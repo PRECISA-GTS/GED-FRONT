@@ -514,8 +514,9 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ data:', data)
+        console.log('🚀 ~ data do submit:', data)
         startLoading()
+        if (id == true) return
         try {
             if (type == 'edit') {
                 setSavingForm(true)
@@ -792,6 +793,7 @@ const FormRecebimentoMp = ({ id }) => {
                     {unidade && unidade.modelo && (
                         <CustomChip
                             size='small'
+                            HeaderFiel
                             skin='light'
                             label={unidade.modelo.nome}
                             sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
@@ -980,6 +982,7 @@ const FormRecebimentoMp = ({ id }) => {
                         conclusionForm={conclusionForm}
                         listErrors={listErrors}
                         canApprove={canApprove}
+                        hasNaoConformidade={true}
                     />
 
                     {/* Modal que deleta formulario */}

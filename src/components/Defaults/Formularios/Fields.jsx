@@ -92,10 +92,10 @@ const Fields = ({
     }
 
     // Confirma novo item e adiciona ao name do formulário
-    const handleConfirmNew = data => {
+    const handleConfirmNew = async data => {
         console.log('🚀 ~ data de noivvovov:', data)
         setOpenModalNew(false)
-        setValue(`'${nameSelected}'`, 'ALAAAA')
+        // setValue(`'${nameSelected}'`, 'ALAAAA')
     }
 
     return (
@@ -103,7 +103,6 @@ const Fields = ({
         fields &&
         fields.map((field, index) => {
             setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
-            console.log('🚀 ~ field:', field)
             return (
                 <>
                     {/* Autocomplete (int) */}

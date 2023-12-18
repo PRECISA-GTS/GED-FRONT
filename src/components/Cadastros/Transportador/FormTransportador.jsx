@@ -134,9 +134,9 @@ const FormTransportador = ({
         }
     }, [id])
 
-    useEffect(() => {
-        if (newChange) handleSubmit(onSubmit)()
-    }, [newChange])
+    // useEffect(() => {
+    //     if (newChange) handleSubmit(onSubmit)()
+    // }, [newChange])
 
     return (
         <>

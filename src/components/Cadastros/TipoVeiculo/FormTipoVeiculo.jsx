@@ -61,7 +61,6 @@ const FormTipoVeiculo = ({
                     if (outsideID) {
                         setId(outsideID)
                         handleConfirmNew(response.data.value)
-                        stopLoading()
                     } else {
                         router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
                         setId(response.data.id)
@@ -133,9 +132,9 @@ const FormTipoVeiculo = ({
         }
     }, [id])
 
-    useEffect(() => {
-        if (newChange) handleSubmit(onSubmit)()
-    }, [newChange])
+    // useEffect(() => {
+    //     if (newChange) handleSubmit(onSubmit)()
+    // }, [newChange])
 
     return (
         <>
