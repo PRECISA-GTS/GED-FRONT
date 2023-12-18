@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+html,
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 80%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    min-height: 100%;
+}
+
+#__next {
+    height: 100%;
+}
+
+code {
+    font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+    padding: 0.1rem 0.4rem;
+    font-size: 90%;
+    color: #d400ff;
+    border-radius: 0.1335rem;
+}
+
+code:not([class*='language-']):before,
+code:not([class*='language-']):after {
+    content: '`';
+}
+
+code[class*='language-'] {
+    padding: 0;
+}
+
+/* Custom styles */
+.zebrado:nth-child(odd) {
+    padding: 0.5rem;
+    background-color: #fff;
+    border-bottom: 1px solid #4c4e641f;
+    border-radius: 4px;
+}
+
+.zebrado:nth-child(even) {
+    padding: 0.5rem;
+    background-color: #f6f6f7;
+    border-bottom: 1px solid #4c4e641f;
+    border-radius: 4px;
+}
+
+.fadeIn {
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    -o-animation: fadeIn ease 1s;
+    -ms-animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeOut {
+    animation: fadeOut ease 1s;
+    -webkit-animation: fadeOut ease 1s;
+    -moz-animation: fadeOut ease 1s;
+    -o-animation: fadeOut ease 1s;
+    -ms-animation: fadeOut ease 1s;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}
+
+/* Animação bounce no envio de anexo */
+.animate-custom-bounce {
+    animation: animate-custom-bounce 1s infinite;
+}
+
+@keyframes animate-custom-bounce {
+    0%,
+    100% {
+        transform: translateY(-5%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+/*!Scroll costumizado */
+::-webkit-scrollbar {
+    width: 0.5rem;
+    heigth: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #35553b;
+    border-radius: 1rem;
+}
+
+::-webkit-scroll-track {
+    background-color: transparent;
+}
+
+/* Google Chrome */
+input:-webkit-autofill {
+    background-color: red;
+    fill: red;
+}
+
+/* Mozilla Firefox */
+input:-moz-autofill {
+    background-color: #f0f8ff;
+}
+
+/* Microsoft Edge */
+input:-ms-input-placeholder,
+input::-ms-reveal {
+    background-color: #f0f8ff;
+}
+
+/* Estilo adicionado as linhas da tabela onde o status é inativo */
+.inativo-row {
+    opacity: 0.4;
+}
