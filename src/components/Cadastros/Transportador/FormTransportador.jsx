@@ -18,7 +18,16 @@ import Input from 'src/components/Form/Input'
 import Check from 'src/components/Form/Check'
 import useLoad from 'src/hooks/useLoad'
 
-const FormTransportador = ({ id }) => {
+const FormTransportador = ({
+    id,
+    btnClose,
+    handleModalClose,
+    setNewChange,
+    newChange,
+    outsideID,
+    handleConfirmNew,
+    manualUrl
+}) => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
     const { setId } = useContext(RouteContext)
@@ -40,7 +49,7 @@ const FormTransportador = ({ id }) => {
 
     //? Envia dados para a api
     const onSubmit = async data => {
-        startLoading()
+        // startLoading()
         const values = {
             ...data,
             usuarioID: user.usuarioID,
@@ -48,9 +57,15 @@ const FormTransportador = ({ id }) => {
         }
         try {
             if (type === 'new') {
-                await api.post(`${backRoute(staticUrl)}/new/insertData`, values).then(response => {
-                    router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
-                    setId(response.data)
+                await api.post(`cadastros/transportador/new/insertData`, values).then(response => {
+                    if (outsideID) {
+                        setId(outsideID)
+                        handleConfirmNew(response.data.value)
+                        // stopLoading()
+                    } else {
+                        router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
+                        setId(response.data.id)
+                    }
                     toast.success(toastMessage.successNew)
                 })
             } else if (type === 'edit') {
@@ -119,19 +134,27 @@ const FormTransportador = ({ id }) => {
         }
     }, [id])
 
+    // useEffect(() => {
+    //     if (newChange) handleSubmit(onSubmit)()
+    // }, [newChange])
+
     return (
         <>
-            {!data && <Loading />}
+            {/* {!data && <Loading />} */}
             {data && (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
+                        btnClose
+                        handleModalClose={handleModalClose}
                         btnSave
-                        btnNew
+                        btnNew={outsideID ? false : true}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
+                        manualUrl={manualUrl}
+                        outsideID={outsideID}
                     />
                     <Card>
                         <CardContent>
