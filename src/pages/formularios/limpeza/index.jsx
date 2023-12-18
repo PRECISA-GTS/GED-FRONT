@@ -23,17 +23,19 @@ const Limpeza = () => {
     const { id } = useContext(RouteContext)
 
     const getList = async () => {
-        await api.get(`${currentLink}/getList/${loggedUnity.unidadeID}`).then(response => {
-            setResult(response.data)
-            setTitle({
-                title: 'Limpeza e Higienização',
-                subtitle: {
-                    id: id,
-                    count: response.data.length,
-                    new: false
-                }
+        await api
+            .get(`${currentLink}/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`)
+            .then(response => {
+                setResult(response.data)
+                setTitle({
+                    title: 'Limpeza',
+                    subtitle: {
+                        id: id,
+                        count: response.data.length,
+                        new: false
+                    }
+                })
             })
-        })
     }
 
     useEffect(() => {
@@ -51,12 +53,12 @@ const Limpeza = () => {
             field: 'data',
             size: 0.1,
             type: 'date'
-        },
+        },                 
         {
             headerName: 'Profissional',
             field: 'profissional',
-            size: 0.2
-        },
+            size: 0.4
+        },    
         {
             headerName: 'Modelo',
             field: 'modelo',
@@ -64,10 +66,13 @@ const Limpeza = () => {
         },
         {
             headerName: 'Status',
-            field: 'status',
+            field: {
+                name: 'status',
+                cor: 'cor'
+            },
             size: 0.2
-        }
-    ]
+        }                  
+    ]            
 
     const columns = configColumns(currentLink, arrColumns)
 

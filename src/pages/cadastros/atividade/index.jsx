@@ -18,7 +18,7 @@ const Atividade = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-
+    
     useEffect(() => {
         const getList = async () => {
             await api.get(currentLink).then(response => {

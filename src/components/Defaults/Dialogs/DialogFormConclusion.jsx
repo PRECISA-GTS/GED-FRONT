@@ -39,7 +39,8 @@ const DialogFormConclusion = ({
     register,
     setValue,
     listErrors,
-    canApprove
+    canApprove, 
+    hasNaoConformidade
 }) => {
     console.log('🚀 ~ info:', info)
     const { user, loggedUnity } = useContext(AuthContext)
@@ -101,6 +102,7 @@ const DialogFormConclusion = ({
                                         setValue={setValue}
                                         setResult={setResult}
                                         papelID={user.papelID}
+                                        hasNaoConformidade={hasNaoConformidade}
                                         options={[
                                             {
                                                 value: 70,

@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
+import { Card } from '@material-ui/core'
 import SelectModel from './SelectModel'
 
 const ListParametrosLimpeza = () => {
@@ -24,10 +25,11 @@ const ListParametrosLimpeza = () => {
 
     useEffect(() => {
         const getList = async () => {
+            console.log('getList')
             await api.get(`${currentLink}/getList/${loggedUnity.unidadeID}`).then(response => {
                 setResult(response.data)
                 setTitle({
-                    title: 'Formulários modelo de limpeza',
+                    title: 'Formulários de Limpeza',
                     subtitle: {
                         id: id,
                         count: response.data.length,

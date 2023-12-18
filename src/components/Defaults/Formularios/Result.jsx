@@ -16,7 +16,7 @@ import {
 import CheckLabel from 'src/components/Form/CheckLabel'
 import CheckLabelConditional from 'src/components/Form/CheckLabelConditional'
 
-const Result = ({ title, name, value, papelID, register, setValue, setResult, options }) => {
+const Result = ({ title, name, value, papelID, register, setValue, setResult, options, hasNaoConformidade }) => {
     console.log('🚀 ~ Result:', name)
 
     return (
@@ -60,7 +60,7 @@ const Result = ({ title, name, value, papelID, register, setValue, setResult, op
                     </Grid>
 
                     {/* Gerar não conformidade */}
-                    {value.status && (value.status == 50 || value.status == 60) && (
+                    {hasNaoConformidade && value.status && (value.status == 50 || value.status == 60) && (
                         <CheckLabelConditional
                             xs={12}
                             md={12}

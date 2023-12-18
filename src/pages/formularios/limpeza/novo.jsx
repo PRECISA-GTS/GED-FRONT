@@ -1,13 +1,13 @@
-import FormRecebimentoMp from 'src/components/RecebimentoMp/FormRecebimentoMp'
+import SelectModel from 'src/components/Limpeza/SelectModel'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { useContext, useEffect } from 'react'
 
-const RecebimentoMpNovo = () => {
+const LimpezaNovo = () => {
     const { setTitle } = useContext(ParametersContext)
 
     useEffect(() => {
         setTitle({
-            title: 'Recebimento de Matéria Prima',
+            title: 'Limpeza',
             subtitle: {
                 id: null,
                 count: null,
@@ -16,7 +16,7 @@ const RecebimentoMpNovo = () => {
         })
     }, [])
 
-    return <FormRecebimentoMp />
+    return <SelectModel />
 }
 
-export default RecebimentoMpNovo
+export default LimpezaNovo
