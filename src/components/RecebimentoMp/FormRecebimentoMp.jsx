@@ -34,6 +34,9 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
 import RecebimentoMpNaoConformidade from './NaoConformidade'
+import FormTransportador from '../Cadastros/Transportador/FormTransportador'
+import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
+import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 
 const FormRecebimentoMp = ({ id }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -68,6 +71,13 @@ const FormRecebimentoMp = ({ id }) => {
     const { startLoading, stopLoading } = useLoad()
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const { setReportParameters, sendPdfToServer } = useFormContext()
+
+    const [newChange, setNewChange] = useState(false)
+    const [openModalNew, setOpenModalNew] = useState(false)
+    const [columnSelected, setColumnSelected] = useState(null)
+    console.log('🚀 ~ columnSelected:', columnSelected)
+    const [nameSelected, setNameSelected] = useState(null)
+    console.log('🚀 ~ nameSelected:', nameSelected)
 
     const [canEdit, setCanEdit] = useState({
         status: false,
@@ -675,6 +685,12 @@ const FormRecebimentoMp = ({ id }) => {
         })
     }, [])
 
+    const handleConfirmNew = async data => {
+        console.log('🚀 ~ data de noivvovov:', data)
+        setOpenModalNew(false)
+        // setValue(`'${nameSelected}'`, 'ALAAAA')
+    }
+
     return (
         <>
             <Loading show={isLoading} />
@@ -699,7 +715,6 @@ const FormRecebimentoMp = ({ id }) => {
                     type={type}
                     status={status}
                 />
-
                 {/* Div superior com tags e status */}
                 <div className='flex gap-2 mb-2'>
                     {status && (
@@ -734,6 +749,14 @@ const FormRecebimentoMp = ({ id }) => {
 
                     {unidade && (
                         <HeaderFields
+                            nameSelected={nameSelected}
+                            setNameSelected={setNameSelected}
+                            columnSelected={columnSelected}
+                            setColumnSelected={setColumnSelected}
+                            openModalNew={openModalNew}
+                            setOpenModalNew={setOpenModalNew}
+                            newChange={newChange}
+                            setNewChange={setNewChange}
                             recebimentoMpID={id}
                             modelo={unidade.modelo}
                             values={fieldsHeader}
@@ -920,6 +943,41 @@ const FormRecebimentoMp = ({ id }) => {
                     />
                 </Box>
             </form>
+
+            <DialogNewCreate
+                title={
+                    columnSelected == 'transportadorID'
+                        ? 'Novo transportador'
+                        : columnSelected == 'tipoVeiculoID'
+                        ? 'Novo tipo de veiculo'
+                        : ''
+                }
+                size='md'
+                openModal={openModalNew}
+                setOpenModal={setOpenModalNew}
+            >
+                {columnSelected == 'transportadorID' ? (
+                    <FormTransportador
+                        btnClose
+                        handleModalClose={() => setOpenModalNew(false)}
+                        setNewChange={setNewChange}
+                        newChange={newChange}
+                        outsideID={true}
+                        handleConfirmNew={handleConfirmNew}
+                        manualUrl='/cadastros/transportador'
+                    />
+                ) : columnSelected == 'tipoVeiculoID' ? (
+                    <FormTipoVeiculo
+                        btnClose
+                        handleModalClose={() => setOpenModalNew(false)}
+                        setNewChange={setNewChange}
+                        newChange={newChange}
+                        outsideID={true}
+                        handleConfirmNew={handleConfirmNew}
+                        manualUrl='/cadastros/tipo-veiculo'
+                    />
+                ) : null}
+            </DialogNewCreate>
         </>
     )
 }

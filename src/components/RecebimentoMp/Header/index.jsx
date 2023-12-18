@@ -25,7 +25,15 @@ const HeaderFields = ({
     getValues,
     setValue,
     control,
-    getAddressByCep
+    getAddressByCep,
+    nameSelected,
+    setNameSelected,
+    columnSelected,
+    setColumnSelected,
+    openModalNew,
+    setOpenModalNew,
+    newChange,
+    setNewChange
 }) => {
     const { user, loggedUnity } = useContext(AuthContext)
     const [dateStatus, setDateStatus] = useState({})
@@ -221,6 +229,14 @@ const HeaderFields = ({
                                     values={fields}
                                     getAddressByCep={getAddressByCep}
                                     disabled={disabled}
+                                    nameSelected={nameSelected}
+                                    setNameSelected={setNameSelected}
+                                    columnSelected={columnSelected}
+                                    setColumnSelected={setColumnSelected}
+                                    openModalNew={openModalNew}
+                                    setOpenModalNew={setOpenModalNew}
+                                    newChange={newChange}
+                                    setNewChange={setNewChange}
                                 />
                                 {/* Fornecedor */}
                                 <Select

@@ -23,16 +23,18 @@ const Fields = ({
     disabledFields,
     getAddressByCep,
     control,
-    setCopiedDataContext
+    setCopiedDataContext,
+    nameSelected,
+    setNameSelected,
+    columnSelected,
+    setColumnSelected,
+    openModalNew,
+    setOpenModalNew,
+    newChange,
+    setNewChange
 }) => {
     const [dateStatus, setDateStatus] = useState({})
     const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
-    const [newChange, setNewChange] = useState(false)
-    const [openModalNew, setOpenModalNew] = useState(false)
-    const [columnSelected, setColumnSelected] = useState(null)
-    console.log('🚀 ~ columnSelected:', columnSelected)
-    const [nameSelected, setNameSelected] = useState(null)
-    console.log('🚀 ~ nameSelected:', nameSelected)
 
     const router = Router
 
@@ -91,13 +93,6 @@ const Fields = ({
         setNameSelected(name)
     }
 
-    // Confirma novo item e adiciona ao name do formulário
-    const handleConfirmNew = async data => {
-        console.log('🚀 ~ data de noivvovov:', data)
-        setOpenModalNew(false)
-        // setValue(`'${nameSelected}'`, 'ALAAAA')
-    }
-
     return (
         // <Grid container spacing={4}>
         fields &&
@@ -131,7 +126,7 @@ const Fields = ({
                     )}
 
                     {/* Modal para criação de novo, baseado no select clicado */}
-                    <DialogNewCreate
+                    {/* <DialogNewCreate
                         title={
                             columnSelected == 'transportadorID'
                                 ? 'Novo transportador'
@@ -164,7 +159,7 @@ const Fields = ({
                                 manualUrl='/cadastros/tipo-veiculo'
                             />
                         ) : null}
-                    </DialogNewCreate>
+                    </DialogNewCreate> */}
 
                     {/* Date */}
                     {field && field.tipo == 'date' && (
