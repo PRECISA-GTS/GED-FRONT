@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
-import FormRecebimentoMP from 'src/components/RecebimentoMP/FormRecebimentoMP'
+import FormRecebimentoMp from 'src/components/RecebimentoMP/FormRecebimentoMp'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
@@ -126,7 +126,7 @@ const RecebimentoMP = () => {
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <FormRecebimentoMP id={id} />
+                <FormRecebimentoMp id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table result={result} columns={columns} />
