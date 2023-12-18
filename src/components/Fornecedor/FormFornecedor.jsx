@@ -823,7 +823,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
     return (
         <>
-            <Loading show={isLoading} />
+            {/* <Loading show={isLoading} /> */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormHeader
                     btnCancel

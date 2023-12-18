@@ -4,11 +4,14 @@ import { dateConfig } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
 import { backRoute } from 'src/configs/defaultConfigs'
 import Router from 'next/router'
+import FormTransportador from 'src/components/Cadastros/Transportador/FormTransportador'
+import FormTipoVeiculo from 'src/components/Cadastros/TipoVeiculo/FormTipoVeiculo'
 
 //* Custom inputs
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
+import DialogNewCreate from '../Dialogs/DialogNewCreate'
 
 const Fields = ({
     register,
@@ -24,6 +27,13 @@ const Fields = ({
 }) => {
     const [dateStatus, setDateStatus] = useState({})
     const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
+    const [newChange, setNewChange] = useState(false)
+    const [openModalNew, setOpenModalNew] = useState(false)
+    const [columnSelected, setColumnSelected] = useState(null)
+    console.log('🚀 ~ columnSelected:', columnSelected)
+    const [nameSelected, setNameSelected] = useState(null)
+    console.log('🚀 ~ nameSelected:', nameSelected)
+
     const router = Router
 
     const dataLocalStorage = localStorage.getItem('loggedUnity')
@@ -74,11 +84,26 @@ const Fields = ({
         setRegistroEstabelecimento()
     }, [])
 
+    // Abre modal para criar novo item
+    const createNew = async (coluna, name) => {
+        setColumnSelected(coluna)
+        setOpenModalNew(true)
+        setNameSelected(name)
+    }
+
+    // Confirma novo item e adiciona ao name do formulário
+    const handleConfirmNew = data => {
+        console.log('🚀 ~ data de noivvovov:', data)
+        setOpenModalNew(false)
+        setValue(`'${nameSelected}'`, 'ALAAAA')
+    }
+
     return (
         // <Grid container spacing={4}>
         fields &&
         fields.map((field, index) => {
             setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+            console.log('🚀 ~ field:', field)
             return (
                 <>
                     {/* Autocomplete (int) */}
@@ -88,6 +113,11 @@ const Fields = ({
                             md={4}
                             title={field.nomeCampo}
                             name={`fields[${index}].${field.tabela}`}
+                            createNew={
+                                field.nomeColuna === 'transportadorID' || field.nomeColuna === 'tipoVeiculoID'
+                                    ? () => createNew(field.nomeColuna, `fields[${index}].${field.tabela}`)
+                                    : null
+                            }
                             type={field.tabela}
                             options={field.options}
                             value={field?.[field.tabela]}
@@ -100,6 +130,42 @@ const Fields = ({
                             handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
+
+                    {/* Modal para criação de novo, baseado no select clicado */}
+                    <DialogNewCreate
+                        title={
+                            columnSelected == 'transportadorID'
+                                ? 'Novo transportador'
+                                : columnSelected == 'tipoVeiculoID'
+                                ? 'Novo tipo de veiculo'
+                                : ''
+                        }
+                        size='md'
+                        openModal={openModalNew}
+                        setOpenModal={setOpenModalNew}
+                    >
+                        {columnSelected == 'transportadorID' ? (
+                            <FormTransportador
+                                btnClose
+                                handleModalClose={() => setOpenModalNew(false)}
+                                setNewChange={setNewChange}
+                                newChange={newChange}
+                                outsideID={true}
+                                handleConfirmNew={handleConfirmNew}
+                                manualUrl='/cadastros/transportador'
+                            />
+                        ) : columnSelected == 'tipoVeiculoID' ? (
+                            <FormTipoVeiculo
+                                btnClose
+                                handleModalClose={() => setOpenModalNew(false)}
+                                setNewChange={setNewChange}
+                                newChange={newChange}
+                                outsideID={true}
+                                handleConfirmNew={handleConfirmNew}
+                                manualUrl='/cadastros/tipo-veiculo'
+                            />
+                        ) : null}
+                    </DialogNewCreate>
 
                     {/* Date */}
                     {field && field.tipo == 'date' && (

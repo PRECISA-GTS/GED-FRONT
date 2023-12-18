@@ -18,7 +18,16 @@ import Check from 'src/components/Form/Check'
 import useLoad from 'src/hooks/useLoad'
 import { AuthContext } from 'src/context/AuthContext'
 
-const FormTipoVeiculo = ({ id }) => {
+const FormTipoVeiculo = ({
+    id,
+    btnClose,
+    handleModalClose,
+    setNewChange,
+    newChange,
+    outsideID,
+    handleConfirmNew,
+    manualUrl
+}) => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
     const { setId } = useContext(RouteContext)
@@ -48,9 +57,15 @@ const FormTipoVeiculo = ({ id }) => {
         startLoading()
         try {
             if (type === 'new') {
-                await api.post(`${backRoute(staticUrl)}/new/insertData`, values).then(response => {
-                    router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
-                    setId(response.data)
+                await api.post(`cadastros/tipo-veiculo/new/insertData`, values).then(response => {
+                    if (outsideID) {
+                        setId(outsideID)
+                        handleConfirmNew(response.data.value)
+                        stopLoading()
+                    } else {
+                        router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
+                        setId(response.data.id)
+                    }
                     toast.success(toastMessage.successNew)
                 })
             } else if (type === 'edit') {
@@ -118,19 +133,27 @@ const FormTipoVeiculo = ({ id }) => {
         }
     }, [id])
 
+    useEffect(() => {
+        if (newChange) handleSubmit(onSubmit)()
+    }, [newChange])
+
     return (
         <>
             {!data && <Loading />}
             {data && (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormHeader
+                        btnClose
+                        handleModalClose={handleModalClose}
                         btnCancel
                         btnSave
-                        btnNew
+                        btnNew={outsideID ? false : true}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
+                        manualUrl={manualUrl}
+                        outsideID={outsideID}
                     />
                     <Card>
                         <CardContent>
