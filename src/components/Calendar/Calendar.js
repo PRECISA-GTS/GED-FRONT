@@ -53,113 +53,85 @@ const Calendar = props => {
     if (store) {
         console.log("🚀 ~ store:", store)
 
+
+        // Transforma o hex em rgba como alpha de 0.2
+        const hexToRgb = (hex, alpha = 0.2) => {
+            hex = hex.replace(/^#/, '');
+
+            let bigint = parseInt(hex, 16);
+            let r = (bigint >> 16) & 255;
+            let g = (bigint >> 8) & 255;
+            let b = bigint & 255;
+
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        };
+
         const events = [
             {
                 id: 1,
                 title: 'Fornecedor Mais Frango',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.info),
             },
             {
                 id: 2,
                 title: 'Fornecedor Soma',
                 start: '2023-12-22',
                 end: '2023-12-22',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.info),
             },
             {
                 id: 3,
                 title: 'Limpeza da Sala Dona Jura',
                 start: '2023-12-18',
                 end: '2023-12-18',
-                color: CalendarColor.error
+                color: hexToRgb(CalendarColor.error),
             },
             {
                 id: 4,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.warning),
             },
             {
                 id: 5,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.secondary
+                color: hexToRgb(CalendarColor.secondary),
             },
             {
                 id: 6,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-20',
                 end: '2023-12-20',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.info),
             },
             {
                 id: 7,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.secondary
+                color: hexToRgb(CalendarColor.secondary),
             },
             {
                 id: 8,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.info),
             },
             {
                 id: 9,
                 title: 'Limpeza do Silo Cleomar',
                 start: '2023-12-21',
                 end: '2023-12-21',
-                color: CalendarColor.info
+                color: hexToRgb(CalendarColor.info),
             },
-            {
-                id: 5,
-                title: 'Fornecedor NutriPlus',
-                start: '2023-12-19',
-                end: '2023-12-19',
-                color: CalendarColor.warning
-            },
-            {
-                id: 10,
-                title: 'Fornecedor NutriPlus',
-                start: '2023-12-15',
-                end: '2023-12-15',
-                color: CalendarColor.secondary
-            },
-            {
-                id: 11,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-28',
-                end: '2023-12-28',
-                color: CalendarColor.info
-            },
-            {
-                id: 12,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-28',
-                end: '2023-12-28',
-                color: CalendarColor.info
-            },
-            {
-                id: 13,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-28',
-                end: '2023-12-28',
-                color: CalendarColor.info
-            },
-            {
-                id: 14,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-28',
-                end: '2023-12-28',
-                color: CalendarColor.info
-            },
-        ]
+        ];
+
 
         // ** calendarOptions(Props)
         const calendarOptions = {
@@ -215,16 +187,16 @@ const Calendar = props => {
 
                 return [
                     // Background Color transparent
-                    `bg-${colorName}`
+                    // `bg-${colorName}`
 
                 ]
             },
             eventContent({ event: calendarEvent }) {
-                const colorName = CalendarColor[calendarEvent._def.extendedProps.calendar]
-                // retornar html 
-                console.log("🚀 ~ calendarEvent.color:", calendarEvent.title, calendarEvent.eventColor)
+                const colorName = calendarEvent._def.ui.backgroundColor
 
-                let styles = `font-bold text-black `;
+                const color = colorName == 'rgba(38, 198, 249, 0.2)' ? 'text-blue-500' : colorName == 'rgba(255, 77, 73, 0.2)' ? 'text-red-500' : colorName == 'rgba(253, 181, 40, 0.2)' ? 'text-yellow-500' : 'text-black';
+
+                let styles = `font-bold ${color}`;
                 return { html: `<div class="${styles}">${calendarEvent.title}</div>` }
             },
             eventClick({ event: clickedEvent }) {
