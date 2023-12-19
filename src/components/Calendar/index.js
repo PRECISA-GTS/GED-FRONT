@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
 
+import { useTheme } from '@mui/material/styles'
+
 // ** FullCalendar & App Components Imports
 import Calendar from './Calendar'
 import SidebarLeft from './SidebarLeft'
@@ -28,16 +30,9 @@ import {
     handleCalendarsUpdate
 } from 'src/store/apps/calendar'
 
-// ** CalendarColors
-const calendarsColor = {
-    Personal: 'error',
-    Business: 'primary',
-    Family: 'warning',
-    Holiday: 'success',
-    ETC: 'info'
-}
 
 const AppCalendar = () => {
+
     // ** States
     const [calendarApi, setCalendarApi] = useState(null)
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
@@ -47,12 +42,32 @@ const AppCalendar = () => {
     const { settings } = useSettings()
     const dispatch = useDispatch()
     const store = useSelector(state => state.calendar)
+    const theme = useTheme()
 
     // ** Vars
     const leftSidebarWidth = 260
     const addEventSidebarWidth = 400
     const { skin, direction } = settings
     const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
+
+    // ** SidebarColors
+    const SidebarLeftColor = {
+        Personal: 'error',
+        Business: 'primary',
+        Family: 'warning',
+        Holiday: 'success',
+        ETC: 'info'
+    }
+    // ** CalendarColors
+    const CalendarColor = {
+        error: theme.palette.error.main,
+        primary: theme.palette.primary.main,
+        warning: theme.palette.warning.main,
+        success: theme.palette.success.main,
+        info: theme.palette.info.main,
+        secondary: theme.palette.secondary.main
+    }
+
     useEffect(() => {
         dispatch(fetchEvents(store.selectedCalendars))
     }, [dispatch, store.selectedCalendars])
@@ -63,15 +78,17 @@ const AppCalendar = () => {
         <CalendarWrapper
             className='app-calendar'
             sx={{
+                padding: 4,
+                backgroundColor: settings.mode == 'dark' ? '#27272A' : '#FFF',
                 boxShadow: skin === 'bordered' ? 0 : 6,
                 ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
             }}
         >
-            <SidebarLeft
+            {/* <SidebarLeft
                 store={store}
                 mdAbove={mdAbove}
                 dispatch={dispatch}
-                calendarsColor={calendarsColor}
+                SidebarLeftColor={SidebarLeftColor}
                 leftSidebarOpen={leftSidebarOpen}
                 leftSidebarWidth={leftSidebarWidth}
                 handleSelectEvent={handleSelectEvent}
@@ -79,7 +96,7 @@ const AppCalendar = () => {
                 handleCalendarsUpdate={handleCalendarsUpdate}
                 handleLeftSidebarToggle={handleLeftSidebarToggle}
                 handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-            />
+            /> */}
             <Box
                 sx={{
                     px: 5,
@@ -97,7 +114,7 @@ const AppCalendar = () => {
                     direction={direction}
                     updateEvent={updateEvent}
                     calendarApi={calendarApi}
-                    calendarsColor={calendarsColor}
+                    CalendarColor={CalendarColor}
                     setCalendarApi={setCalendarApi}
                     handleSelectEvent={handleSelectEvent}
                     handleLeftSidebarToggle={handleLeftSidebarToggle}

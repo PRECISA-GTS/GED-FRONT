@@ -166,3 +166,9 @@ input::-ms-reveal {
 .fc-button-group {
     color: red !important;
 }
+
+/* Calendar */
+/* .fc-event {
+    background-color: transparent !important;
+    border: none !important;
+} */

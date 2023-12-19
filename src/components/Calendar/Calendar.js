@@ -34,12 +34,13 @@ const Calendar = props => {
         direction,
         updateEvent,
         calendarApi,
-        calendarsColor,
+        CalendarColor,
         setCalendarApi,
         handleSelectEvent,
         handleLeftSidebarToggle,
         handleAddEventSidebarToggle
     } = props
+    console.log("🚀 ~ CalendarColor:", CalendarColor.Personal)
 
     // ** Refs
     const calendarRef = useRef()
@@ -50,20 +51,132 @@ const Calendar = props => {
         }
     }, [calendarApi, setCalendarApi])
     if (store) {
+        console.log("🚀 ~ store:", store)
+
+        const events = [
+            {
+                id: 1,
+                title: 'Fornecedor Mais Frango',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.info
+            },
+            {
+                id: 2,
+                title: 'Fornecedor Soma',
+                start: '2023-12-22',
+                end: '2023-12-22',
+                color: CalendarColor.info
+            },
+            {
+                id: 3,
+                title: 'Limpeza da Sala Dona Jura',
+                start: '2023-12-18',
+                end: '2023-12-18',
+                color: CalendarColor.error
+            },
+            {
+                id: 4,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.info
+            },
+            {
+                id: 5,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.secondary
+            },
+            {
+                id: 6,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-20',
+                end: '2023-12-20',
+                color: CalendarColor.info
+            },
+            {
+                id: 7,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.secondary
+            },
+            {
+                id: 8,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.info
+            },
+            {
+                id: 9,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-21',
+                end: '2023-12-21',
+                color: CalendarColor.info
+            },
+            {
+                id: 5,
+                title: 'Fornecedor NutriPlus',
+                start: '2023-12-19',
+                end: '2023-12-19',
+                color: CalendarColor.warning
+            },
+            {
+                id: 10,
+                title: 'Fornecedor NutriPlus',
+                start: '2023-12-15',
+                end: '2023-12-15',
+                color: CalendarColor.secondary
+            },
+            {
+                id: 11,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-28',
+                end: '2023-12-28',
+                color: CalendarColor.info
+            },
+            {
+                id: 12,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-28',
+                end: '2023-12-28',
+                color: CalendarColor.info
+            },
+            {
+                id: 13,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-28',
+                end: '2023-12-28',
+                color: CalendarColor.info
+            },
+            {
+                id: 14,
+                title: 'Limpeza do Silo Cleomar',
+                start: '2023-12-28',
+                end: '2023-12-28',
+                color: CalendarColor.info
+            },
+        ]
+
         // ** calendarOptions(Props)
         const calendarOptions = {
-            events: store.events.length ? store.events : [],
+            events: events.length ? events : [],
             plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
             initialView: 'dayGridMonth',
             headerToolbar: {
                 start: 'sidebarToggle, prev, next, title',
-                end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                end: 'today,dayGridMonth,timeGridWeek,listMonth'
             },
             views: {
                 week: {
                     titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
                 }
             },
+
+            height: 'auto',
 
             /*
                   Enable dragging and resizing event
@@ -77,6 +190,8 @@ const Calendar = props => {
             */
             eventResizableFromStart: true,
 
+            locale: 'pt-br',
+
             /*
                     Automatically scroll the scroll-containers during event drag-and-drop and date selecting
                     ? Docs: https://fullcalendar.io/docs/dragScroll
@@ -87,7 +202,7 @@ const Calendar = props => {
                     Max number of events within a given day
                     ? Docs: https://fullcalendar.io/docs/dayMaxEvents
                   */
-            dayMaxEvents: 2,
+            dayMaxEvents: 10,
 
             /*
                     Determines if day names and week names are clickable
@@ -96,12 +211,21 @@ const Calendar = props => {
             navLinks: true,
             eventClassNames({ event: calendarEvent }) {
                 // @ts-ignore
-                const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
+                const colorName = CalendarColor[calendarEvent._def.extendedProps.calendar]
 
                 return [
-                    // Background Color
+                    // Background Color transparent
                     `bg-${colorName}`
+
                 ]
+            },
+            eventContent({ event: calendarEvent }) {
+                const colorName = CalendarColor[calendarEvent._def.extendedProps.calendar]
+                // retornar html 
+                console.log("🚀 ~ calendarEvent.color:", calendarEvent.title, calendarEvent.eventColor)
+
+                let styles = `font-bold text-black `;
+                return { html: `<div class="${styles}">${calendarEvent.title}</div>` }
             },
             eventClick({ event: clickedEvent }) {
                 dispatch(handleSelectEvent(clickedEvent))
@@ -150,7 +274,7 @@ const Calendar = props => {
             ref: calendarRef,
 
             // Get direction from app state (store)
-            direction
+            direction,
         }
 
         // @ts-ignore

@@ -95,19 +95,22 @@ const Factory = () => {
                         </Grid>
                     ))}
 
-                    {/* Recebimento MP e Não Conformidade */}
-                    <Grid item xs={12} md={9}>
-                        <CrmWeeklyOverview data={dataRecebimentoNC} />
-                    </Grid>
-
-                    {/* Limpeza e Higienização */}
-                    <Grid item xs={12} md={3}>
-                        <GraphLimpeza data={limpeza} />
-                    </Grid>
-
                     {/* Calendário */}
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12} md={9}>
                         <AppCalendar />
+                    </Grid>
+
+                    <Grid item xs={12} md={3}>
+                        <Grid container spacing={6} className='match-height'>
+                            <Grid item xs={12}>
+                                {/* Limpeza e Higienização */}
+                                <GraphLimpeza data={limpeza} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                {/* Recebimento MP e Não Conformidade */}
+                                <CrmWeeklyOverview data={dataRecebimentoNC} />
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
             </ApexChartWrapper>
