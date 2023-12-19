@@ -19,6 +19,7 @@ import CardStatsVertical from 'src/@core/components/card-statistics/card-stats-v
 import EcommerceSalesOverview from 'src/views/dashboards/ecommerce/EcommerceSalesOverview'
 import AnalyticsOverview from 'src/views/dashboards/analytics/AnalyticsOverview'
 import GraphLimpeza from 'src/components/Graphics/home/factory/GraphLimpeza'
+import AppCalendar from 'src/components/Calendar/index'
 
 const Factory = () => {
     const { loggedUnity } = useContext(AuthContext)
@@ -80,29 +81,6 @@ const Factory = () => {
     return (
         dataFornecedor && (
             <ApexChartWrapper>
-                {/* {fotoBinaria &&
-                    fotoBinaria.map(foto => {
-                        return foto.tipo === 'image/jpeg' ? (
-                            <a href={foto.url} target='_blank' className='bg-blue-600 p-4 rounded-md text-white '>
-                                <img src={foto.url} alt='Imagem' />
-                            </a>
-                        ) : (
-                            <p>
-                                <a href={foto.url} target='_blank' className='bg-green-600 p-4 rounded-md text-white '>
-                                    Abrir documento
-                                </a>
-                            </p>
-                        )
-                    })} */}
-
-                {/* <input
-                    type='file'
-                    multiple
-                    onChange={e => {
-                        sendFoto(e)
-                    }}
-                /> */}
-
                 <Grid container spacing={6} className='match-height'>
                     {/* Por estatus em blocos separadosç */}
                     {dataFornecedor.map(row => (
@@ -117,11 +95,6 @@ const Factory = () => {
                         </Grid>
                     ))}
 
-                    {/* Tudo em uma bloco */}
-                    {/* <Grid item xs={12} md={12}>
-                        <EcommerceSalesOverview title='Fornecedor' data={dataFornecedor} />
-                    </Grid> */}
-
                     {/* Recebimento MP e Não Conformidade */}
                     <Grid item xs={12} md={9}>
                         <CrmWeeklyOverview data={dataRecebimentoNC} />
@@ -132,22 +105,10 @@ const Factory = () => {
                         <GraphLimpeza data={limpeza} />
                     </Grid>
 
-                    {/* <Grid item xs={12} md={12}>
-                        <CrmProjectTimeline />
+                    {/* Calendário */}
+                    <Grid item xs={12} md={12}>
+                        <AppCalendar />
                     </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <CrmOrganicSessions data={data} />
-                    </Grid>
-                    <Grid item xs={6} sm={3} md={6}>
-                        <CrmTotalProfit />
-                    </Grid>
-                    <Grid item xs={6} sm={3} md={6}>
-                        <CrmTotalGrowth />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <CrmWeeklyOverview />
-                    </Grid> */}
                 </Grid>
             </ApexChartWrapper>
         )

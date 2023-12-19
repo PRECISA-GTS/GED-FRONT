@@ -155,3 +155,14 @@ input::-ms-reveal {
 .inativo-row {
     opacity: 0.4;
 }
+
+/* Calendar */
+.fc-prev-button {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: black !important;
+}
+
+.fc-button-group {
+    color: red !important;
+}

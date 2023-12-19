@@ -1,3 +1,6 @@
+import { Provider } from 'react-redux'
+import { store } from 'src/store'
+
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
@@ -98,62 +101,64 @@ const App = props => {
     const aclAbilities = Component.acl ?? defaultACLObj
 
     return (
-        <CacheProvider value={emotionCache}>
-            <Head>
-                {/* Next PWA */}
-                <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
-                <link rel='icon' type='image/png' sizes='32x32' href='/icons/favicon-32x32.png' />
-                <link rel='icon' type='image/png' sizes='16x16' href='/icons/favicon-16x16.png' />
-                <link rel='mask-icon' href='/icons/favicon.ico' color='#5bbad5' />
-                <link rel='manifest' href='/manifest.json' />
-                <meta name='msapplication-TileColor' content='rgb(74, 139, 87)' />
-                <meta name='theme-color' content='rgba(0, 0, 0, 0.9)' />
+        <Provider store={store}>
+            <CacheProvider value={emotionCache}>
+                <Head>
+                    {/* Next PWA */}
+                    <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
+                    <link rel='icon' type='image/png' sizes='32x32' href='/icons/favicon-32x32.png' />
+                    <link rel='icon' type='image/png' sizes='16x16' href='/icons/favicon-16x16.png' />
+                    <link rel='mask-icon' href='/icons/favicon.ico' color='#5bbad5' />
+                    <link rel='manifest' href='/manifest.json' />
+                    <meta name='msapplication-TileColor' content='rgb(74, 139, 87)' />
+                    <meta name='theme-color' content='rgba(0, 0, 0, 0.9)' />
 
-                <meta
-                    name='description'
-                    content={`${themeConfig.templateName} – Software para as Boas Práticas de Fabricação (BPF)`}
-                />
-                <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
-                <meta name='viewport' content='initial-scale=1, width=device-width' />
-            </Head>
-            <RouteProvider>
-                <ParametersProvider>
-                    <AuthProvider>
-                        <FormProvider>
-                            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                                <SettingsConsumer>
-                                    {({ settings }) => {
-                                        return (
-                                            <NotificationProvider>
-                                                <ThemeComponent settings={settings}>
-                                                    <WindowWrapper>
-                                                        <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                                                            <AclGuard
-                                                                aclAbilities={aclAbilities}
-                                                                guestGuard={guestGuard}
-                                                            >
-                                                                {getLayout(<Component {...pageProps} />)}
-                                                            </AclGuard>
-                                                        </Guard>
-                                                    </WindowWrapper>
-                                                    <ReactHotToast>
-                                                        <Toaster
-                                                            position={settings.toastPosition}
-                                                            toastOptions={{ className: 'react-hot-toast' }}
-                                                            style={{ zIndex: 999999 }}
-                                                        />
-                                                    </ReactHotToast>
-                                                </ThemeComponent>
-                                            </NotificationProvider>
-                                        )
-                                    }}
-                                </SettingsConsumer>
-                            </SettingsProvider>
-                        </FormProvider>
-                    </AuthProvider>
-                </ParametersProvider>
-            </RouteProvider>
-        </CacheProvider>
+                    <meta
+                        name='description'
+                        content={`${themeConfig.templateName} – Software para as Boas Práticas de Fabricação (BPF)`}
+                    />
+                    <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+                    <meta name='viewport' content='initial-scale=1, width=device-width' />
+                </Head>
+                <RouteProvider>
+                    <ParametersProvider>
+                        <AuthProvider>
+                            <FormProvider>
+                                <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                                    <SettingsConsumer>
+                                        {({ settings }) => {
+                                            return (
+                                                <NotificationProvider>
+                                                    <ThemeComponent settings={settings}>
+                                                        <WindowWrapper>
+                                                            <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                                                                <AclGuard
+                                                                    aclAbilities={aclAbilities}
+                                                                    guestGuard={guestGuard}
+                                                                >
+                                                                    {getLayout(<Component {...pageProps} />)}
+                                                                </AclGuard>
+                                                            </Guard>
+                                                        </WindowWrapper>
+                                                        <ReactHotToast>
+                                                            <Toaster
+                                                                position={settings.toastPosition}
+                                                                toastOptions={{ className: 'react-hot-toast' }}
+                                                                style={{ zIndex: 999999 }}
+                                                            />
+                                                        </ReactHotToast>
+                                                    </ThemeComponent>
+                                                </NotificationProvider>
+                                            )
+                                        }}
+                                    </SettingsConsumer>
+                                </SettingsProvider>
+                            </FormProvider>
+                        </AuthProvider>
+                    </ParametersProvider>
+                </RouteProvider>
+            </CacheProvider>
+        </Provider>
     )
 }
 
