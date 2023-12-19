@@ -88,8 +88,21 @@ const ButtonsFixedRight = ({
                 </BlobProvider>
             )}
             {/* Salvar */}
-            {btnSave &&
-                (routes.find(route => route.rota === url && route.editar) ||
+            {btnSave && (
+                <Button
+                    onClick={handleSubmit}
+                    type='submit'
+                    variant='contained'
+                    size='medium'
+                    color={isLoading ? 'secondary' : 'primary'}
+                    disabled={disabled || disabledSubmit || isLoading}
+                    sx={{ display: 'flex', gap: 2 }}
+                >
+                    <Icon icon='mdi:check-bold' />
+                    <span className='hidden sm:block'>Salvar</span>
+                </Button>
+            )}
+            {/* (routes.find(route => route.rota === url && route.editar) ||
                     (currentUrl === '/cadastros/profissional' && user.profissionalID == id)) && (
                     <Button
                         onClick={handleSubmit}
@@ -103,7 +116,7 @@ const ButtonsFixedRight = ({
                         <Icon icon='mdi:check-bold' />
                         <span className='hidden sm:block'>Salvar</span>
                     </Button>
-                )}
+                )} */}
             {btnNext && (
                 <Button
                     onClick={handleSubmit}
