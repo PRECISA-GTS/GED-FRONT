@@ -157,18 +157,6 @@ input::-ms-reveal {
 }
 
 /* Calendar */
-.fc-prev-button {
-    background-color: transparent !important;
-    border-color: transparent !important;
-    color: black !important;
-}
-
-.fc-button-group {
-    color: red !important;
-}
-
-/* Calendar */
-/* .fc-event {
-    background-color: transparent !important;
+.fc-event {
     border: none !important;
-} */
+}

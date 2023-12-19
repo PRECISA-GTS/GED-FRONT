@@ -196,7 +196,7 @@ const Calendar = props => {
 
                 const color = colorName == 'rgba(38, 198, 249, 0.2)' ? 'text-blue-500' : colorName == 'rgba(255, 77, 73, 0.2)' ? 'text-red-500' : colorName == 'rgba(253, 181, 40, 0.2)' ? 'text-yellow-500' : 'text-black';
 
-                let styles = `font-bold ${color}`;
+                let styles = `font-bold p-1 ${color}`;
                 return { html: `<div class="${styles}">${calendarEvent.title}</div>` }
             },
             eventClick({ event: clickedEvent }) {
