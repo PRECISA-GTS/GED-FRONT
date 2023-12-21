@@ -19,12 +19,14 @@ const Usuario = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { loggedUnity } = useContext(AuthContext)
+    const { user, loggedUnity } = useContext(AuthContext)
 
     useEffect(() => {
         const getList = async () => {
             await api
-                .get(`${currentLink}?unidadeID=${loggedUnity.unidadeID}&papelID=${loggedUnity.papelID}`)
+                .get(
+                    `${currentLink}?unidadeID=${loggedUnity.unidadeID}&papelID=${loggedUnity.papelID}&admin=${user.admin}`
+                )
                 .then(response => {
                     setResult(response.data)
                     setTitle({

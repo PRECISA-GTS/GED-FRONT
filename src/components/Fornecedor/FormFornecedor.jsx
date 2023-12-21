@@ -832,7 +832,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     btnSave={canEdit.status}
                     // btnSend={(canEdit.status || user.papelID == 1) && info.status < 40}
                     btnSend={
-                        (user.papelID == 1 && info.status <= 40) || (user.papelID == 2 && info.status < 40)
+                        (user.papelID == 1 && info.status >= 30 && info.status <= 40) ||
+                        (user.papelID == 2 && info.status < 40)
                             ? true
                             : false
                     }

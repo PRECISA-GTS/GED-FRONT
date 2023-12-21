@@ -1,5 +1,8 @@
+import Router from 'next/router'
+import { RouteContext } from 'src/context/RouteContext'
+
 // ** React Import
-import { useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 // ** Full Calendar & it's Plugins
 import FullCalendar from '@fullcalendar/react'
@@ -8,9 +11,15 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5'
 import interactionPlugin from '@fullcalendar/interaction'
+import { api } from 'src/configs/api'
+
+import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Third Party Style Import
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import Legend from './Legend'
+import DialogActs from '../Defaults/Dialogs/DialogActs'
+import Event from './Event'
 
 const blankEvent = {
     title: '',
@@ -40,7 +49,13 @@ const Calendar = props => {
         handleLeftSidebarToggle,
         handleAddEventSidebarToggle
     } = props
-    console.log("🚀 ~ CalendarColor:", CalendarColor.Personal)
+
+    const router = Router
+    const { setId } = useContext(RouteContext)
+    const { settings } = useSettings()
+    const [events, setEvents] = useState([])
+    const [open, setOpen] = useState(false)
+    const [modalEvent, setModalEvent] = useState(null)
 
     // ** Refs
     const calendarRef = useRef()
@@ -53,85 +68,33 @@ const Calendar = props => {
     if (store) {
         console.log("🚀 ~ store:", store)
 
+        const getEvents = async () => {
+            const data = {
+                usuarioID: 2,
+                unidadeID: 1,
+                papelID: 1
+            }
+            try {
+                const response = await api.post('calendario/getEvents', data);
+                setEvents(response.data);
+                console.log("🚀 ~ getEvents response: ", response.data)
+            } catch (error) {
+                console.error('Erro ao buscar eventos:', error);
+            }
+        }
 
-        // Transforma o hex em rgba como alpha de 0.2
-        const hexToRgb = (hex, alpha = 0.2) => {
-            hex = hex.replace(/^#/, '');
+        const handleEventLink = () => {
+            const { rota, id } = modalEvent._def.extendedProps.link
+            console.log("🚀 ~ rota, rotaID:", rota, id)
 
-            let bigint = parseInt(hex, 16);
-            let r = (bigint >> 16) & 255;
-            let g = (bigint >> 8) & 255;
-            let b = bigint & 255;
+            router.push(rota)
+            setId(id)
 
-            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        };
+        }
 
-        const events = [
-            {
-                id: 1,
-                title: 'Fornecedor Mais Frango',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.info),
-            },
-            {
-                id: 2,
-                title: 'Fornecedor Soma',
-                start: '2023-12-22',
-                end: '2023-12-22',
-                color: hexToRgb(CalendarColor.info),
-            },
-            {
-                id: 3,
-                title: 'Limpeza da Sala Dona Jura',
-                start: '2023-12-18',
-                end: '2023-12-18',
-                color: hexToRgb(CalendarColor.error),
-            },
-            {
-                id: 4,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.warning),
-            },
-            {
-                id: 5,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.secondary),
-            },
-            {
-                id: 6,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-20',
-                end: '2023-12-20',
-                color: hexToRgb(CalendarColor.info),
-            },
-            {
-                id: 7,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.secondary),
-            },
-            {
-                id: 8,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.info),
-            },
-            {
-                id: 9,
-                title: 'Limpeza do Silo Cleomar',
-                start: '2023-12-21',
-                end: '2023-12-21',
-                color: hexToRgb(CalendarColor.info),
-            },
-        ];
-
+        useEffect(() => {
+            getEvents()
+        }, [])
 
         // ** calendarOptions(Props)
         const calendarOptions = {
@@ -148,12 +111,12 @@ const Calendar = props => {
                 }
             },
 
-            height: 'auto',
+            // height: 'auto',
 
             /*
-                  Enable dragging and resizing event
-                  ? Docs: https://fullcalendar.io/docs/editable
-                */
+            Enable dragging and resizing event
+            ? Docs: https://fullcalendar.io/docs/editable
+            */
             editable: true,
 
             /*
@@ -165,21 +128,21 @@ const Calendar = props => {
             locale: 'pt-br',
 
             /*
-                    Automatically scroll the scroll-containers during event drag-and-drop and date selecting
-                    ? Docs: https://fullcalendar.io/docs/dragScroll
-                  */
+            Automatically scroll the scroll-containers during event drag-and-drop and date selecting
+            ? Docs: https://fullcalendar.io/docs/dragScroll
+            */
             dragScroll: true,
 
             /*
-                    Max number of events within a given day
-                    ? Docs: https://fullcalendar.io/docs/dayMaxEvents
-                  */
+            Max number of events within a given day
+            ? Docs: https://fullcalendar.io/docs/dayMaxEvents
+            */
             dayMaxEvents: 10,
 
             /*
-                    Determines if day names and week names are clickable
-                    ? Docs: https://fullcalendar.io/docs/navLinks
-                  */
+            Determines if day names and week names are clickable
+            ? Docs: https://fullcalendar.io/docs/navLinks
+            */
             navLinks: true,
             eventClassNames({ event: calendarEvent }) {
                 // @ts-ignore
@@ -192,30 +155,37 @@ const Calendar = props => {
                 ]
             },
             eventContent({ event: calendarEvent }) {
-                const colorName = calendarEvent._def.ui.backgroundColor
+                // const colorName = calendarEvent._def.ui.backgroundColor
+                const colorVariant = calendarEvent._def.extendedProps.variant
+                const colorHex = CalendarColor[colorVariant]
 
-                const color = colorName == 'rgba(38, 198, 249, 0.2)' ? 'text-blue-500' : colorName == 'rgba(255, 77, 73, 0.2)' ? 'text-red-500' : colorName == 'rgba(253, 181, 40, 0.2)' ? 'text-yellow-500' : 'text-black';
+                const colorLight = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
 
-                let styles = `font-bold p-1 ${color}`;
+                console.log("🚀 ~ color:", colorVariant, colorHex, colorLight)
+
+                let styles = `font-bold p-2 ${colorLight}`;
                 return { html: `<div class="${styles}">${calendarEvent.title}</div>` }
             },
             eventClick({ event: clickedEvent }) {
-                dispatch(handleSelectEvent(clickedEvent))
-                handleAddEventSidebarToggle()
+                setOpen(true)
+                setModalEvent(clickedEvent)
+
+                // dispatch(handleSelectEvent(clickedEvent))
+                // handleAddEventSidebarToggle()
 
                 // * Only grab required field otherwise it goes in infinity loop
                 // ! Always grab all fields rendered by form (even if it get `undefined`) otherwise due to Vue3/Composition API you might get: "object is not extensible"
                 // event.value = grabEventDataFromEventApi(clickedEvent)
                 // isAddNewEventSidebarActive.value = true
             },
-            customButtons: {
-                sidebarToggle: {
-                    icon: 'bi bi-list',
-                    click() {
-                        handleLeftSidebarToggle()
-                    }
-                }
-            },
+            // customButtons: {
+            //     sidebarToggle: {
+            //         icon: 'bi bi-list',
+            //         click() {
+            //             handleLeftSidebarToggle()
+            //         }
+            //     }
+            // },
             dateClick(info) {
                 const ev = { ...blankEvent }
                 ev.start = info.date
@@ -228,18 +198,18 @@ const Calendar = props => {
             },
 
             /*
-                    Handle event drop (Also include dragged event)
-                    ? Docs: https://fullcalendar.io/docs/eventDrop
-                    ? We can use `eventDragStop` but it doesn't return updated event so we have to use `eventDrop` which returns updated event
-                  */
+            Handle event drop (Also include dragged event)
+            ? Docs: https://fullcalendar.io/docs/eventDrop
+            ? We can use `eventDragStop` but it doesn't return updated event so we have to use `eventDrop` which returns updated event
+            */
             eventDrop({ event: droppedEvent }) {
                 dispatch(updateEvent(droppedEvent))
             },
 
             /*
-                    Handle event resize
-                    ? Docs: https://fullcalendar.io/docs/eventResize
-                  */
+            Handle event resize
+            ? Docs: https://fullcalendar.io/docs/eventResize
+            */
             eventResize({ event: resizedEvent }) {
                 dispatch(updateEvent(resizedEvent))
             },
@@ -250,7 +220,20 @@ const Calendar = props => {
         }
 
         // @ts-ignore
-        return <FullCalendar {...calendarOptions} />
+        return <>
+            <FullCalendar {...calendarOptions} />
+            <Legend />
+            {/* Modal pra ver o evento */}
+            <DialogActs
+                title='Calendário'
+                setOpenModal={setOpen}
+                openModal={open}
+                size='sm'
+                handleLink={handleEventLink}
+            >
+                <Event values={modalEvent} />
+            </DialogActs>
+        </>
     } else {
         return null
     }

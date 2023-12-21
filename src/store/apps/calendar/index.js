@@ -4,13 +4,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
+import { api } from 'src/configs/api'
+
 // ** Fetch Events
 export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async calendars => {
-    const response = await axios.get('/apps/calendar/events', {
+    console.log('no fetchEvents')
+
+    const response = await api.get('/apps/calendar/events', {
         params: {
             calendars
         }
     })
+
+    console.log("🚀 ~ fetchEvents response: ", response.data)
 
     return response.data
 })

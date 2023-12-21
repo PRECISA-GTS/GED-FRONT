@@ -69,6 +69,7 @@ const FormProfissional = ({ id }) => {
         startLoading()
         const values = {
             ...data,
+            admin: user.admin,
             usualioLogado: user.usuarioID,
             unidadeID: loggedUnity.unidadeID,
             fields: {

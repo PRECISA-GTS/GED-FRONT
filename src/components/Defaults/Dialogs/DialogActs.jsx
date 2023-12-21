@@ -15,6 +15,7 @@ const DialogActs = ({
     children,
     handleConclusion,
     handleCopyLink,
+    handleLink,
     size
 }) => {
     const {
@@ -83,6 +84,12 @@ const DialogActs = ({
                         {handleConclusion && (
                             <Button type='button' variant='contained' color='primary' onClick={validateForm}>
                                 Confirmar
+                            </Button>
+                        )}
+
+                        {handleLink && (
+                            <Button type='button' variant='contained' color='primary' onClick={handleLink}>
+                                Acessar
                             </Button>
                         )}
 

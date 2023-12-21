@@ -24,7 +24,6 @@ const CardStatsVertical = props => {
                 <div className=' space-y-4'>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center gap-4'>
-
                             <CustomAvatar skin='light' variant='rounded' color={color}>
                                 {icon}
                             </CustomAvatar>
