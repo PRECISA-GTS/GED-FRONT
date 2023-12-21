@@ -1,11 +1,9 @@
-import { Typography } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 import CustomChip from 'src/@core/components/mui/chip'
 
 const Event = ({ values }) => {
-    console.log("🚀 ~ values:", values)
-
     const data = {
         ...values._def.extendedProps,
         title: values._def.title,
@@ -16,35 +14,39 @@ const Event = ({ values }) => {
         return label
     }
 
-    console.log("🚀 ~ data:", data)
     return (
-        <div className="flex flex-col gap-4">
-            <div>
 
-                <div className='flex items-center gap-4'>
-                    <CustomAvatar skin='light' variant='rounded' color="secondary">
-                        <Icon icon={data.icon} />
-                    </CustomAvatar>
-                    <Typography variant='body1'>{data.type}</Typography>
+        <Grid container spacing={4}>
+            <Grid item xs={6} md={3} >
+                <CustomAvatar skin='light' variant='rounded' color="secondary" sx={{ width: '100%', height: '100%' }}>
+                    <Icon icon={data.icon} />
+                </CustomAvatar>
+            </Grid>
+            <Grid item xs={6} md={8} >
+                <div className="flex flex-col gap-1">
+                    <Typography variant="h5">
+                        {data.title}
+                    </Typography>
+                    <div className='flex items-end gap-2'>
+                        <div>
+                            <Typography variant="caption">
+                                Vencimento
+                            </Typography>
+                            <Typography variant="body1">
+                                {data.eventDate}
+                            </Typography>
+                        </div>
+                        <CustomChip
+                            skin='light'
+                            size='small'
+                            label={getLabel()}
+                            color={data.variant}
+                            sx={{ height: 20, fontWeight: 500, fontSize: '0.75rem' }}
+                        />
+                    </div>
                 </div>
-
-                <Typography variant="h6">
-                    {data.title}
-                </Typography>
-
-                <Typography variant="h6">
-                    {data.eventDate}
-                </Typography>
-
-                <CustomChip
-                    skin='light'
-                    size='small'
-                    label={getLabel()}
-                    color={data.variant}
-                    sx={{ mb: 5.5, height: 20, fontWeight: 500, fontSize: '0.75rem' }}
-                />
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     )
 }
 
