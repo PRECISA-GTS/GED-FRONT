@@ -16,6 +16,7 @@ const AppCalendar = () => {
     const { settings } = useSettings()
     const theme = useTheme()
 
+
     // ** Vars
     const { skin } = settings
     const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
