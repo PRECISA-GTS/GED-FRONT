@@ -260,7 +260,7 @@ const LoginPage = ({ units }) => {
                                     variant='h6'
                                     sx={{ fontWeight: 600 }}
                                 >{`Bem-vindo ao ${themeConfig.templateName}! 👋🏻`}</TypographyStyled>
-                                <Typography variant='body2'>Digite seu CPF e senha para começar</Typography>
+                                <Typography variant='body2'>Digite seu CPF e senha para começar (teste export)</Typography>
                             </Box>
 
                             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
