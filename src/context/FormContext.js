@@ -13,9 +13,6 @@ const FormContext = createContext(defaultValues);
 const FormProvider = ({ children }) => {
     const { user, loggedUnity } = useContext(AuthContext)
 
-    // const setReportParameters = (parameters) => {
-    //     localStorage.setItem('report', JSON.stringify(parameters));
-    // }
     const setReportParameters = (parameters) => {
         const seen = new WeakSet();
 

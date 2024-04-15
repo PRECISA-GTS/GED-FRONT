@@ -19,7 +19,7 @@ const Home = () => {
 
     useEffect(() => {
         setTitle({
-            title: user.papelID == 1 ? 'Home' : user.papelID == 2 ? 'Dashboard' : '',
+            title: 'Início',
             subtitle: ''
         })
     }, [])

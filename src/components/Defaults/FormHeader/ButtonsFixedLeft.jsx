@@ -63,20 +63,6 @@ const ButtonsFixedLeft = ({
                     <span className='hidden sm:block'>Fechar</span>
                 </Button>
             )}
-
-            {btnStatus && (
-                <Button
-                    type='button'
-                    onClick={handleBtnStatus}
-                    variant='outlined'
-                    color='primary'
-                    size='medium'
-                    sx={{ display: 'flex', gap: 2 }}
-                >
-                    <Icon icon='fluent:status-12-filled' />
-                    <span className='hidden sm:block'>Status</span>
-                </Button>
-            )}
         </div>
     )
 }

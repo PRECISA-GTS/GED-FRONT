@@ -39,10 +39,12 @@ const DialogFormConclusion = ({
     register,
     setValue,
     listErrors,
-    canApprove, 
-    hasNaoConformidade
+    canApprove,
+    hasNaoConformidade,
+    type,
+    unity
 }) => {
-    console.log('🚀 ~ info:', info)
+    console.log('🚀 ~ info:', unity)
     const { user, loggedUnity } = useContext(AuthContext)
     const [result, setResult] = useState({})
     console.log('🚀 ~ result:', result)
@@ -81,8 +83,10 @@ const DialogFormConclusion = ({
                                 )}
 
                                 {listErrors && user.papelID == 2 && !listErrors.status && (
-                                    <Alert severity='warning' sx={{ mt: 2 }}>
-                                        Após concluir o formulário, o mesmo não poderá mais ser alterado!
+                                    <Alert severity='info' sx={{ mt: 2 }}>
+                                        {unity.quemPreenche == 2 && type == 'fornecedor'
+                                            ? `Após concluir o formulário, o mesmo será enviado para análise e conclusão da empresa ${unity?.nomeFantasia}!`
+                                            : 'Após concluir o formulário, o mesmo não poderá mais ser alterado!'}
                                     </Alert>
                                 )}
 

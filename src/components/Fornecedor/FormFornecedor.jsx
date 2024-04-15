@@ -33,6 +33,8 @@ import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import DadosFornecedor from 'src/components/Reports/Formularios/Fornecedor/DadosFornecedor'
 import { useFormContext } from 'src/context/FormContext'
+import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
+import HistoricForm from '../Defaults/HistoricForm'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -46,6 +48,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const [unidade, setUnidade] = useState(null)
     const [produtos, setProdutos] = useState([])
     const [grupoAnexo, setGrupoAnexo] = useState([])
+    const [change, setChange] = useState(false)
     const [status, setStatus] = useState(null)
     const { createNewNotification } = useContext(NotificationContext)
     const [openModalStatus, setOpenModalStatus] = useState(false)
@@ -96,10 +99,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     console.log('formFornecedor errors: ', errors)
 
     //* Reabre o formulário pro fornecedor alterar novamente se ainda nao estiver vinculado com recebimento
-    const changeFormStatus = async (status, observacao) => {
+    const changeFormStatus = async values => {
         const data = {
-            status: status,
-            observacao: observacao,
+            status: 30,
+            observacao: values?.obs,
             auth: {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
@@ -264,9 +267,25 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         icon: 'bi:gear',
         identification: null
     }
+    const objReOpenForm = {
+        id: 6,
+        name: 'Reabrir formulário',
+        description: 'Reabrir formulário para preenchimento.',
+        component: <ReOpenFornecedor />,
+        disabled: hasFormPending ? true : false,
+        route: null,
+        type: null,
+        action: changeFormStatus,
+        modal: true,
+        icon: 'heroicons:lock-open',
+        identification: null
+    }
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    if (user.papelID == 1) actionsData.push(objNovoFormulario)
+    if (user.papelID == 1) {
+        actionsData.push(objNovoFormulario)
+        if (info.status >= 40) actionsData.push(objReOpenForm)
+    }
     actionsData.push(objGerarNotificacao)
     actionsData.push(objCopiarLink)
     actionsData.push(objRelatorio)
@@ -796,6 +815,38 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         }
     }
 
+    const changeAllOptions = colIndex => {
+        const tempBlocos = [...blocos]
+
+        //? Formulário
+        tempBlocos.map((bloco, index) => {
+            // bloco
+            bloco.itens.map((item, indexItem) => {
+                // item
+                setValue(`blocos[${index}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
+            })
+        })
+
+        //? Estado
+        setBlocos(prev =>
+            prev.map(bloco => ({
+                ...bloco,
+                itens: bloco.itens.map(item => ({
+                    ...item,
+                    resposta:
+                        item.alternativas[colIndex] && item.alternativas[colIndex].id > 0
+                            ? item.alternativas[colIndex]
+                            : null
+                }))
+            }))
+        )
+        setChange(!change)
+
+        //* Submete formulário pra atualizar configurações dos produtos
+        const values = getValues()
+        onSubmit(values)
+    }
+
     useEffect(() => {
         type == 'edit' ? getData() : null
     }, [id, savingForm])
@@ -891,9 +942,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     {info && info.cabecalhoModelo != '' && (
                         <Card>
                             <CardContent>
-                                <Typography variant='subtitle1' sx={{ mb: 2 }}>
-                                    {info.cabecalhoModelo}
-                                </Typography>
+                                <p>{info.cabecalhoModelo}</p>
                             </CardContent>
                         </Card>
                     )}
@@ -952,11 +1001,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     {blocos &&
                         blocos.map((bloco, index) => (
                             <Block
-                                key={index}
+                                key={change}
                                 index={index}
                                 blockKey={`parFornecedorModeloBlocoID`}
                                 handleFileSelect={handleFileSelectItem}
-                                changeAllOptions={null}
+                                changeAllOptions={changeAllOptions}
                                 setItemResposta={setItemResposta}
                                 handleRemoveAnexoItem={handleRemoveAnexoItem}
                                 setBlocos={setBlocos}
@@ -1017,7 +1066,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     {/* Rodapé com informações de conclusão */}
                     {fieldsFooter && fieldsFooter.concluded && (
                         <Typography variant='caption'>
-                            {`Concluído por ${fieldsFooter.profissionalAprova.nome} em ${fieldsFooter.dataFim} ${fieldsFooter.horaFim}.`}
+                            {`Concluído por ${fieldsFooter?.profissionalAprova?.nome} em ${fieldsFooter.dataFim} ${fieldsFooter.horaFim}.`}
                         </Typography>
                     )}
 
@@ -1058,23 +1107,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         conclusionForm={conclusionForm}
                         listErrors={listErrors}
                         canApprove={true}
+                        type='fornecedor'
+                        unity={unidade}
                     />
 
-                    {/* Mensagem */}
-                    {canEdit.message && <Alert severity='warning'>{canEdit.message}</Alert>}
-
-                    {/* Última movimentação do formulário */}
-                    {movimentacao && (
-                        <Alert severity='info'>
-                            {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
-                            {movimentacao.observacao && (
-                                <p>
-                                    <br />
-                                    Mensagem: "{movimentacao.observacao}"
-                                </p>
-                            )}
-                        </Alert>
-                    )}
+                    <HistoricForm parFormularioID={1} id={id} />
                 </Box>
             </form>
         </>

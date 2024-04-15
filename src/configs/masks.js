@@ -35,8 +35,6 @@ function rgMask(rg) {
     return rg;
 }
 
-
-
 // Mascara telefone celular
 function cellPhoneMask(cellPhone) {
     cellPhone = cellPhone.replace(/\D/g, ''); // remove tudo que não é dígito

@@ -20,7 +20,14 @@ const defaultProvider = {
     setLoading: () => Boolean,
     login: () => Promise.resolve(),
     logout: () => Promise.resolve(),
-    register: () => Promise.resolve()
+    register: () => Promise.resolve(),
+    setIsNotFactory: () => Boolean,
+    isNotFactory: true,
+    setReOpenForm: () => null,
+    reOpenForm: {
+        status: 30,
+        obs: ''
+    }
 }
 
 const FornecedorContext = createContext(defaultProvider)
@@ -39,6 +46,14 @@ const FornecedorProvider = ({ children }) => {
     const [routes, setRoutes] = useState([])
     // Menu 
     const [menu, setMenu] = useState([])
+
+    // Validação do tipo de formulário a ser preenchido (fornecedor ou fábrica)
+    const [isNotFactory, setIsNotFactory] = useState(true)
+
+    const [reOpenForm, setReOpenForm] = useState({
+        status: 30,
+        obs: ''
+    })
 
     console.log('Unidade logada', loggedUnity)
 
@@ -196,6 +211,12 @@ const FornecedorProvider = ({ children }) => {
         login: handleLogin,
         logout: handleLogout,
         register: handleRegister,
+
+        setIsNotFactory,
+        isNotFactory,
+
+        setReOpenForm,
+        reOpenForm,
     }
 
     return <FornecedorContext.Provider value={values}>{children}</FornecedorContext.Provider>

@@ -6,23 +6,15 @@ import { validationCNPJ } from '../../../../configs/validations'
 import { api } from 'src/configs/api'
 import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
-const NewFornecedor = ({
-    cnpj,
-    control,
-    setValue,
-    register,
-    errors,
-    reset,
-    getValues,
-    isNotFactory,
-    setIsNotFactory
-}) => {
+const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
     const [params, setParams] = useState(null)
     const [validationCnpj, setValidationCnpj] = useState(null)
+    const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
 
     const handleCnpj = cnpj => {
         if (cnpj.length == 18) {
@@ -149,8 +141,8 @@ const NewFornecedor = ({
                                 register={register}
                                 handleCnpj={handleCnpj}
                                 validCnpj={validationCnpj}
-                                isNotFactory={isNotFactory}
-                                setIsNotFactory={setIsNotFactory}
+                                // isNotFactory={isNotFactory}
+                                // setIsNotFactory={setIsNotFactory}
                             />
                         </Box>
                     </Grid>

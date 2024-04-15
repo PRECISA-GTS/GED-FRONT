@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewFornecedor/FormFornecedorConclusion'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const Fornecedor = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -30,7 +31,9 @@ const Fornecedor = () => {
     const [open, setOpen] = useState(false)
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
-    const [isNotFactory, setIsNotFactory] = useState(true)
+    // const [isNotFactory, setIsNotFactory] = useState(true)
+
+    const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -221,7 +224,7 @@ const Fornecedor = () => {
                 openModal={open}
                 size='lg'
             >
-                <NewFornecedor isNotFactory={isNotFactory} setIsNotFactory={setIsNotFactory} />
+                <NewFornecedor />
             </DialogActs>
 
             {/* Modal que exibe mensagem de novo fornecedor habilitado */}

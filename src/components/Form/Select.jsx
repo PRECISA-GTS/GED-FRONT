@@ -68,6 +68,11 @@ const Select = ({
                                         label={title}
                                         placeholder={title}
                                         error={errors ? true : false}
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                padding: '8px 14px' // Ajuste o valor conforme necessário
+                                            }
+                                        }}
                                     />
                                 )}
                                 noOptionsText='Sem opções'

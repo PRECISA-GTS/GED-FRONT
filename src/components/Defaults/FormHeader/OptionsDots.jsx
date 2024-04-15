@@ -26,7 +26,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                 size='medium'
                 sx={{ display: 'flex', gap: 2 }}
             >
-                <Icon icon='akar-icons:edit' />
+                <Icon icon='octicon:chevron-down-12' />
                 <span className='hidden sm:block'>Ações</span>
             </Button>
 
@@ -65,6 +65,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                                 handleClose()
                                 handleClickReport(item)
                             }}
+                            disabled={item.disabled ? true : false}
                             style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '4px' }}
                         >
                             {item.identification ? (

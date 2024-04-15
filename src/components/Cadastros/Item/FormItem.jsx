@@ -31,6 +31,7 @@ const FormItem = ({
     const [open, setOpen] = useState(false)
     const [change, setChange] = useState(false)
     const [data, setData] = useState(null)
+    console.log('🚀 ~ data:', data)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
@@ -199,6 +200,7 @@ const FormItem = ({
                             btnCancel
                             btnNew
                             btnSave
+                            disabled={data.fields.pending}
                             manualUrl={manualUrl}
                             btnClose={btnClose}
                             handleModalClose={handleModalClose}

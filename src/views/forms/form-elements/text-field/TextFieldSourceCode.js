@@ -12,7 +12,7 @@ const TextFieldColor = () => {
 }
 
 export default TextFieldColor
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldControlledUncontrolledJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -37,7 +37,7 @@ const TextFieldControlledUncontrolled = () => {
 }
 
 export default TextFieldControlledUncontrolled
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldCustomizedJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import InputLabel from '@mui/material/InputLabel'
@@ -90,7 +90,7 @@ const TextFieldCustomized = () => {
 }
 
 export default TextFieldCustomized
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldInputAdornmentJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -176,7 +176,7 @@ const TextFieldInputAdornment = () => {
 }
 
 export default TextFieldInputAdornment
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldComponentsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -231,7 +231,7 @@ const TextFieldComponents = () => {
 }
 
 export default TextFieldComponents
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldFormPropsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import TextField from '@mui/material/TextField'
@@ -267,7 +267,7 @@ const TextFieldFormProps = () => {
 }
 
 export default TextFieldFormProps
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldIconsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -321,7 +321,7 @@ const TextFieldIcons = () => {
 }
 
 export default TextFieldIcons
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldInputsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Input from '@mui/material/Input'
@@ -338,7 +338,7 @@ const TextFieldInputs = () => {
 }
 
 export default TextFieldInputs
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldLayoutJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Box from '@mui/material/Box'
@@ -375,7 +375,7 @@ const TextFieldLayout = () => {
 }
 
 export default TextFieldLayout
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldSizesJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import TextField from '@mui/material/TextField'
@@ -390,7 +390,7 @@ const TextFieldSizes = () => {
 }
 
 export default TextFieldSizes
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldValidationJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import TextField from '@mui/material/TextField'
@@ -411,7 +411,7 @@ const TextFieldValidation = () => {
 }
 
 export default TextFieldValidation
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextFieldVariantJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import TextField from '@mui/material/TextField'
@@ -427,5 +427,5 @@ const TextFieldVariant = () => {
 }
 
 export default TextFieldVariant
-`}</code></pre>) 
+`}</code></pre>)
 

@@ -611,7 +611,7 @@ const FormLimpeza = ({ id }) => {
                             register={register}
                             errors={errors}
                             setValue={setValue}
-                            control={control}                            
+                            control={control}
                         />
                     )}
 
@@ -755,7 +755,8 @@ const FormLimpeza = ({ id }) => {
                         conclusionForm={conclusionForm}
                         listErrors={listErrors}
                         canApprove={true}
-                        
+                        type='limpeza'
+                        unity={unidade}
                     />
 
                     {/* Modal que deleta formulario */}

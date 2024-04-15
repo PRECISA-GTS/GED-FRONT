@@ -37,6 +37,7 @@ import RecebimentoMpNaoConformidade from './NaoConformidade'
 import FormTransportador from '../Cadastros/Transportador/FormTransportador'
 import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
+import HistoricForm from '../Defaults/HistoricForm'
 
 const FormRecebimentoMp = ({ id }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -656,8 +657,6 @@ const FormRecebimentoMp = ({ id }) => {
                 }))
             }))
         )
-        console.log('id do fornecedorrr', getValues('fieldsHeader.fornecedor.id'))
-
         setChange(!change)
 
         //* Submete formulário pra atualizar configurações dos produtos
@@ -873,21 +872,10 @@ const FormRecebimentoMp = ({ id }) => {
                         />
                     )}
 
-                    {/* Mensagem */}
-                    {canEdit.message && <Alert severity='warning'>{canEdit.message}</Alert>}
-
-                    {/* Última movimentação do formulário */}
-                    {movimentacao && (
-                        <Alert severity='info'>
-                            {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
-                            {movimentacao.observacao && (
-                                <p>
-                                    <br />
-                                    Mensagem: "{movimentacao.observacao}"
-                                </p>
-                            )}
-                        </Alert>
-                    )}
+                    <HistoricForm
+                        id={id}
+                        parFormularioID={2} // Recebimento MP
+                    />
 
                     {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
                     {openModalStatus && (
@@ -927,6 +915,8 @@ const FormRecebimentoMp = ({ id }) => {
                         listErrors={listErrors}
                         canApprove={canApprove}
                         hasNaoConformidade={true}
+                        type='recebimentoMp'
+                        unity={unidade}
                     />
 
                     {/* Modal que deleta formulario */}

@@ -139,9 +139,9 @@ const FormHeader = ({
     return (
         <>
             <div
-                className={`sticky ${outsideID ? '-top-20 px-4 bg-transparent' : 'top-20'}  pb-2 mb-2 z-50 ${
-                    settings.mode == 'dark' ? 'bg-[#202023]' : 'bg-[#F7F7F9]'
-                }`}
+                className={`sticky ${
+                    outsideID ? '-top-[4.5rem] px-4 bg-transparent' : 'top-[4.5rem]'
+                }  pb-2 mb-2 z-50 ${settings.mode == 'dark' ? 'bg-[#202023]' : 'bg-[#F7F7F9]'}`}
             >
                 <div className={`flex items-center justify-between w-full `} style={{ zIndex: 1000 }}>
                     {/* Div da esquerda */}

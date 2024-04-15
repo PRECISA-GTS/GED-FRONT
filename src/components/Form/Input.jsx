@@ -116,6 +116,11 @@ const Input = ({
                                             </InputAdornment>
                                         )
                                     }}
+                                    sx={{
+                                        '& .MuiInputBase-input': {
+                                            padding: '8px 14px' // Ajuste o valor conforme necessário
+                                        }
+                                    }}
                                 />
                             </>
                         )}

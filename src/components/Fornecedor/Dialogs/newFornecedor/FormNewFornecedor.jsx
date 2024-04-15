@@ -8,6 +8,7 @@ import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import FormGrupoAnexos from 'src/components/Cadastros/grupoAnexos/FormGrupoAnexos'
 import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import ToggleButtonLabel from 'src/components/Form/ToggleButtonLabel'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const FormNewFornecedor = ({
     fields,
@@ -21,9 +22,7 @@ const FormNewFornecedor = ({
     errors,
     setValue,
     register,
-    reset,
-    isNotFactory,
-    setIsNotFactory
+    reset
 }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState([])
@@ -33,6 +32,7 @@ const FormNewFornecedor = ({
     const [openModalNew, setOpenModalNew] = useState(false)
     const [titleModal, setTitleModal] = useState('')
     const [componetSelect, setComponetSelect] = useState(null)
+    const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
 
     const getModels = async () => {
         const result = await api.post(`/formularios/fornecedor/getModels`, { unidadeID: loggedUnity.unidadeID })
@@ -125,11 +125,11 @@ const FormNewFornecedor = ({
                         <div className='mb-6'>
                             <ToggleButtonLabel
                                 xs={12}
-                                md={6}
+                                md={12}
                                 register={register}
                                 name='habilitaQuemPreencheFormFornecedor'
                                 setValue={setValue}
-                                setIsNotFactory={setIsNotFactory}
+                                // setIsNotFactory={setIsNotFactory}
                             />
                         </div>
                     )}
