@@ -150,6 +150,7 @@ const FormRecebimentoMp = ({ id }) => {
         icon: 'bi:gear',
         identification: null
     }
+
     // Monta array de ações baseado nas permissões
     const actionsData = []
     actionsData.push(objRelatorio)

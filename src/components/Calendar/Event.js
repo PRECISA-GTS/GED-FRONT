@@ -8,6 +8,7 @@ const Event = ({ values }) => {
         ...values._def.extendedProps,
         title: values._def.title,
     }
+    console.log("🚀 ~ Event:", data)
 
     const getLabel = () => {
         const label = data.variant == 'info' ? 'Dentro do prazo' : data.variant == 'warning' ? 'Vence hoje' : data.variant == 'error' ? 'Vencido' : 'Concluído'

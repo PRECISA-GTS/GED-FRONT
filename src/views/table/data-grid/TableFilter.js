@@ -43,9 +43,9 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
     const getRowClassName = (params) => {
         const status = params.row.status;
         const concluido = params.row.concluido;
-        if (status === 'Inativo' || concluido == 1) {
-            return 'inativo-row';
-        }
+        // if (status === 'Inativo' || concluido == 1) {
+        //     return 'inativo-row';
+        // }
         return '';
     };
 

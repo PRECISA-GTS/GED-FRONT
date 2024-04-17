@@ -607,7 +607,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             }
         }
 
-        // return
         try {
             if (type == 'edit') {
                 setSavingForm(true)
