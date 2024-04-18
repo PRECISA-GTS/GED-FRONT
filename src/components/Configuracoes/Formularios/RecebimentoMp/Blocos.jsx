@@ -200,7 +200,7 @@ const Blocos = ({
                                             md={1}
                                             title={indexItem == 0 ? 'Remover' : ''}
                                             index={index}
-                                            removeItem={() => removeItem(item, index, indexItem)}
+                                            removeItem={() => removeItem(index, indexItem, block.itens)}
                                             item={item}
                                             pending={item.hasPending}
                                             textSuccess='Remover este item'

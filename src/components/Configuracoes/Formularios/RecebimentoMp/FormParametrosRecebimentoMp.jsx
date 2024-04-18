@@ -153,23 +153,17 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
 
-    const removeItem = (item, indexBlock, indexItem) => {
-        if (blocks[indexBlock].itens.length === 1) {
+    const removeItem = (indexBlock, indexItem, arrItens) => {
+        if (blocks[indexBlock].itens.length == 1) {
             toast.error('Você deve ter ao menos um item!')
             return
         }
-        // Inserir no array de itens removidos
-        let newRemovedItems = [...arrRemovedItems]
-        newRemovedItems.push(item)
-        setArrRemovedItems(newRemovedItems)
 
-        const updatedBlocks = [...getValues('blocks')]
-        updatedBlocks[indexBlock].itens.splice(indexItem, 1)
-
-        setValue('blocks', updatedBlocks)
-
-        setBlocks(updatedBlocks)
-
+        const newBlocks = [...blocks]
+        const newItensBlock = arrItens.splice(indexItem, 1)
+        newBlocks[indexBlock].itens = newItensBlock
+        setBlocks(newBlocks)
+        setValue(`blocks.[${indexBlock}].itens`, newItensBlock)
         refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
         setChange(!change)
     }
@@ -177,6 +171,11 @@ const FormParametrosRecebimentoMp = ({ id }) => {
     console.log('allOptions:', allOptions)
 
     const removeBlock = (block, index) => {
+        if (blocks.length == 1) {
+            toast.error('Você deve ter ao menos um bloco!')
+            return
+        }
+
         // Verifica se o bloco possui itens com pendência
         let canDelete = true
         block &&
