@@ -170,12 +170,19 @@ const FormParametrosFornecedor = ({ id }) => {
             return
         }
 
-        const newBlocks = [...blocks]
-        const newItensBlock = arrItens.splice(indexItem, 1)
-        newBlocks[indexBlock].itens = newItensBlock
+        const newBlocks = getValues('blocks')
+        const newItens = arrItens.filter((_, i) => i !== indexItem)
+        newBlocks[indexBlock].itens = newItens
+
         setBlocks(newBlocks)
-        setValue(`blocks.[${indexBlock}].itens`, newItensBlock)
-        refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
+        setValue(`blocks.[${indexBlock}].itens`, newItens)
+
+        // Inserir no array de itens removidos
+        let newRemovedItems = [...arrRemovedItems]
+        newRemovedItems.push(arrItens[indexItem].parFornecedorModeloBlocoItemID)
+        setArrRemovedItems(newRemovedItems)
+
+        refreshOptions(newBlocks[indexBlock], indexBlock, newBlocks, allOptions)
         setChange(!change)
     }
 
@@ -421,28 +428,6 @@ const FormParametrosFornecedor = ({ id }) => {
                                         />
                                     </>
                                 )}
-
-                                {/* <Grid item xs={12}>
-                                    <JoditEditor
-                                        ref={editor}
-                                        value={textCabecalho}
-                                        // name={`model.cabecalho`}
-                                        // register={register}
-                                        config={{
-                                            height: 300,
-                                            readonly: false // all options from https://xdsoft.net/jodit/doc/
-                                        }}
-                                        tabIndex={1} // tabIndex of textarea
-                                        onChange={newContent => {
-                                            console.log('🚀 ~ newContent:', newContent)
-                                            setTextCabecalho(newContent)
-                                        }}
-                                        onBlur={newContent => {
-                                            console.log('🚀 ~ newContent:', newContent)
-                                            setTextCabecalho(newContent)
-                                        }}
-                                    />
-                                </Grid> */}
                             </Grid>
                         </CardContent>
                     </Card>

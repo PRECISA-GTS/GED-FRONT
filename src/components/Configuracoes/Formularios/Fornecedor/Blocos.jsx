@@ -84,130 +84,125 @@ const Blocos = ({
                             <Typography variant='subtitle1' sx={{ fontWeight: 600, mt: 4 }}>
                                 Itens
                             </Typography>
-                            {block.itens &&
-                                block.itens.map((item, indexItem) => (
-                                    <Grid
-                                        id={`item-${index}-${indexItem}`}
-                                        key={indexItem}
-                                        container
-                                        spacing={2}
-                                        sx={{ my: 1 }}
-                                    >
-                                        {/* Sequência do item */}
-                                        <Input
-                                            xs={12}
-                                            md={1}
-                                            title='Sequência'
-                                            name={`blocks.[${index}].itens.[${indexItem}].ordem`}
-                                            value={item.ordem}
-                                            required={true}
-                                            control={control}
-                                            errors={errors?.blocks?.[index]?.itens?.[indexItem]?.ordem}
-                                        />
+                            {getValues(`blocks.[${index}].itens`)?.map((item, indexItem) => (
+                                <Grid
+                                    id={`item-${index}-${indexItem}`}
+                                    key={indexItem}
+                                    container
+                                    spacing={2}
+                                    sx={{ my: 1 }}
+                                >
+                                    {/* Sequência do item */}
+                                    <Input
+                                        xs={12}
+                                        md={1}
+                                        title='Sequência'
+                                        name={`blocks.[${index}].itens.[${indexItem}].ordem`}
+                                        value={item.ordem}
+                                        required={true}
+                                        control={control}
+                                        errors={errors?.blocks?.[index]?.itens?.[indexItem]?.ordem}
+                                    />
 
-                                        {/* Item */}
-                                        <Select
-                                            xs={12}
-                                            md={7}
-                                            createNew={() => createNew(index, indexItem)}
-                                            title={
-                                                blocks[index]?.itens[indexItem]?.itemID
-                                                    ? `Item [${blocks[index]?.itens[indexItem]?.itemID}]`
-                                                    : 'Item'
-                                            }
-                                            name={`blocks.[${index}].itens.[${indexItem}].item`}
-                                            value={blocks[index]?.itens[indexItem]?.item ?? null}
-                                            required={true}
-                                            disabled={item.hasPending == 1 ? true : false}
-                                            options={blocks[index]?.optionsBlock?.itens}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                            errors={errors?.blocks?.[index]?.itens?.[indexItem]?.item}
-                                        />
+                                    {/* Item */}
+                                    <Select
+                                        xs={12}
+                                        md={7}
+                                        createNew={() => createNew(index, indexItem)}
+                                        title={
+                                            blocks[index]?.itens[indexItem]?.itemID
+                                                ? `Item [${blocks[index]?.itens[indexItem]?.itemID}]`
+                                                : 'Item'
+                                        }
+                                        name={`blocks.[${index}].itens.[${indexItem}].item`}
+                                        value={blocks[index]?.itens[indexItem]?.item ?? null}
+                                        required={true}
+                                        disabled={item.hasPending == 1 ? true : false}
+                                        options={blocks[index]?.optionsBlock?.itens}
+                                        register={register}
+                                        setValue={setValue}
+                                        control={control}
+                                        errors={errors?.blocks?.[index]?.itens?.[indexItem]?.item}
+                                    />
 
-                                        {/* Mais detalhes do item */}
-                                        <Grid item xs={12} md={1}>
-                                            <Box
-                                                height='100%'
-                                                display='flex'
-                                                flexDirection='column'
-                                                justifyContent='center'
-                                                alignItems='center'
+                                    {/* Mais detalhes do item */}
+                                    <Grid item xs={12} md={1}>
+                                        <Box
+                                            height='100%'
+                                            display='flex'
+                                            flexDirection='column'
+                                            justifyContent='center'
+                                            alignItems='center'
+                                        >
+                                            {indexItem == 0 && <Typography variant='caption'>Detalhes</Typography>}
+                                            <Tooltip
+                                                title={
+                                                    watch(`blocks.[${index}].itens.[${indexItem}].item`)
+                                                        ? 'Ver mais detalhes do item selecionado'
+                                                        : 'Selecione o item'
+                                                }
                                             >
-                                                {indexItem == 0 && <Typography variant='caption'>Detalhes</Typography>}
-                                                <Tooltip
-                                                    title={
+                                                <IconButton
+                                                    color='primary'
+                                                    size='small'
+                                                    onClick={() => {
                                                         watch(`blocks.[${index}].itens.[${indexItem}].item`)
-                                                            ? 'Ver mais detalhes do item selecionado'
-                                                            : 'Selecione o item'
-                                                    }
-                                                >
-                                                    <IconButton
-                                                        color='primary'
-                                                        size='small'
-                                                        onClick={() => {
-                                                            watch(`blocks.[${index}].itens.[${indexItem}].item`)
-                                                                ? viewItem(
-                                                                      getValues(
-                                                                          `blocks.[${index}].itens.[${indexItem}].item`
-                                                                      )
+                                                            ? viewItem(
+                                                                  getValues(
+                                                                      `blocks.[${index}].itens.[${indexItem}].item`
                                                                   )
-                                                                : null
-                                                        }}
-                                                        sx={{
-                                                            opacity: watch(
-                                                                `blocks.[${index}].itens.[${indexItem}].item`
-                                                            )
-                                                                ? 1
-                                                                : 0.5,
-                                                            disabled: watch(
-                                                                `blocks.[${index}].itens.[${indexItem}].item`
-                                                            )
-                                                                ? false
-                                                                : true
-                                                        }}
-                                                    >
-                                                        <Icon icon='octicon:info-16' width='18' />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Box>
-                                        </Grid>
-
-                                        <Check
-                                            xs={2}
-                                            md={1}
-                                            title='Ativo'
-                                            index={indexItem}
-                                            name={`blocks.[${index}].itens.[${indexItem}].status`}
-                                            value={blocks[index]?.itens[indexItem]?.status}
-                                            register={register}
-                                        />
-
-                                        <Check
-                                            xs={2}
-                                            md={1}
-                                            title='Obrigatório'
-                                            index={indexItem}
-                                            name={`blocks.[${index}].itens.[${indexItem}].obrigatorio`}
-                                            value={blocks[index]?.itens[indexItem]?.obrigatorio}
-                                            register={register}
-                                        />
-
-                                        {/* Deletar */}
-                                        <Remove
-                                            xs={2}
-                                            md={1}
-                                            title={indexItem == 0 ? 'Remover' : ''}
-                                            index={index}
-                                            removeItem={() => removeItem(index, indexItem, block.itens)}
-                                            item={item}
-                                            pending={item.hasPending}
-                                            textSuccess='Remover este item'
-                                            textError='Este item não pode mais ser removido pois já foi respondido em um formulário'
-                                        />
+                                                              )
+                                                            : null
+                                                    }}
+                                                    sx={{
+                                                        opacity: watch(`blocks.[${index}].itens.[${indexItem}].item`)
+                                                            ? 1
+                                                            : 0.5,
+                                                        disabled: watch(`blocks.[${index}].itens.[${indexItem}].item`)
+                                                            ? false
+                                                            : true
+                                                    }}
+                                                >
+                                                    <Icon icon='octicon:info-16' width='18' />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
                                     </Grid>
-                                ))}
+
+                                    <Check
+                                        xs={2}
+                                        md={1}
+                                        title='Ativo'
+                                        index={indexItem}
+                                        name={`blocks.[${index}].itens.[${indexItem}].status`}
+                                        value={blocks[index]?.itens[indexItem]?.status}
+                                        register={register}
+                                    />
+
+                                    <Check
+                                        xs={2}
+                                        md={1}
+                                        title='Obrigatório'
+                                        index={indexItem}
+                                        name={`blocks.[${index}].itens.[${indexItem}].obrigatorio`}
+                                        value={blocks[index]?.itens[indexItem]?.obrigatorio}
+                                        register={register}
+                                    />
+
+                                    {/* Deletar */}
+                                    <Remove
+                                        xs={2}
+                                        md={1}
+                                        title={indexItem == 0 ? 'Remover' : ''}
+                                        index={index}
+                                        removeItem={() => removeItem(index, indexItem, block.itens)}
+                                        item={item}
+                                        pending={item.hasPending}
+                                        textSuccess='Remover este item'
+                                        textError='Este item não pode mais ser removido pois já foi respondido em um formulário'
+                                    />
+                                </Grid>
+                            ))}
                             {/* Modal que define a pontuação das respostas */}
                             {openModalConfirmScore && itemScore && (
                                 <DialogConfirmScore

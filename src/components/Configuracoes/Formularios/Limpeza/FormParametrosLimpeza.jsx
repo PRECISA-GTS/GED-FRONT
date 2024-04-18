@@ -153,18 +153,40 @@ const FormParametrosLimpeza = ({ id }) => {
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
 
+    // const removeItem = (indexBlock, indexItem, arrItens) => {
+    //     if (blocks[indexBlock].itens.length == 1) {
+    //         toast.error('Você deve ter ao menos um item!')
+    //         return
+    //     }
+
+    //     const newBlocks = [...blocks]
+    //     const newItensBlock = arrItens.splice(indexItem, 1)
+    //     newBlocks[indexBlock].itens = newItensBlock
+    //     setBlocks(newBlocks)
+    //     setValue(`blocks.[${indexBlock}].itens`, newItensBlock)
+    //     refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
+    //     setChange(!change)
+    // }
+
     const removeItem = (indexBlock, indexItem, arrItens) => {
         if (blocks[indexBlock].itens.length == 1) {
             toast.error('Você deve ter ao menos um item!')
             return
         }
 
-        const newBlocks = [...blocks]
-        const newItensBlock = arrItens.splice(indexItem, 1)
-        newBlocks[indexBlock].itens = newItensBlock
+        const newBlocks = getValues('blocks')
+        const newItens = arrItens.filter((_, i) => i !== indexItem)
+        newBlocks[indexBlock].itens = newItens
+
         setBlocks(newBlocks)
-        setValue(`blocks.[${indexBlock}].itens`, newItensBlock)
-        refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
+        setValue(`blocks.[${indexBlock}].itens`, newItens)
+
+        // Inserir no array de itens removidos
+        let newRemovedItems = [...arrRemovedItems]
+        newRemovedItems.push(arrItens[indexItem].parLimpezaModeloBlocoItemID)
+        setArrRemovedItems(newRemovedItems)
+
+        refreshOptions(newBlocks[indexBlock], indexBlock, newBlocks, allOptions)
         setChange(!change)
     }
 
