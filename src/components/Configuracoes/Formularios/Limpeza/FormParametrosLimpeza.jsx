@@ -236,7 +236,7 @@ const FormParametrosLimpeza = ({ id }) => {
 
     const getProfissionaisModelo = async model => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
-            formularioID: 2, // recebimento MP
+            formularioID: 4, // limpeza
             modeloID: id
         })
         const updatedModel = { ...model }
@@ -458,7 +458,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].mostra`}
                                                 value={header.mostra}
-                                                register={register}                                                
+                                                register={register}
                                             />
 
                                             <CheckLabel
@@ -467,7 +467,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].obrigatorio`}
                                                 value={header.obrigatorio}
-                                                register={register}                                                
+                                                register={register}
                                             />
 
                                             <Input
