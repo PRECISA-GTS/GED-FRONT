@@ -94,8 +94,8 @@ const ButtonsFixedRight = ({
                     type='submit'
                     variant='contained'
                     size='medium'
-                    color={isLoading ? 'secondary' : 'primary'}
-                    disabled={disabled || disabledSubmit || isLoading}
+                    // color={isLoading ? 'secondary' : 'primary'}
+                    disabled={disabled || disabledSubmit}
                     sx={{ display: 'flex', gap: 2 }}
                 >
                     <Icon icon='mdi:check-bold' />

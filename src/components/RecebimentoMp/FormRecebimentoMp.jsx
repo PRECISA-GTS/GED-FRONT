@@ -168,7 +168,7 @@ const FormRecebimentoMp = ({ id }) => {
     }
 
     const getData = () => {
-        setLoading(true)
+        startLoading()
         try {
             api.post(`${staticUrl}/getData/${id}`, {
                 type: type,
@@ -176,8 +176,6 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             })
                 .then(response => {
-                    setLoading(false)
-
                     console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
@@ -217,11 +215,11 @@ const FormRecebimentoMp = ({ id }) => {
                 })
                 .catch(error => {
                     console.log('🚀 ~ error:', error)
-                    setLoading(false)
                 })
         } catch (error) {
             console.log('🚀 ~ error:', error)
-            setLoading(false)
+        } finally {
+            stopLoading()
         }
     }
 
