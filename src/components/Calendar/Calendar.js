@@ -29,7 +29,8 @@ const Calendar = () => {
         const data = {
             usuarioID: user.usuarioID,
             unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID
+            papelID: user.papelID,
+            admin: user.admin
         }
         try {
             const response = await api.post('calendario/getEvents', data);

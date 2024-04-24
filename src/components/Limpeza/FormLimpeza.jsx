@@ -284,7 +284,7 @@ const FormLimpeza = ({ id }) => {
 
     const conclusionForm = async values => {
         console.log('🚀 ~ conclusionForm:', values)
-        // sendPdfToServer(id, blobSaveReport, 'recebimento-mp')
+        // sendPdfToServer(id, blobSaveReport, 'limpeza')
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
     }

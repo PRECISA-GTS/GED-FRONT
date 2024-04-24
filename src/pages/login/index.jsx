@@ -52,6 +52,7 @@ import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import DialogSelectUnit from 'src/components/Defaults/Dialogs/DialogSelectUnit'
 import { toast } from 'react-hot-toast'
 import Logo from 'src/components/Defaults/Logo'
+import useLoading from 'src/hooks/useLoad'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -260,7 +261,9 @@ const LoginPage = ({ units }) => {
                                     variant='h6'
                                     sx={{ fontWeight: 600 }}
                                 >{`Bem-vindo ao ${themeConfig.templateName}! 👋🏻`}</TypographyStyled>
-                                <Typography variant='body2'>Digite seu CPF e senha para começar (teste export)</Typography>
+                                <Typography variant='body2'>
+                                    Digite seu CPF e senha para começar (teste export)
+                                </Typography>
                             </Box>
 
                             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
