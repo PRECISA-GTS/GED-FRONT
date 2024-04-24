@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
+import Router from 'next/router'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
 import FormFornecedor from 'src/components/Fornecedor/FormFornecedor'
@@ -17,7 +18,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewFornecedor/FormFornecedorConclusion'
-import { FornecedorContext } from 'src/context/FornecedorContext'
+import { useFornecedor } from 'src/context/FornecedorContext'
 
 const Fornecedor = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -31,9 +32,7 @@ const Fornecedor = () => {
     const [open, setOpen] = useState(false)
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
-    // const [isNotFactory, setIsNotFactory] = useState(true)
-
-    const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
+    const { isNotFactory } = useFornecedor()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -72,11 +71,13 @@ const Fornecedor = () => {
                 values: values.fields,
                 habilitaQuemPreencheFormFornecedor: values.habilitaQuemPreencheFormFornecedor
             })
+
             if (response.status == 200) {
                 toast.success(response.data.message)
                 if (isNotFactory) {
                     setOpenModalConclusion(true)
                     setResponseConclusion(response.data.result)
+                    getList()
                 } else {
                     setId(response.data.fornecedorID)
                 }
@@ -91,6 +92,13 @@ const Fornecedor = () => {
         const link = responseConclusion?.link
         if (link) {
             navigator.clipboard.writeText(link)
+            toast.success('Link copiado com sucesso!')
+        }
+    }
+
+    const handleLink = link => {
+        if (link) {
+            router.push(link)
             toast.success('Link copiado com sucesso!')
         }
     }
