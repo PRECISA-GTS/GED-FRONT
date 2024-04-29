@@ -32,13 +32,14 @@ import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import { toast } from 'react-hot-toast'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
+import { useFilter } from 'src/context/FilterContext'
 
 const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSave }) => {
     const router = useRouter()
 
     const [loading, setLoading] = useState(false)
     const { user, loggedUnity } = useContext(AuthContext)
-    const { handleSearch } = useContext(ParametersContext)
+    const { handleSearch } = useFilter()
     const [data, setData] = useState(null)
     const [cnpj, setCnpj] = useState(null)
     const [viewEmail, setViewEmail] = useState(false)

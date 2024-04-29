@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { DataGrid, ptBR } from '@mui/x-data-grid';
 import QuickSearchToolbar from 'src/views/table/data-grid/QuickSearchToolbar';
-import { ParametersContext } from 'src/context/ParametersContext';
 import { RouteContext } from 'src/context/RouteContext';
 import DialogLog from 'src/components/Defaults/Dialogs/DialogLog';
+import { useFilter } from 'src/context/FilterContext';
 
-const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
+const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
     const {
         handleSearch,
         pageSize,
@@ -14,20 +14,13 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
         filteredData,
         setData,
         data,
-    } = useContext(ParametersContext);
+    } = useFilter()
 
     const { setId } = useContext(RouteContext);
     const [rowSelected, setRowSelected] = useState(null)
     const [openModalLog, setOpenModalLog] = useState(false)
-
-    // ** States
     setData(rows);
 
-    // Função para converter a data do formato 'dd/mm/YYYY' para 'YYYY-MM-DD'
-    function formatDateForComparison(date) {
-        const parts = date.split('/');
-        return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
 
     // ordena as linhas, do status inativo ficam por ultimo
     const sortedData = data.slice().sort((a, b) => {
@@ -39,12 +32,11 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
         return 0;
     });
 
-    // Adiciona opacidades as linhas que estão com status inativo
-    const getRowClassName = (params) => {
-        const status = params.row.status;
-        const concluido = params.row.concluido;
-        return '';
-    };
+    // Função para converter a data do formato 'dd/mm/YYYY' para 'YYYY-MM-DD'
+    function formatDateForComparison(date) {
+        const parts = date.split('/');
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
 
     //? Varre array columns, verificando se existe type date, se sim, formata data com formatDateForComparison
     columns.map((column) => {
@@ -59,7 +51,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
 
     // Função ativada ao clicar na linha
     const handleClickRow = (row) => {
-        if (modaLog) {
+        if (modalLog) {
             setRowSelected(row)
             setOpenModalLog(true)
         } else {
@@ -81,15 +73,11 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
                     handleClickRow(params.row)
                 }}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                getRowClassName={getRowClassName}
                 sx={{
                     '& .MuiDataGrid-cell': { cursor: 'pointer', overflow: 'scroll' }
                 }}
                 componentsProps={{
                     toolbar: {
-                        value: searchText,
-                        clearSearch: () => handleSearch(''),
-                        onChange: (event) => handleSearch(event.target.value),
                         buttonsHeader: buttonsHeader,
                     }
                 }}

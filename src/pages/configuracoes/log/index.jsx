@@ -83,7 +83,7 @@ const Usuario = () => {
             <Loading />
         ) : (
             // Lista tabela de resultados da listagem
-            <Table result={result} columns={columns} modaLog />
+            <Table result={result} columns={columns} modalLog />
         )
     )
 }

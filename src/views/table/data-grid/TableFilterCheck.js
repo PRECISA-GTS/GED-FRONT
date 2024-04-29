@@ -3,6 +3,7 @@ import { DataGrid, ptBR } from '@mui/x-data-grid'
 import QuickSearchToolbar from 'src/views/table/data-grid/QuickSearchToolbar'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
+import { useFilter } from 'src/context/FilterContext'
 
 const TableFilterCheck = ({ rows, columns, buttonsHeader, selectedRows, setSelectedRows, hasChange, setHasChange }) => {
     const {
@@ -13,7 +14,7 @@ const TableFilterCheck = ({ rows, columns, buttonsHeader, selectedRows, setSelec
         filteredData,
         setData,
         data
-    } = useContext(ParametersContext)
+    } = useFilter()
 
 
     // ** States

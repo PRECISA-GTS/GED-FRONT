@@ -10,12 +10,19 @@ import { Button } from '@mui/material'
 import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
+    const { clearSearch, searchText, handleSearch, setOpenFilter, openFilter } = useFilter()
 
-
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Box
@@ -46,50 +53,102 @@ const QuickSearchToolbar = (props) => {
                         </Button>
                     )
                 }
+                <div className='w-full'>
+                    <TextField
+                        size='medium'
+                        value={searchText}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        placeholder='Buscar…'
+                        className='w-auto md:!w-[30vw]'
+                        variant='standard'
+                        InputProps={{
+                            startAdornment: (
+                                <Box sx={{ mr: 2, display: 'flex' }}>
+                                    <Icon icon='mdi:magnify' fontSize={20} />
+                                </Box>
+                            ),
+                            endAdornment: (
+                                <div className='flex items-center gap-1'>
+                                    {
+                                        searchText && (
+                                            <IconButton size='medium' title='Clear' aria-label='Clear' onClick={clearSearch}>
+                                                <Icon icon='mdi:close' fontSize={20} />
+                                            </IconButton>
+                                        )
+                                    }
+                                    {/* <IconButton
+                                        size='medium'
+                                        title='Clear' aria-label='Clear'
+                                        id="basic-button"
+                                        aria-controls={open ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        <BsSliders size={16} />
+                                    </IconButton> */}
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        id="account-menu"
+                                        open={open}
+                                        onClose={handleClose}
+                                        onClick={handleClose}
+                                        PaperProps={{
+                                            elevation: 0,
+                                            sx: {
+                                                overflow: 'visible',
+                                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                mt: 1.5,
+                                                '& .MuiAvatar-root': {
+                                                    width: 32,
+                                                    height: 32,
+                                                    ml: -0.5,
+                                                    mr: 1,
+                                                },
+                                                '&::before': {
+                                                    content: '""',
+                                                    display: 'block',
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    right: 14,
+                                                    width: 10,
+                                                    height: 10,
+                                                    bgcolor: 'background.paper',
+                                                    transform: 'translateY(-50%) rotate(45deg)',
+                                                    zIndex: 0,
+                                                },
+                                            },
+                                        }}
+                                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                    >
 
-                <TextField
-                    size='medium'
-                    value={props.value}
-                    onChange={props.onChange}
-                    placeholder='Buscar…'
-                    className='w-auto md:!w-[30vw]'
-                    variant='standard'
-                    InputProps={{
-                        startAdornment: (
-                            <Box sx={{ mr: 2, display: 'flex' }}>
-                                <Icon icon='mdi:magnify' fontSize={20} />
-                            </Box>
-                        ),
-                        endAdornment: (
-                            <div className='flex items-center gap-1'>
-                                {
-                                    props.value && (
-                                        <IconButton size='medium' title='Clear' aria-label='Clear' onClick={props.clearSearch}>
-                                            <Icon icon='mdi:close' fontSize={20} />
-                                        </IconButton>
-                                    )
-                                }
-                                <IconButton
-                                    size='medium'
-                                    title='Clear' aria-label='Clear' onClick={props.clearSearch}>
-                                    <BsSliders size={16} />
-                                </IconButton>
+                                        <MenuItem onClick={handleClose} className='w-auto md:!w-[30vw]'>
 
-                            </div>
-                        )
-                    }}
-                    sx={{
-                        width: {
-                            xs: 1,
-                            sm: 'auto'
-                        },
-                        '& .MuiInputBase-root > svg': {
-                            mr: 2
-                        }
-                    }}
-                />
-                <div className='hidden sm:block '>
-                    {/* <GridToolbarFilterButton className="!h-full !z-50" /> */}
+                                            Add another account
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose}>
+
+                                            Settings
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose}>
+
+                                            Logout
+                                        </MenuItem>
+                                    </Menu>
+                                </div>
+                            )
+                        }}
+                        sx={{
+                            width: {
+                                xs: 1,
+                                sm: 'auto'
+                            },
+                            '& .MuiInputBase-root > svg': {
+                                mr: 2
+                            }
+                        }}
+                    />
                 </div>
             </Box>
 

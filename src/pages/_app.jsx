@@ -55,7 +55,6 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import { useContext, useEffect } from 'react'
 import { FormProvider } from 'src/context/FormContext'
 import { FornecedorProvider } from 'src/context/FornecedorContext'
 import { FilterProvider } from 'src/context/FilterContext'
