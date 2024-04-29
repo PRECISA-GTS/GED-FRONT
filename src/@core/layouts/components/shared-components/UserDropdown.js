@@ -217,6 +217,7 @@ const UserDropdown = props => {
                                 handleClose={() => setOpenModalNewPassword(false)}
                                 setOpenModalNewPassword={setOpenModalNewPassword}
                                 handleDropdownClose={handleDropdownClose}
+                                usuarioID={user.usuarioID}
                             />
 
                             {/* troca de unidade quando mobile */}

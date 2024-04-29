@@ -32,6 +32,7 @@ const Fields = ({
     userExistDefault,
     type
 }) => {
+    console.log('🚀 ~ data', data)
     const [lenghtPassword, setLenghtPassword] = useState(null)
     const [openModalNewPassword, setOpenModalNewPassword] = useState(false)
     const { setDateFormat, dateStatus } = useDateFormat()
@@ -285,6 +286,7 @@ const Fields = ({
                     openModal={openModalNewPassword}
                     handleClose={() => setOpenModalNewPassword(false)}
                     setOpenModalNewPassword={setOpenModalNewPassword}
+                    usuarioID={data.fields?.usuarioID}
                 />
             </>
         )
