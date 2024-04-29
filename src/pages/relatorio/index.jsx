@@ -17,7 +17,7 @@ const PageReport = () => {
     const [params, setParams] = React.useState({})
 
     const route =
-        process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api/' : 'https://demo.gedagro.com.br/api/'
+        process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api/' : 'https://app.gedagro.com.br/api/'
 
     if (report.status >= 40) {
         const newUrl = `${route}uploads/${report.unidadeID}/fornecedor/relatorio/original/${report.usuarioID}-${report.id}-fornecedor.pdf`
