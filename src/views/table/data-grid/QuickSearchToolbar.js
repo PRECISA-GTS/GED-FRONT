@@ -83,7 +83,7 @@ const QuickSearchToolbar = (props) => {
                                         aria-controls={open ? 'basic-menu' : undefined}
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
+                                    // onClick={handleClick}
                                     >
                                         <BsSliders size={16} />
                                     </IconButton> */}
