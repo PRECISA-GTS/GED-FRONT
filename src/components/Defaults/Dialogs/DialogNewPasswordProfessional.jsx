@@ -50,7 +50,6 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID
             })
-            console.log('🚀 ~ onSubmit ~ response', response)
             toast.success('Senha atualizada com sucesso!')
             reset()
             setOpenModalNewPassword(false)
