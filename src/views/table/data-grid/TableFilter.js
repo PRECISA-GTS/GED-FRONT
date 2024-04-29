@@ -43,9 +43,6 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
     const getRowClassName = (params) => {
         const status = params.row.status;
         const concluido = params.row.concluido;
-        // if (status === 'Inativo' || concluido == 1) {
-        //     return 'inativo-row';
-        // }
         return '';
     };
 
@@ -93,7 +90,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modaLog }) => {
                         value: searchText,
                         clearSearch: () => handleSearch(''),
                         onChange: (event) => handleSearch(event.target.value),
-                        buttonsHeader: buttonsHeader
+                        buttonsHeader: buttonsHeader,
                     }
                 }}
             />

@@ -1,24 +1,20 @@
-// ** MUI Imports
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
-import { GridToolbarFilterButton } from '@mui/x-data-grid'
 import ListHeader from 'src/components/Defaults/ListHeader'
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { AuthContext } from 'src/context/AuthContext'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import Router from 'next/router'
-
+import { BsSliders } from "react-icons/bs";
 import { Button } from '@mui/material'
 import { backRoute } from 'src/configs/defaultConfigs'
-
-// ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import { useFilter } from 'src/context/FilterContext'
 
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
+
 
 
     return (
@@ -56,6 +52,7 @@ const QuickSearchToolbar = (props) => {
                     value={props.value}
                     onChange={props.onChange}
                     placeholder='Buscar…'
+                    className='w-auto md:!w-[30vw]'
                     variant='standard'
                     InputProps={{
                         startAdornment: (
@@ -64,9 +61,21 @@ const QuickSearchToolbar = (props) => {
                             </Box>
                         ),
                         endAdornment: (
-                            <IconButton size='medium' title='Clear' aria-label='Clear' onClick={props.clearSearch}>
-                                <Icon icon='mdi:close' fontSize={20} />
-                            </IconButton>
+                            <div className='flex items-center gap-1'>
+                                {
+                                    props.value && (
+                                        <IconButton size='medium' title='Clear' aria-label='Clear' onClick={props.clearSearch}>
+                                            <Icon icon='mdi:close' fontSize={20} />
+                                        </IconButton>
+                                    )
+                                }
+                                <IconButton
+                                    size='medium'
+                                    title='Clear' aria-label='Clear' onClick={props.clearSearch}>
+                                    <BsSliders size={16} />
+                                </IconButton>
+
+                            </div>
                         )
                     }}
                     sx={{
@@ -80,7 +89,7 @@ const QuickSearchToolbar = (props) => {
                     }}
                 />
                 <div className='hidden sm:block '>
-                    <GridToolbarFilterButton className="!h-full !z-50" />
+                    {/* <GridToolbarFilterButton className="!h-full !z-50" /> */}
                 </div>
             </Box>
 

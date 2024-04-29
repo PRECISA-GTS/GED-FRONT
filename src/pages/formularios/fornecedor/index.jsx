@@ -9,7 +9,6 @@ import { AuthContext } from 'src/context/AuthContext'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import toast from 'react-hot-toast'
 import Loading from 'src/components/Loading'
-import { validationEmail } from '../../../configs/validations'
 
 // ** Next
 import { useRouter } from 'next/router'
