@@ -6,6 +6,7 @@ import ComponentError from '../../components/Reports/Layout/ComponentError'
 import ReportComponents from 'src/components/Reports/Layout/reportComponents'
 import { useRouter } from 'next/router'
 import { useTheme } from '@mui/material'
+import { api } from 'src/configs/api'
 
 const PageReport = () => {
     const reportJSON = localStorage.getItem('report')
@@ -14,6 +15,15 @@ const PageReport = () => {
     const reportComponents = ReportComponents()
     const DynamicComponent = reportComponents[nameComponent]
     const [params, setParams] = React.useState({})
+
+    const route =
+        process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api/' : 'https://demo.gedagro.com.br/api/'
+
+    if (report.status >= 40) {
+        const newUrl = `${route}uploads/${report.unidadeID}/fornecedor/relatorio/original/${report.usuarioID}-${report.id}-fornecedor.pdf`
+        window.location.href = newUrl
+        return
+    }
 
     const router = useRouter()
     useEffect(() => {

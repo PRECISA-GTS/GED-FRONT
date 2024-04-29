@@ -52,17 +52,17 @@ const ButtonsFloating = ({ nameComponent }) => {
             disable: false,
             icon: 'ooui:close',
             function: closePage
-        },
-        {
-            id: 2,
-            title: 'Assinar digitalmente',
-            color: 'primary',
-            size: 'large',
-            variant: 'outlined',
-            disable: report.status < 40 ? true : false,
-            icon: 'fluent:signature-24-filled',
-            function: signature
         }
+        // {
+        //     id: 2,
+        //     title: 'Assinar digitalmente',
+        //     color: 'primary',
+        //     size: 'large',
+        //     variant: 'outlined',
+        //     disable: report.status < 40 ? true : false,
+        //     icon: 'fluent:signature-24-filled',
+        //     function: signature
+        // }
     ]
 
     return (

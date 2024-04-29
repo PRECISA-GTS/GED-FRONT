@@ -246,7 +246,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
     const objRelatorio = {
         id: id,
-        name: 'Formulário do fornecedor',
+        name: 'Imprimir',
         nameComponent: 'DadosFornecedor',
         type: 'report',
         unidadeID: loggedUnity.unidadeID,

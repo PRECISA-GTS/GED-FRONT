@@ -40,24 +40,24 @@ const Fornecedor = () => {
     }
 
     const getList = async () => {
-        console.log('🚀 ~ user.cnpj:', user.cnpj)
-        await api
-            .post(`${currentLink}/getList/`, {
+        try {
+            const response = await api.post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
-            .then(response => {
-                setResult(response.data)
-                setTitle({
-                    title: 'Fornecedor',
-                    subtitle: {
-                        id: id,
-                        count: response.data.length,
-                        new: false
-                    }
-                })
+            setResult(response.data)
+            setTitle({
+                title: 'Fornecedor',
+                subtitle: {
+                    id: id,
+                    count: response.data.length,
+                    new: false
+                }
             })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     //? handleSubmit do modal de gerar um novo fornecedor
@@ -118,12 +118,12 @@ const Fornecedor = () => {
                   {
                       headerName: 'ID',
                       field: 'id',
-                      size: 1
+                      size: 0.2
                   },
                   {
                       headerName: 'Fornecedor',
                       field: 'fornecedor',
-                      size: 1
+                      size: 2
                   },
                   {
                       headerName: 'CNPJ',
@@ -133,7 +133,7 @@ const Fornecedor = () => {
                   {
                       headerName: 'Data da Avaliação',
                       field: 'data',
-                      size: 1,
+                      size: 0.7,
                       type: 'date'
                   },
                   {
@@ -226,7 +226,6 @@ const Fornecedor = () => {
             {/* Modal pra habilitar um novo fornecedor */}
             <DialogActs
                 title='Habilitar Fornecedor'
-                description='Habilitar novo preenchimento de formulário pro fornecedor'
                 handleConclusion={makeFornecedor}
                 setOpenModal={setOpen}
                 openModal={open}

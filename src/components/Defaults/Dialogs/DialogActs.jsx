@@ -28,14 +28,11 @@ const DialogActs = ({
         formState: { errors }
     } = useForm()
 
-    console.log('🚀 ~ DialogActs control:', control)
-
     const validateForm = values => {
         handleSubmit(onSubmit)(values)
     }
 
     const onSubmit = values => {
-        // limpa formulario
         reset()
         setOpenModal(false)
         handleConclusion(values)

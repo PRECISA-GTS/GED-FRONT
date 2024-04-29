@@ -87,8 +87,8 @@ const Calendar = () => {
             <div class="${styles}">
                 <div>
                     ${calendarEvent._def.extendedProps.type}<br/>
-                </div>    
-                <div class="font-bold">
+                </div> 
+                <div class="font-bold whitespace-normal">
                     ${calendarEvent.title}
                 </div>            
             </div>

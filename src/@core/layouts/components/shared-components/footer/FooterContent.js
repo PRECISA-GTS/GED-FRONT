@@ -1,10 +1,10 @@
 // ** MUI Imports
-import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { versions } from 'src/data/versions'
 
 const FooterContent = () => {
     // ** Var
@@ -34,7 +34,7 @@ const FooterContent = () => {
                     <span
                         className={`hidden sm:block text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`}
                     >
-                        versão {latestVersionState}
+                        versão {versions[versions.length - 1].version}
                     </span>
                 </p>
             </div>

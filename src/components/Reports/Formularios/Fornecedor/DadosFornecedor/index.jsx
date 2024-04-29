@@ -6,8 +6,6 @@ import getData from 'src/components/Reports/Layout/getData'
 const index = () => {
     const data = getData()
 
-    const fornecedor = data?.header?.filter(row => row.name === 'Nome Fantasia')[0].value
-
     return (
         data && (
             <View style={{ width: '100%' }}>
@@ -32,7 +30,7 @@ const index = () => {
                 Fornecedor
                 <View style={{ marginTop: 20 }}>
                     <Text style={{ fontSize: 10 }}>
-                        Fornecedor: <Text style={{ fontWeight: 'bold', fontSize: 10 }}>{fornecedor}</Text>
+                        Fornecedor: <Text style={{ fontWeight: 'bold', fontSize: 10 }}>{data.fornecedor}</Text>
                     </Text>
                 </View>
                 {/* Produtos */}
