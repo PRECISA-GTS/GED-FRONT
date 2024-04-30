@@ -3,7 +3,18 @@ import Input from 'src/components/Form/Input'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames } = useFilter()
+    const { form, setNames, dataFilters } = useFilter()
+
+    const onSubmit = () => {
+        console.log('filters função')
+    }
+
+    useEffect(() => {
+        if (dataFilters && Object.keys(dataFilters).length > 0) {
+            onSubmit()
+        }
+    }, [dataFilters])
+
     useEffect(() => {
         setNames(['email', 'senha'])
     }, [])

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { convertStringToDate } from 'src/configs/defaultConfigs'
 
 const initialValues = {
     // Estados
@@ -17,11 +18,14 @@ const initialValues = {
     setComponentFilters: () => {},
     names: [],
     setNames: () => {},
-
+    dataFilters: [],
+    setDataFilters: () => {},
     // Funções
     handleSearch: () => {},
     clearSearch: () => {},
-    onSubmit: () => {}
+    handleClear: () => {},
+    onSubmit: () => {},
+    filterData: () => {}
 }
 
 const FilterContext = createContext(initialValues)
@@ -30,6 +34,7 @@ const FilterProvider = ({ children }) => {
     const [pageSize, setPageSize] = useState(initialValues.pageSize)
     const [searchText, setSearchText] = useState(initialValues.searchText)
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
+    const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [data, setData] = useState(initialValues.data)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
@@ -45,8 +50,8 @@ const FilterProvider = ({ children }) => {
             .filter(word => word !== '')
 
         const filteredRows =
-            data &&
-            data.filter(row => {
+            filteredData &&
+            filteredData.filter(row => {
                 return searchWords?.every(word => {
                     return Object.keys(row).some(field => {
                         return row[field]?.toString().toLowerCase().indexOf(word) !== -1
@@ -60,14 +65,48 @@ const FilterProvider = ({ children }) => {
         }
     }
 
+    console.log('🚀 ~ clearSearch ~ data', data)
     //* Função para limpar o filtro | Input de busca
     const clearSearch = () => {
+        setFilteredData(data)
         setSearchText('')
-        setFilteredData([])
     }
 
+    //* Função para limpar todos os filtros
+    const handleClear = () => {
+        setDataFilters(null)
+        clearSearch()
+        names.map(name => {
+            form.setValue(name, '')
+        })
+    }
+
+    //* Função para setar os valores dos filtros
     const onSubmit = data => {
-        console.log('onsubmitttt', data)
+        if (!form.formState.isValid) {
+            setDataFilters(data)
+            setOpenFilter(false)
+        }
+    }
+
+    // Função que filtra por data
+    const filterData = () => {
+        const filter = filteredData.filter(item => {
+            const itemDate = convertStringToDate(item.data)
+            const dataInicio = dataFilters.dataInicio ? new Date(dataFilters.dataInicio) : null
+            const dataFim = dataFilters.dataFim ? new Date(dataFilters.dataFim) : null
+
+            if (dataInicio && dataFim) {
+                return itemDate >= dataInicio && itemDate <= dataFim
+            } else if (dataInicio) {
+                return itemDate >= dataInicio
+            } else if (dataFim) {
+                return itemDate <= dataFim
+            }
+
+            return true
+        })
+        setFilteredData(filter)
     }
 
     // TODO Função para buscar os dados ao clicar nos cards da dashboard
@@ -96,12 +135,16 @@ const FilterProvider = ({ children }) => {
         setComponentFilters,
         names,
         setNames,
+        dataFilters,
+        setDataFilters,
 
         // Funções
         form,
         handleSearch,
         clearSearch,
-        onSubmit
+        handleClear,
+        onSubmit,
+        filterData
     }
     return <FilterContext.Provider value={values}>{children}</FilterContext.Provider>
 }

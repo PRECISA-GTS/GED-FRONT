@@ -1,16 +1,28 @@
-import React, { useEffect } from 'react'
-import Input from 'src/components/Form/Input'
+import { useEffect } from 'react'
+import CustomInputDate from 'src/components/Form/CustomInputDate'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames } = useFilter()
+    const { form, setNames, dataFilters, filterData } = useFilter()
+
+    const onSubmit = () => {
+        filterData()
+    }
+
     useEffect(() => {
-        setNames(['nome'])
+        if (dataFilters && Object.keys(dataFilters).length > 0) {
+            onSubmit()
+        }
+    }, [dataFilters])
+
+    useEffect(() => {
+        setNames(['dataInicio', 'dataFim'])
     }, [])
     return (
-        <div>
-            <Input placeholder='Filtrar por nome' control={form.control} name='nome' title='Nome' />
-        </div>
+        <>
+            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} required />
+            <CustomInputDate xs={12} md={6} title='Data Fim' name='dataFim' form={form} />
+        </>
     )
 }
 

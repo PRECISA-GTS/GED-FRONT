@@ -1,44 +1,27 @@
-import { FormControl, Grid } from '@mui/material'
 import { useEffect, useState, useContext } from 'react'
 import { dateConfig } from 'src/configs/defaultConfigs'
-import { AuthContext } from 'src/context/AuthContext'
-import { backRoute } from 'src/configs/defaultConfigs'
-import Router from 'next/router'
-import FormTransportador from 'src/components/Cadastros/Transportador/FormTransportador'
-import FormTipoVeiculo from 'src/components/Cadastros/TipoVeiculo/FormTipoVeiculo'
 
 //* Custom inputs
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
-import DialogNewCreate from '../Dialogs/DialogNewCreate'
 
 const Fields = ({
     register,
     errors,
     setValue,
     fields,
-    values,
     disabled,
     disabledFields,
     getAddressByCep,
     control,
-    setCopiedDataContext,
-    nameSelected,
     setNameSelected,
-    columnSelected,
     setColumnSelected,
-    openModalNew,
-    setOpenModalNew,
-    newChange,
-    setNewChange
+    setOpenModalNew
 }) => {
+    console.log('renderiza fields dynamic....')
     const [dateStatus, setDateStatus] = useState({})
     const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
-
-    const router = Router
-
-    const dataLocalStorage = localStorage.getItem('loggedUnity')
 
     const setDateFormat = (type, name, value, numDays) => {
         const newDate = new Date(value)
@@ -94,10 +77,9 @@ const Fields = ({
     }
 
     return (
-        // <Grid container spacing={4}>
         fields &&
         fields.map((field, index) => {
-            setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+            // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
             return (
                 <>
                     {/* Autocomplete (int) */}
@@ -121,7 +103,7 @@ const Fields = ({
                             setValue={setValue}
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
-                            handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
+                            // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
 
@@ -190,8 +172,9 @@ const Fields = ({
                                 md={4}
                                 title={field.nomeCampo}
                                 name={`fields[${index}].${field.nomeColuna}`}
-                                value={getMaskForField ?? field?.[nomeColuna]}
+                                register={register}
                                 control={control}
+                                value={getMaskForField ?? field?.[nomeColuna]}
                                 errors={errors?.fields?.[index]?.nomeColuna}
                                 type={field.nomeColuna}
                                 getAddressByCep={getAddressByCep}
@@ -206,8 +189,6 @@ const Fields = ({
                 </>
             )
         })
-
-        // </Grid>
     )
 }
 

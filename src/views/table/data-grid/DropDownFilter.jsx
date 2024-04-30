@@ -1,21 +1,9 @@
-import { useState } from 'react'
-import { Menu, IconButton, Button } from '@mui/material'
+import { Menu, IconButton, Button, Grid } from '@mui/material'
 import { BsSliders } from 'react-icons/bs'
 import { useFilter } from 'src/context/FilterContext'
 
 const DropDownFilter = () => {
-    const { onSubmit, form, componentFilters, clearSearch, names } = useFilter()
-    const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-    const handleClick = event => {
-        setAnchorEl(event.currentTarget)
-    }
-    const handleClear = () => {
-        clearSearch()
-        names.map(name => {
-            form.setValue(name, '')
-        })
-    }
+    const { onSubmit, form, componentFilters, handleClear, openFilter, setOpenFilter } = useFilter()
 
     return (
         <>
@@ -24,18 +12,18 @@ const DropDownFilter = () => {
                 title='Clear'
                 aria-label='Clear'
                 id='basic-button'
-                aria-controls={open ? 'basic-menu' : undefined}
+                aria-controls={openFilter ? 'basic-menu' : undefined}
                 aria-haspopup='true'
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
+                aria-expanded={openFilter ? 'true' : undefined}
+                onClick={event => setOpenFilter(event.currentTarget)}
             >
                 <BsSliders size={16} />
             </IconButton>
             <Menu
-                anchorEl={anchorEl}
+                anchorEl={openFilter}
                 id='account-menu'
-                open={open}
-                onClose={() => setAnchorEl(null)}
+                open={openFilter}
+                onClose={() => setOpenFilter(false)}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -65,16 +53,18 @@ const DropDownFilter = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <form onSubmit={form.handleSubmit(onSubmit)} className='w-auto md:!w-[30vw] p-2'>
-                    {componentFilters}
-                    <div className='flex items-center justify-end gap-3'>
-                        <Button variant='text' onClick={handleClear}>
-                            Limpar
-                        </Button>
-                        <Button type='submit' variant='contained'>
-                            Aplicar
-                        </Button>
-                    </div>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='w-auto md:!w-[30vw] p-6'>
+                    <Grid container spacing={4}>
+                        {componentFilters}
+                        <Grid item xs={12} className='flex justify-end items-center gap-2 '>
+                            <Button variant='text' onClick={handleClear}>
+                                Limpar
+                            </Button>
+                            <Button type='submit' variant='contained'>
+                                Aplicar
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </form>
             </Menu>
         </>
