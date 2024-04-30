@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const initialValues = {
     // Estados
@@ -12,10 +13,15 @@ const initialValues = {
     setData: () => {},
     openFilter: false,
     setOpenFilter: () => {},
+    componentFilters: null,
+    setComponentFilters: () => {},
+    names: [],
+    setNames: () => {},
 
     // Funções
     handleSearch: () => {},
-    clearSearch: () => {}
+    clearSearch: () => {},
+    onSubmit: () => {}
 }
 
 const FilterContext = createContext(initialValues)
@@ -26,6 +32,9 @@ const FilterProvider = ({ children }) => {
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
     const [data, setData] = useState(initialValues.data)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
+    const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
+    const [names, setNames] = useState(initialValues.names)
+    const form = useForm()
 
     //* Função para filtrar os dados da tabela | Input de busca
     const handleSearch = searchValue => {
@@ -57,6 +66,10 @@ const FilterProvider = ({ children }) => {
         setFilteredData([])
     }
 
+    const onSubmit = data => {
+        console.log('onsubmitttt', data)
+    }
+
     // TODO Função para buscar os dados ao clicar nos cards da dashboard
     // useEffect(() => {
     //     if (router.query.s) {
@@ -79,10 +92,16 @@ const FilterProvider = ({ children }) => {
         setData,
         openFilter,
         setOpenFilter,
+        componentFilters,
+        setComponentFilters,
+        names,
+        setNames,
 
         // Funções
+        form,
         handleSearch,
-        clearSearch
+        clearSearch,
+        onSubmit
     }
     return <FilterContext.Provider value={values}>{children}</FilterContext.Provider>
 }

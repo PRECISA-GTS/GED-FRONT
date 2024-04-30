@@ -13,6 +13,8 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const RecebimentoMP = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -21,6 +23,7 @@ const RecebimentoMP = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
+    const { setComponentFilters, form } = useFilter()
 
     const getList = async () => {
         await api
@@ -40,6 +43,8 @@ const RecebimentoMP = () => {
 
     useEffect(() => {
         getList()
+        form.reset()
+        setComponentFilters(<Filters />)
     }, [id])
 
     const arrColumns =
