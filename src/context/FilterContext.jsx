@@ -50,8 +50,8 @@ const FilterProvider = ({ children }) => {
             .filter(word => word !== '')
 
         const filteredRows =
-            filteredData &&
-            filteredData.filter(row => {
+            data &&
+            data.filter(row => {
                 return searchWords?.every(word => {
                     return Object.keys(row).some(field => {
                         return row[field]?.toString().toLowerCase().indexOf(word) !== -1
@@ -61,7 +61,7 @@ const FilterProvider = ({ children }) => {
         if (searchValue && searchValue.length && filteredRows.length > 0) {
             setFilteredData(filteredRows)
         } else {
-            setFilteredData([])
+            setFilteredData(data)
         }
     }
 
