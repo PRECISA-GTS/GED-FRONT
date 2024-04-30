@@ -14,7 +14,7 @@ import DropDownFilter from './DropDownFilter'
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
-    const { clearSearch, searchText, handleSearch } = useFilter()
+    const { clearSearch, searchText, handleSearch, filteredData, handleClear, existFilter } = useFilter()
 
 
 
@@ -30,7 +30,7 @@ const QuickSearchToolbar = (props) => {
                 p: theme => theme.spacing(8, 0, 0, 0),
             }}
         >
-            <Box sx={{ display: 'flex', gap: '8px', textAlig: "end" }}>
+            <Box className='w-full flex items-center gap-2'>
                 {
                     props.buttonsHeader.btnBack && (
                         <Button
@@ -47,7 +47,7 @@ const QuickSearchToolbar = (props) => {
                         </Button>
                     )
                 }
-                <div className='w-full'>
+                <div>
                     <TextField
                         size='medium'
                         value={searchText}
@@ -85,6 +85,10 @@ const QuickSearchToolbar = (props) => {
                         }}
                     />
                 </div>
+                {existFilter && (
+                    <Button onClick={handleClear} className='!capitalize' variant='outlined' color='secondary' endIcon={<Icon icon='iconamoon:sign-times-fill' className='text-red-500' />}>Filtro: {filteredData.length}</Button>
+
+                )}
             </Box>
 
             <ListHeader

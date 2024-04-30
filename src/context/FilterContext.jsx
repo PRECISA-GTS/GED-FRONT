@@ -12,13 +12,17 @@ const initialValues = {
     setFilteredData: () => {},
     data: [],
     setData: () => {},
+    auxDataFilter: [],
+    setAuxDataFilter: () => {},
+    existFilter: false,
+    setExistFilter: () => {},
     openFilter: false,
     setOpenFilter: () => {},
     componentFilters: null,
     setComponentFilters: () => {},
     names: [],
     setNames: () => {},
-    dataFilters: [],
+    dataFilters: {},
     setDataFilters: () => {},
     // Funções
     handleSearch: () => {},
@@ -36,6 +40,8 @@ const FilterProvider = ({ children }) => {
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
     const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [data, setData] = useState(initialValues.data)
+    const [auxDataFilter, setAuxDataFilter] = useState(initialValues.auxDataFilter)
+    const [existFilter, setExistFilter] = useState(initialValues.existFilter)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
@@ -50,22 +56,36 @@ const FilterProvider = ({ children }) => {
             .filter(word => word !== '')
 
         const filteredRows =
-            data &&
-            data.filter(row => {
+            filteredData &&
+            filteredData.filter(row => {
                 return searchWords?.every(word => {
                     return Object.keys(row).some(field => {
                         return row[field]?.toString().toLowerCase().indexOf(word) !== -1
                     })
                 })
             })
-        if (searchValue && searchValue.length && filteredRows.length > 0) {
-            setFilteredData(filteredRows)
+
+        if ((searchValue && searchValue.length > 0) || (dataFilters && Object.keys(dataFilters).length > 0)) {
+            setExistFilter(true)
         } else {
+            setExistFilter(false)
+        }
+
+        if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
             setFilteredData(data)
+            return
+        }
+
+        if ((!searchValue || searchValue.length == 0) && dataFilters) {
+            setFilteredData(auxDataFilter)
+            return
+        }
+
+        if (searchValue && searchValue.length > 0) {
+            setFilteredData(filteredRows)
+            return
         }
     }
-
-    console.log('🚀 ~ clearSearch ~ data', data)
     //* Função para limpar o filtro | Input de busca
     const clearSearch = () => {
         setFilteredData(data)
@@ -74,7 +94,8 @@ const FilterProvider = ({ children }) => {
 
     //* Função para limpar todos os filtros
     const handleClear = () => {
-        setDataFilters(null)
+        setDataFilters(false)
+        setExistFilter(false)
         clearSearch()
         names.map(name => {
             form.setValue(name, '')
@@ -83,18 +104,37 @@ const FilterProvider = ({ children }) => {
 
     //* Função para setar os valores dos filtros
     const onSubmit = data => {
-        if (!form.formState.isValid) {
-            setDataFilters(data)
-            setOpenFilter(false)
+        if ((searchText && searchText.length > 0) || (data && Object.keys(data).length > 0)) {
+            setExistFilter(true)
+        } else {
+            setExistFilter(false)
         }
+        setDataFilters(data)
+        setOpenFilter(false)
     }
 
     // Função que filtra por data
     const filterData = () => {
-        const filter = filteredData.filter(item => {
+        const dataInicio = dataFilters.dataInicio ? new Date(dataFilters.dataInicio) : null
+
+        if (dataInicio) {
+            dataInicio.setDate(dataInicio.getDate() + 1)
+            dataInicio.setHours(0, 0, 0, 0) // Define a hora para 00:00:00
+        }
+
+        const dataFim = dataFilters.dataFim ? new Date(dataFilters.dataFim) : null
+
+        if (dataFim) {
+            dataFim.setDate(dataFim.getDate() + 1)
+            dataFim.setHours(0, 0, 0, 0) // Define a hora para 00:00:00
+        }
+
+        const filter = data.filter(item => {
             const itemDate = convertStringToDate(item.data)
-            const dataInicio = dataFilters.dataInicio ? new Date(dataFilters.dataInicio) : null
-            const dataFim = dataFilters.dataFim ? new Date(dataFilters.dataFim) : null
+
+            // if (itemDate) {
+            //     itemDate.setDate(itemDate.getDate() + 1)
+            // }
 
             if (dataInicio && dataFim) {
                 return itemDate >= dataInicio && itemDate <= dataFim
@@ -107,6 +147,7 @@ const FilterProvider = ({ children }) => {
             return true
         })
         setFilteredData(filter)
+        setAuxDataFilter(filter)
     }
 
     // TODO Função para buscar os dados ao clicar nos cards da dashboard
@@ -129,6 +170,7 @@ const FilterProvider = ({ children }) => {
         setFilteredData,
         data,
         setData,
+        existFilter,
         openFilter,
         setOpenFilter,
         componentFilters,

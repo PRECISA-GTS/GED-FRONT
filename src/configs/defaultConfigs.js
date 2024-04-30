@@ -220,6 +220,7 @@ const convertStringToDate = dateString => {
     const day = parseInt(parts[0], 10)
     const month = parseInt(parts[1], 10) - 1
     const year = parseInt(parts[2], 10)
+    console.log("filterData", new Date(year, month, day))
     return new Date(year, month, day)
 }
 

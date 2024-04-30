@@ -20,7 +20,7 @@ const Filters = () => {
     }, [])
     return (
         <>
-            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} required />
+            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} />
             <CustomInputDate xs={12} md={6} title='Data Fim' name='dataFim' form={form} />
         </>
     )
