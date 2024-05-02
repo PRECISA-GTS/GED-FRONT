@@ -3,12 +3,13 @@ import CustomInputDate from 'src/components/Form/CustomInputDate'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, dataFilters, filterData } = useFilter()
+    const { form, setNames, dataFilters, filterDate } = useFilter()
 
-    const onSubmit = () => {
-        filterData()
+    const onSubmit = async () => {
+        filterDate(dataFilters.dataInicio, dataFilters.dataFim)
     }
 
+    //* Função para acionar o formulario de filtro do contexto (useFilter())
     useEffect(() => {
         if (dataFilters && Object.keys(dataFilters).length > 0) {
             onSubmit()
@@ -20,8 +21,8 @@ const Filters = () => {
     }, [])
     return (
         <>
-            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} />
-            <CustomInputDate xs={12} md={6} title='Data Fim' name='dataFim' form={form} />
+            <CustomInputDate xs={12} md={6} title='Data inicio da avaliacão' name='dataInicio' form={form} />
+            <CustomInputDate xs={12} md={6} title='Data Fim da avaliação' name='dataFim' form={form} />
         </>
     )
 }

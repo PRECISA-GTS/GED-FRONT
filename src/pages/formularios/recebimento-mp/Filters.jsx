@@ -1,28 +1,28 @@
 import React, { useEffect } from 'react'
-import Input from 'src/components/Form/Input'
+import CustomInputDate from 'src/components/Form/CustomInputDate'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, dataFilters } = useFilter()
+    const { form, setNames, dataFilters, filterDate } = useFilter()
 
-    const onSubmit = () => {
-        console.log('filters função')
+    const onSubmit = async () => {
+        filterDate(dataFilters.dataInicio, dataFilters.dataFim)
     }
 
+    //* Função para acionar o formulario de filtro do contexto (useFilter())
     useEffect(() => {
         if (dataFilters && Object.keys(dataFilters).length > 0) {
             onSubmit()
         }
     }, [dataFilters])
-
     useEffect(() => {
-        setNames(['email', 'senha'])
+        setNames(['dataInicio', 'dataFim'])
     }, [])
     return (
-        <div>
-            <Input placeholder='Filtrar por Email' control={form.control} name='email' title='Email' />
-            <Input placeholder='Filtrar por senha' control={form.control} name='senha' title='Senha' />
-        </div>
+        <>
+            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} />
+            <CustomInputDate xs={12} md={6} title='Data Fim' name='dataFim' form={form} />
+        </>
     )
 }
 

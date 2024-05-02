@@ -12,31 +12,39 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
+import { useFilter } from 'src/context/FilterContext'
 
 // import axios from 'axios'
 
 const Profissao = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
+    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
+        useFilter()
+
+    const getList = async () => {
+        await api.get(currentLink).then(response => {
+            setFilteredData(response.data)
+            setData(response.data)
+            setTitle({
+                title: 'Profissão',
+                subtitle: {
+                    id: id,
+                    count: response.data.length,
+                    new: false
+                }
+            })
+        })
+    }
 
     useEffect(() => {
-        const getList = async () => {
-            await api.get(currentLink).then(response => {
-                setResult(response.data)
-                setTitle({
-                    title: 'Profissão',
-                    subtitle: {
-                        id: id,
-                        count: response.data.length,
-                        new: false
-                    }
-                })
-            })
-        }
         getList()
-    }, [])
+        form.reset()
+        setComponentFilters(null)
+        setDataFilters({})
+        setSearchText('')
+    }, [id])
 
     const arrColumns = [
         {
@@ -63,13 +71,13 @@ const Profissao = () => {
 
     return (
         <>
-            {!result && <Loading />}
-            {result && (
+            {!filteredData && <Loading />}
+            {filteredData && (
                 <>
                     <Card>
                         <CardContent sx={{ pt: '0' }}>
                             <TableFilter
-                                rows={result}
+                                rows={filteredData}
                                 columns={columns}
                                 buttonsHeader={{
                                     btnNew: true,

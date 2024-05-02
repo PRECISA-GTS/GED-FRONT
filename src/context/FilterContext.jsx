@@ -14,8 +14,6 @@ const initialValues = {
     setData: () => {},
     auxDataFilter: [],
     setAuxDataFilter: () => {},
-    existFilter: false,
-    setExistFilter: () => {},
     openFilter: false,
     setOpenFilter: () => {},
     componentFilters: null,
@@ -29,7 +27,7 @@ const initialValues = {
     clearSearch: () => {},
     handleClear: () => {},
     onSubmit: () => {},
-    filterData: () => {}
+    filterDate: () => {}
 }
 
 const FilterContext = createContext(initialValues)
@@ -41,7 +39,6 @@ const FilterProvider = ({ children }) => {
     const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [data, setData] = useState(initialValues.data)
     const [auxDataFilter, setAuxDataFilter] = useState(initialValues.auxDataFilter)
-    const [existFilter, setExistFilter] = useState(initialValues.existFilter)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
@@ -65,14 +62,9 @@ const FilterProvider = ({ children }) => {
                 })
             })
 
-        if ((searchValue && searchValue.length > 0) || (dataFilters && Object.keys(dataFilters).length > 0)) {
-            setExistFilter(true)
-        } else {
-            setExistFilter(false)
-        }
-
         if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
             setFilteredData(data)
+            setAuxDataFilter([])
             return
         }
 
@@ -95,7 +87,6 @@ const FilterProvider = ({ children }) => {
     //* Função para limpar todos os filtros
     const handleClear = () => {
         setDataFilters(false)
-        setExistFilter(false)
         clearSearch()
         names.map(name => {
             form.setValue(name, '')
@@ -104,44 +95,35 @@ const FilterProvider = ({ children }) => {
 
     //* Função para setar os valores dos filtros
     const onSubmit = data => {
-        if ((searchText && searchText.length > 0) || (data && Object.keys(data).length > 0)) {
-            setExistFilter(true)
-        } else {
-            setExistFilter(false)
-        }
         setDataFilters(data)
         setOpenFilter(false)
     }
 
     // Função que filtra por data
-    const filterData = () => {
-        const dataInicio = dataFilters.dataInicio ? new Date(dataFilters.dataInicio) : null
+    const filterDate = (dataIni, dataFim) => {
+        const dataInicio = dataIni ? new Date(dataIni) : null
 
         if (dataInicio) {
             dataInicio.setDate(dataInicio.getDate() + 1)
-            dataInicio.setHours(0, 0, 0, 0) // Define a hora para 00:00:00
+            dataInicio.setHours(0, 0, 0, 0)
         }
 
-        const dataFim = dataFilters.dataFim ? new Date(dataFilters.dataFim) : null
+        const dataFinal = dataFim ? new Date(dataFim) : null
 
-        if (dataFim) {
-            dataFim.setDate(dataFim.getDate() + 1)
-            dataFim.setHours(0, 0, 0, 0) // Define a hora para 00:00:00
+        if (dataFinal) {
+            dataFinal.setDate(dataFinal.getDate() + 1)
+            dataFinal.setHours(0, 0, 0, 0)
         }
 
         const filter = data.filter(item => {
             const itemDate = convertStringToDate(item.data)
 
-            // if (itemDate) {
-            //     itemDate.setDate(itemDate.getDate() + 1)
-            // }
-
-            if (dataInicio && dataFim) {
-                return itemDate >= dataInicio && itemDate <= dataFim
+            if (dataInicio && dataFinal) {
+                return itemDate >= dataInicio && itemDate <= dataFinal
             } else if (dataInicio) {
                 return itemDate >= dataInicio
-            } else if (dataFim) {
-                return itemDate <= dataFim
+            } else if (dataFinal) {
+                return itemDate <= dataFinal
             }
 
             return true
@@ -170,7 +152,6 @@ const FilterProvider = ({ children }) => {
         setFilteredData,
         data,
         setData,
-        existFilter,
         openFilter,
         setOpenFilter,
         componentFilters,
@@ -186,7 +167,7 @@ const FilterProvider = ({ children }) => {
         clearSearch,
         handleClear,
         onSubmit,
-        filterData
+        filterDate
     }
     return <FilterContext.Provider value={values}>{children}</FilterContext.Provider>
 }

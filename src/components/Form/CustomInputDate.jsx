@@ -30,6 +30,10 @@ const CustomInputDate = ({ xs, md, title, name, disabled, required, form, onChan
                                 InputLabelProps={{
                                     shrink: true
                                 }}
+                                inputProps={{
+                                    min: '1900-01-01',
+                                    max: '2100-01-01'
+                                }}
                             />
                         )}
                     />

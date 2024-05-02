@@ -18,18 +18,19 @@ import Filters from './Filters'
 
 const RecebimentoMP = () => {
     const { user, loggedUnity } = useContext(AuthContext)
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { setComponentFilters, form, setDataFilters } = useFilter()
+    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
+        useFilter()
 
     const getList = async () => {
         await api
             .get(`${currentLink}/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`)
             .then(response => {
-                setResult(response.data)
+                setFilteredData(response.data)
+                setData(response.data)
                 setTitle({
                     title: 'Recebimento de MP',
                     subtitle: {
@@ -46,6 +47,7 @@ const RecebimentoMP = () => {
         form.reset()
         setComponentFilters(<Filters />)
         setDataFilters({})
+        setSearchText('')
     }, [id])
 
     const arrColumns =
@@ -128,14 +130,14 @@ const RecebimentoMP = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormRecebimentoMp id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )
