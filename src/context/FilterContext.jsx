@@ -91,6 +91,8 @@ const FilterProvider = ({ children }) => {
         names.map(name => {
             form.setValue(name, '')
         })
+
+        console.log('🚀 ~ names:', form.getValues())
     }
 
     //* Função para setar os valores dos filtros

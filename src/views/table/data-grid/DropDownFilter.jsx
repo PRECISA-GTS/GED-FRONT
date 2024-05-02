@@ -2,10 +2,11 @@ import { IconButton, Button, Grid } from '@mui/material'
 import { useEffect, useRef } from 'react'
 import { BsSliders } from 'react-icons/bs'
 import { useFilter } from 'src/context/FilterContext'
+import { useTheme } from '@mui/material/styles'
 
 const DropDownFilter = () => {
     const { onSubmit, form, componentFilters, handleClear, openFilter, setOpenFilter } = useFilter()
-
+    const theme = useTheme()
     const filterRef = useRef(null)
     const buttonRef = useRef(null)
 
@@ -15,22 +16,22 @@ const DropDownFilter = () => {
         }
     }
 
-    const handleClickOutside = event => {
-        if (buttonRef.current && buttonRef.current.contains(event.target)) {
-            return
-        }
+    // const handleClickOutside = event => {
+    //     if (buttonRef.current && buttonRef.current.contains(event.target)) {
+    //         return
+    //     }
 
-        if (filterRef.current && !filterRef.current.contains(event.target)) {
-            setOpenFilter(false)
-        }
-    }
+    //     if (filterRef.current && !filterRef.current.contains(event.target)) {
+    //         setOpenFilter(false)
+    //     }
+    // }
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside)
+        // document.addEventListener('mousedown', handleClickOutside)
         document.addEventListener('keydown', handleKeyDown)
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
+            // document.removeEventListener('mousedown', handleClickOutside)
             document.removeEventListener('keydown', handleKeyDown)
         }
     }, [])
@@ -52,13 +53,13 @@ const DropDownFilter = () => {
             </IconButton>
 
             <div
-                className={`absolute top-10 left-0 bg-white border rounded-xl shadow-2xl z-30 pt-4 ${
+                className={`absolute top-10 left-0 border rounded-xl shadow-2xl z-30 pt-4 ${
                     openFilter ? 'block' : 'hidden'
-                }`}
+                } ${theme.palette.mode === 'dark' ? 'bg-[#202023] dark:border-[#27272A]' : 'bg-white border-white'}`}
                 ref={filterRef}
             >
                 <form onSubmit={form.handleSubmit(onSubmit)} className='w-auto md:!w-[30vw] p-6'>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={6}>
                         {componentFilters}
                         <Grid item xs={12} className='flex justify-end items-center gap-2 '>
                             <Button variant='text' onClick={handleClear}>

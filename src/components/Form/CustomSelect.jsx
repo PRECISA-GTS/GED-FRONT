@@ -1,6 +1,8 @@
 import { Grid, FormControl, Autocomplete, TextField } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import HelpText from '../Defaults/HelpText'
+import { useEffect, useState } from 'react'
+import { useFilter } from 'src/context/FilterContext'
 
 const CustomSelect = ({
     xs,
@@ -14,14 +16,20 @@ const CustomSelect = ({
     required,
     disabled,
     multiple,
-    setValue,
     onChange,
     className,
     createNew,
     helpText,
     helpTextPosition
 }) => {
-    let optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
+    const { handleClear } = useFilter()
+    const [currentValue, setCurrentValue] = useState(value ?? null)
+
+    let optionsWithNew = createNew ? [{ id: null, name: '-- Novo --' }, ...(options ?? [])] : options
+
+    useEffect(() => {
+        setCurrentValue(null)
+    }, [handleClear])
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -30,44 +38,26 @@ const CustomSelect = ({
                     <Controller
                         name={name}
                         control={form.control}
-                        defaultValue={value}
                         rules={{ required }}
                         render={({ field }) => (
                             <Autocomplete
-                                {...field}
-                                multiple={multiple}
-                                limitTags={limitTags}
-                                size='small'
-                                options={optionsWithNovo}
-                                error={form.formState.errors[name] ? true : false}
-                                value={
-                                    multiple && field.value && field.value.length > 0
-                                        ? field.value.map(item => options.find(option => option.id === item.id))
-                                        : field.value ?? { nome: '' }
-                                }
-                                disabled={disabled}
-                                onChange={(e, newValue) => {
-                                    if (newValue && e.target.innerText == '-- Novo --') {
-                                        createNew()
-                                    } else {
-                                        onChange && onChange(newValue)
-                                        setValue(newValue)
-                                    }
+                                options={optionsWithNew.map(option => option.name)}
+                                value={currentValue}
+                                // setar em setValue o id do item selecionado
+                                onChange={(event, newValue) => {
+                                    const selectedOption = optionsWithNew.find(option => option.name === newValue)
+                                    form.setValue(name, selectedOption ?? null)
                                 }}
                                 renderInput={params => (
                                     <TextField
                                         {...params}
+                                        size='small'
                                         label={title}
                                         placeholder={title}
-                                        error={errors ? true : false}
-                                        sx={{
-                                            '& .MuiInputBase-input': {
-                                                padding: '8px 14px' // Ajuste o valor conforme necessário
-                                            }
-                                        }}
+                                        error={form.formState.errors[name] ? true : false}
+                                        helperText={form.formState.errors[name]?.message}
                                     />
                                 )}
-                                noOptionsText='Sem opções'
                             />
                         )}
                     />
