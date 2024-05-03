@@ -22,6 +22,7 @@ const initialValues = {
     setNames: () => {},
     dataFilters: {},
     setDataFilters: () => {},
+    key: false,
     // Funções
     handleSearch: () => {},
     clearSearch: () => {},
@@ -42,7 +43,16 @@ const FilterProvider = ({ children }) => {
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
+    const [key, setKey] = useState(initialValues.key)
     const form = useForm()
+
+    const startFilter = component => {
+        form.reset()
+        setComponentFilters(component)
+        setDataFilters({})
+        setSearchText('')
+        setOpenFilter(false)
+    }
 
     //* Função para filtrar os dados da tabela | Input de busca
     const handleSearch = searchValue => {
@@ -52,15 +62,15 @@ const FilterProvider = ({ children }) => {
             .split(' ')
             .filter(word => word !== '')
 
-        const filteredRows =
-            filteredData &&
-            filteredData.filter(row => {
-                return searchWords?.every(word => {
-                    return Object.keys(row).some(field => {
-                        return row[field]?.toString().toLowerCase().indexOf(word) !== -1
-                    })
+        const filterDataUse = auxDataFilter.length > 0 ? auxDataFilter : filteredData
+
+        const filteredRows = filterDataUse.filter(row => {
+            return searchWords?.every(word => {
+                return Object.keys(row).some(field => {
+                    return row[field]?.toString().toLowerCase().indexOf(word) !== -1
                 })
             })
+        })
 
         if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
             setFilteredData(data)
@@ -86,13 +96,12 @@ const FilterProvider = ({ children }) => {
 
     //* Função para limpar todos os filtros
     const handleClear = () => {
+        setKey(!key)
         setDataFilters(false)
         clearSearch()
         names.map(name => {
             form.setValue(name, '')
         })
-
-        console.log('🚀 ~ names:', form.getValues())
     }
 
     //* Função para setar os valores dos filtros
@@ -103,6 +112,10 @@ const FilterProvider = ({ children }) => {
 
     // Função que filtra por data
     const filterDate = (dataIni, dataFim) => {
+        if (!dataIni && !dataFim) {
+            return filteredData
+        }
+
         const dataInicio = dataIni ? new Date(dataIni) : null
 
         if (dataInicio) {
@@ -130,19 +143,9 @@ const FilterProvider = ({ children }) => {
 
             return true
         })
-        setFilteredData(filter)
-        setAuxDataFilter(filter)
-    }
 
-    // TODO Função para buscar os dados ao clicar nos cards da dashboard
-    // useEffect(() => {
-    //     if (router.query.s) {
-    //         setSearchText(router.query.s);
-    //         handleSearch(router.query.s)
-    //     } else {
-    //         setSearchText('');
-    //     }
-    // }, [title, router])
+        return filter
+    }
 
     const values = {
         // Estados
@@ -151,6 +154,7 @@ const FilterProvider = ({ children }) => {
         searchText,
         setSearchText,
         filteredData,
+        setAuxDataFilter,
         setFilteredData,
         data,
         setData,
@@ -162,9 +166,11 @@ const FilterProvider = ({ children }) => {
         setNames,
         dataFilters,
         setDataFilters,
+        key,
 
         // Funções
         form,
+        startFilter,
         handleSearch,
         clearSearch,
         handleClear,

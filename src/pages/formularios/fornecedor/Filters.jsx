@@ -1,17 +1,41 @@
 import { useEffect } from 'react'
 import CustomInputDate from 'src/components/Form/CustomInputDate'
 import CustomSelect from 'src/components/Form/CustomSelect'
+import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
-import Autocomplete from '@mui/material/Autocomplete'
-import TextField from '@mui/material/TextField'
-import { MenuItem, Select } from '@mui/material'
 
 const Filters = () => {
-    const { form, setNames, dataFilters, filterDate } = useFilter()
+    const { form, setNames, dataFilters, filterDate, filteredData, setFilteredData, setAuxDataFilter, key } =
+        useFilter()
+    const { commonData } = useCommonData()
+    let data = filteredData
 
     const onSubmit = async () => {
-        console.log('onSubmit: ', dataFilters)
-        filterDate(dataFilters.dataInicio, dataFilters.dataFim)
+        data = await filterDate(dataFilters.dataInicio, dataFilters.dataFim)
+        data = await filterFactorySupplier()
+        data = await filterStatus()
+        setAuxDataFilter(data)
+        setFilteredData(data)
+    }
+
+    const filterStatus = async () => {
+        if (dataFilters.status) {
+            const newDataFiltered = data.filter(item => {
+                return item.status == dataFilters.status.name
+            })
+            return newDataFiltered
+        }
+        return data
+    }
+
+    const filterFactorySupplier = async () => {
+        if (dataFilters.quemPreenche) {
+            const newDataFiltered = data.filter(item => {
+                return item.quemPreenche == dataFilters.quemPreenche?.name
+            })
+            return newDataFiltered
+        }
+        return data
     }
 
     const arrQuemPreenche = [
@@ -33,7 +57,7 @@ const Filters = () => {
     }, [dataFilters])
 
     useEffect(() => {
-        setNames(['dataInicio', 'dataFim', 'quemPreenche'])
+        setNames(['dataInicio', 'dataFim', 'quemPreenche', 'status'])
     }, [])
 
     return (
@@ -48,6 +72,7 @@ const Filters = () => {
                 form={form}
                 options={arrQuemPreenche}
             />
+            <CustomSelect xs={12} md={6} title='Status' name='status' form={form} options={commonData.status} />
         </>
     )
 }

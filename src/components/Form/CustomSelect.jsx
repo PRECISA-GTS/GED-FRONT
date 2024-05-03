@@ -1,9 +1,7 @@
 import { Grid, FormControl, Autocomplete, TextField } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import HelpText from '../Defaults/HelpText'
-import { useEffect, useState } from 'react'
 import { useFilter } from 'src/context/FilterContext'
-
 const CustomSelect = ({
     xs,
     md,
@@ -18,18 +16,13 @@ const CustomSelect = ({
     multiple,
     onChange,
     className,
+    keyProps,
     createNew,
     helpText,
     helpTextPosition
 }) => {
-    const { handleClear } = useFilter()
-    const [currentValue, setCurrentValue] = useState(value ?? null)
-
     let optionsWithNew = createNew ? [{ id: null, name: '-- Novo --' }, ...(options ?? [])] : options
-
-    useEffect(() => {
-        setCurrentValue(null)
-    }, [handleClear])
+    const { key } = useFilter()
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -38,11 +31,12 @@ const CustomSelect = ({
                     <Controller
                         name={name}
                         control={form.control}
+                        value={value ?? null}
                         rules={{ required }}
                         render={({ field }) => (
                             <Autocomplete
+                                key={keyProps || key}
                                 options={optionsWithNew.map(option => option.name)}
-                                value={currentValue}
                                 // setar em setValue o id do item selecionado
                                 onChange={(event, newValue) => {
                                     const selectedOption = optionsWithNew.find(option => option.name === newValue)

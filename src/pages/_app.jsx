@@ -58,6 +58,7 @@ import '../../styles/globals.css'
 import { FormProvider } from 'src/context/FormContext'
 import { FornecedorProvider } from 'src/context/FornecedorContext'
 import { FilterProvider } from 'src/context/FilterContext'
+import { CommonDataProvider } from 'src/context/CommonDataContext'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -122,37 +123,42 @@ const App = props => {
                     <AuthProvider>
                         <FornecedorProvider>
                             <FormProvider>
-                                <FilterProvider>
-                                    <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                                        <SettingsConsumer>
-                                            {({ settings }) => {
-                                                return (
-                                                    <NotificationProvider>
-                                                        <ThemeComponent settings={settings}>
-                                                            <WindowWrapper>
-                                                                <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                                                                    <AclGuard
-                                                                        aclAbilities={aclAbilities}
+                                <CommonDataProvider>
+                                    <FilterProvider>
+                                        <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                                            <SettingsConsumer>
+                                                {({ settings }) => {
+                                                    return (
+                                                        <NotificationProvider>
+                                                            <ThemeComponent settings={settings}>
+                                                                <WindowWrapper>
+                                                                    <Guard
+                                                                        authGuard={authGuard}
                                                                         guestGuard={guestGuard}
                                                                     >
-                                                                        {getLayout(<Component {...pageProps} />)}
-                                                                    </AclGuard>
-                                                                </Guard>
-                                                            </WindowWrapper>
-                                                            <ReactHotToast>
-                                                                <Toaster
-                                                                    position={settings.toastPosition}
-                                                                    toastOptions={{ className: 'react-hot-toast' }}
-                                                                    style={{ zIndex: 999999 }}
-                                                                />
-                                                            </ReactHotToast>
-                                                        </ThemeComponent>
-                                                    </NotificationProvider>
-                                                )
-                                            }}
-                                        </SettingsConsumer>
-                                    </SettingsProvider>
-                                </FilterProvider>
+                                                                        <AclGuard
+                                                                            aclAbilities={aclAbilities}
+                                                                            guestGuard={guestGuard}
+                                                                        >
+                                                                            {getLayout(<Component {...pageProps} />)}
+                                                                        </AclGuard>
+                                                                    </Guard>
+                                                                </WindowWrapper>
+                                                                <ReactHotToast>
+                                                                    <Toaster
+                                                                        position={settings.toastPosition}
+                                                                        toastOptions={{ className: 'react-hot-toast' }}
+                                                                        style={{ zIndex: 999999 }}
+                                                                    />
+                                                                </ReactHotToast>
+                                                            </ThemeComponent>
+                                                        </NotificationProvider>
+                                                    )
+                                                }}
+                                            </SettingsConsumer>
+                                        </SettingsProvider>
+                                    </FilterProvider>
+                                </CommonDataProvider>
                             </FormProvider>
                         </FornecedorProvider>
                     </AuthProvider>
