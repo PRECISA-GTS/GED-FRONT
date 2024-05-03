@@ -31,7 +31,7 @@ const AnexoList = ({
                     error && error?.[key]
                         ? 'border border-red-500'
                         : modeTheme === 'dark'
-                        ? 'bg-[#202023]'
+                        ? 'bg-[#212b36]'
                         : ' bg-[#F6F6F8] '
                 } rounded-lg flex flex-col relative z-10`}
             >
@@ -55,7 +55,7 @@ const AnexoList = ({
                         >
                             <div
                                 className={`flex relative p-2 justify-start items-center gap-2 rounded-lg w-full mx-2 my-1 mb-2 border-2 border-dashed hover:border-[#4A8B57] transition-colors ${
-                                    modeTheme === 'dark' ? ' border-[#27272a]' : 'rgba(76, 78, 100, 0.12)'
+                                    modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
                                 }`}
                             >
                                 {loadingFile && item.produtoAnexoID == selectedItem?.produtoAnexoID && (

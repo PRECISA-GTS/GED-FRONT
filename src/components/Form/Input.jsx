@@ -120,7 +120,7 @@ const Input = ({
                                     }}
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            padding: '8px 14px' // Ajuste o valor conforme necessário
+                                            padding: '10px 14px' // Ajuste o valor conforme necessário
                                         }
                                     }}
                                 />

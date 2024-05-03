@@ -1,5 +1,3 @@
-
-
 // Tema do sistema/ Cores do sistema/ Themes/ Colors
 const DefaultPalette = (mode, skin) => {
     // ** Vars
@@ -8,15 +6,14 @@ const DefaultPalette = (mode, skin) => {
     const darkColor = '234, 234, 255'
     const mainColor = mode === 'light' ? lightColor : darkColor
 
-
     const defaultBgColor = () => {
         if (skin === 'bordered' && mode === 'light') {
             return whiteColor
         } else if (skin === 'bordered' && mode === 'dark') {
-            return '#202023'
+            return '#161c24'
         } else if (mode === 'light') {
             return '#F7F7F9'
-        } else return '#202023'
+        } else return '#161c24'
     }
 
     return {
@@ -24,13 +21,14 @@ const DefaultPalette = (mode, skin) => {
             dark: darkColor,
             main: mainColor,
             light: lightColor,
-            darkBg: '#27272A',
-            lightBg: '#27272A',
-            bodyBg: mode === 'light' ? '#35553b' : '#303033',
-            trackBg: mode === 'light' ? '#35553b' : '#303033',
-            tooltipBg: mode === 'light' ? '#262732' : '#303033',
-            tableHeaderBg: mode === 'light' ? '#F5F5F7' : '#303033',
-            disabledBg: mode === 'light' ? '#F7F7F9' : '#303033',
+            darkBg: '#212b36',
+            lightBg: '#212b36',
+            bodyBg: mode === 'light' ? '#35553b' : '#21272f',
+            trackBg: mode === 'light' ? '#35553b' : '#21272f',
+            tooltipBg: mode === 'light' ? '#262732' : '#212b36',
+            tableHeaderBg: mode === 'light' ? '#F5F5F7' : '#21272f',
+            disabledBg: mode === 'light' ? '#F7F7F9' : '#21272f',
+
         },
         mode: mode,
         common: {
@@ -40,9 +38,17 @@ const DefaultPalette = (mode, skin) => {
         primary: {
             light: '#4a8b57',
             main: '#4a8b57',
+            bg: mode === 'dark' ? '#14272a' : '#cde9e2',
             dark: '#35553b',
             contrastText: whiteColor
         },
+        // },
+        // primary: {
+        //     light: '#4a8b57',
+        //     main: '#4a8b57',
+        //     dark: '#35553b',
+        //     contrastText: whiteColor
+        // },
         secondary: {
             light: '#7F889B',
             main: '#6D788D',
@@ -102,9 +108,9 @@ const DefaultPalette = (mode, skin) => {
             disabled: `rgba(${mainColor}, 0.95)`,
             opacity: `rgba(${mainColor}, 0.4)`
         },
-        divider: `rgba(${mainColor}, 0.12)`,
+        divider: mode === 'dark' ? '#373f48' : '#EBEBEB',
         background: {
-            paper: mode === 'light' ? whiteColor : '#27272A', //! bg content
+            paper: mode === 'light' ? whiteColor : '#212b36', //! bg content
             default: defaultBgColor()
         },
         action: {

@@ -61,7 +61,7 @@ const DropDownFilter = () => {
             <div
                 className={`absolute top-10 left-0 border rounded-xl shadow-2xl z-30 pt-4 ${
                     openFilter ? 'block' : 'hidden'
-                } ${theme.palette.mode === 'dark' ? 'bg-[#202023] dark:border-[#27272A]' : 'bg-white border-white'}`}
+                } ${theme.palette.mode === 'dark' ? 'bg-[#212b36] dark:border-[#212b36]' : 'bg-white border-white'}`}
                 ref={filterRef}
             >
                 <form onSubmit={form.handleSubmit(onSubmit)} className='w-auto md:!w-[30vw] p-6'>

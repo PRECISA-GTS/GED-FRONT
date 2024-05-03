@@ -172,7 +172,7 @@ const DialogLog = ({ open, handleClose, row }) => {
 
                                     <div
                                         className={`${
-                                            mode === 'dark' ? 'bg-[#202023]' : 'bg-[#f7f7f9]'
+                                            mode === 'dark' ? 'bg-[#212b36]' : 'bg-[#f7f7f9]'
                                         } p-2 rounded-lg`}
                                     >
                                         <pre>{formatarAlteracao(log.alteracao, log.operacao)}</pre>

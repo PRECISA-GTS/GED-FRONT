@@ -52,21 +52,17 @@ const input = theme => {
                 root: {
                     borderRadius: 8,
                     '&:hover:not(.Mui-focused):not(.Mui-disabled):not(.Mui-error) .MuiOutlinedInput-notchedOutline': {
-                        borderColor: `rgba(${theme.palette.customColors.main}, 0.32)`
+                        borderColor: theme.palette.primary.main
                     },
                     '&:hover.Mui-error .MuiOutlinedInput-notchedOutline': {
                         borderColor: theme.palette.error.main
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: `rgba(${theme.palette.customColors.main}, 0.22)`
+                        borderColor: theme.palette.divider
                     },
                     '&.Mui-disabled': {
-                        backgroundColor: theme.palette.customColors.disabledBg,
+                        backgroundColor: 'transparent',
                     },
-                    // diminuir padding vertical
-                    // '& .MuiOutlinedInput-input': {
-                    //     padding: '8px 14px',
-                    // }
                 }
             }
         }

@@ -3,6 +3,7 @@ import CustomInputDate from 'src/components/Form/CustomInputDate'
 import CustomSelect from 'src/components/Form/CustomSelect'
 import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
+import { Box, Card, CardContent } from '@mui/material'
 
 const Filters = () => {
     const {
@@ -11,7 +12,6 @@ const Filters = () => {
         dataFilters,
         filterDate,
         SelectFilterByName,
-        filteredData,
         data: dataAll,
         setFilteredData,
         setAuxDataFilter,

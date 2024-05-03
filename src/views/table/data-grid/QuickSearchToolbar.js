@@ -51,7 +51,7 @@ const QuickSearchToolbar = (props) => {
                         value={searchText}
                         onChange={(e) => handleSearch(e.target.value)}
                         placeholder='Buscar…'
-                        className='!w-[50vw] md:!w-[30vw] relative'
+                        className='!w-[70vw] md:!w-[30vw] relative'
                         autoComplete='off'
                         variant='standard'
                         InputProps={{

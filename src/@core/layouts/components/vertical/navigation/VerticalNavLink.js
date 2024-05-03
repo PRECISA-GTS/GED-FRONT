@@ -32,17 +32,17 @@ const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
     transition: 'padding-left .25s ease-in-out',
     '&.active': {
         '&, &:hover': {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: `${theme.palette.primary.bg} !important`,
             '&.Mui-focusVisible': {
-                backgroundColor: theme.palette.primary.main
+                backgroundColor: '#F00 !important',
             }
         },
         '& .MuiTypography-root': {
             fontWeight: 500,
-            color: `${theme.palette.common.white} !important`
+            color: `${theme.palette.primary.main} !important`
         },
         '& .MuiListItemIcon-root': {
-            color: `${theme.palette.common.white} !important`
+            color: `${theme.palette.primary.main} !important`
         }
     }
 }))

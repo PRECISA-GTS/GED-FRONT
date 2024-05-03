@@ -45,7 +45,7 @@ const AppCalendar = () => {
                 className='app-calendar'
                 sx={{
                     padding: 4,
-                    backgroundColor: settings.mode == 'dark' ? '#27272A' : '#FFF',
+                    backgroundColor: settings.mode == 'dark' ? '#212b36' : '#FFF',
                     boxShadow: skin === 'bordered' ? 0 : 6,
                     ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
                 }}

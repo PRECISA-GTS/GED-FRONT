@@ -13,7 +13,7 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing(0, 0),
-    backgroundColor: theme.palette.mode == 'dark' ? '#202023' : '#F7F7F9',
+    backgroundColor: theme.palette.mode == 'dark' ? '#161c24' : '#F7F7F9',
     color: theme.palette.text.primary,
     minHeight: theme.mixins.toolbar.minHeight,
     [theme.breakpoints.down('sm')]: {

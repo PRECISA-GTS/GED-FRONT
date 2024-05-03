@@ -34,7 +34,7 @@ const AnexoList = ({
                         error?.grupoAnexo?.[indexBlock]?.itens[indexItem])
                         ? 'border border-red-500'
                         : modeTheme === 'dark'
-                        ? 'bg-[#202023]'
+                        ? 'bg-[#212b36]'
                         : ' bg-[#F6F6F8] '
                 } px-4 py-2 rounded-lg flex flex-col relative gap-2 z-10`}
             >
@@ -45,7 +45,7 @@ const AnexoList = ({
                 {/* Área de adicionar arquivos (pontilhado) */}
                 <div
                     className={`rounded-lg border-2 p-3 cursor-pointer border-dashed hover:border-[#4A8B57] transition-colors ${
-                        modeTheme === 'dark' ? ' border-[#27272a]' : 'rgba(76, 78, 100, 0.12)'
+                        modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
                     }`}
                     onClick={() => (!disabled ? handleFileClick(item) : null)}
                 >
@@ -68,7 +68,7 @@ const AnexoList = ({
                         item.anexos.map((anexo, index) => (
                             <div
                                 className={`flex items-center justify-between gap-2 border rounded-lg p-3 hover:border-[#4A8B57] transition-colors ${
-                                    modeTheme === 'dark' ? ' border-[#27272a]' : 'rgba(76, 78, 100, 0.12)'
+                                    modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
                                 }`}
                             >
                                 {/* Bloco esquerda */}

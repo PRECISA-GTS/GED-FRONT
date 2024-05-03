@@ -21,7 +21,7 @@ const FooterContent = () => {
                     `block sm:hidden text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`
                 }
             >
-                v {latestVersionState}
+                v {versions[versions.length - 1].version}
             </span>
 
             <div>

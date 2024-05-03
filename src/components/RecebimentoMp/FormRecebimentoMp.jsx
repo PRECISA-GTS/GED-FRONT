@@ -735,7 +735,7 @@ const FormRecebimentoMp = ({ id }) => {
                     )}
                 </div>
 
-                <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
+                <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
                     {/* Cabeçalho do modelo */}
                     {info && info.cabecalhoModelo != '' && (
                         <Card>
