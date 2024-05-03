@@ -12,12 +12,13 @@ const Filters = () => {
         filterDate,
         SelectFilterByName,
         filteredData,
+        data: dataAll,
         setFilteredData,
         setAuxDataFilter,
         key
     } = useFilter()
     const { commonData } = useCommonData()
-    let data = filteredData
+    let data = dataAll
 
     const onSubmit = async () => {
         data = await filterDate(dataFilters.dataInicio, dataFilters.dataFim)

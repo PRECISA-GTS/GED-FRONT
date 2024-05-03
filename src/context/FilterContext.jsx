@@ -114,7 +114,7 @@ const FilterProvider = ({ children }) => {
     // Função que filtra por data
     const filterDate = (dataIni, dataFim) => {
         if (!dataIni && !dataFim) {
-            return filteredData
+            return data
         }
 
         const dataInicio = dataIni ? new Date(dataIni) : null
@@ -133,7 +133,6 @@ const FilterProvider = ({ children }) => {
 
         const filter = data.filter(item => {
             const itemDate = convertStringToDate(item.data)
-
             if (dataInicio && dataFinal) {
                 return itemDate >= dataInicio && itemDate <= dataFinal
             } else if (dataInicio) {
@@ -153,7 +152,6 @@ const FilterProvider = ({ children }) => {
         if (!value) {
             return data
         }
-        console.log('🚀 ~ SelectFilterByName', value, data)
         return data.filter(item => item[name] === value)
     }
 

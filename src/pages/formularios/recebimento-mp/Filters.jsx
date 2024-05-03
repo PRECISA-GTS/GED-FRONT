@@ -11,20 +11,20 @@ const Filters = () => {
         dataFilters,
         filterDate,
         SelectFilterByName,
-        filteredData,
+        data: dataAll,
         setFilteredData,
         setAuxDataFilter,
         key
     } = useFilter()
     const { commonData } = useCommonData()
-    console.log('🚀 ~ commonData:', commonData)
-    let data = filteredData
+    let data = dataAll
 
     const onSubmit = async () => {
         data = await filterDate(dataFilters.dataInicio, dataFilters.dataFim)
         data = await SelectFilterByName(data, 'status', dataFilters.status?.name)
         data = await SelectFilterByName(data, 'profissional', dataFilters.professional?.name)
         data = await SelectFilterByName(data, 'modelo', dataFilters.recebimentoModel?.name)
+
         setAuxDataFilter(data)
         setFilteredData(data)
     }

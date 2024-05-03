@@ -82,6 +82,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
                         buttonsHeader: buttonsHeader,
                     }
                 }}
+                className='min-h-[85vh]'
             />
             {/* Modal que abre com informações do log */}
             <DialogLog

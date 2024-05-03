@@ -51,7 +51,7 @@ const QuickSearchToolbar = (props) => {
                         value={searchText}
                         onChange={(e) => handleSearch(e.target.value)}
                         placeholder='Buscar…'
-                        className='w-auto md:!w-[30vw] relative'
+                        className='!w-[50vw] md:!w-[30vw] relative'
                         autoComplete='off'
                         variant='standard'
                         InputProps={{
@@ -90,7 +90,9 @@ const QuickSearchToolbar = (props) => {
                     />
                 </div>
                 {((dataFilters && Object.keys(dataFilters).length > 0) || (searchText.length > 0)) && (
-                    <Button onClick={handleClear} className='!capitalize' variant='outlined' color='secondary' endIcon={<Icon icon='iconamoon:sign-times-fill' className='text-red-500' />}>Filtro: {filteredData.length}</Button>
+                    <Button onClick={handleClear} className='hidden sm:block !capitalize' variant='outlined' color='secondary' endIcon={<Icon icon='iconamoon:sign-times-fill' className='text-red-500' />}>
+                        <span>Filtro: {filteredData.length}</span>
+                    </Button>
                 )}
             </Box>
 
