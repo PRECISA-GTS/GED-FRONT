@@ -84,6 +84,7 @@ const FilterProvider = ({ children }) => {
         }
 
         if (searchValue && searchValue.length > 0) {
+            setSearchText
             setFilteredData(filteredRows)
             return
         }
@@ -147,6 +148,15 @@ const FilterProvider = ({ children }) => {
         return filter
     }
 
+    // Função que filtra os selects por nome
+    const SelectFilterByName = (data, name, value) => {
+        if (!value) {
+            return data
+        }
+        console.log('🚀 ~ SelectFilterByName', value, data)
+        return data.filter(item => item[name] === value)
+    }
+
     const values = {
         // Estados
         pageSize,
@@ -175,7 +185,8 @@ const FilterProvider = ({ children }) => {
         clearSearch,
         handleClear,
         onSubmit,
-        filterDate
+        filterDate,
+        SelectFilterByName
     }
     return <FilterContext.Provider value={values}>{children}</FilterContext.Provider>
 }

@@ -45,6 +45,7 @@ const CustomSelect = ({
                                 renderInput={params => (
                                     <TextField
                                         {...params}
+                                        id='customSelect'
                                         size='small'
                                         label={title}
                                         placeholder={title}

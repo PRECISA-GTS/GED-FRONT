@@ -16,22 +16,25 @@ const DropDownFilter = () => {
         }
     }
 
-    // const handleClickOutside = event => {
-    //     if (buttonRef.current && buttonRef.current.contains(event.target)) {
-    //         return
-    //     }
+    const handleClickOutside = event => {
+        // validação pra não fechar dropdown ao selecionar um item do select
+        if (event.target.tagName.toLowerCase() === 'li') return
 
-    //     if (filterRef.current && !filterRef.current.contains(event.target)) {
-    //         setOpenFilter(false)
-    //     }
-    // }
+        if (buttonRef.current && buttonRef.current.contains(event.target)) {
+            return
+        }
+
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+            setOpenFilter(false)
+        }
+    }
 
     useEffect(() => {
-        // document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('mousedown', handleClickOutside)
         document.addEventListener('keydown', handleKeyDown)
 
         return () => {
-            // document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener('mousedown', handleClickOutside)
             document.removeEventListener('keydown', handleKeyDown)
         }
     }, [])
@@ -46,7 +49,10 @@ const DropDownFilter = () => {
                 aria-controls={openFilter ? 'basic-menu' : undefined}
                 aria-haspopup='true'
                 aria-expanded={openFilter ? 'true' : undefined}
-                onClick={() => setOpenFilter(!openFilter)}
+                onClick={e => {
+                    e.preventDefault()
+                    setOpenFilter(!openFilter)
+                }}
                 ref={buttonRef}
             >
                 <BsSliders size={16} />

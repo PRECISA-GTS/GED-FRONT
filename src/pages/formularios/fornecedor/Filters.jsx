@@ -5,37 +5,26 @@ import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, dataFilters, filterDate, filteredData, setFilteredData, setAuxDataFilter, key } =
-        useFilter()
+    const {
+        form,
+        setNames,
+        dataFilters,
+        filterDate,
+        SelectFilterByName,
+        filteredData,
+        setFilteredData,
+        setAuxDataFilter,
+        key
+    } = useFilter()
     const { commonData } = useCommonData()
     let data = filteredData
 
     const onSubmit = async () => {
         data = await filterDate(dataFilters.dataInicio, dataFilters.dataFim)
-        data = await filterFactorySupplier()
-        data = await filterStatus()
+        data = await SelectFilterByName(data, 'status', dataFilters.status?.name)
+        data = await SelectFilterByName(data, 'quemPreenche', dataFilters.quemPreenche?.name)
         setAuxDataFilter(data)
         setFilteredData(data)
-    }
-
-    const filterStatus = async () => {
-        if (dataFilters.status) {
-            const newDataFiltered = data.filter(item => {
-                return item.status == dataFilters.status.name
-            })
-            return newDataFiltered
-        }
-        return data
-    }
-
-    const filterFactorySupplier = async () => {
-        if (dataFilters.quemPreenche) {
-            const newDataFiltered = data.filter(item => {
-                return item.quemPreenche == dataFilters.quemPreenche?.name
-            })
-            return newDataFiltered
-        }
-        return data
     }
 
     const arrQuemPreenche = [

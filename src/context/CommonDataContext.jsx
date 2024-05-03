@@ -1,32 +1,47 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
+import { AuthContext } from './AuthContext'
 
-const statusTypes = {
-    statusID: 0,
-    nome: '',
-    icone: '',
-    cor: ''
-}
+const statusTypes = [
+    {
+        statusID: 0,
+        name: '',
+        icone: '',
+        cor: ''
+    }
+]
+
+const selectTypes = [
+    {
+        id: 0,
+        name: ''
+    }
+]
 
 const initialValues = {
     commonData: {
-        status: statusTypes
+        status: statusTypes,
+        professional: selectTypes,
+        recebimentoModel: selectTypes
     }
 }
 
 const CommonDataContext = createContext(initialValues)
 
 const CommonDataProvider = ({ children }) => {
-    const [commonData, setCommonData] = useState(initialValues.data)
+    const [commonData, setCommonData] = useState(initialValues.commonData)
+    const { loggedUnity } = useContext(AuthContext)
 
     const getData = async () => {
-        const res = await api.post('commonData/getData')
+        const res = await api.post('commonData/getData', {
+            unidadeID: loggedUnity.unidadeID
+        })
         setCommonData(res.data)
     }
 
     useEffect(() => {
-        getData()
-    }, [])
+        if (loggedUnity) getData()
+    }, [loggedUnity])
 
     const values = {
         commonData,

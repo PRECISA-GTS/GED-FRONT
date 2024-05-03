@@ -22,8 +22,7 @@ const RecebimentoMP = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
-        useFilter()
+    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
 
     const getList = async () => {
         await api
@@ -44,10 +43,7 @@ const RecebimentoMP = () => {
 
     useEffect(() => {
         getList()
-        form.reset()
-        setComponentFilters(<Filters />)
-        setDataFilters({})
-        setSearchText('')
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns =
