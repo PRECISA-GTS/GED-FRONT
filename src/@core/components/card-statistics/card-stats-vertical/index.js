@@ -6,17 +6,28 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 import { useTheme } from '@mui/material/styles'
 import { useFilter } from 'src/context/FilterContext'
+import { useCommonData } from 'src/context/CommonDataContext'
 
 const CardStatsVertical = props => {
     const { title, color, icon, stats = 'positive' } = props
     const router = Router
     const theme = useTheme()
-    const { setSearchText } = useFilter()
+    const { setDataFilters, dataFilters, form } = useFilter()
+    const { commonData } = useCommonData()
 
     const handleFilterStatus = () => {
-        setSearchText(title)
+        const statusSelected = commonData?.status?.find(status => status.name === title)
+        const statusFormat = {
+            id: statusSelected?.statusID,
+            name: statusSelected?.name
+        }
+        form.reset({
+            status: statusFormat
+        })
+        setDataFilters({ ...dataFilters, status: statusFormat })
         router.push(`/formularios/fornecedor`)
     }
+
 
     return (
         <Card

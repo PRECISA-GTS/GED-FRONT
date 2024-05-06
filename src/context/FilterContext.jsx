@@ -14,8 +14,6 @@ const initialValues = {
     setData: () => {},
     auxDataFilter: [],
     setAuxDataFilter: () => {},
-    auxDataSearch: [],
-    setAuxDataSearch: () => {},
     openFilter: false,
     setOpenFilter: () => {},
     componentFilters: null,
@@ -25,13 +23,15 @@ const initialValues = {
     dataFilters: {},
     setDataFilters: () => {},
     key: false,
+    setKey: () => {},
     // Funções
     handleSearch: () => {},
     clearSearch: () => {},
     handleClear: () => {},
     onSubmit: () => {},
     filterDate: () => {},
-    startFilter: () => {}
+    startFilter: () => {},
+    SelectFilterByName: () => {}
 }
 
 const FilterContext = createContext(initialValues)
@@ -43,56 +43,50 @@ const FilterProvider = ({ children }) => {
     const [data, setData] = useState(initialValues.data)
     const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [auxDataFilter, setAuxDataFilter] = useState(initialValues.auxDataFilter)
-    const [auxDataSearch, setAuxDataSearch] = useState(initialValues.auxDataSearch)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
     const [key, setKey] = useState(initialValues.key)
     const form = useForm()
 
-    const startFilter = (component, keeptext) => {
+    const startFilter = (component, keepFilter) => {
         form.reset()
         setComponentFilters(component)
         setFilteredData(data)
-        setDataFilters({})
         setOpenFilter(false)
-        if (!keeptext) setSearchText('')
+        if (!keepFilter) setDataFilters({})
     }
 
     //* Função para filtrar os dados da tabela | Input de busca
-    const handleSearch = async (searchValue, dataPref) => {
+    const handleSearch = searchValue => {
         setSearchText(searchValue)
 
         const searchWords = searchValue
             ?.toLowerCase()
             .split(' ')
             .filter(word => word !== '')
-        const filterSelected =
-            dataPref && dataPref.length > 0 ? dataPref : auxDataFilter.length > 0 ? auxDataFilter : filteredData
 
-        const filteredRows = filterSelected.filter(row =>
+        const filterDataUse = auxDataFilter.length > 0 ? auxDataFilter : filteredData
+
+        const filteredRows = filterDataUse.filter(row =>
             searchWords?.every(word => Object.values(row).some(field => field?.toString().toLowerCase().includes(word)))
         )
 
-        if (searchValue && dataPref && dataPref?.length > 0) {
-            setAuxDataSearch(filteredRows)
-            return filteredRows
-        }
-
-        if (!searchValue && Object.keys(dataFilters).length === 0) {
+        if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
             setFilteredData(data)
             setAuxDataFilter([])
-            return data
+            return
         }
 
-        if (!searchValue && dataFilters) {
+        if ((!searchValue || searchValue.length == 0) && dataFilters) {
             setFilteredData(auxDataFilter)
-            return auxDataFilter
+            return
         }
 
-        if (searchValue) {
+        if (searchValue && searchValue.length > 0) {
+            setSearchText
             setFilteredData(filteredRows)
-            return filteredRows
+            return
         }
     }
 
@@ -182,6 +176,7 @@ const FilterProvider = ({ children }) => {
         dataFilters,
         setDataFilters,
         key,
+        setKey,
 
         // Funções
         form,

@@ -1,6 +1,8 @@
-import { Grid, FormControl, Autocomplete, TextField } from '@mui/material'
+import { Grid, FormControl, Autocomplete, TextField, Paper } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import HelpText from '../Defaults/HelpText'
+import { useTheme } from '@mui/material/styles'
+import { useSettings } from 'src/@core/hooks/useSettings'
 
 const Select = ({
     xs,
@@ -24,6 +26,10 @@ const Select = ({
     helpText,
     helpTextPosition
 }) => {
+    const theme = useTheme()
+    const { settings } = useSettings()
+    const { mode } = settings
+    console.log('🚀 ~ theme:', settings, theme)
     let optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
     return (
@@ -74,6 +80,21 @@ const Select = ({
                                             }
                                         }}
                                     />
+                                )}
+                                PaperComponent={({ children }) => (
+                                    <Paper
+                                        sx={{
+                                            '& ul': {
+                                                border:
+                                                    settings.mode == 'dark'
+                                                        ? `1px solid rgba(${theme.palette.customColors.main}, 0.32)`
+                                                        : `null`,
+                                                borderRadius: '8px'
+                                            }
+                                        }}
+                                    >
+                                        {children}
+                                    </Paper>
                                 )}
                                 noOptionsText='Sem opções'
                             />

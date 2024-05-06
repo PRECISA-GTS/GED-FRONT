@@ -13,6 +13,7 @@ const Filters = () => {
         SelectFilterByName,
         data: dataAll,
         setFilteredData,
+        searchText,
         setAuxDataFilter
     } = useFilter()
     const { commonData } = useCommonData()
@@ -45,7 +46,7 @@ const Filters = () => {
     }, [dataFilters])
 
     useEffect(() => {
-        setNames(['dataInicio', 'dataFim', 'quemPreenche', 'status', 'dataTeste'])
+        setNames(['dataInicio', 'dataFim', 'quemPreenche', 'status'])
     }, [])
 
     return (
@@ -60,7 +61,15 @@ const Filters = () => {
                 form={form}
                 options={arrQuemPreenche}
             />
-            <CustomSelect xs={12} md={6} title='Status' name='status' form={form} options={commonData.status} />
+            <CustomSelect
+                xs={12}
+                md={6}
+                title='Status'
+                name='status'
+                form={form}
+                options={commonData.status}
+                value={dataFilters?.status?.name}
+            />
         </>
     )
 }

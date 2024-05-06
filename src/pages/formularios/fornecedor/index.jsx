@@ -47,12 +47,7 @@ const Fornecedor = () => {
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
-            if (searchText) {
-                const res = handleSearch(searchText, response.data)
-                setFilteredData(res)
-            } else {
-                setFilteredData(response.data)
-            }
+            setFilteredData(response.data)
             setData(response.data)
             setTitle({
                 title: 'Fornecedor',
