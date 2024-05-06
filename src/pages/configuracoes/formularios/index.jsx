@@ -86,8 +86,7 @@ const ListParametrosFormularios = () => {
                                 key={index}
                                 xs={12}
                                 md={3}
-                                color={'!bg-[#f9eb8d]'}
-                                icon='bi:folder'
+                                icon='material-symbols:folder'
                                 title={value?.nome}
                                 subtitle={`Contém os modelos do formulário`}
                                 action='edit'

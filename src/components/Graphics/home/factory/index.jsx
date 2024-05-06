@@ -57,16 +57,12 @@ const Factory = () => {
     const sendFoto = async event => {
         try {
             const selectedFiles = event.target.files
-            console.log('🚀 ~ selectedFiles:', selectedFiles.length)
 
             const formData = new FormData()
             for (let i = 0; i < selectedFiles.length; i++) {
                 formData.append('files[]', selectedFiles[i])
-                console.log('🚀 ~ selectedFiles[i]:', selectedFiles[i])
             }
 
-            console.log('🚀 ~ enviando foto pro backend: ', formData)
-            const response = await api.post(`login/enviaFoto/`, formData)
             getFoto()
         } catch (err) {
             console.log(err)

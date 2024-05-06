@@ -85,25 +85,6 @@ const Navigation = props => {
         }
     }
 
-    const shadowBgColor = () => {
-        if (mode === 'light') {
-            return `linear-gradient(${theme.palette.customColors.lightBg} 5%,${hexToRGBA(
-                theme.palette.customColors.lightBg,
-                0.85
-            )} 30%,${hexToRGBA(theme.palette.customColors.lightBg, 0.5)} 65%,${hexToRGBA(
-                theme.palette.customColors.lightBg,
-                0.3
-            )} 75%,transparent)`
-        } else {
-            return `linear-gradient(${theme.palette.customColors.darkBg} 5%,${hexToRGBA(
-                theme.palette.customColors.darkBg,
-                0.85
-            )} 30%,${hexToRGBA(theme.palette.customColors.darkBg, 0.5)} 65%,${hexToRGBA(
-                theme.palette.customColors.darkBg,
-                0.3
-            )} 75%,transparent)`
-        }
-    }
     const ScrollWrapper = hidden ? Box : PerfectScrollbar
 
     return (
@@ -112,7 +93,7 @@ const Navigation = props => {
                 <VerticalNavHeader {...props} navHover={navHover} />
                 {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed' ? beforeNavMenuContent(props) : null}
                 {(beforeVerticalNavMenuContentPosition === 'static' || !beforeNavMenuContent) && (
-                    <StyledBoxForShadow ref={shadowRef} sx={{ background: shadowBgColor() }} />
+                    <StyledBoxForShadow ref={shadowRef} />
                 )}
                 <Box sx={{ position: 'relative', overflow: 'hidden' }}>
                     <ScrollWrapper

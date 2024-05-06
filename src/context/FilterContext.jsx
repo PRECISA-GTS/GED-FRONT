@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { convertStringToDate } from 'src/configs/defaultConfigs'
 
@@ -14,6 +14,8 @@ const initialValues = {
     setData: () => {},
     auxDataFilter: [],
     setAuxDataFilter: () => {},
+    auxDataSearch: [],
+    setAuxDataSearch: () => {},
     openFilter: false,
     setOpenFilter: () => {},
     componentFilters: null,
@@ -28,7 +30,8 @@ const initialValues = {
     clearSearch: () => {},
     handleClear: () => {},
     onSubmit: () => {},
-    filterDate: () => {}
+    filterDate: () => {},
+    startFilter: () => {}
 }
 
 const FilterContext = createContext(initialValues)
@@ -37,58 +40,62 @@ const FilterProvider = ({ children }) => {
     const [pageSize, setPageSize] = useState(initialValues.pageSize)
     const [searchText, setSearchText] = useState(initialValues.searchText)
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
-    const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [data, setData] = useState(initialValues.data)
+    const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
     const [auxDataFilter, setAuxDataFilter] = useState(initialValues.auxDataFilter)
+    const [auxDataSearch, setAuxDataSearch] = useState(initialValues.auxDataSearch)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
     const [key, setKey] = useState(initialValues.key)
     const form = useForm()
 
-    const startFilter = component => {
+    const startFilter = (component, keeptext) => {
         form.reset()
         setComponentFilters(component)
+        setFilteredData(data)
         setDataFilters({})
-        setSearchText('')
         setOpenFilter(false)
+        if (!keeptext) setSearchText('')
     }
 
     //* Função para filtrar os dados da tabela | Input de busca
-    const handleSearch = searchValue => {
+    const handleSearch = async (searchValue, dataPref) => {
         setSearchText(searchValue)
+
         const searchWords = searchValue
             ?.toLowerCase()
             .split(' ')
             .filter(word => word !== '')
+        const filterSelected =
+            dataPref && dataPref.length > 0 ? dataPref : auxDataFilter.length > 0 ? auxDataFilter : filteredData
 
-        const filterDataUse = auxDataFilter.length > 0 ? auxDataFilter : filteredData
+        const filteredRows = filterSelected.filter(row =>
+            searchWords?.every(word => Object.values(row).some(field => field?.toString().toLowerCase().includes(word)))
+        )
 
-        const filteredRows = filterDataUse.filter(row => {
-            return searchWords?.every(word => {
-                return Object.keys(row).some(field => {
-                    return row[field]?.toString().toLowerCase().indexOf(word) !== -1
-                })
-            })
-        })
+        if (searchValue && dataPref && dataPref?.length > 0) {
+            setAuxDataSearch(filteredRows)
+            return filteredRows
+        }
 
-        if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
+        if (!searchValue && Object.keys(dataFilters).length === 0) {
             setFilteredData(data)
             setAuxDataFilter([])
-            return
+            return data
         }
 
-        if ((!searchValue || searchValue.length == 0) && dataFilters) {
+        if (!searchValue && dataFilters) {
             setFilteredData(auxDataFilter)
-            return
+            return auxDataFilter
         }
 
-        if (searchValue && searchValue.length > 0) {
-            setSearchText
+        if (searchValue) {
             setFilteredData(filteredRows)
-            return
+            return filteredRows
         }
     }
+
     //* Função para limpar o filtro | Input de busca
     const clearSearch = () => {
         setFilteredData(data)

@@ -10,14 +10,15 @@ import { AuthContext } from 'src/context/AuthContext'
 import { useContext, useEffect } from 'react'
 import Factory from 'src/components/Graphics/home/factory'
 import Supplier from 'src/components/Graphics/home/supplier'
+import { useFilter } from 'src/context/FilterContext'
 
 const Home = () => {
     const { setTitle } = useContext(ParametersContext)
     const { user } = useContext(AuthContext)
-
-    console.log('user', user)
+    const { startFilter } = useFilter()
 
     useEffect(() => {
+        startFilter()
         setTitle({
             title: 'Início',
             subtitle: ''

@@ -1,4 +1,5 @@
 // Tema do sistema/ Cores do sistema/ Themes/ Colors
+
 const DefaultPalette = (mode, skin) => {
     // ** Vars
     const whiteColor = '#FFF'
@@ -38,17 +39,10 @@ const DefaultPalette = (mode, skin) => {
         primary: {
             light: '#4a8b57',
             main: '#4a8b57',
-            bg: mode === 'dark' ? '#14272a' : '#cde9e2',
+            bg: mode === 'light' ? '#cde9e2' : '#123230',
             dark: '#35553b',
             contrastText: whiteColor
         },
-        // },
-        // primary: {
-        //     light: '#4a8b57',
-        //     main: '#4a8b57',
-        //     dark: '#35553b',
-        //     contrastText: whiteColor
-        // },
         secondary: {
             light: '#7F889B',
             main: '#6D788D',
@@ -114,8 +108,8 @@ const DefaultPalette = (mode, skin) => {
             default: defaultBgColor()
         },
         action: {
-            active: `rgba(${mainColor}, 0.54)`,
-            hover: `rgba(${mainColor}, 0.05)`,
+            active: `rgba(${mainColor}, 0.14)`,
+            hover: mode === 'light' ? '#e5e7eb' : '#123230',
             hoverOpacity: 0.05,
             selected: `rgba(${mainColor}, 0.08)`,
             disabled: `rgba(${mainColor}, 0.26)`,

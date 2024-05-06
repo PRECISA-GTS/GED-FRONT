@@ -78,7 +78,7 @@ const Item = ({
 
             {/* Descrição do item */}
             <Grid item xs={12} md={6}>
-                <Typography variant='subtitle1' sx={{ fontWeight: 700 }}>
+                <Typography variant='subtitle1' sx={{ fontWeight: 400 }}>
                     {values.nome ? `${values.ordem} - ${values.nome}` : ``}
                 </Typography>
             </Grid>

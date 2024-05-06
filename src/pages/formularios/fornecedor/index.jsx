@@ -33,7 +33,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const { isNotFactory } = useFornecedor()
-    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
+    const { startFilter, setFilteredData, filteredData, setData, searchText, handleSearch } = useFilter()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -47,7 +47,12 @@ const Fornecedor = () => {
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
-            setFilteredData(response.data)
+            if (searchText) {
+                const res = handleSearch(searchText, response.data)
+                setFilteredData(res)
+            } else {
+                setFilteredData(response.data)
+            }
             setData(response.data)
             setTitle({
                 title: 'Fornecedor',
@@ -107,7 +112,7 @@ const Fornecedor = () => {
 
     useEffect(() => {
         getList()
-        startFilter(<Filters />)
+        startFilter(<Filters />, true)
     }, [id])
 
     // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
