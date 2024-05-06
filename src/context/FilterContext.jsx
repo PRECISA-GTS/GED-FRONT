@@ -6,14 +6,12 @@ const initialValues = {
     // Estados
     pageSize: 50,
     setPageSize: () => {},
-    searchText: '',
-    setSearchText: () => {},
     filteredData: [],
     setFilteredData: () => {},
     data: [],
     setData: () => {},
-    auxDataFilter: [],
-    setAuxDataFilter: () => {},
+    searchText: '',
+    setSearchText: () => {},
     openFilter: false,
     setOpenFilter: () => {},
     componentFilters: null,
@@ -38,11 +36,9 @@ const FilterContext = createContext(initialValues)
 
 const FilterProvider = ({ children }) => {
     const [pageSize, setPageSize] = useState(initialValues.pageSize)
-    const [searchText, setSearchText] = useState(initialValues.searchText)
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
+    const [searchText, setSearchText] = useState(initialValues.searchText)
     const [data, setData] = useState(initialValues.data)
-    const [dataFilters, setDataFilters] = useState(initialValues.dataFilters)
-    const [auxDataFilter, setAuxDataFilter] = useState(initialValues.auxDataFilter)
     const [openFilter, setOpenFilter] = useState(initialValues.openFilter)
     const [componentFilters, setComponentFilters] = useState(initialValues.componentFilters)
     const [names, setNames] = useState(initialValues.names)
@@ -50,70 +46,56 @@ const FilterProvider = ({ children }) => {
     const form = useForm()
 
     const startFilter = (component, keepFilter) => {
-        form.reset()
         setComponentFilters(component)
         setFilteredData(data)
         setOpenFilter(false)
-        if (!keepFilter) setDataFilters({})
+        if (!keepFilter) form.reset()
     }
 
     //* Função para filtrar os dados da tabela | Input de busca
-    const handleSearch = searchValue => {
-        setSearchText(searchValue)
-
-        const searchWords = searchValue
+    const handleSearch = data => {
+        const searchWords = searchText
             ?.toLowerCase()
             .split(' ')
             .filter(word => word !== '')
 
-        const filterDataUse = auxDataFilter.length > 0 ? auxDataFilter : filteredData
-
-        const filteredRows = filterDataUse.filter(row =>
+        const filteredRows = data.filter(row =>
             searchWords?.every(word => Object.values(row).some(field => field?.toString().toLowerCase().includes(word)))
         )
-
-        if ((!searchValue || searchValue.length == 0) && (!dataFilters || Object.keys(dataFilters).length == 0)) {
-            setFilteredData(data)
-            setAuxDataFilter([])
-            return
-        }
-
-        if ((!searchValue || searchValue.length == 0) && dataFilters) {
-            setFilteredData(auxDataFilter)
-            return
-        }
-
-        if (searchValue && searchValue.length > 0) {
-            setSearchText
-            setFilteredData(filteredRows)
-            return
-        }
+        return filteredRows
     }
 
     //* Função para limpar o filtro | Input de busca
     const clearSearch = () => {
-        setFilteredData(data)
         setSearchText('')
+        setFilteredData(data)
     }
 
     //* Função para limpar todos os filtros
     const handleClear = () => {
         setKey(!key)
-        setDataFilters(false)
         clearSearch()
         names.map(name => {
             form.setValue(name, '')
         })
+        setFilteredData(data)
     }
 
     //* Função para setar os valores dos filtros
-    const onSubmit = data => {
-        setDataFilters(data)
+    const onSubmit = () => {
         setOpenFilter(false)
+        setKey(!key)
     }
 
+    useEffect(() => {
+        onSubmit()
+    }, [searchText])
+
     // Função que filtra por data
-    const filterDate = (dataIni, dataFim) => {
+    const filterDate = data => {
+        const dataIni = form.getValues('dataInicio')
+        const dataFim = form.getValues('dataFim')
+
         if (!dataIni && !dataFim) {
             return data
         }
@@ -149,21 +131,21 @@ const FilterProvider = ({ children }) => {
     }
 
     // Função que filtra os selects por nome
-    const SelectFilterByName = (data, name, value) => {
-        if (!value) {
+    const SelectFilterByName = (data, name) => {
+        const nameFormat = form.getValues(name)?.name
+        if (!nameFormat) {
             return data
         }
-        return data.filter(item => item[name] === value)
+        return data.filter(item => item[name] === nameFormat)
     }
 
     const values = {
         // Estados
-        pageSize,
-        setPageSize,
         searchText,
         setSearchText,
+        pageSize,
+        setPageSize,
         filteredData,
-        setAuxDataFilter,
         setFilteredData,
         data,
         setData,
@@ -173,8 +155,6 @@ const FilterProvider = ({ children }) => {
         setComponentFilters,
         names,
         setNames,
-        dataFilters,
-        setDataFilters,
         key,
         setKey,
 

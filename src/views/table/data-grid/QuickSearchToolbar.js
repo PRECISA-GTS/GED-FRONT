@@ -14,7 +14,15 @@ import DropDownFilter from './DropDownFilter'
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
-    const { clearSearch, searchText, handleSearch, filteredData, handleClear, componentFilters, dataFilters } = useFilter()
+    const { clearSearch, searchText, filteredData, handleClear, componentFilters, form, setSearchText } = useFilter()
+
+    const filter = form.getValues();
+    let filledFields = 0;
+    for (const key in filter) {
+        if (filter[key] !== "" && filter[key] !== undefined) {
+            filledFields++;
+        }
+    }
 
     return (
         <Box
@@ -49,7 +57,9 @@ const QuickSearchToolbar = (props) => {
                     <TextField
                         size='medium'
                         value={searchText}
-                        onChange={(e) => handleSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearchText(e.target.value)
+                        }}
                         placeholder='Buscar…'
                         className='!w-[70vw] md:!w-[30vw] relative'
                         autoComplete='off'
@@ -89,7 +99,7 @@ const QuickSearchToolbar = (props) => {
                         autoFocus={true}
                     />
                 </div>
-                {((dataFilters && Object.keys(dataFilters).length > 0) || (searchText.length > 0)) && (
+                {((searchText && searchText.length > 0) || filledFields > 0) && (
                     <Button onClick={handleClear} className='hidden sm:block !capitalize' variant='outlined' color='secondary' endIcon={<Icon icon='iconamoon:sign-times-fill' className='text-red-500' />}>
                         <span>Filtro: {filteredData.length}</span>
                     </Button>

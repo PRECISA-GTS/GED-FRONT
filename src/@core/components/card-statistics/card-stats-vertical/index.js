@@ -12,7 +12,7 @@ const CardStatsVertical = props => {
     const { title, color, icon, stats = 'positive' } = props
     const router = Router
     const theme = useTheme()
-    const { setDataFilters, dataFilters, form } = useFilter()
+    const { form } = useFilter()
     const { commonData } = useCommonData()
 
     const handleFilterStatus = () => {
@@ -24,7 +24,6 @@ const CardStatsVertical = props => {
         form.reset({
             status: statusFormat
         })
-        setDataFilters({ ...dataFilters, status: statusFormat })
         router.push(`/formularios/fornecedor`)
     }
 

@@ -5,26 +5,17 @@ import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const {
-        form,
-        setNames,
-        dataFilters,
-        filterDate,
-        SelectFilterByName,
-        data: dataAll,
-        setFilteredData,
-        searchText,
-        setAuxDataFilter
-    } = useFilter()
+    const { form, setNames, filterDate, SelectFilterByName, data, setFilteredData, handleSearch, key, searchText } =
+        useFilter()
     const { commonData } = useCommonData()
-    let data = dataAll
+    let dataFiltered = data
 
     const onSubmit = async () => {
-        data = await filterDate(dataFilters.dataInicio, dataFilters.dataFim)
-        data = await SelectFilterByName(data, 'status', dataFilters.status?.name)
-        data = await SelectFilterByName(data, 'quemPreenche', dataFilters.quemPreenche?.name)
-        setAuxDataFilter(data)
-        setFilteredData(data)
+        dataFiltered = await handleSearch(dataFiltered)
+        dataFiltered = await filterDate(dataFiltered)
+        dataFiltered = await SelectFilterByName(dataFiltered, 'status')
+        dataFiltered = await SelectFilterByName(dataFiltered, 'quemPreenche')
+        setFilteredData(dataFiltered)
     }
 
     const arrQuemPreenche = [
@@ -40,10 +31,18 @@ const Filters = () => {
 
     //* Função para acionar o formulario de filtro do contexto (useFilter())
     useEffect(() => {
-        if (dataFilters && Object.keys(dataFilters).length > 0) {
+        const filter = form.getValues()
+        let filledFields = 0
+        for (const key in filter) {
+            if (filter[key] !== '' && filter[key] !== undefined) {
+                filledFields++
+            }
+        }
+
+        if (filledFields > 0 || searchText !== '') {
             onSubmit()
         }
-    }, [dataFilters])
+    }, [key])
 
     useEffect(() => {
         setNames(['dataInicio', 'dataFim', 'quemPreenche', 'status'])
@@ -58,6 +57,7 @@ const Filters = () => {
                 md={6}
                 title='Quem preencheu'
                 name='quemPreenche'
+                value={form.getValues('quemPreenche')?.name}
                 form={form}
                 options={arrQuemPreenche}
             />
@@ -68,7 +68,7 @@ const Filters = () => {
                 name='status'
                 form={form}
                 options={commonData.status}
-                value={dataFilters?.status?.name}
+                value={form.getValues('status')?.name}
             />
         </>
     )
