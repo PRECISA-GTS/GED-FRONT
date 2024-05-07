@@ -14,7 +14,7 @@ import DropDownFilter from './DropDownFilter'
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
-    const { clearSearch, searchText, filteredData, handleClear, componentFilters, form, setSearchText } = useFilter()
+    const { clearSearch, searchText, filteredData, handleClear, form, setSearchText } = useFilter()
 
     const filter = form.getValues();
     let filledFields = 0;
@@ -79,11 +79,7 @@ const QuickSearchToolbar = (props) => {
                                             </IconButton>
                                         )
                                     }
-                                    {
-                                        componentFilters && (
-                                            <DropDownFilter />
-                                        )
-                                    }
+                                    <DropDownFilter />
                                 </div>
                             )
                         }}

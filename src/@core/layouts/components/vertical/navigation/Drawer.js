@@ -46,7 +46,7 @@ const Drawer = props => {
     const drawerColors = () => {
         if (mode === 'semi-dark') {
             return {
-                backgroundColor: 'customColors.darkBg',
+                backgroundColor: theme.palette.primary.bgMenuDark,
                 '& .MuiTypography-root': {
                     color: `rgba(${theme.palette.customColors.dark}, 0.87)`
                 }

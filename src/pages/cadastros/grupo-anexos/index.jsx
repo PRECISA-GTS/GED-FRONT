@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
 import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 // import axios from 'axios'
 
@@ -25,8 +26,7 @@ const GrupoAnexos = () => {
     const { loggedUnity } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
-        useFilter()
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
@@ -45,10 +45,7 @@ const GrupoAnexos = () => {
 
     useEffect(() => {
         getList()
-        form.reset()
-        setComponentFilters(null)
-        setDataFilters({})
-        setSearchText('')
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [

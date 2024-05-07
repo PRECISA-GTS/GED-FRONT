@@ -13,14 +13,23 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Apresentacao = () => {
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
-        useFilter()
+    const {
+        setComponentFilters,
+        form,
+        setDataFilters,
+        filteredData,
+        setFilteredData,
+        setData,
+        setSearchText,
+        startFilter
+    } = useFilter()
 
     const getList = async () => {
         await api.get(currentLink).then(response => {
@@ -39,10 +48,7 @@ const Apresentacao = () => {
 
     useEffect(() => {
         getList()
-        form.reset()
-        setComponentFilters(null)
-        setDataFilters({})
-        setSearchText('')
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [

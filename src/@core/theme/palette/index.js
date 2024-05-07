@@ -40,6 +40,8 @@ const DefaultPalette = (mode, skin) => {
             light: '#4a8b57',
             main: '#4a8b57',
             bg: mode === 'light' ? '#cde9e2' : '#123230',
+            bgDark: '#123230', // pra ajustar pro menu semi-dark, pois o resto do sistema é light e apenas o menu é dark
+            bgMenuDark: '#161c24', // pra ajustar pro menu semi-dark, pois o resto do sistema é light e apenas o menu é dark
             dark: '#35553b',
             contrastText: whiteColor
         },
@@ -109,7 +111,7 @@ const DefaultPalette = (mode, skin) => {
         },
         action: {
             active: `rgba(${mainColor}, 0.14)`,
-            hover: mode === 'light' ? '#e5e7eb' : '#123230',
+            hover: mode === 'light' ? '#f5f5f5' : '#1c2d3f',
             hoverOpacity: 0.05,
             selected: `rgba(${mainColor}, 0.08)`,
             disabled: `rgba(${mainColor}, 0.26)`,

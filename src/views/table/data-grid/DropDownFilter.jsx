@@ -5,7 +5,7 @@ import { useFilter } from 'src/context/FilterContext'
 import { useTheme } from '@mui/material/styles'
 
 const DropDownFilter = () => {
-    const { onSubmit, form, componentFilters, handleClear, openFilter, setOpenFilter } = useFilter()
+    const { onSubmit, form, componentFilters, handleClear, openFilter, setOpenFilter, names } = useFilter()
     const theme = useTheme()
     const filterRef = useRef(null)
     const buttonRef = useRef(null)
@@ -42,6 +42,7 @@ const DropDownFilter = () => {
     return (
         <>
             <IconButton
+                className={` ${names.length > 0 ? 'block' : 'invisible'}`}
                 size='medium'
                 title='Clear'
                 aria-label='Clear'

@@ -17,18 +17,17 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
 import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 // import axios from 'axios'
 
 const Unidade = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
     const { user, loggedUnity } = useContext(AuthContext)
-    const { setComponentFilters, form, setDataFilters, setFilteredData, filteredData, setData, setSearchText } =
-        useFilter()
+    const { setFilteredData, filteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api
@@ -49,10 +48,7 @@ const Unidade = () => {
 
     useEffect(() => {
         getList()
-        form.reset()
-        setComponentFilters(null)
-        setDataFilters({})
-        setSearchText('')
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [

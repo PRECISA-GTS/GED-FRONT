@@ -13,20 +13,23 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Limpeza = () => {
     const { user, loggedUnity } = useContext(AuthContext)
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
+    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
 
     const getList = async () => {
         await api
             .get(`${currentLink}/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`)
             .then(response => {
-                setResult(response.data)
+                setFilteredData(response.data)
+                setData(response.data)
                 setTitle({
                     title: 'Limpeza',
                     subtitle: {
@@ -40,6 +43,7 @@ const Limpeza = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -53,12 +57,12 @@ const Limpeza = () => {
             field: 'data',
             size: 0.1,
             type: 'date'
-        },                 
+        },
         {
             headerName: 'Profissional',
             field: 'profissional',
             size: 0.4
-        },    
+        },
         {
             headerName: 'Modelo',
             field: 'modelo',
@@ -71,22 +75,22 @@ const Limpeza = () => {
                 cor: 'cor'
             },
             size: 0.2
-        }                  
-    ]            
+        }
+    ]
 
     const columns = configColumns(currentLink, arrColumns)
 
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormLimpeza id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

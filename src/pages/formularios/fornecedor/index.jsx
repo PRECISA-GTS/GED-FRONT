@@ -33,7 +33,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const { isNotFactory } = useFornecedor()
-    const { startFilter, setFilteredData, filteredData, setData, searchText, handleSearch } = useFilter()
+    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -106,9 +106,10 @@ const Fornecedor = () => {
     }
 
     useEffect(() => {
+        const filter = router.query.filter === 1 ? true : false
         getList()
-        startFilter(<Filters />, true)
-    }, [id])
+        startFilter(<Filters />, filter)
+    }, [id, router.query])
 
     // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
     useEffect(() => {

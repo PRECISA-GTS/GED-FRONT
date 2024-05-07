@@ -24,7 +24,7 @@ const CardStatsVertical = props => {
         form.reset({
             status: statusFormat
         })
-        router.push(`/formularios/fornecedor`)
+        router.push(`/formularios/fornecedor?filter=1`)
     }
 
 

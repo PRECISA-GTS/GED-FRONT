@@ -32,7 +32,8 @@ const MenuNavLink = styled(ListItemButton)(({ mode, theme }) => ({
     transition: 'padding-left .25s ease-in-out',
     '&.active': {
         '&, &:hover': {
-            backgroundColor: mode === 'light' ? '#cde9e2' : '#123230',
+            backgroundColor: mode === 'light' ? theme.palette.primary.bg : theme.palette.primary.bgDark,
+            // backgroundColor: '#F00',
             '&.Mui-focusVisible': {
                 backgroundColor: '#F00',
             }
@@ -74,6 +75,7 @@ const VerticalNavLink = ({
 
     // ** Hooks
     const theme = useTheme()
+    console.log("🚀 ~~~ theme:", theme.palette.primary.bgDark)
     const router = useRouter()
 
     // ** Vars
@@ -92,13 +94,19 @@ const VerticalNavLink = ({
     }
 
     const conditionalBgColor = () => {
-        if (mode === 'semi-dark') {
+        if (mode === 'light') {
             return {
                 '&:hover': {
-                    backgroundColor: `rgba(${theme.palette.primary.bg}, 0.05)`
+                    backgroundColor: theme.palette.primary.bg
                 }
             }
-        } else return {}
+        } else {
+            return {
+                '&:hover': {
+                    backgroundColor: theme.palette.primary.bgDark
+                }
+            }
+        }
     }
 
     const isNavLinkActive = () => {

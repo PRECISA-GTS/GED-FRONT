@@ -32,7 +32,6 @@ const Factory = () => {
         try {
             const response = await api.get(`dashboard/fabrica/getData/${loggedUnity.unidadeID}`)
             setDataFornecedor(response.data.fornecedorPorStatus)
-            console.log('🚀 ~ response:', response)
             setDataRecebimentoNC(response.data.totalRecebimentoNC)
             setLimpeza(response.data.limpeza)
         } catch (err) {

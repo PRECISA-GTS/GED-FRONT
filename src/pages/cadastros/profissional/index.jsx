@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import FormProfissional from 'src/components/Cadastros/profissional/FormProfissional'
 import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Usuario = () => {
     const router = useRouter()
@@ -20,8 +21,7 @@ const Usuario = () => {
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
     const { user, loggedUnity } = useContext(AuthContext)
-    const { setComponentFilters, form, setDataFilters, filteredData, setFilteredData, setData, setSearchText } =
-        useFilter()
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api
@@ -42,10 +42,7 @@ const Usuario = () => {
 
     useEffect(() => {
         getList()
-        form.reset()
-        setComponentFilters(null)
-        setDataFilters({})
-        setSearchText('')
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [

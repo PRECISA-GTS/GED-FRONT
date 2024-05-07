@@ -47,9 +47,15 @@ const FilterProvider = ({ children }) => {
 
     const startFilter = (component, keepFilter) => {
         setComponentFilters(component)
+        setNames([])
         setFilteredData(data)
         setOpenFilter(false)
-        if (!keepFilter) form.reset()
+        setSearchText('')
+        if (keepFilter) return
+        form.reset()
+        names.map(name => {
+            form.setValue(name, '')
+        })
     }
 
     //* Função para filtrar os dados da tabela | Input de busca
@@ -62,6 +68,8 @@ const FilterProvider = ({ children }) => {
         const filteredRows = data.filter(row =>
             searchWords?.every(word => Object.values(row).some(field => field?.toString().toLowerCase().includes(word)))
         )
+
+        setFilteredData(filteredRows)
         return filteredRows
     }
 
