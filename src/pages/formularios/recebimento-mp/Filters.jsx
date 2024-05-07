@@ -21,17 +21,7 @@ const Filters = () => {
     //* Função para acionar o formulario de filtro do contexto (useFilter())
     //* Função para acionar o formulario de filtro do contexto (useFilter())
     useEffect(() => {
-        const filter = form.getValues()
-        let filledFields = 0
-        for (const key in filter) {
-            if (filter[key] !== '' && filter[key] !== undefined) {
-                filledFields++
-            }
-        }
-
-        if (filledFields > 0 || searchText !== '') {
-            onSubmit()
-        }
+        onSubmit()
     }, [key])
     useEffect(() => {
         setNames(['dataInicio', 'dataFim', 'status', 'professional', 'recebimentoModel'])
