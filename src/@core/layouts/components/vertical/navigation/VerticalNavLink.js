@@ -33,10 +33,6 @@ const MenuNavLink = styled(ListItemButton)(({ mode, theme }) => ({
     '&.active': {
         '&, &:hover': {
             backgroundColor: mode === 'light' ? theme.palette.primary.bg : theme.palette.primary.bgDark,
-            // backgroundColor: '#F00',
-            '&.Mui-focusVisible': {
-                backgroundColor: '#F00',
-            }
         },
         '& .MuiTypography-root': {
             fontWeight: 400,
@@ -75,7 +71,6 @@ const VerticalNavLink = ({
 
     // ** Hooks
     const theme = useTheme()
-    console.log("🚀 ~~~ theme:", theme.palette.primary.bgDark)
     const router = useRouter()
 
     // ** Vars
@@ -148,7 +143,7 @@ const VerticalNavLink = ({
                         setId(null)
                     }}
                     sx={{
-                        py: 3.4,
+                        py: 3.8,
                         gap: 2,
                         ...conditionalBgColor(),
                         ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
@@ -165,7 +160,7 @@ const VerticalNavLink = ({
                                 ...(parent ? { ml: 2, mr: 4 } : {}),
                                 '& svg': {
                                     ...(!parent ? { fontSize: '1.6rem' } : { fontSize: '1rem' }),
-                                    ...(parent && item.icon ? { fontSize: '1.3rem' } : {})
+                                    ...(parent && item.icon ? { fontSize: '1.2rem', marginLeft: '0.5rem' } : {})
                                 }
                             }}
                         >

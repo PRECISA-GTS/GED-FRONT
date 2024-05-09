@@ -105,7 +105,7 @@ const DefaultPalette = (mode, skin) => {
             disabled: `rgba(${mainColor}, 0.95)`,
             opacity: `rgba(${mainColor}, 0.4)`
         },
-        divider: mode === 'dark' ? '#373f48' : '#EBEBEB',
+        divider: mode === 'dark' ? '#2f363f' : '#dbdbdb',
         background: {
             paper: mode === 'light' ? whiteColor : '#212b36', //! bg content
             default: defaultBgColor()

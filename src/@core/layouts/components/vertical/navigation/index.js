@@ -89,7 +89,7 @@ const Navigation = props => {
 
     return (
         <>
-            <Drawer {...props} navHover={navHover} setNavHover={setNavHover}>
+            <Drawer {...props} navHover={navHover} setNavHover={setNavHover} >
                 <VerticalNavHeader {...props} navHover={navHover} />
                 {beforeNavMenuContent && beforeVerticalNavMenuContentPosition === 'fixed' ? beforeNavMenuContent(props) : null}
                 {(beforeVerticalNavMenuContentPosition === 'static' || !beforeNavMenuContent) && (
