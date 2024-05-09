@@ -3,7 +3,7 @@ const input = theme => {
         MuiInputLabel: {
             styleOverrides: {
                 root: {
-                    color: theme.palette.text.secondary
+                    color: theme.palette.text.secondary,
                 }
             }
         },
@@ -38,12 +38,13 @@ const input = theme => {
                     '&:hover:not(.Mui-disabled):before': {
                         borderBottom: `1px solid rgba(${theme.palette.customColors.main}, 0.32)`
                     },
-                    // '&.Mui-disabled': {
-                    //     backgroundColor: `rgba(${theme.palette.customColors.main}, 0.05)`,
-                    //     '&:before': {
-                    //         borderBottomStyle: 'solid'
-                    //     }
-                    // }
+                    '&.Mui-disabled': {
+                        backgroundColor: `rgba(${theme.palette.customColors.main}, 0.05)`,
+                        borderColor: theme.palette.customColors.borderColor,
+                        '&:before': {
+                            borderBottomStyle: 'solid'
+                        }
+                    }
                 }
             }
         },
@@ -58,11 +59,15 @@ const input = theme => {
                         borderColor: theme.palette.error.main
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.divider
+                        borderColor: theme.palette.customColors.borderColor
                     },
                     '&.Mui-disabled': {
-                        backgroundColor: 'transparent',
+                        backgroundColor: theme.palette.customColors.disabledBg,
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: theme.palette.customColors.borderColor
+                        }
                     },
+
                 }
             }
         }

@@ -29,6 +29,7 @@ const DefaultPalette = (mode, skin) => {
             tooltipBg: mode === 'light' ? '#262732' : '#212b36',
             tableHeaderBg: mode === 'light' ? '#F5F5F7' : '#21272f',
             disabledBg: mode === 'light' ? '#F7F7F9' : '#21272f',
+            borderColor: mode === 'light' ? '#e1e1e1' : '#33404f',
 
         },
         mode: mode,

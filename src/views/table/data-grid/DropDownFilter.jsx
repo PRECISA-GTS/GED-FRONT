@@ -42,8 +42,9 @@ const DropDownFilter = () => {
     return (
         <>
             <IconButton
-                className={` ${names.length > 0 ? 'block' : 'invisible'}`}
+                className={` ${names.length > 0 ? 'block order-2' : 'invisible'}`}
                 size='medium'
+                color='secondary'
                 title='Clear'
                 aria-label='Clear'
                 id='basic-button'

@@ -11,10 +11,12 @@ const Filters = () => {
     let dataFiltered = data
 
     const onSubmit = async () => {
+        console.log('🚀 ~ onSubmit ~ dataFiltered', dataFiltered)
         dataFiltered = await handleSearch(dataFiltered)
         dataFiltered = await filterDate(dataFiltered)
         dataFiltered = await SelectFilterByName(dataFiltered, 'status')
-        dataFiltered = await SelectFilterByName(dataFiltered, 'quemPreenche')
+        dataFiltered = await SelectFilterByName(dataFiltered, 'profissional')
+        dataFiltered = await SelectFilterByName(dataFiltered, 'modelo')
         setFilteredData(dataFiltered)
     }
 
@@ -24,7 +26,7 @@ const Filters = () => {
         onSubmit()
     }, [key])
     useEffect(() => {
-        setNames(['dataInicio', 'dataFim', 'status', 'professional', 'recebimentoModel'])
+        setNames(['dataInicio', 'dataFim', 'status', 'profissional', 'modelo'])
     }, [])
     return (
         <>
@@ -35,8 +37,8 @@ const Filters = () => {
                 xs={12}
                 md={6}
                 title='Profissional'
-                name='professional'
-                value={form.getValues('professional')?.name}
+                name='profissional'
+                value={form.getValues('profissional')?.name}
                 form={form}
                 options={commonData.professional}
             />
@@ -44,8 +46,8 @@ const Filters = () => {
                 xs={12}
                 md={6}
                 title='Modelo'
-                name='recebimentoModel'
-                value={form.getValues('recebimentoModel')?.name}
+                name='modelo'
+                value={form.getValues('modelo')?.name}
                 form={form}
                 options={commonData.recebimentoModel}
             />

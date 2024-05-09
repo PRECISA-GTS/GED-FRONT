@@ -22,7 +22,9 @@ const initialValues = {
     commonData: {
         status: statusTypes,
         professional: selectTypes,
-        recebimentoModel: selectTypes
+        recebimentoModel: selectTypes,
+        limpezaModel: selectTypes,
+        typeFormulario: selectTypes
     }
 }
 

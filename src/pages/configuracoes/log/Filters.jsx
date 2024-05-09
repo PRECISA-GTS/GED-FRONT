@@ -11,7 +11,8 @@ const Filters = () => {
 
     const onSubmit = async () => {
         dataFiltered = await handleSearch(dataFiltered)
-        dataFiltered = await SelectFilterByName(dataFiltered, 'formulario')
+        dataFiltered = await filterDate(dataFiltered)
+        dataFiltered = await SelectFilterByName(dataFiltered, 'usuario')
         setFilteredData(dataFiltered)
     }
 
@@ -21,19 +22,21 @@ const Filters = () => {
     }, [key])
 
     useEffect(() => {
-        setNames(['formulario'])
+        setNames(['dataInicio', 'dataFim', 'usuario'])
     }, [])
 
     return (
         <>
+            <CustomInputDate xs={12} md={6} title='Data inicio' name='dataInicio' form={form} />
+            <CustomInputDate xs={12} md={6} title='Data Fim' name='dataFim' form={form} />
             <CustomSelect
                 xs={12}
                 md={6}
-                title='Formulário'
-                name='formulario'
+                title='Profissional'
+                name='usuario'
                 form={form}
-                options={commonData.typeFormulario}
-                value={form.getValues('formulario')?.name}
+                options={commonData.professional}
+                value={form.getValues('usuario')?.name}
             />
         </>
     )

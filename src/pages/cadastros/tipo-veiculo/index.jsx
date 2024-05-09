@@ -15,6 +15,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
 import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 // import axios from 'axios'
 

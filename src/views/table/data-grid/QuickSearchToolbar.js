@@ -14,7 +14,7 @@ import DropDownFilter from './DropDownFilter'
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
-    const { clearSearch, searchText, filteredData, handleClear, form, setSearchText } = useFilter()
+    const { clearSearch, searchText, filteredData, handleClear, form, setSearchText, names } = useFilter()
 
     const filter = form.getValues();
     let filledFields = 0;
@@ -23,6 +23,7 @@ const QuickSearchToolbar = (props) => {
             filledFields++;
         }
     }
+    console.log("🚀 ~ QuickSearchToolbar ~ filledFields", filledFields, form.getValues())
 
     return (
         <Box
@@ -74,7 +75,7 @@ const QuickSearchToolbar = (props) => {
                                 <div className='flex items-center gap-1'>
                                     {
                                         searchText && (
-                                            <IconButton size='medium' title='Clear' aria-label='Clear' onClick={clearSearch}>
+                                            <IconButton className={` ${names.length > 0 ? 'order-2' : 'order-1'}`} size='medium' title='Clear' color='secondary' aria-label='Clear' onClick={clearSearch}>
                                                 <Icon icon='mdi:close' fontSize={20} />
                                             </IconButton>
                                         )
@@ -96,8 +97,11 @@ const QuickSearchToolbar = (props) => {
                     />
                 </div>
                 {((searchText && searchText.length > 0) || filledFields > 0) && (
-                    <Button onClick={handleClear} className='hidden sm:block !capitalize' variant='outlined' color='secondary' endIcon={<Icon icon='iconamoon:sign-times-fill' className='text-red-500' />}>
-                        <span>Filtro: {filteredData.length}</span>
+                    <Button size='medium' title='Clear' color='secondary' variant='outlined' aria-label='Clear' onClick={handleClear} className='hidden sm:block !capitalize'>
+                        <div className='flex items-center gap-1'>
+                            <span>Filtro: {filteredData.length}</span>
+                            <Icon icon='mdi:close' fontSize={20} className='text-red-500' />
+                        </div>
                     </Button>
                 )}
             </Box>

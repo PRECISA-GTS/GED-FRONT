@@ -11,19 +11,23 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Usuario = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
     const { loggedUnity } = useContext(AuthContext)
+    const { setFilteredData, filteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         try {
             const response = await api.get(`${currentLink}/${loggedUnity.unidadeID}`)
-            setResult(response.data)
+            setFilteredData(response.data)
+            // console.log('🚀 ~ getList ~ response', response.data)
+            setData(response.data)
             setTitle({
                 title: 'Log',
                 subtitle: {
@@ -39,6 +43,7 @@ const Usuario = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -79,11 +84,11 @@ const Usuario = () => {
 
     return (
         /* Exibe loading enquanto não existe result */
-        !result ? (
+        !filteredData ? (
             <Loading />
         ) : (
             // Lista tabela de resultados da listagem
-            <Table result={result} columns={columns} modalLog />
+            <Table result={filteredData} columns={columns} modalLog />
         )
     )
 }

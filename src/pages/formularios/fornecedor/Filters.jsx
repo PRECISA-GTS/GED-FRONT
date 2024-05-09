@@ -5,8 +5,7 @@ import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, filterDate, SelectFilterByName, data, setFilteredData, handleSearch, key, searchText } =
-        useFilter()
+    const { form, setNames, filterDate, SelectFilterByName, data, setFilteredData, handleSearch, key } = useFilter()
     const { commonData } = useCommonData()
     let dataFiltered = data
 
@@ -45,20 +44,20 @@ const Filters = () => {
             <CustomSelect
                 xs={12}
                 md={6}
-                title='Quem preencheu'
-                name='quemPreenche'
-                value={form.getValues('quemPreenche')?.name}
-                form={form}
-                options={arrQuemPreenche}
-            />
-            <CustomSelect
-                xs={12}
-                md={6}
                 title='Status'
                 name='status'
                 form={form}
                 options={commonData.status}
                 value={form.getValues('status')?.name}
+            />
+            <CustomSelect
+                xs={12}
+                md={6}
+                title='Quem preencheu'
+                name='quemPreenche'
+                value={form.getValues('quemPreenche')?.name}
+                form={form}
+                options={arrQuemPreenche}
             />
         </>
     )

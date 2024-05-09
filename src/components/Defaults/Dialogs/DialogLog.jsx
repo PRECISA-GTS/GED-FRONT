@@ -19,7 +19,7 @@ const DialogLog = ({ open, handleClose, row }) => {
 
     const getData = async () => {
         const response = await api.get(`${currentLink}/getData/${loggedUnity.unidadeID}/${row.id}`)
-        console.log('🚀 ~ response:', response.data)
+        // console.log('🚀 ~ response:', response.data)
         setData(response.data)
     }
 
@@ -64,7 +64,7 @@ const DialogLog = ({ open, handleClose, row }) => {
         row &&
         data && (
             <Dialog open={open} onClose={handleClose} scroll='paper' maxWidth={'md'} fullWidth>
-                <DialogTitle id='customized-dialog-title' sx={{ p: 10, textAlign: 'center' }}>
+                <DialogTitle id='customized-dialog-title' sx={{ textAlign: 'center' }}>
                     <Typography variant='h5' component='span'>
                         {row.nome}
                     </Typography>
