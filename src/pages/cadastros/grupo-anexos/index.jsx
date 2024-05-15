@@ -15,20 +15,23 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 // import axios from 'axios'
 
 const GrupoAnexos = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { loggedUnity } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
-            setResult(response.data)
+            setFilteredData(response.data)
+            setData(response.data)
             setTitle({
                 title: 'Grupo de Anexos',
                 subtitle: {
@@ -42,6 +45,7 @@ const GrupoAnexos = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -75,14 +79,14 @@ const GrupoAnexos = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormGrupoAnexos id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

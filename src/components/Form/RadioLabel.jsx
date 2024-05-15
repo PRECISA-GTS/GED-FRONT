@@ -39,7 +39,6 @@ const RadioLabel = ({
                                     fullWidth
                                     sx={{
                                         '& .MuiFormControlLabel-label': {
-                                            fontSize: '0.8rem',
                                             color: 'text.secondary'
                                         },
                                         '&:hover': {

@@ -1,25 +1,44 @@
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import Router from 'next/router'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
-import { SettingsContext } from 'src/@core/context/settingsContext'
-import { useContext } from 'react'
+import { useTheme } from '@mui/material/styles'
+import { useFilter } from 'src/context/FilterContext'
+import { useCommonData } from 'src/context/CommonDataContext'
 
 const CardStatsVertical = props => {
-    const { settings } = useContext(SettingsContext)
-    const mode = settings.mode
     const { title, color, icon, stats = 'positive' } = props
     const router = Router
+    const theme = useTheme()
+    const { form } = useFilter()
+    const { commonData } = useCommonData()
 
     const handleFilterStatus = () => {
-        router.push(`/formularios/fornecedor/?s=${props.title}`)
+        const statusSelected = commonData?.status?.find(status => status.name === title)
+        const statusFormat = {
+            id: statusSelected?.statusID,
+            name: statusSelected?.name
+        }
+        form.reset({
+            status: statusFormat
+        })
+        router.push(`/formularios/fornecedor?filter=1`)
     }
 
+
     return (
-        <Card onClick={handleFilterStatus} className={`cursor-pointer ${mode == 'dark' ? 'hover:bg-[#232327]' : 'hover:bg-[#EEEEF1]'}  shadow-xl transition-all`}>
+        <Card
+            sx={{
+                "&:hover": {
+                    backgroundColor: theme.palette.action.hover
+                }
+            }}
+
+            onClick={handleFilterStatus}
+            className={`cursor-pointer  shadow-xl transition-all`}
+        >
             <CardContent>
                 <div className=' space-y-4'>
                     <div className='flex items-center justify-between'>
@@ -30,7 +49,7 @@ const CardStatsVertical = props => {
                             <Typography variant='body1'>{title}</Typography>
                         </div>
                         <div>
-                            <Icon icon='uil:external-link-alt' className='text-base text-[#35553B]' />
+                            <Icon icon='uil:external-link-alt' className='text-base' />
                         </div>
                     </div>
                     <div className={`w-full flex justify-center`}>

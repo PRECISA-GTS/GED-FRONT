@@ -3,6 +3,8 @@ import { FormControl, Grid, IconButton, InputAdornment, InputLabel, TextField } 
 import { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask } from 'src/configs/masks'
 import Icon from 'src/@core/components/icon'
 import HelpText from '../Defaults/HelpText'
+import { useFilter } from 'src/context/FilterContext'
+import { useEffect } from 'react'
 
 const Input = ({
     xs,
@@ -118,7 +120,7 @@ const Input = ({
                                     }}
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            padding: '8px 14px' // Ajuste o valor conforme necessário
+                                            padding: '10px 14px' // Ajuste o valor conforme necessário
                                         }
                                     }}
                                 />

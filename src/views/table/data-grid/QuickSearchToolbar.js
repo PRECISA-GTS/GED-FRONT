@@ -2,27 +2,28 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import ListHeader from 'src/components/Defaults/ListHeader'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import Router from 'next/router'
-import { BsSliders } from "react-icons/bs";
 import { Button } from '@mui/material'
 import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import DropDownFilter from './DropDownFilter'
 
 const QuickSearchToolbar = (props) => {
     const router = Router
     const { setId } = useContext(RouteContext)
-    const { clearSearch, searchText, handleSearch, setOpenFilter, openFilter } = useFilter()
+    const { clearSearch, searchText, filteredData, handleClear, form, setSearchText, names } = useFilter()
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const filter = form.getValues();
+    let filledFields = 0;
+    for (const key in filter) {
+        if (filter[key] !== "" && filter[key] !== undefined) {
+            filledFields++;
+        }
+    }
+    console.log("🚀 ~ QuickSearchToolbar ~ filledFields", filledFields, form.getValues())
 
     return (
         <Box
@@ -36,7 +37,7 @@ const QuickSearchToolbar = (props) => {
                 p: theme => theme.spacing(8, 0, 0, 0),
             }}
         >
-            <Box sx={{ display: 'flex', gap: '8px', textAlig: "end" }}>
+            <Box className='w-full flex items-center gap-2'>
                 {
                     props.buttonsHeader.btnBack && (
                         <Button
@@ -53,13 +54,16 @@ const QuickSearchToolbar = (props) => {
                         </Button>
                     )
                 }
-                <div className='w-full'>
+                <div>
                     <TextField
                         size='medium'
                         value={searchText}
-                        onChange={(e) => handleSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearchText(e.target.value)
+                        }}
                         placeholder='Buscar…'
-                        className='w-auto md:!w-[30vw]'
+                        className='!w-[70vw] md:!w-[30vw] relative'
+                        autoComplete='off'
                         variant='standard'
                         InputProps={{
                             startAdornment: (
@@ -71,71 +75,12 @@ const QuickSearchToolbar = (props) => {
                                 <div className='flex items-center gap-1'>
                                     {
                                         searchText && (
-                                            <IconButton size='medium' title='Clear' aria-label='Clear' onClick={clearSearch}>
+                                            <IconButton className={` ${names.length > 0 ? 'order-2' : 'order-1'}`} size='medium' title='Clear' color='secondary' aria-label='Clear' onClick={clearSearch}>
                                                 <Icon icon='mdi:close' fontSize={20} />
                                             </IconButton>
                                         )
                                     }
-                                    {/* <IconButton
-                                        size='medium'
-                                        title='Clear' aria-label='Clear'
-                                        id="basic-button"
-                                        aria-controls={open ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                    // onClick={handleClick}
-                                    >
-                                        <BsSliders size={16} />
-                                    </IconButton> */}
-                                    <Menu
-                                        anchorEl={anchorEl}
-                                        id="account-menu"
-                                        open={open}
-                                        onClose={handleClose}
-                                        onClick={handleClose}
-                                        PaperProps={{
-                                            elevation: 0,
-                                            sx: {
-                                                overflow: 'visible',
-                                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                                mt: 1.5,
-                                                '& .MuiAvatar-root': {
-                                                    width: 32,
-                                                    height: 32,
-                                                    ml: -0.5,
-                                                    mr: 1,
-                                                },
-                                                '&::before': {
-                                                    content: '""',
-                                                    display: 'block',
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    right: 14,
-                                                    width: 10,
-                                                    height: 10,
-                                                    bgcolor: 'background.paper',
-                                                    transform: 'translateY(-50%) rotate(45deg)',
-                                                    zIndex: 0,
-                                                },
-                                            },
-                                        }}
-                                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                                    >
-
-                                        <MenuItem onClick={handleClose} className='w-auto md:!w-[30vw]'>
-
-                                            Add another account
-                                        </MenuItem>
-                                        <MenuItem onClick={handleClose}>
-
-                                            Settings
-                                        </MenuItem>
-                                        <MenuItem onClick={handleClose}>
-
-                                            Logout
-                                        </MenuItem>
-                                    </Menu>
+                                    <DropDownFilter />
                                 </div>
                             )
                         }}
@@ -148,8 +93,17 @@ const QuickSearchToolbar = (props) => {
                                 mr: 2
                             }
                         }}
+                        autoFocus={true}
                     />
                 </div>
+                {((searchText && searchText.length > 0) || filledFields > 0) && (
+                    <Button size='medium' title='Clear' color='secondary' variant='outlined' aria-label='Clear' onClick={handleClear} className='hidden sm:block !capitalize'>
+                        <div className='flex items-center gap-1'>
+                            <span>Filtro: {filteredData.length}</span>
+                            <Icon icon='mdi:close' fontSize={20} className='text-red-500' />
+                        </div>
+                    </Button>
+                )}
             </Box>
 
             <ListHeader

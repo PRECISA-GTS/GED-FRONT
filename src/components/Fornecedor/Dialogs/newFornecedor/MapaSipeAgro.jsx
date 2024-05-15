@@ -102,13 +102,19 @@ const MapaSipeAgro = ({ sipeAgro }) => {
                         <strong>Dados MAPA - Última atualização ({sipeAgro?.dataImportacao})</strong>
                     </Typography>
                     <Typography variant='caption'>
-                        <strong>Razão Social:</strong> {sipeAgro?.razaoSocial}
+                        <strong>Razão Social:</strong> {sipeAgro?.razaoSocial?.toUpperCase()}
                     </Typography>
                     <Typography variant='caption'>
                         <strong>Registro SIPEAGRO:</strong> {sipeAgro?.registroSipeAgro}
                     </Typography>
                     <Typography variant='caption'>
+                        <strong>SIPOA:</strong> {sipeAgro?.sipoa}
+                    </Typography>
+                    <Typography variant='caption'>
                         <strong>Situação:</strong> {sipeAgro?.situacao}
+                    </Typography>
+                    <Typography variant='caption'>
+                        <strong>Município:</strong> {`${sipeAgro?.municipio}/${sipeAgro?.uf}`}
                     </Typography>
                     <TableServices />
                 </div>

@@ -125,7 +125,7 @@ const SelectModel = () => {
                                     key={index}
                                     xs={12}
                                     md={3}
-                                    icon='fluent:form-multiple-48-regular'
+                                    icon='material-symbols:add-box-rounded'
                                     title={item.nome}
                                     action='new'
                                     subtitle={`Ciclo de ${item.ciclo} dias`}

@@ -26,23 +26,21 @@ import { handleURLQueries } from 'src/@core/layouts/utils'
 import { useContext } from 'react'
 
 // ** Styled Components
-const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
+const MenuNavLink = styled(ListItemButton)(({ mode, theme }) => ({
     width: '100%',
     borderRadius: 8,
     transition: 'padding-left .25s ease-in-out',
     '&.active': {
         '&, &:hover': {
-            backgroundColor: theme.palette.primary.light,
-            '&.Mui-focusVisible': {
-                backgroundColor: theme.palette.primary.main
-            }
+            backgroundColor: mode === 'light' ? theme.palette.primary.bg : theme.palette.primary.bgDark,
         },
         '& .MuiTypography-root': {
-            fontWeight: 500,
-            color: `${theme.palette.common.white} !important`
+            fontWeight: 400,
+            color: `${theme.palette.primary.main}`
         },
         '& .MuiListItemIcon-root': {
-            color: `${theme.palette.common.white} !important`
+            color: `${theme.palette.primary.main}`,
+            fontWeight: 400
         }
     }
 }))
@@ -67,6 +65,7 @@ const VerticalNavLink = ({
     toggleNavVisibility,
     navigationBorderWidth
 }) => {
+
     //* ID do contexto
     const { setId } = useContext(RouteContext)
 
@@ -90,13 +89,19 @@ const VerticalNavLink = ({
     }
 
     const conditionalBgColor = () => {
-        if (mode === 'semi-dark') {
+        if (mode === 'light') {
             return {
                 '&:hover': {
-                    backgroundColor: `rgba(${theme.palette.customColors.dark}, 0.05)`
+                    backgroundColor: theme.palette.primary.bg
                 }
             }
-        } else return {}
+        } else {
+            return {
+                '&:hover': {
+                    backgroundColor: theme.palette.primary.bgDark
+                }
+            }
+        }
     }
 
     const isNavLinkActive = () => {
@@ -120,6 +125,7 @@ const VerticalNavLink = ({
                 }}
             >
                 <MenuNavLink
+                    mode={mode}
                     component={Link}
                     {...(item.disabled && { tabIndex: -1 })}
                     className={isNavLinkActive() ? 'active' : ''}
@@ -137,11 +143,12 @@ const VerticalNavLink = ({
                         setId(null)
                     }}
                     sx={{
-                        py: 2.25,
+                        py: 3.5,
+                        gap: 2,
                         ...conditionalBgColor(),
                         ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
                         pr: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 3,
-                        pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 4
+                        pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 4,
                     }}
                 >
                     {isSubToSub ? null : (
@@ -152,8 +159,8 @@ const VerticalNavLink = ({
                                 ...(navCollapsed && !navHover ? { mr: 0 } : { mr: 2 }),
                                 ...(parent ? { ml: 2, mr: 4 } : {}),
                                 '& svg': {
-                                    ...(!parent ? { fontSize: '1.5rem' } : { fontSize: '0.5rem' }),
-                                    ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
+                                    ...(!parent ? { fontSize: '1.6rem' } : { fontSize: '1rem' }),
+                                    ...(parent && item.icon ? { fontSize: '1.2rem', marginLeft: '0.5rem' } : {})
                                 }
                             }}
                         >
@@ -171,6 +178,7 @@ const VerticalNavLink = ({
                             {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                                 noWrap: true
                             })}
+                            sx={{ fontWeight: 400 }}
                         >
                             <Translations text={item.title} />
                         </Typography>

@@ -590,8 +590,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const onSubmit = async (values, param = false) => {
-        console.log('🚀 ~ values:', values)
-
         startLoading()
         if (param.conclusion === true) {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
@@ -921,7 +919,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     <CustomChip size='small' skin='light' label={`Modelo ${unidade?.modelo}`} />
                 </div>
 
-                <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
+                <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
                     {/* Foi copiado pelo menos uma informação de meus dados */}
                     {dataCopiedMyData && dataCopiedMyData.length > 0 && (
                         <Alert severity='info' sx={{ mb: 2 }}>

@@ -16,36 +16,39 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { Card } from '@mui/material'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 // import axios from 'axios'
 
 const Unidade = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
     const { user, loggedUnity } = useContext(AuthContext)
+    const { setFilteredData, filteredData, setData, startFilter } = useFilter()
+
+    const getList = async () => {
+        await api
+            .get(`${currentLink}?admin=${user.admin}&unidadeID=${loggedUnity.unidadeID}&usuarioID=${user.usuarioID}`)
+            .then(response => {
+                setFilteredData(response.data)
+                setData(response.data)
+                setTitle({
+                    title: 'Unidade',
+                    subtitle: {
+                        id: id,
+                        count: response.data.length,
+                        new: false
+                    }
+                })
+            })
+    }
 
     useEffect(() => {
-        const getList = async () => {
-            await api
-                .get(
-                    `${currentLink}?admin=${user.admin}&unidadeID=${loggedUnity.unidadeID}&usuarioID=${user.usuarioID}`
-                )
-                .then(response => {
-                    setResult(response.data)
-                    setTitle({
-                        title: 'Unidade',
-                        subtitle: {
-                            id: id,
-                            count: response.data.length,
-                            new: false
-                        }
-                    })
-                })
-        }
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -74,14 +77,14 @@ const Unidade = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormUnidade id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

@@ -13,18 +13,21 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Transportador = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const { id } = useContext(RouteContext)
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { loggedUnity } = useContext(AuthContext)
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
-            setResult(response.data)
+            setFilteredData(response.data)
+            setData(response.data)
             setTitle({
                 title: 'Transportador',
                 subtitle: {
@@ -38,6 +41,7 @@ const Transportador = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -66,14 +70,14 @@ const Transportador = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormTransportador id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

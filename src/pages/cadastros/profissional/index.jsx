@@ -12,34 +12,37 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import FormProfissional from 'src/components/Cadastros/profissional/FormProfissional'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Usuario = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
     const { user, loggedUnity } = useContext(AuthContext)
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
+
+    const getList = async () => {
+        await api
+            .get(`${currentLink}?unidadeID=${loggedUnity.unidadeID}&papelID=${loggedUnity.papelID}&admin=${user.admin}`)
+            .then(response => {
+                setFilteredData(response.data)
+                setData(response.data)
+                setTitle({
+                    title: 'Profissional',
+                    subtitle: {
+                        id: id,
+                        count: response.data.length,
+                        new: false
+                    }
+                })
+            })
+    }
 
     useEffect(() => {
-        const getList = async () => {
-            await api
-                .get(
-                    `${currentLink}?unidadeID=${loggedUnity.unidadeID}&papelID=${loggedUnity.papelID}&admin=${user.admin}`
-                )
-                .then(response => {
-                    setResult(response.data)
-                    setTitle({
-                        title: 'Profissional',
-                        subtitle: {
-                            id: id,
-                            count: response.data.length,
-                            new: false
-                        }
-                    })
-                })
-        }
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -68,14 +71,14 @@ const Usuario = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id ? (
                 <FormProfissional id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

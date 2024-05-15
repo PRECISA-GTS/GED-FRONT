@@ -50,7 +50,7 @@ const SelectControlledUncontrolled = () => {
 }
 
 export default SelectControlledUncontrolled
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectGroupingJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Select from '@mui/material/Select'
@@ -95,7 +95,7 @@ const SelectGrouping = () => {
 }
 
 export default SelectGrouping
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectMultipleJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -286,7 +286,7 @@ const SelectMultiple = () => {
 }
 
 export default SelectMultiple
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectPropsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Box from '@mui/material/Box'
@@ -415,7 +415,7 @@ const SelectProps = () => {
 }
 
 export default SelectProps
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectCustomizedJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -512,7 +512,7 @@ const SelectCustomized = () => {
 }
 
 export default SelectCustomized
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectNativeJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Select from '@mui/material/Select'
@@ -578,7 +578,7 @@ const SelectNative = () => {
 }
 
 export default SelectNative
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectWithDialogJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** React Imports
 import { useState } from 'react'
@@ -659,7 +659,7 @@ const SelectWithDialog = () => {
 }
 
 export default SelectWithDialog
-`}</code></pre>) 
+`}</code></pre>)
 
 export const SelectVariantsJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Select from '@mui/material/Select'
@@ -710,5 +710,5 @@ const SelectVariants = () => {
 }
 
 export default SelectVariants
-`}</code></pre>) 
+`}</code></pre>)
 

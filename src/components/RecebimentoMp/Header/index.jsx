@@ -132,7 +132,7 @@ const HeaderFields = ({
 
     return (
         <>
-            <Grid container alignItems='stretch' spacing={4}>
+            <Grid container alignItems='stretch' spacing={6}>
                 {/* Bloco esquerda (cabeçalho) */}
                 <Grid item xs={12} md={9}>
                     <Card style={{ height: '100%' }}>

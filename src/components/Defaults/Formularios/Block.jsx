@@ -83,13 +83,12 @@ const Block = ({
                                             value={indexCol}
                                             control={<Radio disabled={disabled} error={errors ? true : false} />}
                                             onChange={() => changeAllOptions(indexCol)}
-                                            label='Marcar todos'
+                                            label='Todos'
                                             fullWidth
                                             sx={{
                                                 '& .MuiFormControlLabel-label': {
-                                                    fontSize: '0.8rem',
                                                     color: 'text.secondary',
-                                                    fontWeight: 700
+                                                    fontWeight: 600
                                                 },
                                                 '&:hover': {
                                                     '& .MuiFormControlLabel-label': {

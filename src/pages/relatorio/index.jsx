@@ -7,6 +7,7 @@ import ReportComponents from 'src/components/Reports/Layout/reportComponents'
 import { useRouter } from 'next/router'
 import { useTheme } from '@mui/material'
 import { api } from 'src/configs/api'
+import { useAuth } from 'src/hooks/useAuth'
 
 const PageReport = () => {
     const reportJSON = localStorage.getItem('report')

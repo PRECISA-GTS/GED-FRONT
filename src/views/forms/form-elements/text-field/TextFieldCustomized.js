@@ -13,9 +13,10 @@ const InputBase = styled(MuiInputBase)(({ theme }) => ({
         borderRadius: 4,
         padding: '10px 12px',
         position: 'relative',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'red !important',
         transition: theme.transitions.create(['border-color', 'box-shadow']),
-        border: theme.palette.mode === 'light' ? '1px solid #ced4da' : `1px solid ${theme.palette.divider}`,
+        // border: theme.palette.mode === 'light' ? '1px solid #ced4da' : `1px solid ${theme.palette.divider}`,
+        border: '1px solid red !important',
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',

@@ -7,19 +7,19 @@ import { useFilter } from 'src/context/FilterContext';
 
 const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
     const {
-        handleSearch,
         pageSize,
         setPageSize,
         searchText,
         filteredData,
         setData,
         data,
+        dataFilters
     } = useFilter()
 
     const { setId } = useContext(RouteContext);
     const [rowSelected, setRowSelected] = useState(null)
     const [openModalLog, setOpenModalLog] = useState(false)
-    setData(rows);
+    // setData(rows);
 
 
     // ordena as linhas, do status inativo ficam por ultimo
@@ -68,7 +68,8 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
                 pageSize={pageSize}
                 rowsPerPageOptions={[10, 20, 30, 40, 50, 100]}
                 components={{ Toolbar: QuickSearchToolbar }}
-                rows={searchText ? filteredData : sortedData}
+                // sortedData
+                rows={filteredData}
                 onCellClick={(params, event) => {
                     handleClickRow(params.row)
                 }}
@@ -81,6 +82,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
                         buttonsHeader: buttonsHeader,
                     }
                 }}
+                className='min-h-[85vh]'
             />
             {/* Modal que abre com informações do log */}
             <DialogLog

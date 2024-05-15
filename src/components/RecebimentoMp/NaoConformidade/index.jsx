@@ -90,7 +90,6 @@ const RecebimentoMpNaoConformidade = ({
     const handleChangeStatus = (index, event) => {
         const naoConformidades = getValues('naoConformidade.itens')
         naoConformidades[index].status = event
-        console.log('🚀 ~ naoConformidades:', naoConformidades)
         setValue('naoConformidade.itens', naoConformidades)
     }
 

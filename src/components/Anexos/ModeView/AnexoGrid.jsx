@@ -27,7 +27,7 @@ const AnexoGrid = ({
         <Grid item xs={12} md={3}>
             <div
                 className={`${
-                    error?.[key] ? 'border border-red-500' : modeTheme === 'dark' ? 'bg-[#202023]' : 'bg-[#F6F6F8]'
+                    error?.[key] ? 'border border-red-500' : modeTheme === 'dark' ? 'bg-[#212b36]' : 'bg-[#F6F6F8]'
                 } rounded-lg flex flex-col relative z-10`}
             >
                 <div className={`flex items-center justify-center p-2 mt-1 `}>
@@ -46,7 +46,7 @@ const AnexoGrid = ({
                 >
                     <div
                         className={`flex p-1 justify-center items-center gap-2 rounded-lg w-full h-full m-3 border-2 border-dashed hover:border-[#4A8B57] transition-colors ${
-                            modeTheme === 'dark' ? ' border-[#27272a]' : 'rgba(76, 78, 100, 0.12)'
+                            modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
                         }`}
                     >
                         {selectedItem && selectedItem.grupoAnexoItemID == item.grupoAnexoItemID && (

@@ -18,10 +18,11 @@ import { configColumns } from 'src/configs/defaultConfigs'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewFornecedor/FormFornecedorConclusion'
 import { useFornecedor } from 'src/context/FornecedorContext'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Fornecedor = () => {
     const { user, loggedUnity } = useContext(AuthContext)
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
@@ -32,6 +33,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const { isNotFactory } = useFornecedor()
+    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -45,7 +47,8 @@ const Fornecedor = () => {
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
-            setResult(response.data)
+            setFilteredData(response.data)
+            setData(response.data)
             setTitle({
                 title: 'Fornecedor',
                 subtitle: {
@@ -103,8 +106,10 @@ const Fornecedor = () => {
     }
 
     useEffect(() => {
+        const filter = router.query.filter === 1 ? true : false
         getList()
-    }, [id])
+        startFilter(<Filters />, filter)
+    }, [id, router.query])
 
     // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
     useEffect(() => {
@@ -207,7 +212,7 @@ const Fornecedor = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
@@ -215,7 +220,7 @@ const Fornecedor = () => {
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table
-                    result={result}
+                    result={filteredData}
                     columns={columns}
                     openModal={user.papelID == 1 ? openModal : null}
                     btnNew={user.papelID == 1 ? true : false}

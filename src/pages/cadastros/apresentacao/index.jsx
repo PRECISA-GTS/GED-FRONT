@@ -12,17 +12,29 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Apresentacao = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
+    const {
+        setComponentFilters,
+        form,
+        setDataFilters,
+        filteredData,
+        setFilteredData,
+        setData,
+        setSearchText,
+        startFilter
+    } = useFilter()
 
     const getList = async () => {
         await api.get(currentLink).then(response => {
-            setResult(response.data)
+            setFilteredData(response.data)
+            setData(response.data)
             setTitle({
                 title: 'Apresentação',
                 subtitle: {
@@ -36,6 +48,7 @@ const Apresentacao = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -64,14 +77,14 @@ const Apresentacao = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormApresentacao id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

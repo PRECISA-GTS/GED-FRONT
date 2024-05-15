@@ -94,7 +94,7 @@ const RecebimentoMpProdutos = ({ produtos, setProdutos, getValues, setValue, reg
                                             : `${produto.diasRestantes} dias`}
                                         )
                                     </Typography>
-                                    <Button variant='outlined' size='small'>
+                                    {/* <Button variant='outlined' size='small'>
                                         <Box display='flex' alignItems='center' sx={{ gap: 1 }}>
                                             <Icon icon='fluent:form-new-20-regular' width={18} height={18} />
                                             Nova avaliação
@@ -105,7 +105,7 @@ const RecebimentoMpProdutos = ({ produtos, setProdutos, getValues, setValue, reg
                                             <Icon icon='raphael:lab' width={18} height={18} />
                                             Laboratório (dev)
                                         </Box>
-                                    </Button>
+                                    </Button> */}
                                 </Box>
                             </Grid>
 

@@ -214,4 +214,14 @@ function getCurrentDate() {
     return formattedDate
 }
 
-export { configColumns, formType, backRoute, statusDefault, toastMessage, dateConfig, dateOptions, getCurrentTime, getCurrentDate }
+// Converte data do formato dd/mm/yyyy para Mon Dec 18 2023 00:00:00 GMT-0300 (Horário Padrão de Brasília
+const convertStringToDate = dateString => {
+    const parts = dateString.split('/')
+    const day = parseInt(parts[0], 10)
+    const month = parseInt(parts[1], 10) - 1
+    const year = parseInt(parts[2], 10)
+    console.log("filterData", new Date(year, month, day))
+    return new Date(year, month, day)
+}
+
+export { configColumns, formType, backRoute, statusDefault, toastMessage, dateConfig, dateOptions, getCurrentTime, getCurrentDate, convertStringToDate }

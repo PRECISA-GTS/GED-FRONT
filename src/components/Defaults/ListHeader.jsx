@@ -59,7 +59,7 @@ const ListHeader = ({
 
                 {/* Div Direira */}
                 <div className='flex items-center gap-4 right-0 '>
-                    <div>
+                    <div className='hidden sm:block'>
                         {btnPrint && (
                             <Button
                                 onClick={() => window.print()}

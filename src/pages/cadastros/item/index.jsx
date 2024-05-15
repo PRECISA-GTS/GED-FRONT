@@ -12,18 +12,21 @@ import { useRouter } from 'next/router'
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
+import { useFilter } from 'src/context/FilterContext'
+import Filters from './Filters'
 
 const Item = () => {
-    const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { loggedUnity } = useContext(AuthContext)
     const { id } = useContext(RouteContext)
+    const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
         await api.get(`${currentLink}/${loggedUnity.unidadeID}`).then(response => {
-            setResult(response.data)
+            setFilteredData(response.data)
+            setData(response.data)
             setTitle({
                 title: 'Item',
                 subtitle: {
@@ -37,6 +40,7 @@ const Item = () => {
 
     useEffect(() => {
         getList()
+        startFilter(<Filters />)
     }, [id])
 
     const arrColumns = [
@@ -71,14 +75,14 @@ const Item = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!result ? (
+            {!filteredData ? (
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormItem id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={result} columns={columns} />
+                <Table result={filteredData} columns={columns} />
             )}
         </>
     )

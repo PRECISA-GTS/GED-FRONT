@@ -46,7 +46,7 @@ const Drawer = props => {
     const drawerColors = () => {
         if (mode === 'semi-dark') {
             return {
-                backgroundColor: 'customColors.darkBg',
+                backgroundColor: theme.palette.primary.bgMenuDark,
                 '& .MuiTypography-root': {
                     color: `rgba(${theme.palette.customColors.dark}, 0.87)`
                 }
@@ -108,7 +108,7 @@ const Drawer = props => {
                     ...drawerColors(),
                     width: navCollapsed && !navHover ? collapsedNavWidth : navWidth,
                     ...(!hidden && navCollapsed && navHover ? { boxShadow: 10 } : {}),
-                    borderRight: navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid ${theme.palette.divider}`,
+                    borderRight: `1px dashed ${theme.palette.divider}`,
                     ...userNavMenuPaperStyle
                 },
                 ...navMenuProps?.PaperProps
