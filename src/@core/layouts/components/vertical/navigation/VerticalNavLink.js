@@ -143,7 +143,7 @@ const VerticalNavLink = ({
                         setId(null)
                     }}
                     sx={{
-                        py: 3.8,
+                        py: 3.5,
                         gap: 2,
                         ...conditionalBgColor(),
                         ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),

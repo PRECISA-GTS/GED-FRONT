@@ -56,8 +56,6 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 {actionsData?.map(item => {
-                    // console.log('🚀 ~ item:', item)
-                    // setParamsReport(item)
                     return (
                         <MenuItem
                             key={item.id}

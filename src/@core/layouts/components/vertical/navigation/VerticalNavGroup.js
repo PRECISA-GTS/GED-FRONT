@@ -237,7 +237,7 @@ const VerticalNavGroup = props => {
                             'Mui-selected': groupActive.includes(item.title) || currentActiveGroup.includes(item.title)
                         })}
                         sx={{
-                            py: 3.8,
+                            py: 3.5,
                             width: '100%',
                             borderRadius: '8px',
                             ...conditionalBgColor(),
