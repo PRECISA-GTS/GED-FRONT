@@ -113,6 +113,7 @@ const FormNewFornecedor = ({
     }
 
     const handleSave = async data => {
+        console.log('handleSave........', data)
         setOpenModalNew(false)
     }
 

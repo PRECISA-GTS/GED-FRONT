@@ -41,6 +41,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 
 const FormRecebimentoMp = ({ id }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
+    console.log('🚀 ~ FormRecebimentoMp ~ user', user)
     const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
@@ -76,9 +77,7 @@ const FormRecebimentoMp = ({ id }) => {
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [columnSelected, setColumnSelected] = useState(null)
-    console.log('🚀 ~ columnSelected:', columnSelected)
     const [nameSelected, setNameSelected] = useState(null)
-    console.log('🚀 ~ nameSelected:', nameSelected)
 
     const [canEdit, setCanEdit] = useState({
         status: false,
@@ -445,7 +444,7 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ data do submit:', data)
+        console.log('🚀 ~ onSubmit ~ data', data)
         startLoading()
         if (id == true) return
         try {

@@ -64,6 +64,8 @@ const Fornecedor = () => {
 
     //? handleSubmit do modal de gerar um novo fornecedor
     const makeFornecedor = async values => {
+        console.log('🚀 ~ makeFornecedor values:', values)
+
         try {
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, {
                 usuarioID: user.usuarioID,
@@ -73,6 +75,7 @@ const Fornecedor = () => {
                 values: values.fields,
                 habilitaQuemPreencheFormFornecedor: values.habilitaQuemPreencheFormFornecedor
             })
+            console.log('🚀 ~ response:', response)
 
             if (response.status == 200) {
                 toast.success(response.data.message)

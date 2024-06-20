@@ -45,7 +45,7 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
             {/* Apresentação */}
             <Select
                 xs={12}
-                md={2}
+                md={4}
                 title='Apresentação'
                 name={`produtos[${index}].apresentacao`}
                 type='string'
@@ -58,7 +58,7 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
             />
 
             {/* NF */}
-            <Input
+            {/* <Input
                 xs={12}
                 md={2}
                 title='NF'
@@ -67,7 +67,7 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 control={control}
                 errors={errors?.produtos?.[index]?.nf}
                 disabled={disabled}
-            />
+            /> */}
 
             {/* Data de validade */}
             <DateField
