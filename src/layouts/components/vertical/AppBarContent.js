@@ -36,8 +36,12 @@ const AppBarContent = props => {
 
     // ** Hooks
     const router = useRouter()
-    // const isDemo = process.env.NODE_ENV === 'development' ? true : false
-    const isDemo = process.env.NEXT_PUBLIC_BASE_URL === 'https://demo.gedagro.com.br/api/' ? true : false
+    const fullUrl = window.location.href; // Pega a URL completa
+    const apiUrl = "https://demo.gedagro.com.br/api/";
+
+    const isDemo = fullUrl.includes(apiUrl) ? true : false
+    console.log("🚀  isDemo", isDemo);
+
 
     // Controla troca de unidade
     const [openModal, setOpenModal] = useState(false);
