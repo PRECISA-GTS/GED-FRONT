@@ -39,14 +39,14 @@ const DialogActs = ({
     }
 
     return (
-        <>
+        <div className='relative'>
             <Dialog
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 fullWidth={size ? true : false}
                 maxWidth={size ? size : null}
             >
-                <form>
+                <form className='grid grid-rows-[60px_auto_60px] h-[calc(100vh-120px)]'>
                     <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
                     {description && (
                         <DialogContent>
@@ -54,7 +54,6 @@ const DialogActs = ({
                         </DialogContent>
                     )}
 
-                    {/* Passa children com props */}
                     <DialogContent>
                         <DialogContentText
                             sx={{
@@ -103,7 +102,7 @@ const DialogActs = ({
                     </DialogActions>
                 </form>
             </Dialog>
-        </>
+        </div>
     )
 }
 

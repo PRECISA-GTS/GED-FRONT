@@ -18,116 +18,116 @@ import DialogActs from '../Defaults/Dialogs/DialogActs'
 import Event from './Event'
 
 const Calendar = () => {
-    const router = Router
-    const { user, loggedUnity } = useContext(AuthContext)
-    const { setId } = useContext(RouteContext)
-    const [events, setEvents] = useState([])
-    const [open, setOpen] = useState(false)
-    const [event, setEvent] = useState(null)
+  const router = Router
+  const { user, loggedUnity } = useContext(AuthContext)
+  const { setId } = useContext(RouteContext)
+  const [events, setEvents] = useState([])
+  const [open, setOpen] = useState(false)
+  const [event, setEvent] = useState(null)
 
-    const getEvents = async () => {
-        const data = {
-            usuarioID: user.usuarioID,
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID,
-            admin: user.admin
-        }
-        try {
-            const response = await api.post('calendario/getEvents', data);
-            setEvents(response.data);
-            console.log("🚀 ~ getEvents response: ", response.data)
-        } catch (error) {
-            console.error('Erro ao buscar eventos:', error);
-        }
+  const getEvents = async () => {
+    const data = {
+      usuarioID: user.usuarioID,
+      unidadeID: loggedUnity.unidadeID,
+      papelID: user.papelID,
+      admin: user.admin
     }
-
-    const handleEventLink = () => {
-        const { rota, id } = event._def.extendedProps.link
-        if (!rota) return
-        router.push(rota)
-        setId(id)
+    try {
+      const response = await api.post('calendario/getEvents', data);
+      setEvents(response.data);
+      console.log("🚀 ~ getEvents response: ", response.data)
+    } catch (error) {
+      console.error('Erro ao buscar eventos:', error);
     }
+  }
 
-    useEffect(() => {
-        getEvents()
-    }, [])
+  const handleEventLink = () => {
+    const { rota, id } = event._def.extendedProps.link
+    if (!rota) return
+    router.push(rota)
+    setId(id)
+  }
 
-    // ** calendarOptions
-    const calendarOptions = {
-        events: events.length ? events : [],
-        plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            start: 'sidebarToggle, prev, next, title',
-            end: 'today,dayGridMonth,timeGridWeek,dayGridDay,listMonth'
-        },
-        views: {
-            week: {
-                titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
-            }
-        },
-        /* Enable dragging and resizing event */
-        editable: true,
-        /* Enable resizing event from start */
-        eventResizableFromStart: true,
-        locale: ptBr,
-        /* Automatically scroll the scroll-containers during event drag-and-drop and date selecting */
-        dragScroll: true,
-        /* Max number of events within a given day */
-        dayMaxEvents: 10,
-        /* Determines if day names and week names are clickable*/
-        navLinks: true,
-        eventContent({ event: calendarEvent }) {
-            const colorVariant = calendarEvent._def.extendedProps.variant
-            const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
-            let styles = `p-2 ${color}`;
-            console.log("🚀 ~ color: ", colorVariant, color)
+  useEffect(() => {
+    getEvents()
+  }, [])
 
-            const htmlEvent = `
+  // ** calendarOptions
+  const calendarOptions = {
+    events: events.length ? events : [],
+    plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      start: 'sidebarToggle, prev, next, title',
+      end: 'today,dayGridMonth,timeGridWeek,dayGridDay,listMonth'
+    },
+    views: {
+      week: {
+        titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+      }
+    },
+    /* Enable dragging and resizing event */
+    editable: true,
+    /* Enable resizing event from start */
+    eventResizableFromStart: true,
+    locale: ptBr,
+    /* Automatically scroll the scroll-containers during event drag-and-drop and date selecting */
+    dragScroll: true,
+    /* Max number of events within a given day */
+    dayMaxEvents: 10,
+    /* Determines if day names and week names are clickable*/
+    navLinks: true,
+    eventContent({ event: calendarEvent }) {
+      const colorVariant = calendarEvent._def.extendedProps.variant
+      const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
+      let styles = `p-2 ${color}`;
+      console.log("🚀 ~ color: ", colorVariant, color)
+
+      const htmlEvent = `
             <div class="${styles}">
                 <div>
                     ${calendarEvent._def.extendedProps.type}<br/>
-                </div> 
+                </div>
                 <div class="font-bold whitespace-normal">
                     ${calendarEvent.title}
-                </div>            
+                </div>
             </div>
             `
 
-            return { html: htmlEvent }
-        },
-        eventClick({ event: clickedEvent }) {
-            setOpen(true)
-            setEvent(clickedEvent)
-        },
-        dateClick(info) {
-            console.log('dateClick')
-        },
-        eventDrop({ event: droppedEvent }) {
-            console.log('eventDrop')
-        },
-        eventResize({ event: resizedEvent }) {
-            console.log('eventResize')
-        }
+      return { html: htmlEvent }
+    },
+    eventClick({ event: clickedEvent }) {
+      setOpen(true)
+      setEvent(clickedEvent)
+    },
+    dateClick(info) {
+      console.log('dateClick')
+    },
+    eventDrop({ event: droppedEvent }) {
+      console.log('eventDrop')
+    },
+    eventResize({ event: resizedEvent }) {
+      console.log('eventResize')
     }
+  }
 
-    // @ts-ignore
-    return (
-        <>
-            <FullCalendar {...calendarOptions} />
-            <Legend />
-            {/* Modal pra ver o evento */}
-            <DialogActs
-                title={`Calendário de ${event?._def?.extendedProps?.type}`}
-                setOpenModal={setOpen}
-                openModal={open}
-                size='xs'
-                handleLink={handleEventLink}
-            >
-                <Event values={event} />
-            </DialogActs>
-        </>
-    )
+  // @ts-ignore
+  return (
+    <>
+      <FullCalendar {...calendarOptions} />
+      <Legend />
+      {/* Modal pra ver o evento */}
+      <DialogActs
+        title={`Calendário de ${event?._def?.extendedProps?.type}`}
+        setOpenModal={setOpen}
+        openModal={open}
+        size='xs'
+        handleLink={handleEventLink}
+      >
+        <Event values={event} />
+      </DialogActs>
+    </>
+  )
 }
 
 export default Calendar

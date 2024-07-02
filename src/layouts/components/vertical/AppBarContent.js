@@ -36,6 +36,8 @@ const AppBarContent = props => {
 
     // ** Hooks
     const router = useRouter()
+    // const isDemo = process.env.NODE_ENV === 'development' ? true : false
+    const isDemo = process.env.NEXT_PUBLIC_BASE_URL === 'https://demo.gedagro.com.br/api/' ? true : false
 
     // Controla troca de unidade
     const [openModal, setOpenModal] = useState(false);
@@ -61,7 +63,7 @@ const AppBarContent = props => {
     return (
         <>
             {/* App Bar Content */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1 '>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1'>
                 <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
                     {hidden && !settings.navHidden ? (
                         <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
@@ -70,9 +72,12 @@ const AppBarContent = props => {
                     ) : null}
                     <Autocomplete hidden={hidden} settings={settings} />
                 </Box>
-                <Box className='app-title' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Typography variant='h6' sx={{ fontWeight: 700 }} >{title.title}</Typography>
-                    <Typography variant='caption'>
+                <Box
+                    className='app-title p-1 rounded-xl'
+                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '10px' }}
+                >
+                    <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
+                    <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
                         {title.subtitle.new ? `Novo` : title.subtitle.id ? `ID: ${title.subtitle.id}` : title.subtitle.count ? `Total de registros: ${title.subtitle.count}` : ``}
                     </Typography>
                     {/* todo migalhas de pão */}
