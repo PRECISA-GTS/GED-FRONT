@@ -244,6 +244,7 @@ const Fornecedor = () => {
                 setOpenModal={setOpen}
                 openModal={open}
                 size='lg'
+                fullHeight
             >
                 <NewFornecedor />
             </DialogActs>

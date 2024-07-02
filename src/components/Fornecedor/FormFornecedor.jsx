@@ -38,9 +38,6 @@ import HistoricForm from '../Defaults/HistoricForm'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
-    // const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
-    // const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
-    // const [loadingFileItem, setLoadingFileItem] = useState(false) //? loading de carregamento do arquivo
     const [savingForm, setSavingForm] = useState(false)
     const [validateForm, setValidateForm] = useState(false) //? Se true, valida campos obrigatórios
     const [hasFormPending, setHasFormPending] = useState(true) //? Tem pendencia no formulário (já vinculado em formulário de recebimento, não altera mais o status)

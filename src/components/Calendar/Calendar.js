@@ -35,7 +35,6 @@ const Calendar = () => {
     try {
       const response = await api.post('calendario/getEvents', data);
       setEvents(response.data);
-      console.log("🚀 ~ getEvents response: ", response.data)
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
     }

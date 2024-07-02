@@ -1,6 +1,7 @@
 
 // ** Material UI
-import { Typography } from '@mui/material'
+import { Tooltip, Typography } from '@mui/material'
+import Icon from 'src/@core/components/icon'
 import { formatDate } from './conversions'
 
 
@@ -47,7 +48,6 @@ const configColumns = (currentLink, arrColumns) => {
                         arrColumns.map((c, j) => {
                             if (c.field === currentColumns) {
                                 if (c.field.name == 'status') {
-
                                     return (
                                         <CustomChip
                                             key={j}
@@ -59,7 +59,21 @@ const configColumns = (currentLink, arrColumns) => {
                                         />
                                     )
 
-                                } else {
+                                } else if (c.field == 'naoConformidade') {
+                                    return (
+                                        params?.row.naoConformidade === 1 &&
+                                        <Tooltip
+                                            title='Este formulário contém não conformidades'
+                                            placement='top'
+                                            arrow
+                                        >
+                                            <p>
+                                                <Icon icon='typcn:warning' color='#FFC107' />
+                                            </p>
+                                        </Tooltip>
+                                    )
+                                }
+                                else {
                                     return params.row[c.field]
                                 }
                             }

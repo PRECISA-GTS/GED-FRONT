@@ -175,8 +175,6 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             })
                 .then(response => {
-                    console.log('getData: ', response.data)
-
                     setFieldsHeader(response.data.fieldsHeader)
                     // setFornecedor(response.data.fieldsHeader.fornecedor)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -374,7 +372,6 @@ const FormRecebimentoMp = ({ id }) => {
     }
 
     const conclusionForm = async values => {
-        console.log('🚀 ~ conclusionForm:', values)
         sendPdfToServer(id, blobSaveReport, 'recebimento-mp')
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
@@ -444,7 +441,6 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ onSubmit ~ data', data)
         startLoading()
         if (id == true) return
         try {

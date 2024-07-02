@@ -29,7 +29,6 @@ const Select = ({
     const theme = useTheme()
     const { settings } = useSettings()
     const { mode } = settings
-    console.log('🚀 ~ theme:', settings, theme)
     let optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
     return (
@@ -48,9 +47,7 @@ const Select = ({
                                 limitTags={limitTags}
                                 size='small'
                                 options={optionsWithNovo}
-                                getOptionLabel={option =>
-                                    option?.cnpj ? `${option.cnpj} - ${option.nome}` : option?.nome
-                                }
+                                getOptionLabel={option => option?.nome}
                                 value={
                                     multiple && field.value && field.value.length > 0
                                         ? field.value.map(item => options.find(option => option.id === item.id))

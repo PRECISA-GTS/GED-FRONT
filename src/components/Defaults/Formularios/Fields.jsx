@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { dateConfig } from 'src/configs/defaultConfigs'
 
 //* Custom inputs
@@ -19,7 +19,6 @@ const Fields = ({
     setColumnSelected,
     setOpenModalNew
 }) => {
-    console.log('renderiza fields dynamic....')
     const [dateStatus, setDateStatus] = useState({})
     const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
 
@@ -79,7 +78,8 @@ const Fields = ({
     return (
         fields &&
         fields.map((field, index) => {
-            // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+            setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+
             return (
                 <>
                     {/* Autocomplete (int) */}
@@ -103,45 +103,9 @@ const Fields = ({
                             setValue={setValue}
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
-                            // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
+                            handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
-
-                    {/* Modal para criação de novo, baseado no select clicado */}
-                    {/* <DialogNewCreate
-                        title={
-                            columnSelected == 'transportadorID'
-                                ? 'Novo transportador'
-                                : columnSelected == 'tipoVeiculoID'
-                                ? 'Novo tipo de veiculo'
-                                : ''
-                        }
-                        size='md'
-                        openModal={openModalNew}
-                        setOpenModal={setOpenModalNew}
-                    >
-                        {columnSelected == 'transportadorID' ? (
-                            <FormTransportador
-                                btnClose
-                                handleModalClose={() => setOpenModalNew(false)}
-                                setNewChange={setNewChange}
-                                newChange={newChange}
-                                outsideID={true}
-                                handleConfirmNew={handleConfirmNew}
-                                manualUrl='/cadastros/transportador'
-                            />
-                        ) : columnSelected == 'tipoVeiculoID' ? (
-                            <FormTipoVeiculo
-                                btnClose
-                                handleModalClose={() => setOpenModalNew(false)}
-                                setNewChange={setNewChange}
-                                newChange={newChange}
-                                outsideID={true}
-                                handleConfirmNew={handleConfirmNew}
-                                manualUrl='/cadastros/tipo-veiculo'
-                            />
-                        ) : null}
-                    </DialogNewCreate> */}
 
                     {/* Date */}
                     {field && field.tipo == 'date' && (

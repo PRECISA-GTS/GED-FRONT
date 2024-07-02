@@ -30,8 +30,6 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
         }
     }, [values])
 
-    console.log('renderiza fields static....')
-
     return (
         <Grid container spacing={4}>
             <Input
@@ -154,7 +152,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 errors={errors?.fieldsHeader?.['nomeFantasia']}
             />
 
-            {/* Fiels dinâmicos */}
+            {/* Fields dinâmicos */}
             <Fields
                 register={register}
                 errors={errors}

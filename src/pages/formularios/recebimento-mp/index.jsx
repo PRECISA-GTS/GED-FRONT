@@ -82,7 +82,12 @@ const RecebimentoMP = () => {
                           cor: 'cor'
                       },
                       size: 0.2
-                  }
+                  },
+                  {
+                    headerName: 'Não Conformidade',
+                    field: 'naoConformidade',
+                    size: 0.2
+                }
               ]
             : [
                   {
@@ -118,7 +123,12 @@ const RecebimentoMP = () => {
                           cor: 'cor'
                       },
                       size: 0.2
-                  }
+                  },
+                  {
+                    headerName: 'Não Conformidade',
+                    field: 'naoConformidade',
+                    size: 0.2
+                }
               ]
 
     const columns = configColumns(currentLink, arrColumns)
