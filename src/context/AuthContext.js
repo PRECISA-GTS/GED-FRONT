@@ -35,7 +35,6 @@ const AuthProvider = ({ children }) => {
   const { setId } = useContext(RouteContext)
   // ** States
   const [user, setUser] = useState(defaultProvider.user)
-  console.log("🚀 ~ AuthProvider ~ user", user)
   const [loading, setLoading] = useState(defaultProvider.loading)
   // Controlar unidades de seleção ao usuário logar no sistema
   const [openModalSelectUnits, setOpenModalSelectUnits] = useState(false)

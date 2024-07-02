@@ -87,22 +87,22 @@ const HorizontalNavLink = props => {
             ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
             ...(!hasParent
               ? {
-                  borderRadius: '8px',
-                  '&.active, &.active:hover': {
-                    backgroundColor: 'primary.main',
-                    '&:focus-visible': { backgroundColor: 'primary.dark' },
-                    '& .MuiTypography-root, & .MuiListItemIcon-root': {
-                      color: 'common.white'
-                    }
+                borderRadius: '8px',
+                '&.active, &.active:hover': {
+                  backgroundColor: 'primary.main',
+                  '&:focus-visible': { backgroundColor: 'primary.dark' },
+                  '& .MuiTypography-root, & .MuiListItemIcon-root': {
+                    color: 'common.white'
                   }
                 }
+              }
               : {
-                  '&.active, &.active:hover': {
-                    '&:focus-visible': {
-                      backgroundColor: theme => hexToRGBA(theme.palette.primary.main, 0.24)
-                    }
+                '&.active, &.active:hover': {
+                  '&:focus-visible': {
+                    backgroundColor: theme => hexToRGBA(theme.palette.primary.main, 0.24)
                   }
-                })
+                }
+              })
           }}
         >
           <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

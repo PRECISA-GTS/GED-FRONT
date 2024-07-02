@@ -53,7 +53,7 @@ const Typography = theme => {
     caption: {
       lineHeight: 1.25,
       letterSpacing: '0.4px',
-      color: theme.palette.text.secondary
+      color: theme.palette.text.primary
     },
     overline: {
       letterSpacing: '1px',

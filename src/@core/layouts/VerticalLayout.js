@@ -21,104 +21,105 @@ import Footer from './components/shared-components/footer'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 const VerticalLayoutWrapper = styled('div')({
-    height: '100%',
-    display: 'flex',
+  height: '100%',
+  display: 'flex',
 })
 
 const MainContentWrapper = styled(Box)({
-    flexGrow: 1,
-    minWidth: 0,
-    display: 'flex',
-    minHeight: '100vh',
-    flexDirection: 'column'
+  flexGrow: 1,
+  minWidth: 0,
+  display: 'flex',
+  minHeight: '100vh',
+  flexDirection: 'column'
 })
 
 const ContentWrapper = styled('main')(({ theme }) => ({
-    flexGrow: 1,
-    width: '100%',
-    padding: theme.spacing(6),
-    transition: 'padding .25s ease-in-out',
-    [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4)
-    }
+  flexGrow: 1,
+  width: '100%',
+  padding: theme.spacing(6),
+  transition: 'padding .25s ease-in-out',
+  [theme.breakpoints.down('sm')]: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4)
+  }
 }))
 
 const VerticalLayout = props => {
-    // ** Props
-    const { hidden, settings, children, scrollToTop, footerProps, contentHeightFixed, verticalLayoutProps } = props
-    const { setSubmitActive, submitActive } = useContext(ParametersContext)
+  // ** Props
+  const { hidden, settings, children, scrollToTop, footerProps, contentHeightFixed, verticalLayoutProps } = props
+  const { setSubmitActive, submitActive } = useContext(ParametersContext)
 
-    // ** Vars
-    const { skin, navHidden, contentWidth } = settings
-    const { navigationSize, disableCustomizer, collapsedNavigationSize } = themeConfig
-    const navWidth = navigationSize
-    const navigationBorderWidth = skin === 'bordered' ? 1 : 0
-    const collapsedNavWidth = collapsedNavigationSize
+  // ** Vars
+  const { skin, navHidden, contentWidth } = settings
+  const { navigationSize, disableCustomizer, collapsedNavigationSize } = themeConfig
+  const navWidth = navigationSize
+  const navigationBorderWidth = skin === 'bordered' ? 1 : 0
+  const collapsedNavWidth = collapsedNavigationSize
 
-    // ** States
-    const [navVisible, setNavVisible] = useState(false)
+  // ** States
+  const [navVisible, setNavVisible] = useState(false)
 
-    // ** Toggle Functions
-    const toggleNavVisibility = () => setNavVisible(!navVisible)
+  // ** Toggle Functions
+  const toggleNavVisibility = () => setNavVisible(!navVisible)
 
-    return (
-        <>
-            <VerticalLayoutWrapper className='layout-wrapper'>
-                {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
-                    <Navigation
-                        navWidth={navWidth}
-                        navVisible={navVisible}
-                        setNavVisible={setNavVisible}
-                        collapsedNavWidth={collapsedNavWidth}
-                        toggleNavVisibility={toggleNavVisibility}
-                        navigationBorderWidth={navigationBorderWidth}
-                        navMenuContent={verticalLayoutProps.navMenu.content}
-                        navMenuBranding={verticalLayoutProps.navMenu.branding}
-                        menuLockedIcon={verticalLayoutProps.navMenu.lockedIcon}
-                        verticalNavItems={verticalLayoutProps.navMenu.navItems}
-                        navMenuProps={verticalLayoutProps.navMenu.componentProps}
-                        menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
-                        afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
-                        beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
-                        {...props}
-                    />
-                )}
-                <MainContentWrapper
-                    className={`layout-content-wrapper pt-0 ${settings.mode == 'dark' ? 'bg-[#161c24]' : 'bg-[#f5f5f5]'}`}
-                    sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
-                >
-                    <AppBar
-                        toggleNavVisibility={toggleNavVisibility}
-                        appBarContent={verticalLayoutProps.appBar?.content}
-                        appBarProps={verticalLayoutProps.appBar?.componentProps}
-                        {...props}
-                    />
+  return (
+    <>
+      <VerticalLayoutWrapper className='layout-wrapper'>
+        {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
+          <Navigation
+            navWidth={navWidth}
+            navVisible={navVisible}
+            setNavVisible={setNavVisible}
+            collapsedNavWidth={collapsedNavWidth}
+            toggleNavVisibility={toggleNavVisibility}
+            navigationBorderWidth={navigationBorderWidth}
+            navMenuContent={verticalLayoutProps.navMenu.content}
+            navMenuBranding={verticalLayoutProps.navMenu.branding}
+            menuLockedIcon={verticalLayoutProps.navMenu.lockedIcon}
+            verticalNavItems={verticalLayoutProps.navMenu.navItems}
+            navMenuProps={verticalLayoutProps.navMenu.componentProps}
+            menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
+            afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
+            beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
+            {...props}
+          />
+        )}
+        <MainContentWrapper
+          className={`layout-content-wrapper pt-0 ${settings.mode == 'dark' ? 'bg-[#161c24]' : 'bg-[#f5f5f5]'}`}
+          sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
+        >
+          <AppBar
+            toggleNavVisibility={toggleNavVisibility}
+            appBarContent={verticalLayoutProps.appBar?.content}
+            appBarProps={verticalLayoutProps.appBar?.componentProps}
+            {...props}
+          />
 
-                    <ContentWrapper
-                        className='layout-page-content !pt-0'
-                        sx={{
-                            ...(contentHeightFixed && {
-                                overflow: 'hidden',
-                                '& > :first-of-type': { height: '100%' }
-                            }),
-                            ...(contentWidth === 'boxed' && {
-                                mx: 'auto',
-                                '@media (min-width:1440px)': { maxWidth: 1440 },
-                                '@media (min-width:1200px)': { maxWidth: '100%' }
-                            })
-                        }}
-                    >
-                        {children}
-                    </ContentWrapper>
+          <ContentWrapper
+            className='layout-page-content !pt-0'
+            sx={{
+              ...(contentHeightFixed && {
+                overflow: 'hidden',
+                '& > :first-of-type': { height: '100%' }
 
-                    <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
-                </MainContentWrapper>
-            </VerticalLayoutWrapper>
+              }),
+              ...(contentWidth === 'boxed' && {
+                mx: 'auto',
+                '@media (min-width:1440px)': { maxWidth: 1440 },
+                '@media (min-width:1200px)': { maxWidth: '100%' }
+              })
+            }}
+          >
+            {children}
+          </ContentWrapper>
 
-            {disableCustomizer || hidden ? null : <Customizer />}
+          <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
+        </MainContentWrapper>
+      </VerticalLayoutWrapper>
 
-            {/* {scrollToTop ? (
+      {disableCustomizer || hidden ? null : <Customizer />}
+
+      {/* {scrollToTop ? (
                 scrollToTop(props)
             ) : (
                 <ScrollToTop className='mui-fixed' >
@@ -127,8 +128,8 @@ const VerticalLayout = props => {
                     </Fab>
                 </ScrollToTop>
             )} */}
-        </>
-    )
+    </>
+  )
 }
 
 export default VerticalLayout
