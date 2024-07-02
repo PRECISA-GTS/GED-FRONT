@@ -37,9 +37,10 @@ const AppBarContent = props => {
     // ** Hooks
     const router = useRouter()
     const fullUrl = window.location.href; // Pega a URL completa
-    const apiUrl = "https://demo.gedagro.com.br/api/";
 
+    const apiUrl = "https://demo.gedagro.com.br";
     const isDemo = fullUrl.includes(apiUrl) ? true : false
+    console.log("🚀  fullUrl", fullUrl);
     console.log("🚀  isDemo", isDemo);
 
 
