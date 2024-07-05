@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+// import { useWatch } from 'react-hook-form'
 import { dateConfig } from 'src/configs/defaultConfigs'
 
 //* Custom inputs
@@ -17,10 +18,20 @@ const Fields = ({
     control,
     setNameSelected,
     setColumnSelected,
+    getValues,
     setOpenModalNew
 }) => {
     const [dateStatus, setDateStatus] = useState({})
     const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
+
+    // Use useWatch to monitor the registroEstabelecimentoID field
+    // const watchRegistroEstabelecimento = useWatch({
+    //     control,
+    //     name: 'registroEstabelecimentoID',
+    //     defaultValue: null
+    // })
+
+    console.log('🚀 ~ watchRegistroEstabelecimento:', watchRegistroEstabelecimento)
 
     const setDateFormat = (type, name, value, numDays) => {
         const newDate = new Date(value)
@@ -30,15 +41,6 @@ const Fields = ({
             ...prevState,
             [name]: status
         }))
-    }
-
-    const setRegistroEstabelecimento = () => {
-        fields &&
-            fields.map((field, index) => {
-                if (field?.nomeColuna == 'registroEstabelecimentoID') {
-                    setWatchRegistroEstabelecimento(field?.[field.tabela]?.id > 0 ? field?.[field.tabela].id : null)
-                }
-            })
     }
 
     const getMaskForField = fieldName => {
@@ -64,10 +66,6 @@ const Fields = ({
         return false
     }
 
-    useEffect(() => {
-        setRegistroEstabelecimento()
-    }, [])
-
     // Abre modal para criar novo item
     const createNew = async (coluna, name) => {
         setColumnSelected(coluna)
@@ -75,16 +73,26 @@ const Fields = ({
         setNameSelected(name)
     }
 
+    console.log('======> ', getValues())
+
+    // useEffect que verifique o valor do registroEstabelecimento, se > 1, watchRegistroEstabelecimento vira true
+    useEffect(() => {
+        console.log('trocou algoooooooooooo')
+    }, [watchRegistroEstabelecimento])
+
     return (
         fields &&
         fields.map((field, index) => {
             setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+
+            console.log('🚀 ~ field:', field)
 
             return (
                 <>
                     {/* Autocomplete (int) */}
                     {field && field.tipo === 'int' && field.tabela && (
                         <Select
+                            key={`select-${index}`}
                             xs={12}
                             md={4}
                             title={field.nomeCampo}
@@ -110,6 +118,7 @@ const Fields = ({
                     {/* Date */}
                     {field && field.tipo == 'date' && (
                         <DateField
+                            key={`datefield-${index}`}
                             xs={12}
                             md={4}
                             title='Data da avaliação'
@@ -128,28 +137,25 @@ const Fields = ({
                     )}
 
                     {/* Textfield */}
-                    {field &&
-                        field.tipo == 'string' &&
-                        (field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1) && (
-                            <Input
-                                xs={12}
-                                md={4}
-                                title={field.nomeCampo}
-                                name={`fields[${index}].${field.nomeColuna}`}
-                                register={register}
-                                control={control}
-                                value={getMaskForField ?? field?.[nomeColuna]}
-                                errors={errors?.fields?.[index]?.nomeColuna}
-                                type={field.nomeColuna}
-                                getAddressByCep={getAddressByCep}
-                                mask={getMaskForField(field.nomeColuna)}
-                                disabled={
-                                    disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj'
-                                        ? true
-                                        : false
-                                }
-                            />
-                        )}
+                    {field && (field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1) && (
+                        <Input
+                            key={`input-${index}`}
+                            xs={12}
+                            md={4}
+                            title={field.nomeCampo}
+                            name={`fields[${index}].${field.nomeColuna}`}
+                            register={register}
+                            control={control}
+                            value={getMaskForField ?? field?.[nomeColuna]}
+                            errors={errors?.fields?.[index]?.nomeColuna}
+                            type={field.nomeColuna}
+                            getAddressByCep={getAddressByCep}
+                            mask={getMaskForField(field.nomeColuna)}
+                            disabled={
+                                disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
+                            }
+                        />
+                    )}
                 </>
             )
         })

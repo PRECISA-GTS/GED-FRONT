@@ -14,6 +14,7 @@ import { toast } from 'react-hot-toast'
 import { backRoute } from 'src/configs/defaultConfigs'
 import { NotificationContext } from './NotificationContext'
 import { RouteContext } from 'src/context/RouteContext'
+import { useGlobal } from 'src/hooks/useGlobal'
 
 // ** Defaults
 const defaultProvider = {
@@ -54,6 +55,7 @@ const AuthProvider = ({ children }) => {
     version: null,
   })
   const [paramsReport, setParamsReport] = useState({})
+  const { setData, data: dataGlobal } = useGlobal()
 
   const router = useRouter();
   const staticUrl = backRoute(router.pathname) // Url sem ID
@@ -64,6 +66,13 @@ const AuthProvider = ({ children }) => {
   };
 
   const idGET = router.query.id
+
+  // Adiciona os dados no hook do zustand
+  useEffect(() => {
+    if (user) {
+      setData({ ...dataGlobal, user: user });
+    }
+  }, [user]);
 
   const verifyGetRedirect = () => {
     if (idGET && idGET > 0) {

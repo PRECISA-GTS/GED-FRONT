@@ -7,7 +7,18 @@ import { api } from 'src/configs/api'
 import useDateFormat from 'src/hooks/useDateFormat'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
 
-const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, setValue, control, getAddressByCep }) => {
+const HeaderFields = ({
+    modeloID,
+    values,
+    fields,
+    disabled,
+    register,
+    errors,
+    setValue,
+    control,
+    getValues,
+    getAddressByCep
+}) => {
     console.log('🚀 ~ values:', values)
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
     const { setDateFormat, dateStatus } = useDateFormat()
@@ -158,6 +169,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 errors={errors}
                 setValue={setValue}
                 control={control}
+                getValues={getValues}
                 fields={fields}
                 values={fields}
                 getAddressByCep={getAddressByCep}

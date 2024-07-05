@@ -13,9 +13,12 @@ import { api } from 'src/configs/api'
 import Router from 'next/router'
 import CardList from 'src/components/Defaults/Cards/CardList'
 import ListHeader from 'src/components/Defaults/ListHeader'
+import DialogDefault from 'src/components/Defaults/Dialogs/DialogDefault'
+import LinkForms from '../LinkForms'
 
 const SelectModel = ({ values }) => {
     const { user, loggedUnity } = useContext(AuthContext)
+    const [openConfig, setOpenConfig] = useState(false)
     const { setId } = useContext(RouteContext)
     const [models, setModels] = useState([])
     const [model, setModel] = useState(null)
@@ -30,7 +33,14 @@ const SelectModel = ({ values }) => {
 
     return (
         <>
-            <ListHeader btnBack btnNew type='new' partialRoute={false} />
+            <ListHeader
+                btnConfig
+                btnBack
+                btnNew
+                type='new'
+                partialRoute={false}
+                handleOpenConfig={() => setOpenConfig(true)}
+            />
             <Grid container spacing={4}>
                 {values &&
                     values.map((value, index) => (
@@ -46,6 +56,26 @@ const SelectModel = ({ values }) => {
                         />
                     ))}
             </Grid>
+
+            {openConfig && (
+                <DialogDefault
+                    open={openConfig}
+                    onClose={() => setOpenConfig(false)}
+                    size='sm'
+                    fullWidth
+                    title='Vincular Formulários'
+                    DialogActionsChildren={
+                        <div className='flex items-center gap-2'>
+                            <Button onClick={() => setOpenConfig(false)}>Fechar</Button>
+                            <Button variant='contained' color='primary' onClick={() => setOpenConfig(false)}>
+                                Salvar
+                            </Button>
+                        </div>
+                    }
+                >
+                    <LinkForms onClose={() => setOpenConfig(false)} />
+                </DialogDefault>
+            )}
         </>
     )
 }

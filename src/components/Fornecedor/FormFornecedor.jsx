@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 //* Default Form Components
 import Fields from 'src/components/Defaults/Formularios/Fields'
@@ -11,7 +11,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 //* Custom components
 import Input from 'src/components/Form/Input'
 import AnexoModeView from 'src/components/Anexos/ModeView'
-import { Alert, Box, Button, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
+import { Alert, Box, Button, ButtonBase, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
@@ -31,7 +31,6 @@ import HeaderFields from './Header'
 import FooterFields from './Footer'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
-import DadosFornecedor from 'src/components/Reports/Formularios/Fornecedor/DadosFornecedor'
 import { useFormContext } from 'src/context/FormContext'
 import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
@@ -244,13 +243,13 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const objRelatorio = {
         id: id,
         name: 'Imprimir',
-        nameComponent: 'DadosFornecedor',
+        nameComponent: 'indexFormulario',
         type: 'report',
         unidadeID: loggedUnity.unidadeID,
         papelID: user.papelID,
         usuarioID: user.usuarioID,
         status: info.status,
-        route: 'fornecedor/dadosFornecedor',
+        route: 'fornecedor/formulario',
         icon: 'fluent:print-24-regular'
     }
     const objFormConfig = {
@@ -533,7 +532,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const conclusionForm = async values => {
-        sendPdfToServer(id, blobSaveReport, 'fornecedor')
+        if (loggedUnity.papelID === 1) {
+            console.log('so passa se for fabricaahahahah')
+            sendPdfToServer(id, blobSaveReport, 'fornecedor')
+        }
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
     }
@@ -587,9 +589,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const onSubmit = async (values, param = false) => {
-        console.log('🚀 ~ onSubmit values', values)
         startLoading()
         if (param.conclusion === true) {
+            console.log('concluiu', values)
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
         }
@@ -850,23 +852,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         checkErrors()
     }, [])
 
-    //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
-    useEffect(() => {
-        setReportParameters({
-            id: id,
-            nameComponent: 'DadosFornecedor',
-            route: 'fornecedor/dadosFornecedor',
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID,
-            canEdit,
-            usuarioID: user.usuarioID
-        })
-    }, [])
-    console.log('🚀 ~ info.status:', info.status)
-    console.log('user', user.papelID)
-    console.log('canEdit.status', canEdit.status)
-    console.log('peding', hasFormPending)
-
     return (
         <>
             {/* <Loading show={isLoading} /> */}
@@ -888,7 +873,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     actions
                     handleSubmit={() => handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
-                    componentSaveReport={<DadosFornecedor />}
+                    // componentSaveReport={<DadosFornecedor />}
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Fornecedor'
@@ -897,6 +882,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     type={type}
                     status={status}
                 />
+                {/* <Button oncl>Botãoooo</Button> */}
                 {/* Div superior com tags e status */}
                 <div className='flex gap-2 mb-2'>
                     {status && (
@@ -969,6 +955,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                     errors={errors}
                                     setValue={setValue}
                                     control={control}
+                                    getValues={getValues}
                                     getAddressByCep={getAddressByCep}
                                 />
                             )}

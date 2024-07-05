@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Fade from '@mui/material/Fade'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { useContext } from 'react'
-import LayoutReport from 'src/components/Reports/Layout'
+// import LayoutReport from 'src/components/Reports/Layout'
 
 export default function MenuReports({ actionsData, open, anchorEl, handleClick, handleClose }) {
     return (
@@ -26,7 +26,7 @@ export default function MenuReports({ actionsData, open, anchorEl, handleClick, 
                 >
                     <span>{item.identification}</span>
                     <span style={{ padding: '0 5px' }}>-</span>
-                    <LayoutReport title={item.name} content={item.component} />
+                    {/* <LayoutReport title={item.name} content={item.component} /> */}
                 </MenuItem>
             ))}
         </Menu>

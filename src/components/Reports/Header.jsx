@@ -1,7 +1,6 @@
 import { Text, View, Image } from '@react-pdf/renderer'
 import React, { useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
-import Router from 'next/router'
 
 const styles = {
     header: {
@@ -35,20 +34,15 @@ const styles = {
     }
 }
 
-const Header = ({ params }) => {
-    // console.log('🚀 ~ params header:', params)
-    const route = Router.pathname.split('/')[2]
+const Header = ({data: params}) => {
     const [data, setData] = useState([])
-
-    const reportJSON = localStorage.getItem('report')
-    const report = JSON.parse(reportJSON)
 
     const fetchData = async () => {
         try {
-            const response = await api.post('relatorio/header', report)
+            const response = await api.post('relatorio/header', params)
             setData(response.data)
         } catch (error) {
-            console.error('Erro ao buscar os dados do cabeçalho:', error)
+            console.error('Erro ao buscar os dados do cabeçalho:', params)
         }
     }
 

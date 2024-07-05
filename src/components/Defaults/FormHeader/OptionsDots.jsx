@@ -2,18 +2,17 @@ import { Button, Menu, MenuItem } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import DialogActs from '../Dialogs/DialogActs'
 import { useState } from 'react'
-import { useContext } from 'react'
-import { AuthContext } from 'src/context/AuthContext'
-import { useFormContext } from 'src/context/FormContext'
+import { useGlobal } from 'src/hooks/useGlobal'
 
 const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
-    const { setReportParameters } = useFormContext()
-
+    const { setData, data: dataGlobal } = useGlobal()
+    
     // Ao clicar em um item e ele for do tipo report
     const handleClickReport = item => {
-        setReportParameters(item)
+        setData({ ...dataGlobal, report: {id: item.id, status: item.status} });
+
     }
 
     return (
@@ -75,7 +74,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                             )}
 
                             {item.type == 'report' ? (
-                                <a href={`/relatorio`} target='_blank'>
+                                <a href={`/relatorio/${item.route}`} target='_blank'>
                                     {item.name}
                                 </a>
                             ) : (
@@ -101,17 +100,18 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
             {item && (
                 <DialogActs
                     title={item.name}
-                    description={item.description}
                     handleConclusion={item.action}
                     size={item.size}
                     setOpenModal={setOpenModal}
                     openModal={openModal}
+                    fullHeight
                 >
                     {item.component}
                 </DialogActs>
             )}
         </div>
     )
+                
 }
 
 export default OptionsDots

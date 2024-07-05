@@ -1,10 +1,12 @@
 import { Text, View } from '@react-pdf/renderer'
 import React from 'react'
-import { styles } from '../../../Layout/styles'
-import getData from 'src/components/Reports/Layout/getData'
+import { styles } from '../../../../components/Reports/styles'
+import getDataContentReport from 'src/components/Reports/getDataContentReport'
+import { useAuth } from 'src/hooks/useAuth'
 
-const index = () => {
-    const data = getData()
+
+const Content = ({data: params}) => {
+    const data = getDataContentReport('fornecedor/formulario', params)
 
     return (
         data && (
@@ -103,4 +105,4 @@ const index = () => {
     )
 }
 
-export default index
+export default Content

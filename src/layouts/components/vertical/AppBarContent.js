@@ -20,16 +20,14 @@ import { useRouter } from 'next/router'
 import Autocomplete from 'src/layouts/components/vertical/Autocomplete'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
-import FormHeader from 'src/components/Defaults/FormHeader'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
-import { Button, Snackbar, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import DialogSelectUnit from 'src/components/Defaults/Dialogs/DialogSelectUnit'
 
 const AppBarContent = props => {
     // ** Props
     const { hidden, settings, saveSettings, toggleNavVisibility } = props
     const { title } = useContext(ParametersContext)
-    const { id, setId } = useContext(RouteContext)
     const { notifications } = useContext(NotificationContext)
 
     const { user, setLoggedUnity, loggedUnity, unitsUser, getRoutes, getMenu } = useContext(AuthContext)
@@ -40,9 +38,6 @@ const AppBarContent = props => {
 
     const apiUrl = "https://demo.gedagro.com.br";
     const isDemo = fullUrl.includes(apiUrl) ? true : false
-    console.log("🚀  fullUrl", fullUrl);
-    console.log("🚀  isDemo", isDemo);
-
 
     // Controla troca de unidade
     const [openModal, setOpenModal] = useState(false);

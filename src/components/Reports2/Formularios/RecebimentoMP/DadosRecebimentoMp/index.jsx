@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/renderer'
 import React from 'react'
-import { styles } from '../../../Layout/styles'
+import { styles } from '../../../../Reports/styles'
 import getData from 'src/components/Reports/Layout/getData'
 
 const index = () => {

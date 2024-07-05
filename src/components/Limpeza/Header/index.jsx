@@ -60,7 +60,7 @@ const HeaderFields = ({
         const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
         if (profissional && profissional.id > 0) setValue('fieldsHeader.profissional', profissional)
     }
-    
+
     useEffect(() => {
         getProfissionais()
     }, [])
@@ -154,16 +154,17 @@ const HeaderFields = ({
                                     control={control}
                                     errors={errors?.fieldsHeader?.['profissional']}
                                 />
-                                {/* Fiels dinâmicos */}
+                                {/* Fields dinâmicos */}
                                 <Fields
                                     register={register}
                                     errors={errors}
+                                    getValues={getValues}
                                     setValue={setValue}
                                     control={control}
                                     fields={fields}
                                     values={fields}
                                     disabled={disabled}
-                                />                                
+                                />
                             </Grid>
                         </CardContent>
                     </Card>
@@ -173,7 +174,7 @@ const HeaderFields = ({
                 <Grid item xs={12} md={3}>
                     <HeaderInfo value={null} />
                 </Grid>
-            </Grid>            
+            </Grid>
         </>
     )
 }

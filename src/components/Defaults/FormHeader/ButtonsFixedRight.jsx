@@ -3,12 +3,13 @@ import Icon from 'src/@core/components/icon'
 import Router from 'next/router'
 import Link from 'next/link'
 import useLoad from 'src/hooks/useLoad'
-import Header from 'src/components/Reports/Layout/Header'
-import Footer from 'src/components/Reports/Layout/Footer'
+// import Header from 'src/components/Reports/Layout/Header'
+// import Footer from 'src/components/Reports/Layout/Footer'
 import { useContext } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
-import { BlobProvider, Document, Page } from '@react-pdf/renderer'
+import { BlobProvider, Document, Page, Text } from '@react-pdf/renderer'
+import {DocumentContent, indexFormulario as Formulario} from 'src/pages/relatorio/fornecedor/formulario/index'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -23,15 +24,12 @@ const ButtonsFixedRight = ({
     disabledSubmit,
     handleSubmit,
     handleSend,
-    componentSaveReport,
+    // componentSaveReport,
     iconConclusion,
     titleConclusion
 }) => {
     const router = Router
     const { isLoading } = useLoad()
-    const url = manualUrl ?? currentUrl
-    const { user } = useContext(AuthContext)
-    const { id } = useContext(RouteContext)
 
     const DocumentPdf = () => {
         return (
@@ -42,9 +40,10 @@ const ButtonsFixedRight = ({
                         paddingHorizontal: 25
                     }}
                 >
-                    <Header />
+                    <Text>TEsteeee</Text>
+                    {/* <Header />
                     {componentSaveReport}
-                    <Footer />
+                    <Footer /> */}
                 </Page>
             </Document>
         )
@@ -70,10 +69,15 @@ const ButtonsFixedRight = ({
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
             {btnSend && (
-                <BlobProvider document={<DocumentPdf />}>
+                <BlobProvider 
+                document={<DocumentPdf />}
+                >
                     {({ blob, url, loading, error }) => (
                         <Button
-                            onClick={() => handleSend(blob)}
+                            onClick={() => {
+                                handleSend(blob)
+                                console.log('blob', blob)
+                            }}
                             type='button'
                             variant='contained'
                             size='medium'
@@ -87,7 +91,6 @@ const ButtonsFixedRight = ({
                     )}
                 </BlobProvider>
             )}
-            {/* Salvar */}
             {btnSave && (
                 <Button
                     onClick={handleSubmit}
@@ -102,7 +105,7 @@ const ButtonsFixedRight = ({
                     <span className='hidden sm:block'>Salvar</span>
                 </Button>
             )}
-            {/* (routes.find(route => route.rota === url && route.editar) ||
+           {/* {(routes.find(route => route.rota === url && route.editar) ||
                     (currentUrl === '/cadastros/profissional' && user.profissionalID == id)) && (
                     <Button
                         onClick={handleSubmit}

@@ -219,7 +219,7 @@ const HeaderFields = ({
                                     control={control}
                                     errors={errors?.fieldsHeader?.['profissional']}
                                 />
-                                {/* Fiels dinâmicos */}
+                                {/* Fields dinâmicos */}
                                 <Fields
                                     register={register}
                                     errors={errors}
@@ -231,6 +231,7 @@ const HeaderFields = ({
                                     disabled={disabled}
                                     nameSelected={nameSelected}
                                     setNameSelected={setNameSelected}
+                                    getValues={getValues}
                                     columnSelected={columnSelected}
                                     setColumnSelected={setColumnSelected}
                                     openModalNew={openModalNew}

@@ -4,8 +4,8 @@ import Icon from 'src/@core/components/icon'
 import { PDFDownloadLink, Document, Page } from '@react-pdf/renderer'
 
 // reports defaults
-import Footer from './Footer'
-import Header from './Header'
+import Footer from '../../Reports/Footer'
+import Header from '../../Reports/Header'
 import ReportComponents from './reportComponents'
 import DialogSignatureReport from 'src/components/Defaults/Dialogs/DialogSignatureReport'
 import { useEffect } from 'react'
