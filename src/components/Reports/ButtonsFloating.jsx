@@ -4,9 +4,9 @@ import Icon from 'src/@core/components/icon'
 import { PDFDownloadLink, Document, Page } from '@react-pdf/renderer'
 
 // reports defaults
-import Footer from '../../Reports/Footer'
-import Header from '../../Reports/Header'
-import ReportComponents from './reportComponents'
+import Footer from './Footer'
+import Header from './Header'
+import ReportComponents from '../Reports2/Layout/reportComponents'
 import DialogSignatureReport from 'src/components/Defaults/Dialogs/DialogSignatureReport'
 import { useEffect } from 'react'
 
@@ -22,9 +22,9 @@ const MyDoc = ({ nameComponent }) => {
                     paddingHorizontal: 25
                 }}
             >
-                <Header />
+                {/* <Header /> */}
                 {ReportComponent && <ReportComponent />}
-                <Footer />
+                {/* <Footer /> */}
             </Page>
         </Document>
     )

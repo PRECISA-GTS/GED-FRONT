@@ -20,6 +20,8 @@ import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewForne
 import { useFornecedor } from 'src/context/FornecedorContext'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
+import InitialSteps from './InitialSteps'
+import VerifyFormType from './verifyFormType'
 
 const Fornecedor = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -47,6 +49,8 @@ const Fornecedor = () => {
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
+            console.log('🚀 ~ getList ~ response', response.data)
+
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
@@ -106,7 +110,7 @@ const Fornecedor = () => {
     }
 
     useEffect(() => {
-        const filter = router.query.filter === 1 ? true : false
+        const filter = router.query.filter === '1' ? true : false
         getList()
         startFilter(<Filters />, filter)
     }, [id, router.query])
@@ -226,7 +230,7 @@ const Fornecedor = () => {
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <FormFornecedor id={id} makeFornecedor={makeFornecedor} />
+                <VerifyFormType id={id} makeFornecedor={makeFornecedor} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table
@@ -257,7 +261,9 @@ const Fornecedor = () => {
                 setOpenModal={setOpenModalConclusion}
                 openModal={openModalConclusion}
             >
-                <FormFornecedorConclusion values={responseConclusion} />
+                <div>
+                    <FormFornecedorConclusion values={responseConclusion} />
+                </div>
             </DialogActs>
         </>
     )

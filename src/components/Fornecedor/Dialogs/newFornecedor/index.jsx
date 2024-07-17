@@ -8,7 +8,7 @@ import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
 
-const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues }) => {
+const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues, watch }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
@@ -36,8 +36,8 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
             const response = await api.post('/formularios/fornecedor/mapaSipeAgro', {
                 cnpj: cnpj
             })
+            console.log('🚀  response sipeagro', response)
 
-            console.log('🚀 ~ sipeagro response.data:', response.data)
             setSipeAgro(response.data)
         } catch (e) {
             console.error(e)
@@ -152,6 +152,7 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
                                 reset={reset}
                                 setValue={setValue}
                                 getValues={getValues}
+                                watch={watch}
                                 register={register}
                                 handleCnpj={handleCnpj}
                                 validCnpj={validationCnpj}

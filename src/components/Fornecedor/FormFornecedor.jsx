@@ -34,6 +34,7 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
 import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
+import InitialSteps from 'src/pages/formularios/fornecedor/InitialSteps'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -71,13 +72,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         message: 'Você não tem permissões',
         messageType: 'info'
     })
-    console.log('🚀 ~ canEdit:', canEdit)
 
     //! Se perder Id, copia do localstorage
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
-    console.log('🚀 ~ staticUrl:', staticUrl)
 
     const {
         reset,
@@ -249,7 +248,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         papelID: user.papelID,
         usuarioID: user.usuarioID,
         status: info.status,
-        route: 'fornecedor/formulario',
+        route: 'formularios/fornecedor',
         icon: 'fluent:print-24-regular'
     }
     const objFormConfig = {
@@ -297,8 +296,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             console.log(error)
         }
     }
-
-    console.log('canmEDIT', canEdit)
 
     const getData = () => {
         startLoading()
@@ -927,6 +924,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             </CardContent>
                         </Card>
                     )}
+
+                    <InitialSteps />
 
                     {/* Card Header */}
                     <Card>

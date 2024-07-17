@@ -94,12 +94,36 @@ const MapaSipeAgro = ({ sipeAgro }) => {
         )
     }
 
+    const regioesSipoa = [
+        'Região Norte',
+        'Região Nordeste',
+        'Região Centro-Oeste',
+        'Região Sudeste',
+        'Região Sul',
+        'Goiás',
+        'Minas Gerais',
+        'Bahia',
+        'Paraná',
+        'Rio Grande do Sul',
+        'São Paulo'
+    ]
+
     return (
         <Card sx={{ mt: 4 }}>
             <CardContent>
                 <div className='flex flex-col gap-4'>
-                    <Typography variant='body2'>
-                        <strong>Dados MAPA - Última atualização ({sipeAgro?.dataImportacao})</strong>
+                    <Typography variant='body2' className='flex justify-between'>
+                        <strong>Dados MAPA - Última atualização ({sipeAgro?.dataImportacao ?? '----'})</strong>
+                        <span>
+                            Fonte dos dados:{' '}
+                            <a
+                                className='text-blue-500 hover:underline'
+                                target='_blank'
+                                href='https://www.gov.br/agricultura/pt-br/assuntos/insumos-agropecuarios/insumos-pecuarios/alimentacao-animal/registro-cadastro'
+                            >
+                                link
+                            </a>
+                        </span>
                     </Typography>
                     <Typography variant='caption'>
                         <strong>Razão Social:</strong> {sipeAgro?.razaoSocial?.toUpperCase()}
@@ -108,7 +132,7 @@ const MapaSipeAgro = ({ sipeAgro }) => {
                         <strong>Registro SIPEAGRO:</strong> {sipeAgro?.registroSipeAgro}
                     </Typography>
                     <Typography variant='caption'>
-                        <strong>SIPOA:</strong> {sipeAgro?.sipoa}
+                        <strong>SIPOA:</strong> {regioesSipoa[sipeAgro?.sipoa - 1]}
                     </Typography>
                     <Typography variant='caption'>
                         <strong>Situação:</strong> {sipeAgro?.situacao}

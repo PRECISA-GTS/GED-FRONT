@@ -20,6 +20,7 @@ import EcommerceSalesOverview from 'src/views/dashboards/ecommerce/EcommerceSale
 import AnalyticsOverview from 'src/views/dashboards/analytics/AnalyticsOverview'
 import GraphLimpeza from 'src/components/Graphics/home/factory/GraphLimpeza'
 import LastForms from './LastForms'
+import CardMyData from './CardMyData'
 
 const Supplier = () => {
     const { loggedUnity } = useContext(AuthContext)
@@ -45,6 +46,9 @@ const Supplier = () => {
     return (
         <ApexChartWrapper>
             <Grid container spacing={6} className='match-height'>
+                <Grid item xs={12} md={3}>
+                    <CardMyData />
+                </Grid>
                 {/* Blocos com os principais formularios, ordenado por status */}
                 {lastForms &&
                     lastForms.map((row, index) => {

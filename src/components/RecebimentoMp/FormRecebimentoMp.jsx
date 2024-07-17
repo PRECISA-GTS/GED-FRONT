@@ -31,7 +31,7 @@ import RecebimentoMpFooterFields from './Footer'
 import RecebimentoMpProdutos from './Produtos'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
-import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
+// import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
 import RecebimentoMpNaoConformidade from './NaoConformidade'
 import FormTransportador from '../Cadastros/Transportador/FormTransportador'
@@ -126,16 +126,16 @@ const FormRecebimentoMp = ({ id }) => {
         router.push(`/configuracoes/formularios/recebimento-mp/`)
     }
 
-    // Nomes e rotas dos relatórios passados para o componente FormHeader/MenuReports
     const objRelatorio = {
-        id: id,
         name: 'Formulário do Recebimento de MP',
+        icon: 'fluent:print-24-regular',
         nameComponent: 'DadosRecebimentoMp',
         type: 'report',
-        unidadeID: loggedUnity.unidadeID,
-        papelID: user.papelID,
-        route: 'recebimentoMp/dadosRecebimentoMp',
-        icon: 'fluent:print-24-regular'
+        params: {
+            recebimentoMPID: id,
+            unidadeID: loggedUnity.unidadeID,
+            papelID: user.papelID
+        }
     }
     const objFormConfig = {
         id: 5,
@@ -702,7 +702,7 @@ const FormRecebimentoMp = ({ id }) => {
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Recebimento de MP'
-                    componentSaveReport={<DadosRecebimentoMp />}
+                    // componentSaveReport={<DadosRecebimentoMp />}
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}

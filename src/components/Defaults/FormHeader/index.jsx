@@ -198,27 +198,27 @@ const FormHeader = ({
 
                     {/* Botões flutuantes */}
                     {/* <ButtonsFloating
-                    isVisible={isVisible}
-                    dataButtons={dataButtons}
-                    btnSave={btnSave}
-                    btnPrint={btnPrint}
-                    matches={matches}
-                    routes={routes}
-                    currentUrl={currentUrl}
-                /> */}
+                        isVisible={isVisible}
+                        dataButtons={dataButtons}
+                        btnSave={btnSave}
+                        btnPrint={btnPrint}
+                        matches={matches}
+                        routes={routes}
+                        currentUrl={currentUrl}
+                    /> */}
                     {/* <Box sx={{ mt: 4 }}>
-                    {status && !matches && (
-                        <Box display='flex' alignItems='center' justifyContent='flex-start'>
-                            <CustomChip
-                                size='small'
-                                skin='light'
-                                color={status.color}
-                                label={status.title}
-                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                            />
-                        </Box>
-                    )}
-                </Box> */}
+                        {status && !matches && (
+                            <Box display='flex' alignItems='center' justifyContent='flex-start'>
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    color={status.color}
+                                    label={status.title}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
+                            </Box>
+                        )}
+                    </Box> */}
                 </div>
             </div>
         </>

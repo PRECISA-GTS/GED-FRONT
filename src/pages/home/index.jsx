@@ -20,8 +20,6 @@ const Home = () => {
         })
     }, [])
 
-
-
     return user.papelID === 1 ? (
         <Grid container spacing={6}>
             <Grid item xs={12}>

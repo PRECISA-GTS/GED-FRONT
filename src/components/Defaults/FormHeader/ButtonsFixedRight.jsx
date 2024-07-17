@@ -9,7 +9,11 @@ import { useContext } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { BlobProvider, Document, Page, Text } from '@react-pdf/renderer'
-import {DocumentContent, indexFormulario as Formulario} from 'src/pages/relatorio/fornecedor/formulario/index'
+import { DocumentContent, indexFormulario as Formulario } from 'src/pages/relatorioOLD/fornecedor/formulario/index'
+import { useGlobal } from 'src/hooks/useGlobal'
+import Header from 'src/components/Reports/Header'
+import Content from 'src/pages/relatorioOLD/fornecedor/formulario/Content'
+import Footer from 'src/components/Reports/Footer'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -31,6 +35,20 @@ const ButtonsFixedRight = ({
     const router = Router
     const { isLoading } = useLoad()
 
+    const { data } = useGlobal()
+
+    const dataHeader = {
+        unidadeID: data?.user?.unidadeID,
+        papelID: data?.user?.papelID
+    }
+
+    const dataContent = {
+        unidadeID: data?.user?.unidadeID,
+        papelID: data?.user?.papelID,
+        id: data?.report?.id
+    }
+    console.log('🚀 ~ dataContent:', dataContent)
+
     const DocumentPdf = () => {
         return (
             <Document>
@@ -40,10 +58,9 @@ const ButtonsFixedRight = ({
                         paddingHorizontal: 25
                     }}
                 >
-                    <Text>TEsteeee</Text>
-                    {/* <Header />
-                    {componentSaveReport}
-                    <Footer /> */}
+                    <Header data={dataHeader} />
+                    <Content data={dataContent} />
+                    <Footer />
                 </Page>
             </Document>
         )
@@ -69,9 +86,7 @@ const ButtonsFixedRight = ({
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
             {btnSend && (
-                <BlobProvider 
-                document={<DocumentPdf />}
-                >
+                <BlobProvider document={<DocumentPdf />}>
                     {({ blob, url, loading, error }) => (
                         <Button
                             onClick={() => {
@@ -105,7 +120,7 @@ const ButtonsFixedRight = ({
                     <span className='hidden sm:block'>Salvar</span>
                 </Button>
             )}
-           {/* {(routes.find(route => route.rota === url && route.editar) ||
+            {/* {(routes.find(route => route.rota === url && route.editar) ||
                     (currentUrl === '/cadastros/profissional' && user.profissionalID == id)) && (
                     <Button
                         onClick={handleSubmit}

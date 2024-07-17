@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { api } from 'src/configs/api'
-import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import Table from 'src/components/Defaults/Table'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
@@ -14,8 +13,9 @@ import { configColumns } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
+import FormClassificacaoProduto from 'src/components/Cadastros/ClassificacaoProduto/FormClassificacaoProduto'
 
-const Produto = () => {
+const ClassificacaoProduto = () => {
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
@@ -28,7 +28,7 @@ const Produto = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
-                title: 'Produto',
+                title: 'Classificação de Produtos',
                 subtitle: {
                     id: id,
                     count: response.data.length,
@@ -52,17 +52,7 @@ const Produto = () => {
         {
             headerName: 'Nome',
             field: 'nome',
-            size: 0.4
-        },
-        {
-            headerName: 'Classificação',
-            field: 'classificacao',
-            size: 0.4
-        },
-        {
-            headerName: 'Unidade de medida',
-            field: 'unidadeMedida',
-            size: 0.2
+            size: 0.6
         },
         {
             headerName: 'Status',
@@ -83,7 +73,7 @@ const Produto = () => {
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <FormProduto id={id} />
+                <FormClassificacaoProduto id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table result={filteredData} columns={columns} />
@@ -92,4 +82,4 @@ const Produto = () => {
     )
 }
 
-export default Produto
+export default ClassificacaoProduto

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { convertStringToDate } from 'src/configs/defaultConfigs'
@@ -44,8 +45,9 @@ const FilterProvider = ({ children }) => {
     const [names, setNames] = useState(initialValues.names)
     const [key, setKey] = useState(initialValues.key)
     const form = useForm()
+    const pathName = useRouter().pathname
 
-    const startFilter = (component, keepFilter) => {
+    const startFilter = async (component, keepFilter) => {
         setComponentFilters(component)
         setNames([])
         setFilteredData(data)

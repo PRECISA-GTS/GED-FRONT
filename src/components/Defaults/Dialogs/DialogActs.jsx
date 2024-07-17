@@ -26,6 +26,7 @@ const DialogActs = ({
         reset,
         getValues,
         setValue,
+        watch,
         formState: { errors }
     } = useForm()
 
@@ -48,8 +49,8 @@ const DialogActs = ({
                 maxWidth={size ? size : null}
             >
                 <form
-                    className={`grid grid-rows-[60px_auto_60px] ${
-                        fullHeight ? 'min-h-[calc(100vh-120px)]' : 'max-h-[calc(100vh-120px)]'
+                    className={`grid grid-rows-[60px_auto_auto] ${
+                        fullHeight ? 'min-h-[calc(100vh-120px)]' : 'max-h-[calc(100vh-620px)]'
                     }`}
                 >
                     <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
@@ -71,6 +72,7 @@ const DialogActs = ({
                                 register: register,
                                 setValue: setValue,
                                 errors: errors,
+                                watch: watch,
                                 reset: reset,
                                 onSubmit: onSubmit
                             })}

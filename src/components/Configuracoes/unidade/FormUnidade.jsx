@@ -35,6 +35,7 @@ import { validationCNPJ } from 'src/configs/validations'
 import HelpText from 'src/components/Defaults/HelpText'
 import NewPassword from './NewPassword'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
+import CustomSelect from 'src/components/Form/CustomSelect'
 
 const FormUnidade = ({ id }) => {
     const { user, setUser, loggedUnity, setLoggedUnity } = useContext(AuthContext)
@@ -56,6 +57,7 @@ const FormUnidade = ({ id }) => {
     const fileInputRef = useRef(null)
     const { settings } = useContext(SettingsContext)
     const mode = settings.mode
+    const [categories, setCategories] = useState([])
 
     const {
         trigger,
@@ -89,7 +91,7 @@ const FormUnidade = ({ id }) => {
         }
     }
 
-    console.log('erross', errors)
+    console.log('get valuesssss', getValues('fields.fornecedorCategoriaID'))
 
     // Função que atualiza os dados ou cria novo dependendo do tipo da rota
     const onSubmit = async datas => {
@@ -102,6 +104,7 @@ const FormUnidade = ({ id }) => {
             })
             return
         }
+        console.log('🚀  datas fildsssss', datas.fields)
 
         const data = {
             ...datas,
@@ -109,13 +112,22 @@ const FormUnidade = ({ id }) => {
             unidadeID: loggedUnity.unidadeID,
             fields: {
                 ...datas.fields,
-                dataCadastro: new Date().toISOString().substring(0, 10)
+                fornecedorCategoriaID: datas.fields.categoria.id,
+                fornecedorCategoriaRiscoID: datas.fields.risco.id,
+                dataCadastro: new Date().toISOString().substring(0, 10),
+                dataAtualizacao: new Date().toISOString().substring(0, 10)
             }
         }
 
         delete data.cabecalhoRelatorioTitle
         delete data.cabecalhoRelatorio
+        delete data.fields.riscoID
+        delete data.fields.categoriaID
+        delete data.fields.categoria
+        delete data.fields.risco
+        delete data.fields.categoriaNome
 
+        console.log('🚀  data', data.fields)
         try {
             if (type === 'new') {
                 await api.post(`${backRoute(staticUrl)}/new/insertData`, data).then(response => {
@@ -165,6 +177,20 @@ const FormUnidade = ({ id }) => {
         localStorage.removeItem('loggedUnity')
         localStorage.setItem('loggedUnity', JSON.stringify(loggedUnity))
     }
+    const getCategories = async () => {
+        const result = await api.post(`/configuracoes/formularios/fornecedor/getCategories`, {
+            unidadeID: 1,
+            allRisks: true
+        })
+        console.log('🚀 ~ result.data:', result.data)
+        setCategories(result.data)
+    }
+
+    useEffect(() => {
+        getCategories()
+    }, [])
+
+    console.log('🚀 ~ categoriessssssssssssssssssssss', data?.fields)
 
     //? Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     const getData = async () => {
@@ -172,7 +198,7 @@ const FormUnidade = ({ id }) => {
             try {
                 const response = await api.get(`${staticUrl}/${id}`)
                 reset(response.data)
-                console.log('🚀 ~ response:', response.data)
+                console.log('🚀  response', response)
                 setData(response.data)
                 setFileCurrent(response.data.fields.cabecalhoRelatorioTitle)
                 setPhotoProfile(response.data?.fields?.cabecalhoRelatorio)
@@ -191,6 +217,10 @@ const FormUnidade = ({ id }) => {
                 }
             })
         }
+
+        setTimeout(() => {
+            trigger()
+        }, 100)
     }
     useEffect(() => {
         getData()
@@ -261,6 +291,7 @@ const FormUnidade = ({ id }) => {
                             onclickDelete={() => setOpenModalDeleted(true)}
                             type={type}
                         />
+
                         <Card>
                             <DialogDelete
                                 title='Excluir Unidade'
@@ -384,6 +415,7 @@ const FormUnidade = ({ id }) => {
                                                 name='fields.cnpj'
                                                 mask='cnpj'
                                                 required
+                                                disabled={user.papelID !== 1}
                                                 register={register}
                                                 control={control}
                                                 errors={errors?.fields?.cnpj}
@@ -504,15 +536,57 @@ const FormUnidade = ({ id }) => {
                                                 control={control}
                                                 errors={errors?.fields?.uf}
                                             />
+                                            <Select
+                                                xs={12}
+                                                md={6}
+                                                title='Categoria'
+                                                name='fields.categoria'
+                                                value={getValues('fields.categoria')}
+                                                onChange={newValue => {
+                                                    setValue('fields.risco', null)
+                                                    setValue('fields.categoria', newValue)
+                                                    watch('fields.categoria')
+                                                }}
+                                                required
+                                                options={categories ?? []}
+                                                register={register}
+                                                setValue={setValue}
+                                                control={control}
+                                                errors={errors?.fields?.categoria}
+                                            />
+
+                                            <Select
+                                                xs={12}
+                                                md={6}
+                                                title='Risco'
+                                                name='fields.risco'
+                                                value={data?.fields?.risco}
+                                                required
+                                                options={
+                                                    getValues('fields.categoria')?.riscos ||
+                                                    categories.find(
+                                                        row =>
+                                                            (row.fornecedorCategoriaID =
+                                                                data?.fields?.fornecedorCategoriaID)
+                                                    )?.riscos ||
+                                                    []
+                                                }
+                                                register={register}
+                                                setValue={setValue}
+                                                control={control}
+                                                errors={errors?.fields?.risco}
+                                            />
                                             {/* Editar a senha | Trocar senha */}
                                             {type == 'edit' && user.papelID == 2 && (
-                                                <NewPassword
-                                                    register={register}
-                                                    errors={errors}
-                                                    showNewPassword={showNewPassword}
-                                                    setShowNewPassword={setShowNewPassword}
-                                                    watch={watch}
-                                                />
+                                                <>
+                                                    <NewPassword
+                                                        register={register}
+                                                        errors={errors}
+                                                        showNewPassword={showNewPassword}
+                                                        setShowNewPassword={setShowNewPassword}
+                                                        watch={watch}
+                                                    />
+                                                </>
                                             )}
                                         </Grid>
                                     </Grid>
@@ -592,8 +666,7 @@ const FormUnidade = ({ id }) => {
                     )}
                     {type === 'edit' && data && (
                         <Typography variant='caption' sx={{ display: 'flex', justifyContent: 'end', p: 4 }}>
-                            Data de cadastro:
-                            {formatDate(data.fields.dataCadastro, 'DD/MM/YYYY')}
+                            Data de cadastro: {formatDate(data.fields.dataCadastro, 'DD/MM/YYYY')}
                         </Typography>
                     )}
                 </>

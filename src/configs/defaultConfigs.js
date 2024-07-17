@@ -18,6 +18,7 @@ import { AuthContext } from 'src/context/AuthContext'
 import { api } from 'src/configs/api'
 import axios from 'axios'
 import { tr } from 'date-fns/locale'
+import { truncateString } from './functions'
 
 // Status Default
 const statusDefault = {
@@ -59,6 +60,19 @@ const configColumns = (currentLink, arrColumns) => {
                                         />
                                     )
 
+                                } else if (c.field == 'produtos') {
+                                    return (
+                                        <div>
+                                            <Tooltip
+                                                title={params?.row.produtos}
+                                                placement='bottom'
+                                                enterDelay={200}
+                                                arrow
+                                            >
+                                                <p>{truncateString(params?.row.produtos, 20)}</p>
+                                            </Tooltip>
+                                        </div>
+                                    )
                                 } else if (c.field == 'naoConformidade') {
                                     return (
                                         params?.row.naoConformidade === 1 &&
