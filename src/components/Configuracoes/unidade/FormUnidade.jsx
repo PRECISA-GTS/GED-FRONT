@@ -1,12 +1,10 @@
 import Router from 'next/router'
 import { useEffect, useState, useContext, useRef } from 'react'
 import { api } from 'src/configs/api'
-import { ParametersContext } from 'src/context/ParametersContext'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import { RouteContext } from 'src/context/RouteContext'
 import {
     Avatar,
-    Button,
     Card,
     CardContent,
     CardHeader,
@@ -14,15 +12,12 @@ import {
     Typography,
     Tooltip,
     IconButton,
-    FormControl,
-    Alert,
-    Box
+    FormControl
 } from '@mui/material'
 import Icon from 'src/@core/components/icon'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Loading from 'src/components/Loading'
 import toast from 'react-hot-toast'
-import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
 import FormHeader from '../../Defaults/FormHeader'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import { formatDate } from 'src/configs/conversions'
@@ -32,10 +27,8 @@ import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import CheckLabel from 'src/components/Form/CheckLabel'
 import { validationCNPJ } from 'src/configs/validations'
-import HelpText from 'src/components/Defaults/HelpText'
 import NewPassword from './NewPassword'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
-import CustomSelect from 'src/components/Form/CustomSelect'
 
 const FormUnidade = ({ id }) => {
     const { user, setUser, loggedUnity, setLoggedUnity } = useContext(AuthContext)
@@ -44,9 +37,7 @@ const FormUnidade = ({ id }) => {
 
     const [open, setOpen] = useState(false)
     const [data, setData] = useState()
-    const [fileSelect, setFileSelect] = useState()
     const [showNewPassword, setShowNewPassword] = useState(false)
-    const [saving, setSaving] = useState(false)
     const [fileCurrent, setFileCurrent] = useState()
     const [photoProfile, setPhotoProfile] = useState(null)
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
@@ -58,6 +49,7 @@ const FormUnidade = ({ id }) => {
     const { settings } = useContext(SettingsContext)
     const mode = settings.mode
     const [categories, setCategories] = useState([])
+    console.log('🚀  categories', categories)
 
     const {
         trigger,
@@ -126,8 +118,9 @@ const FormUnidade = ({ id }) => {
         delete data.fields.categoria
         delete data.fields.risco
         delete data.fields.categoriaNome
+        delete data.fields.riscoNome
 
-        console.log('🚀  data', data.fields)
+        console.log('🚀  dataaaaaaaaa', data.fields)
         try {
             if (type === 'new') {
                 await api.post(`${backRoute(staticUrl)}/new/insertData`, data).then(response => {
@@ -179,18 +172,15 @@ const FormUnidade = ({ id }) => {
     }
     const getCategories = async () => {
         const result = await api.post(`/configuracoes/formularios/fornecedor/getCategories`, {
-            unidadeID: 1,
+            unidadeID: loggedUnity.unidadeID,
             allRisks: true
         })
-        console.log('🚀 ~ result.data:', result.data)
         setCategories(result.data)
     }
 
     useEffect(() => {
         getCategories()
     }, [])
-
-    console.log('🚀 ~ categoriessssssssssssssssssssss', data?.fields)
 
     //? Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     const getData = async () => {
@@ -517,7 +507,7 @@ const FormUnidade = ({ id }) => {
                                             />
                                             <Input
                                                 xs={12}
-                                                md={8}
+                                                md={4}
                                                 title='Cidade'
                                                 name='fields.cidade'
                                                 required={false}
@@ -536,9 +526,49 @@ const FormUnidade = ({ id }) => {
                                                 control={control}
                                                 errors={errors?.fields?.uf}
                                             />
+                                            <Input
+                                                xs={12}
+                                                md={4}
+                                                title='Pais'
+                                                name='fields.pais'
+                                                required={false}
+                                                register={register}
+                                                control={control}
+                                                errors={errors?.fields?.pais}
+                                            />
+                                            <Input
+                                                xs={12}
+                                                md={4}
+                                                title='Principais Clientes'
+                                                name='fields.principaisClientes'
+                                                required={false}
+                                                register={register}
+                                                control={control}
+                                                errors={errors?.fields?.principaisClientes}
+                                            />
+                                            <Input
+                                                xs={12}
+                                                md={4}
+                                                title='Resgistro de Sipeagro'
+                                                name='fields.registroSipeagro'
+                                                required={false}
+                                                register={register}
+                                                control={control}
+                                                errors={errors?.fields?.registroSipeagro}
+                                            />
+                                            <Input
+                                                xs={12}
+                                                md={4}
+                                                title='IE'
+                                                name='fields.ie'
+                                                required={false}
+                                                register={register}
+                                                control={control}
+                                                errors={errors?.fields?.ie}
+                                            />
                                             <Select
                                                 xs={12}
-                                                md={6}
+                                                md={4}
                                                 title='Categoria'
                                                 name='fields.categoria'
                                                 value={getValues('fields.categoria')}
@@ -554,21 +584,17 @@ const FormUnidade = ({ id }) => {
                                                 control={control}
                                                 errors={errors?.fields?.categoria}
                                             />
-
                                             <Select
                                                 xs={12}
-                                                md={6}
+                                                md={4}
                                                 title='Risco'
                                                 name='fields.risco'
                                                 value={data?.fields?.risco}
                                                 required
                                                 options={
-                                                    getValues('fields.categoria')?.riscos ||
-                                                    categories.find(
-                                                        row =>
-                                                            (row.fornecedorCategoriaID =
-                                                                data?.fields?.fornecedorCategoriaID)
-                                                    )?.riscos ||
+                                                    (getValues('fields.categoria')?.riscos ||
+                                                        categories.filter(cat => cat.id == data?.fields?.categoriaID)[0]
+                                                            ?.riscos) ??
                                                     []
                                                 }
                                                 register={register}
@@ -576,6 +602,7 @@ const FormUnidade = ({ id }) => {
                                                 control={control}
                                                 errors={errors?.fields?.risco}
                                             />
+                                            <Grid item xs={12} md={4}></Grid>
                                             {/* Editar a senha | Trocar senha */}
                                             {type == 'edit' && user.papelID == 2 && (
                                                 <>

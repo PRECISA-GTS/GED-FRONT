@@ -34,7 +34,6 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
 import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
-import InitialSteps from 'src/pages/formularios/fornecedor/InitialSteps'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -924,8 +923,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             </CardContent>
                         </Card>
                     )}
-
-                    <InitialSteps />
 
                     {/* Card Header */}
                     <Card>

@@ -20,8 +20,6 @@ import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewForne
 import { useFornecedor } from 'src/context/FornecedorContext'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
-import InitialSteps from './InitialSteps'
-import VerifyFormType from './verifyFormType'
 
 const Fornecedor = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -69,6 +67,8 @@ const Fornecedor = () => {
     //? handleSubmit do modal de gerar um novo fornecedor
     const makeFornecedor = async values => {
         try {
+            console.log('🚀 ~ makeFornecedor:', values.fields)
+
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
@@ -230,7 +230,7 @@ const Fornecedor = () => {
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <VerifyFormType id={id} makeFornecedor={makeFornecedor} />
+                <FormFornecedor id={id} makeFornecedor={makeFornecedor} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table

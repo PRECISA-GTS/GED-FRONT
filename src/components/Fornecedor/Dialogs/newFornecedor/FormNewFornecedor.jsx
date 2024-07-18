@@ -36,8 +36,6 @@ const FormNewFornecedor = ({
     const [componetSelect, setComponetSelect] = useState(null)
     const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
 
-    console.log('--> ', getValues('fields'))
-
     const getModels = async () => {
         const result = await api.post(`/formularios/fornecedor/getModels`, { unidadeID: loggedUnity.unidadeID })
         setModels(result.data)

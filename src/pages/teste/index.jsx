@@ -1,12 +1,26 @@
-import React from 'react'
-import { useGlobal } from 'src/hooks/useGlobal'
+import { Button } from '@mui/material'
+import RelatorioFornecedor from './RelatorioFornecedor'
+import { pdf } from '@react-pdf/renderer'
 
 const index = () => {
-    const { data } = useGlobal()
-    console.log('🚀  data', data)
+    const gerar = async () => {
+        const pdfComponent = <RelatorioFornecedor />
+        const blob = await pdf(pdfComponent).toBlob()
+        window.open(URL.createObjectURL(blob))
+    }
+    const baixar = () => {
+        return <RelatorioFornecedor />
+    }
+
     return (
-        <div>
-            <h1>rttrrrtrt</h1>
+        <div className='flex gap-2'>
+            <RelatorioFornecedor />
+            <Button variant='contained' onClick={gerar}>
+                Gerar Relatório
+            </Button>
+            <Button variant='contained' onClick={baixar}>
+                Baixar Relatório
+            </Button>
         </div>
     )
 }

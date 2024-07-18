@@ -126,17 +126,17 @@ const FormRecebimentoMp = ({ id }) => {
         router.push(`/configuracoes/formularios/recebimento-mp/`)
     }
 
-    const objRelatorio = {
-        name: 'Formulário do Recebimento de MP',
-        icon: 'fluent:print-24-regular',
-        nameComponent: 'DadosRecebimentoMp',
-        type: 'report',
-        params: {
-            recebimentoMPID: id,
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID
-        }
-    }
+    // const objRelatorio = {
+    //     name: 'Formulário do Recebimento de MP',
+    //     icon: 'fluent:print-24-regular',
+    //     nameComponent: 'DadosRecebimentoMp',
+    //     type: 'report',
+    //     params: {
+    //         recebimentoMPID: id,
+    //         unidadeID: loggedUnity.unidadeID,
+    //         papelID: user.papelID
+    //     }
+    // }
     const objFormConfig = {
         id: 5,
         name: 'Configurações do formulário',
@@ -667,16 +667,16 @@ const FormRecebimentoMp = ({ id }) => {
     }, [])
 
     //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
-    useEffect(() => {
-        setReportParameters({
-            id: id,
-            nameComponent: 'DadosRecebimentoMp',
-            route: 'recebimentoMp/dadosRecebimentoMp',
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID,
-            usuarioID: user.usuarioID
-        })
-    }, [])
+    // useEffect(() => {
+    //     setReportParameters({
+    //         id: id,
+    //         nameComponent: 'DadosRecebimentoMp',
+    //         route: 'recebimentoMp/dadosRecebimentoMp',
+    //         unidadeID: loggedUnity.unidadeID,
+    //         papelID: user.papelID,
+    //         usuarioID: user.usuarioID
+    //     })
+    // }, [])
 
     const handleConfirmNew = async data => {
         console.log('🚀 ~ data de noivvovov:', data)
