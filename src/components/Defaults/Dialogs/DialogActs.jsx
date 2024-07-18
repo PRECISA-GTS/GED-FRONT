@@ -48,11 +48,7 @@ const DialogActs = ({
                 fullWidth={size ? true : false}
                 maxWidth={size ? size : null}
             >
-                <form
-                    className={`grid grid-rows-[60px_auto_auto] ${
-                        fullHeight ? 'min-h-[calc(100vh-120px)]' : 'max-h-[calc(100vh-620px)]'
-                    }`}
-                >
+                <form className={`${fullHeight && 'grid grid-rows-[60px_auto_auto] min-h-[calc(100vh-120px)]'}`}>
                     <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
                     {description && (
                         <DialogContent>

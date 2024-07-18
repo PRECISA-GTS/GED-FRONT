@@ -34,6 +34,8 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
 import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
+import Formulario from 'src/pages/teste/RelatorioFornecedor/Formulario'
+import { pdf } from '@react-pdf/renderer'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -203,6 +205,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         route: null,
         type: null,
         modal: true,
+        fullHeight: true,
         action: makeFornecedor,
         size: 'lg',
         icon: 'fluent:form-new-20-regular',
@@ -271,6 +274,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         type: null,
         action: changeFormStatus,
         modal: true,
+        size: 'sm',
         icon: 'heroicons:lock-open',
         identification: null
     }
@@ -527,10 +531,45 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         setCanApprove(tempCanApprove)
     }
 
+    // const sendPdfToServer = async (id, fileBlob, type) => {
+    //     const formData = new FormData()
+    //     formData.append('files[]', fileBlob, `${id}-${type}.pdf`) //? Ex.: 55-fornecedor.pdf, 22-recebimento-mp.pdf, ...
+
+    //     console.log("🚀 ~ fileBlob:", fileBlob)
+    //     try {
+    //         const route = `/formularios/${type}/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
+    //         const response = await api.post(route, formData)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+    // formato esperado para o backend: {id}-${type}.pdf exemplo : 1-fornecedor.pdf, acima função antiga
+    const salvar = async () => {
+        // pega os dados do relatorio do backend
+        const res = await api.get('relatorio/teste/generate')
+        const pdfComponent = <Formulario data={res.data} />
+        const blob = await pdf(pdfComponent).toBlob()
+
+        // Enviar o blob para o backend
+        const formData = new FormData()
+        formData.append('file', blob, 'relatorio.pdf')
+
+        const route = `/formularios/fornecedor/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
+        // const route = `/formularios/${type}/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
+        await api.post(route, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        console.log('passou akiii no salvarrr')
+    }
+
     const conclusionForm = async values => {
         if (loggedUnity.papelID === 1) {
-            console.log('so passa se for fabricaahahahah')
-            sendPdfToServer(id, blobSaveReport, 'fornecedor')
+            console.log('aaaaaa')
+            salvar()
+            // sendPdfToServer(id, blobSaveReport, 'fornecedor')
         }
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)

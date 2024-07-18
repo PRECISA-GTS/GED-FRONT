@@ -8,11 +8,10 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
     const { setData, data: dataGlobal } = useGlobal()
-    
+
     // Ao clicar em um item e ele for do tipo report
     const handleClickReport = item => {
-        setData({ ...dataGlobal, report: {id: item.id, status: item.status} });
-
+        setData({ ...dataGlobal, report: { id: item.id, status: item.status } })
     }
 
     return (
@@ -104,14 +103,13 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                     size={item.size}
                     setOpenModal={setOpenModal}
                     openModal={openModal}
-                    fullHeight
+                    fullHeight={item.fullHeight}
                 >
                     {item.component}
                 </DialogActs>
             )}
         </div>
     )
-                
 }
 
 export default OptionsDots

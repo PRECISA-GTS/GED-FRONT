@@ -8,6 +8,7 @@ import { AuthContext } from 'src/context/AuthContext'
 const CardMyData = () => {
     const { settings } = useContext(SettingsContext)
     const { loggedUnity } = useContext(AuthContext)
+
     const mode = settings.mode
     const router = Router
     const [data, setData] = useState(null)
@@ -17,12 +18,6 @@ const CardMyData = () => {
             const response = await api.post(`dashboard/fornecedor/myData`, {
                 unidadeID: loggedUnity.unidadeID
             })
-
-            //? Se ainda não possui categoria/risco, redirecionar pra /meus-dados
-            if (response.data && response.data.possuiRisco !== 1) {
-                router.push('/meus-dados')
-                return
-            }
 
             setData(response.data)
         } catch (err) {
