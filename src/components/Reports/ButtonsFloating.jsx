@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Fab from '@mui/material/Fab'
 import Icon from 'src/@core/components/icon'
-import { PDFDownloadLink, Document, Page } from '@react-pdf/renderer'
+import { PDFDownloadLink, Document, Page, Text } from '@react-pdf/renderer'
 
 // reports defaults
 import Footer from './Footer'
@@ -31,6 +31,18 @@ const MyDoc = ({ nameComponent }) => {
 }
 
 const ButtonsFloating = ({ nameComponent }) => {
+    // return (
+    //     <Text
+    //         style={{
+    //             position: 'fixed',
+    //             bottom: 20,
+    //             right: 20
+    //         }}
+    //     >
+    //         ButtonsFloat..
+    //     </Text>
+    // )
+
     const [openModalSignatureReport, setOpenModalSignatureReport] = useState(false)
     const reportJSON = localStorage.getItem('report')
     const report = JSON.parse(reportJSON)
@@ -81,7 +93,7 @@ const ButtonsFloating = ({ nameComponent }) => {
                     </div>
                 ))}
             <div>
-                <PDFDownloadLink
+                {/* <PDFDownloadLink
                     document={<MyDoc nameComponent={nameComponent} />}
                     fileName={nameComponent}
                     targetDirectory='C:/Users/Jonatan/Desktop/teste'
@@ -93,14 +105,14 @@ const ButtonsFloating = ({ nameComponent }) => {
                             </Fab>
                         </div>
                     )}
-                </PDFDownloadLink>
+                </PDFDownloadLink> */}
             </div>
             {/* Modal para assinatura do relatório */}
-            <DialogSignatureReport
+            {/* <DialogSignatureReport
                 open={openModalSignatureReport}
                 handleClose={() => setOpenModalSignatureReport(false)}
                 title={'Assinatura do relatório'}
-            />
+            /> */}
         </div>
     )
 }

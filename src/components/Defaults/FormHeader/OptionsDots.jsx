@@ -3,6 +3,7 @@ import Icon from 'src/@core/components/icon'
 import DialogActs from '../Dialogs/DialogActs'
 import { useState } from 'react'
 import { useGlobal } from 'src/hooks/useGlobal'
+import { api_url } from 'src/configs/api'
 
 const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
     const [openModal, setOpenModal] = useState(false)
@@ -12,6 +13,15 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
     // Ao clicar em um item e ele for do tipo report
     const handleClickReport = item => {
         setData({ ...dataGlobal, report: { id: item.id, status: item.status } })
+    }
+
+    const handleOpenReport = item => {
+        if (item.status >= 50) {
+            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-fornecedor.pdf`
+            window.open(url, '_blank')
+        } else {
+            window.open(`/relatorio/${item.route}`, '_blank')
+        }
     }
 
     return (
@@ -73,9 +83,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                             )}
 
                             {item.type == 'report' ? (
-                                <a href={`/relatorio/${item.route}`} target='_blank'>
-                                    {item.name}
-                                </a>
+                                <a onClick={() => handleOpenReport(item)}>{item.name}</a>
                             ) : (
                                 <p
                                     onClick={
