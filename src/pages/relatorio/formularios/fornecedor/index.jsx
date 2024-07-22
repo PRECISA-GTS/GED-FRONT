@@ -3,31 +3,41 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { Document, Page, PDFViewer, Text } from '@react-pdf/renderer'
 import { useTheme } from '@mui/material'
 import ButtonsFloating from 'src/components/Reports/ButtonsFloating'
+import Header from 'src/components/Reports/Header'
+import Footer from 'src/components/Reports/Footer'
 
 const indexFormulario = () => {
     const { data } = useGlobal()
 
+    const FileComponent = () => {
+        return (
+            <Document>
+                <Page
+                    size='A4'
+                    style={{
+                        paddingHorizontal: 25
+                    }}
+                >
+                    <>
+                        <Header data={data} />
+                        {/* <Content data={data} /> */}
+                        <Footer />
+                    </>
+                </Page>
+            </Document>
+        )
+    }
+
     return (
         <>
             <PDFViewer style={{ width: '100%', height: '100vh' }}>
-                <Document>
-                    <Page
-                        size='A4'
-                        style={{
-                            paddingHorizontal: 25
-                        }}
-                    >
-                        <>
-                            <Text>{JSON.stringify(data)}</Text>
-                            <Text>Teste 1234567890</Text>
-                            {/* <Header data={dataHeader} />
-                    <Content data={dataContent} />
-                    <Footer /> */}
-                        </>
-                    </Page>
-                </Document>
+                <FileComponent />
             </PDFViewer>
-            <ButtonsFloating />
+
+            <ButtonsFloating
+                FileComponent={<FileComponent />}
+                FileName={`Qualificação de Fornecedor #${data.report.id}`}
+            />
         </>
     )
 }

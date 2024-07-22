@@ -10,39 +10,7 @@ import ReportComponents from '../Reports2/Layout/reportComponents'
 import DialogSignatureReport from 'src/components/Defaults/Dialogs/DialogSignatureReport'
 import { useEffect } from 'react'
 
-const MyDoc = ({ nameComponent }) => {
-    const data = ReportComponents()
-    const ReportComponent = data[nameComponent]
-
-    return (
-        <Document>
-            <Page
-                size='A4'
-                style={{
-                    paddingHorizontal: 25
-                }}
-            >
-                {/* <Header /> */}
-                {ReportComponent && <ReportComponent />}
-                {/* <Footer /> */}
-            </Page>
-        </Document>
-    )
-}
-
-const ButtonsFloating = ({ nameComponent }) => {
-    // return (
-    //     <Text
-    //         style={{
-    //             position: 'fixed',
-    //             bottom: 20,
-    //             right: 20
-    //         }}
-    //     >
-    //         ButtonsFloat..
-    //     </Text>
-    // )
-
+const ButtonsFloating = ({ FileComponent, FileName }) => {
     const [openModalSignatureReport, setOpenModalSignatureReport] = useState(false)
     const reportJSON = localStorage.getItem('report')
     const report = JSON.parse(reportJSON)
@@ -64,21 +32,21 @@ const ButtonsFloating = ({ nameComponent }) => {
             disable: false,
             icon: 'ooui:close',
             function: closePage
+        },
+        {
+            id: 2,
+            title: 'Assinar digitalmente',
+            color: 'primary',
+            size: 'large',
+            variant: 'outlined',
+            disable: false, // report.status < 40 ? true : false,
+            icon: 'fluent:signature-24-filled',
+            function: signature
         }
-        // {
-        //     id: 2,
-        //     title: 'Assinar digitalmente',
-        //     color: 'primary',
-        //     size: 'large',
-        //     variant: 'outlined',
-        //     disable: report.status < 40 ? true : false,
-        //     icon: 'fluent:signature-24-filled',
-        //     function: signature
-        // }
     ]
 
     return (
-        <div className='fixed bottom-10 right-8 flex flex-col gap-2'>
+        <div className='fixed bottom-4 right-12 flex flex-col gap-2'>
             {dataButtons &&
                 dataButtons.map(item => (
                     <div key={item.id} onClick={!item.disable ? item.function : null}>
@@ -93,11 +61,7 @@ const ButtonsFloating = ({ nameComponent }) => {
                     </div>
                 ))}
             <div>
-                {/* <PDFDownloadLink
-                    document={<MyDoc nameComponent={nameComponent} />}
-                    fileName={nameComponent}
-                    targetDirectory='C:/Users/Jonatan/Desktop/teste'
-                >
+                <PDFDownloadLink document={FileComponent} fileName={FileName}>
                     {({ blob, url, loading, error }) => (
                         <div style={{ textAlign: 'center' }}>
                             <Fab color='primary' size='large' variant='outlined'>
@@ -105,14 +69,15 @@ const ButtonsFloating = ({ nameComponent }) => {
                             </Fab>
                         </div>
                     )}
-                </PDFDownloadLink> */}
+                </PDFDownloadLink>
             </div>
+
             {/* Modal para assinatura do relatório */}
-            {/* <DialogSignatureReport
+            <DialogSignatureReport
                 open={openModalSignatureReport}
                 handleClose={() => setOpenModalSignatureReport(false)}
                 title={'Assinatura do relatório'}
-            /> */}
+            />
         </div>
     )
 }

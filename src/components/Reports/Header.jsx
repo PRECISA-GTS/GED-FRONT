@@ -1,6 +1,6 @@
 import { Text, View, Image } from '@react-pdf/renderer'
 import React, { useEffect, useState } from 'react'
-import { api } from 'src/configs/api'
+import { api, api_url } from 'src/configs/api'
 
 const styles = {
     header: {
@@ -34,12 +34,14 @@ const styles = {
     }
 }
 
-const Header = ({data: params}) => {
+const Header = ({ data: params }) => {
     const [data, setData] = useState([])
 
     const fetchData = async () => {
         try {
-            const response = await api.post('relatorio/header', params)
+            console.log('aquii busca no backkk: ', api_url, params)
+            const response = await api.post(`/relatorio/getHeader`, { unidadeID: params.user.unidadeID })
+            console.log('🚀 ~ Header data:', response.data)
             setData(response.data)
         } catch (error) {
             console.error('Erro ao buscar os dados do cabeçalho:', params)
@@ -48,7 +50,7 @@ const Header = ({data: params}) => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [params])
 
     return (
         <View style={styles.header}>
@@ -68,18 +70,18 @@ const Header = ({data: params}) => {
                 }}
             >
                 <Text style={[styles.title, styles.content, { width: '100%' }]}>
-                    {data?.unidade?.tituloRelatorio ?? 'Cabeçalho não definido'}
+                    {data?.tituloRelatorio ?? 'Cabeçalho não definido'}
                 </Text>
                 <Text style={[styles.title, styles.content, { width: '60%', fontSize: 8 }]}>
-                    {data?.unidade?.endereco ?? 'Endereço não definido'}
+                    {data?.endereco ?? 'Endereço não definido'}
                 </Text>
                 <Text
                     style={[styles.title, styles.content, { width: '100%', fontSize: 8 }]}
-                >{`CNPJ: ${data?.unidade?.cnpj}`}</Text>
+                >{`CNPJ: ${data?.cnpj}`}</Text>
             </View>
             {/* Imagem */}
             <View style={[styles.imageContainer, { width: '10%' }]}>
-                {data?.unidade?.url ? <Image src={data?.unidade?.url} style={styles.image} /> : ''}
+                {data?.url ? <Image src={data?.url} style={styles.image} /> : ''}
             </View>
         </View>
     )

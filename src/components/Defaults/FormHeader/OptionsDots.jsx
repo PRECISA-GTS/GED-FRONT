@@ -17,7 +17,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
 
     const handleOpenReport = item => {
         if (item.status >= 50) {
-            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-fornecedor.pdf`
+            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-${item.module}.pdf`
             window.open(url, '_blank')
         } else {
             window.open(`/relatorio/${item.route}`, '_blank')
