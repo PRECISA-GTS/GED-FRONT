@@ -18,7 +18,7 @@ const index = () => {
                     }}
                 >
                     <Text style={{ width: '100%', textAlign: 'center', fontSize: 12 }}>
-                        QUALIFICAÇÃO DE FORNECEDORES
+                        QUALIFICAÇÃO DE FORNECEDORES2
                     </Text>
                 </View>
                 <View style={{ marginTop: 20 }}>

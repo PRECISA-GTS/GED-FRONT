@@ -35,13 +35,11 @@ const styles = {
 }
 
 const Header = ({ data: params }) => {
-    const [data, setData] = useState([])
+    const [data, setData] = useState({})
 
-    const fetchData = async () => {
+    const getData = async () => {
         try {
-            console.log('aquii busca no backkk: ', api_url, params)
             const response = await api.post(`/relatorio/getHeader`, { unidadeID: params.user.unidadeID })
-            console.log('🚀 ~ Header data:', response.data)
             setData(response.data)
         } catch (error) {
             console.error('Erro ao buscar os dados do cabeçalho:', params)
@@ -49,7 +47,7 @@ const Header = ({ data: params }) => {
     }
 
     useEffect(() => {
-        fetchData()
+        getData()
     }, [params])
 
     return (

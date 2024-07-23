@@ -3,17 +3,16 @@ import Icon from 'src/@core/components/icon'
 import Router from 'next/router'
 import Link from 'next/link'
 import useLoad from 'src/hooks/useLoad'
-// import Header from 'src/components/Reports/Layout/Header'
-// import Footer from 'src/components/Reports/Layout/Footer'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { BlobProvider, Document, Page, Text } from '@react-pdf/renderer'
 import { DocumentContent, indexFormulario as Formulario } from 'src/pages/relatorioOLD/fornecedor/formulario/index'
 import { useGlobal } from 'src/hooks/useGlobal'
 import Header from 'src/components/Reports/Header'
-import Content from 'src/pages/relatorioOLD/fornecedor/formulario/Content'
+
 import Footer from 'src/components/Reports/Footer'
+import Content from 'src/pages/relatorio/formularios/fornecedor/Content'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -34,22 +33,16 @@ const ButtonsFixedRight = ({
 }) => {
     const router = Router
     const { isLoading } = useLoad()
+    const { data, setData } = useGlobal()
+    const { user } = useContext(AuthContext)
+    const { id } = useContext(RouteContext)
 
-    const { data } = useGlobal()
-
-    const dataHeader = {
-        unidadeID: data?.user?.unidadeID,
-        papelID: data?.user?.papelID
-    }
-
-    const dataContent = {
-        unidadeID: data?.user?.unidadeID,
-        papelID: data?.user?.papelID,
-        id: data?.report?.id
-    }
-    console.log('🚀 ~ dataContent:', dataContent)
+    console.log('🚀 ~ useGlobal:', id)
+    const module = currentUrl.split('/')[2]
 
     const DocumentPdf = () => {
+        console.log('useGlobal data conclui: ', data)
+
         return (
             <Document>
                 <Page
@@ -58,9 +51,11 @@ const ButtonsFixedRight = ({
                         paddingHorizontal: 25
                     }}
                 >
-                    <Header data={dataHeader} />
-                    <Content data={dataContent} />
-                    <Footer />
+                    <>
+                        <Header data={data} />
+                        <Content values={data} key={data} />
+                        <Footer />
+                    </>
                 </Page>
             </Document>
         )
@@ -85,13 +80,12 @@ const ButtonsFixedRight = ({
             )}
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
-            {btnSend && (
+            {btnSend && data && (
                 <BlobProvider document={<DocumentPdf />}>
                     {({ blob, url, loading, error }) => (
                         <Button
                             onClick={() => {
                                 handleSend(blob)
-                                console.log('blob', blob)
                             }}
                             type='button'
                             variant='contained'

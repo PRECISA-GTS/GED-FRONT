@@ -9,6 +9,7 @@ import Header from './Header'
 import ReportComponents from '../Reports2/Layout/reportComponents'
 import DialogSignatureReport from 'src/components/Defaults/Dialogs/DialogSignatureReport'
 import { useEffect } from 'react'
+import { Tooltip } from '@mui/material'
 
 const ButtonsFloating = ({ FileComponent, FileName }) => {
     const [openModalSignatureReport, setOpenModalSignatureReport] = useState(false)
@@ -50,27 +51,31 @@ const ButtonsFloating = ({ FileComponent, FileName }) => {
             {dataButtons &&
                 dataButtons.map(item => (
                     <div key={item.id} onClick={!item.disable ? item.function : null}>
-                        <Fab
-                            color={item.color}
-                            size={item.size}
-                            variant={item.variant}
-                            className={item.disable ? 'hover:opacity-20 opacity-20' : ''}
-                        >
-                            <Icon icon={item.icon} className={item.disable ? 'cursor-default' : ''} />
-                        </Fab>
+                        <Tooltip title={item.title} placement='left'>
+                            <Fab
+                                color={item.color}
+                                size={item.size}
+                                variant={item.variant}
+                                className={item.disable ? 'hover:opacity-20 opacity-20' : ''}
+                            >
+                                <Icon icon={item.icon} className={item.disable ? 'cursor-default' : ''} />
+                            </Fab>
+                        </Tooltip>
                     </div>
                 ))}
-            <div>
-                <PDFDownloadLink document={FileComponent} fileName={FileName}>
-                    {({ blob, url, loading, error }) => (
-                        <div style={{ textAlign: 'center' }}>
-                            <Fab color='primary' size='large' variant='outlined'>
-                                <Icon icon='basil:download-solid' />
-                            </Fab>
-                        </div>
-                    )}
-                </PDFDownloadLink>
-            </div>
+            <Tooltip title='Baixar relatório' placement='left'>
+                <div>
+                    <PDFDownloadLink document={FileComponent} fileName={FileName}>
+                        {({ blob, url, loading, error }) => (
+                            <div style={{ textAlign: 'center' }}>
+                                <Fab color='primary' size='large' variant='outlined'>
+                                    <Icon icon='basil:download-solid' />
+                                </Fab>
+                            </div>
+                        )}
+                    </PDFDownloadLink>
+                </div>
+            </Tooltip>
 
             {/* Modal para assinatura do relatório */}
             <DialogSignatureReport

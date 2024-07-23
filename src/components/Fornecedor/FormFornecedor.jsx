@@ -37,8 +37,10 @@ import HistoricForm from '../Defaults/HistoricForm'
 import Formulario from 'src/pages/teste/RelatorioFornecedor/Formulario'
 import { pdf } from '@react-pdf/renderer'
 import NoModel from './NoModel'
+import { useGlobal } from 'src/hooks/useGlobal'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
+    const { setData, data: dataGlobal } = useGlobal()
     const [hasModel, setHasModel] = useState(false)
     const [noModelInfo, setNoModelInfo] = useState(null)
     const { menu, user, loggedUnity } = useContext(AuthContext)
@@ -894,6 +896,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
     useEffect(() => {
         type == 'edit' ? getData() : null
+        setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
     }, [id, savingForm])
 
     useEffect(() => {

@@ -1,10 +1,11 @@
 import { useGlobal } from 'src/hooks/useGlobal'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
-import { Document, Page, PDFViewer, Text } from '@react-pdf/renderer'
+import { Document, Page, PDFViewer, Text, BlobProvider } from '@react-pdf/renderer'
 import { useTheme } from '@mui/material'
 import ButtonsFloating from 'src/components/Reports/ButtonsFloating'
 import Header from 'src/components/Reports/Header'
 import Footer from 'src/components/Reports/Footer'
+import Content from './Content'
 
 const indexFormulario = () => {
     const { data } = useGlobal()
@@ -20,7 +21,7 @@ const indexFormulario = () => {
                 >
                     <>
                         <Header data={data} />
-                        {/* <Content data={data} /> */}
+                        <Content values={data} key={data} />
                         <Footer />
                     </>
                 </Page>

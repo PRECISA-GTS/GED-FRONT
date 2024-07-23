@@ -1,25 +1,20 @@
 import { Button, Menu, MenuItem } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import DialogActs from '../Dialogs/DialogActs'
-import { useState } from 'react'
-import { useGlobal } from 'src/hooks/useGlobal'
+import { useContext, useState } from 'react'
 import { api_url } from 'src/configs/api'
 
 const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
-    const { setData, data: dataGlobal } = useGlobal()
-
-    // Ao clicar em um item e ele for do tipo report
-    const handleClickReport = item => {
-        setData({ ...dataGlobal, report: { id: item.id, status: item.status } })
-    }
 
     const handleOpenReport = item => {
         if (item.status >= 50) {
+            //? Já concluído, abre PDF já salvo no servidor
             const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-${item.module}.pdf`
             window.open(url, '_blank')
         } else {
+            //? Não concluído, gera o relatório
             window.open(`/relatorio/${item.route}`, '_blank')
         }
     }
@@ -69,7 +64,6 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                             key={item.id}
                             onClick={() => {
                                 handleClose()
-                                handleClickReport(item)
                             }}
                             disabled={item.disabled ? true : false}
                             style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '4px' }}
