@@ -86,6 +86,7 @@ const ButtonsFixedRight = ({
                         <Button
                             onClick={() => {
                                 handleSend(blob)
+                                handleSubmit()
                             }}
                             type='button'
                             variant='contained'

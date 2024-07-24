@@ -21,8 +21,10 @@ const Fields = ({
     getValues,
     setOpenModalNew
 }) => {
+    console.log('HeaderFields dynamic...')
+
     const [dateStatus, setDateStatus] = useState({})
-    const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
+    // const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
 
     // Use useWatch to monitor the registroEstabelecimentoID field
     // const watchRegistroEstabelecimento = useWatch({
@@ -30,8 +32,6 @@ const Fields = ({
     //     name: 'registroEstabelecimentoID',
     //     defaultValue: null
     // })
-
-    console.log('🚀 ~ watchRegistroEstabelecimento:', watchRegistroEstabelecimento)
 
     const setDateFormat = (type, name, value, numDays) => {
         const newDate = new Date(value)
@@ -73,19 +73,15 @@ const Fields = ({
         setNameSelected(name)
     }
 
-    console.log('======> ', getValues())
-
     // useEffect que verifique o valor do registroEstabelecimento, se > 1, watchRegistroEstabelecimento vira true
-    useEffect(() => {
-        console.log('trocou algoooooooooooo')
-    }, [watchRegistroEstabelecimento])
+    // useEffect(() => {
+    //     console.log('trocou algoooooooooooo')
+    // }, [watchRegistroEstabelecimento])
 
     return (
         fields &&
         fields.map((field, index) => {
-            setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
-
-            console.log('🚀 ~ field:', field)
+            // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
 
             return (
                 <>
@@ -111,7 +107,7 @@ const Fields = ({
                             setValue={setValue}
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
-                            handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
+                            // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
 
@@ -137,7 +133,7 @@ const Fields = ({
                     )}
 
                     {/* Textfield */}
-                    {field && (field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1) && (
+                    {field /* && field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1*/ && (
                         <Input
                             key={`input-${index}`}
                             xs={12}

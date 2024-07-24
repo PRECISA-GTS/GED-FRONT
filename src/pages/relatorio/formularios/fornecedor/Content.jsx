@@ -2,19 +2,13 @@ import { Text, View } from '@react-pdf/renderer'
 import React, { useEffect, useState } from 'react'
 import { styles } from '../../../../components/Reports/styles'
 import { api } from 'src/configs/api'
-import { report } from 'process'
-// import getDataContentReport from 'src/components/Reports/getDataContentReportOLD'
-import { useGlobal } from 'src/hooks/useGlobal'
 
 const Content = ({ values: params }) => {
     if (!params) return
     const [data, setData] = useState(null)
 
     const getData = async () => {
-        console.log('🚀 ~~~ useGlobal Content:: ', params)
-        // const response = await api.post(`relatorio/formularios/fornecedor/getContent`, params)
         const response = await api.post(`relatorio/formularios/fornecedor/getContent`, params)
-        console.log('🚀 ~ getData response.data:', response.data)
         setData(response.data)
     }
 
@@ -34,7 +28,7 @@ const Content = ({ values: params }) => {
                     }}
                 >
                     <Text style={{ width: '100%', textAlign: 'center', fontSize: 12 }}>
-                        QUALIFICAÇÃO DE FORNECEDORESSS
+                        QUALIFICAÇÃO DE FORNECEDORES
                     </Text>
                 </View>
                 <View style={{ marginTop: 20 }}>

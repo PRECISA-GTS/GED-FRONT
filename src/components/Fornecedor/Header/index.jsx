@@ -19,7 +19,7 @@ const HeaderFields = ({
     getValues,
     getAddressByCep
 }) => {
-    console.log('🚀 ~ values:', values)
+    console.log('🚀 ~ HeaderFields:', values)
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
     const { setDateFormat, dateStatus } = useDateFormat()
 

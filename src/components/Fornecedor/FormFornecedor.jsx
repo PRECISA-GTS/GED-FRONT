@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 //* Default Form Components
-import Fields from 'src/components/Defaults/Formularios/Fields'
 import Block from 'src/components/Defaults/Formularios/Block'
 import DialogFormStatus from '../Defaults/Dialogs/DialogFormStatus'
 import CustomChip from 'src/@core/components/mui/chip'
@@ -11,7 +10,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 //* Custom components
 import Input from 'src/components/Form/Input'
 import AnexoModeView from 'src/components/Anexos/ModeView'
-import { Alert, Box, Button, ButtonBase, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
+import { Alert, Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
@@ -19,23 +18,18 @@ import FormHeader from 'src/components/Defaults/FormHeader'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { NotificationContext } from 'src/context/NotificationContext'
-import Loading from 'src/components/Loading'
 import toast from 'react-hot-toast'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
 import FormNotification from './Dialogs/Notification/FormNotification'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorProdutos from './FormFornecedorProdutos'
-import DateField from 'src/components/Form/DateField'
 import HeaderFields from './Header'
-import FooterFields from './Footer'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
 import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
-import Formulario from 'src/pages/teste/RelatorioFornecedor/Formulario'
-import { pdf } from '@react-pdf/renderer'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
 
@@ -63,14 +57,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const [movimentacao, setMovimentacao] = useState(null)
     const [info, setInfo] = useState('')
     const [openModal, setOpenModal] = useState(false)
-    const [openModalNewFornecedor, setOpenModalNewFornecedor] = useState(false)
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
-    const { settings } = useContext(SettingsContext)
     const { setId } = useContext(RouteContext)
     const [dataCopiedMyData, setDataCopiedMyData] = useState([])
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const [blobSaveReport, setBlobSaveReport] = useState(null) // Salva o blob do relatório que sera salvo no back
-    const { setReportParameters, sendPdfToServer } = useFormContext()
+    const { sendPdfToServer } = useFormContext()
     const { isLoading, startLoading, stopLoading } = useLoad()
 
     const [canEdit, setCanEdit] = useState({
@@ -90,14 +82,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         getValues,
         setValue,
         control,
-        watch,
         handleSubmit,
         clearErrors,
         setError,
         formState: { errors }
     } = useForm()
-
-    console.log('formFornecedor errors: ', errors)
 
     //* Reabre o formulário pro fornecedor alterar novamente se ainda nao estiver vinculado com recebimento
     const changeFormStatus = async values => {
@@ -158,7 +147,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         unidadeID: loggedUnity.unidadeID
                     }
                 }
-                const response = await api.post(`${staticUrl}/sendNotification`, data)
+                await api.post(`${staticUrl}/sendNotification`, data)
             }
 
             //* Envia toast de sucesso
@@ -307,7 +296,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const getData = () => {
-        console.log('no getData', loggedUnity)
         startLoading()
         try {
             api.post(`${staticUrl}/getData/${id}`, { type: type, unidadeID: loggedUnity.unidadeID })
@@ -320,7 +308,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         setNoModelInfo(response.data)
                     }
 
-                    // if (response.data.hasModel) {
                     setHasModel(true)
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -367,13 +354,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
                     let objStatus = statusDefault[response?.data?.info?.status]
                     setStatus(objStatus)
-
-                    console.log(
-                        '🚀 ~ response.data.unidade:',
-                        user.papelID,
-                        response.data.unidade.quemPreenche,
-                        info.status
-                    )
                     setCanEdit({
                         status:
                             user.papelID == response.data.unidade.quemPreenche && response.data.info.status < 40
@@ -391,7 +371,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     })
 
                     verifyFormPending()
-                    // }
                 })
                 .catch(error => {
                     console.log('🚀 ~ error:', error)
@@ -547,43 +526,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         setCanApprove(tempCanApprove)
     }
 
-    // const sendPdfToServer = async (id, fileBlob, type) => {
-    //     const formData = new FormData()
-    //     formData.append('files[]', fileBlob, `${id}-${type}.pdf`) //? Ex.: 55-fornecedor.pdf, 22-recebimento-mp.pdf, ...
-
-    //     console.log('🚀 ~ fileBlob:', fileBlob)
-    //     try {
-    //         const route = `/formularios/${type}/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
-    //         const response = await api.post(route, formData)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-    // formato esperado para o backend: {id}-${type}.pdf exemplo : 1-fornecedor.pdf, acima função antiga
-    // const salvar = async () => {
-    //     // pega os dados do relatorio do backend
-    //     const res = await api.get('relatorio/teste/generate')
-    //     const pdfComponent = <Formulario data={res.data} />
-    //     const blob = await pdf(pdfComponent).toBlob()
-
-    //     // Enviar o blob para o backend
-    //     const formData = new FormData()
-    //     formData.append('file', blob, 'relatorio.pdf')
-
-    //     const route = `/formularios/fornecedor/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
-    //     // const route = `/formularios/${type}/saveRelatorio/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`
-    //     await api.post(route, formData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //         }
-    //     })
-
-    //     console.log('passou akiii no salvarrr')
-    // }
-
     const conclusionForm = async values => {
         if (loggedUnity.papelID === 1) {
-            // salvar()
             sendPdfToServer(id, blobSaveReport, 'fornecedor')
         }
         values['conclusion'] = true
@@ -641,7 +585,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const onSubmit = async (values, param = false) => {
         startLoading()
         if (param.conclusion === true) {
-            console.log('concluiu', values)
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
         }
@@ -654,6 +597,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
+        console.log('🚀 ~ onSubmit data:', data)
 
         try {
             if (type == 'edit') {
@@ -686,7 +630,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             console.log(error)
         } finally {
             stopLoading()
-            console.log('função ativada fim finally')
         }
     }
 
@@ -867,9 +810,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         //? Formulário
         tempBlocos.map((bloco, index) => {
-            // bloco
             bloco.itens.map((item, indexItem) => {
-                // item
                 setValue(`blocos[${index}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
             })
         })
@@ -921,7 +862,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 actions
                 handleSubmit={() => handleSubmit(onSubmit)}
                 handleSend={handleSendForm}
-                // componentSaveReport={<DadosFornecedor />}
                 iconConclusion={'mdi:check-bold'}
                 titleConclusion={'Concluir Formulário'}
                 title='Fornecedor'
