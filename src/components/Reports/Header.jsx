@@ -35,12 +35,13 @@ const styles = {
 }
 
 const Header = ({ data: params }) => {
-    const [data, setData] = useState({})
+    const [data, setData] = useState(null)
 
     const getData = async () => {
         try {
             const response = await api.post(`/relatorio/getHeader`, { unidadeID: params.user.unidadeID })
             setData(response.data)
+            console.log('🚀 ~ Header data:: ', response.data)
         } catch (error) {
             console.error('Erro ao buscar os dados do cabeçalho:', params)
         }
@@ -48,40 +49,42 @@ const Header = ({ data: params }) => {
 
     useEffect(() => {
         getData()
-    }, [params])
+    }, [])
 
     return (
-        <View style={styles.header}>
-            {/* Vazio... */}
-            <View style={{ width: '10%' }}>
-                <Text></Text>
+        data && (
+            <View style={styles.header}>
+                {/* Vazio... */}
+                <View style={{ width: '10%' }}>
+                    <Text></Text>
+                </View>
+                {/* Descrição */}
+                <View
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 5
+                    }}
+                >
+                    <Text style={[styles.title, styles.content, { width: '100%' }]}>
+                        {data?.tituloRelatorio ?? 'Cabeçalho não definido'}
+                    </Text>
+                    <Text style={[styles.title, styles.content, { width: '60%', fontSize: 8 }]}>
+                        {data?.endereco ?? 'Endereço não definido'}
+                    </Text>
+                    <Text
+                        style={[styles.title, styles.content, { width: '100%', fontSize: 8 }]}
+                    >{`CNPJ: ${data?.cnpj}`}</Text>
+                </View>
+                {/* Imagem */}
+                <View style={[styles.imageContainer, { width: '10%' }]}>
+                    {data?.url ? <Image src={api_url + data?.url} style={styles.image} /> : ''}
+                </View>
             </View>
-            {/* Descrição */}
-            <View
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 5
-                }}
-            >
-                <Text style={[styles.title, styles.content, { width: '100%' }]}>
-                    {data?.tituloRelatorio ?? 'Cabeçalho não definido'}
-                </Text>
-                <Text style={[styles.title, styles.content, { width: '60%', fontSize: 8 }]}>
-                    {data?.endereco ?? 'Endereço não definido'}
-                </Text>
-                <Text
-                    style={[styles.title, styles.content, { width: '100%', fontSize: 8 }]}
-                >{`CNPJ: ${data?.cnpj}`}</Text>
-            </View>
-            {/* Imagem */}
-            <View style={[styles.imageContainer, { width: '10%' }]}>
-                {data?.url ? <Image src={data?.url} style={styles.image} /> : ''}
-            </View>
-        </View>
+        )
     )
 }
 

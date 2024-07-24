@@ -507,8 +507,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         }
     }
 
-    const handleSendForm = blob => {
-        setBlobSaveReport(blob)
+    const handleSendForm = async () => {
+        await handleSubmit(onSubmit)()
         checkErrors()
         setOpenModal(true)
         setValidateForm(true)
@@ -526,9 +526,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         setCanApprove(tempCanApprove)
     }
 
-    const conclusionForm = async values => {
+    const conclusionForm = async (values, blob) => {
         if (loggedUnity.papelID === 1) {
-            sendPdfToServer(id, blobSaveReport, 'fornecedor')
+            sendPdfToServer(id, blob, 'fornecedor')
         }
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
@@ -583,6 +583,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const onSubmit = async (values, param = false) => {
+        setOpenModal(false)
         startLoading()
         if (param.conclusion === true) {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
@@ -597,7 +598,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ onSubmit data:', data)
 
         try {
             if (type == 'edit') {
@@ -1077,6 +1077,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             btnConfirmColor='primary'
                             conclusionForm={conclusionForm}
                             listErrors={listErrors}
+                            handleSend={handleSendForm}
                             canApprove={true}
                             type='fornecedor'
                             unity={unidade}

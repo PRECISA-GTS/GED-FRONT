@@ -87,21 +87,18 @@ const FormAtividade = ({ id }) => {
 
     //? Dados iniciais ao carregar página
     const getData = async () => {
-        if (type == 'new') {
-            setData({
-                fields: {
-                    nome: '',
-                    status: 1
-                }
-            })
-        }
         try {
-            const route = type === 'new' ? `${backRoute(staticUrl)}/new/getData` : `${staticUrl}/getData/${id}`
-            if (type === 'new' || id > 0) {
-                await api.post(route).then(response => {
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
                     setData(response.data)
-                    console.log('🚀 ~ response.data:', response.data)
                     reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
                 })
             }
         } catch (error) {
@@ -111,7 +108,6 @@ const FormAtividade = ({ id }) => {
 
     //? Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     useEffect(() => {
-        console.log('getData: ', id)
         getData()
 
         //? Seta error nos campos obrigatórios
@@ -138,7 +134,6 @@ const FormAtividade = ({ id }) => {
                     />
                     <Card>
                         <CardContent>
-                            <h1>hellloooooo</h1>
                             <Grid container spacing={5}>
                                 <Input
                                     xs={11}

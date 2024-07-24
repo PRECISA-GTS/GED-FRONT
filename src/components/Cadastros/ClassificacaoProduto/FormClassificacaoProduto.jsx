@@ -1,30 +1,24 @@
 import Router from 'next/router'
-import { useEffect, useState, useContext } from 'react'
-import { ParametersContext } from 'src/context/ParametersContext'
-import { RouteContext } from 'src/context/RouteContext'
+import { useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
-import { Card, CardContent, Grid } from '@mui/material'
+import { Button, Card, CardContent, Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import Loading from 'src/components/Loading'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
+import { formType } from 'src/configs/defaultConfigs'
+import Loading from 'src/components/Loading'
 import FormHeader from '../../Defaults/FormHeader'
 import { backRoute } from 'src/configs/defaultConfigs'
 import { toastMessage } from 'src/configs/defaultConfigs'
+import { ParametersContext } from 'src/context/ParametersContext'
+import { RouteContext } from 'src/context/RouteContext'
+import { useContext } from 'react'
 import Input from 'src/components/Form/Input'
 import Check from 'src/components/Form/Check'
-import { AuthContext } from 'src/context/AuthContext'
 import useLoad from 'src/hooks/useLoad'
+import { AuthContext } from 'src/context/AuthContext'
 
-const FormClassificacaoProduto = ({
-    id,
-    btnClose,
-    handleConfirmNew,
-    handleModalClose,
-    newChange,
-    manualUrl,
-    outsideID
-}) => {
+const FormClassificacaoProduto = ({ id }) => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
     const router = Router
@@ -33,39 +27,30 @@ const FormClassificacaoProduto = ({
     const { title } = useContext(ParametersContext)
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
-    const [removedItems, setRemovedItems] = useState([])
     const { startLoading, stopLoading } = useLoad()
 
     const {
         trigger,
         handleSubmit,
         reset,
+        register,
         control,
-        formState: { errors },
-        register
+        formState: { errors }
     } = useForm()
 
-    // Envia dados para a API
+    //? Envia dados para a api
     const onSubmit = async data => {
-        startLoading()
         const values = {
             ...data,
-            unidadeID: loggedUnity.unidadeID,
             usuarioID: user.usuarioID,
-            removedItems
+            unidadeID: loggedUnity.unidadeID
         }
-        console.log(values)
-        // return
-
+        startLoading()
         try {
             if (type === 'new') {
-                await api.post(`cadastros/classificacao-produto/new/insertData`, values).then(response => {
-                    if (handleConfirmNew) {
-                        handleConfirmNew(response.data, 'classificacao-produto')
-                    } else {
-                        router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
-                        setId(response.data.id)
-                    }
+                await api.post(`${backRoute(staticUrl)}/new/insertData`, values).then(response => {
+                    router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
+                    setId(response.data)
                     toast.success(toastMessage.successNew)
                 })
             } else if (type === 'edit') {
@@ -83,7 +68,7 @@ const FormClassificacaoProduto = ({
         }
     }
 
-    // Deleta os dados
+    //? Função que deleta os dados
     const handleClickDelete = async () => {
         try {
             await api.delete(`${staticUrl}/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`)
@@ -100,25 +85,32 @@ const FormClassificacaoProduto = ({
         }
     }
 
-    // Dados iniciais ao carregar a página
+    //? Dados iniciais ao carregar página
     const getData = async () => {
         try {
-            const route = type === 'new' ? `cadastros/produto/new/getData` : `${staticUrl}/getData/${id}`
-            await api.post(route).then(response => {
-                console.log('🚀 ~ getData da classificação:', response.data)
-                setData(response.data)
-                reset(response.data)
-            })
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
-    // Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
+    //? Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     useEffect(() => {
         getData()
 
-        // Seta error nos campos obrigatórios
+        //? Seta error nos campos obrigatórios
         if (type === 'new') {
             setTimeout(() => {
                 trigger()
@@ -126,32 +118,25 @@ const FormClassificacaoProduto = ({
         }
     }, [id])
 
-    useEffect(() => {
-        if (newChange) handleSubmit(onSubmit)()
-    }, [newChange])
-
     return (
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
-                        btnNew={handleConfirmNew ? false : true}
                         btnSave
-                        btnClose={btnClose}
-                        manualUrl={manualUrl}
-                        handleModalClose={handleModalClose}
+                        btnNew
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
-                        outsideID={outsideID}
                     />
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
                                 <Input
+                                    xs={11}
                                     md={11}
                                     title='Nome'
                                     name='fields.nome'
@@ -160,10 +145,11 @@ const FormClassificacaoProduto = ({
                                     errors={errors?.fields?.nome}
                                 />
                                 <Check
+                                    xs={1}
                                     md={1}
                                     title='Ativo'
                                     name='fields.status'
-                                    value={data.fields.status}
+                                    value={data?.fields?.status}
                                     typePage={type}
                                     register={register}
                                 />
@@ -172,7 +158,6 @@ const FormClassificacaoProduto = ({
                     </Card>
                 </form>
             )}
-
             <DialogForm
                 text='Tem certeza que deseja excluir?'
                 title={'Excluir ' + title.title}

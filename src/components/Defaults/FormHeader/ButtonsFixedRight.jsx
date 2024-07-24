@@ -3,16 +3,7 @@ import Icon from 'src/@core/components/icon'
 import Router from 'next/router'
 import Link from 'next/link'
 import useLoad from 'src/hooks/useLoad'
-import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from 'src/context/AuthContext'
-import { RouteContext } from 'src/context/RouteContext'
-import { BlobProvider, Document, Page, Text } from '@react-pdf/renderer'
-import { DocumentContent, indexFormulario as Formulario } from 'src/pages/relatorioOLD/fornecedor/formulario/index'
 import { useGlobal } from 'src/hooks/useGlobal'
-import Header from 'src/components/Reports/Header'
-
-import Footer from 'src/components/Reports/Footer'
-import Content from 'src/pages/relatorio/formularios/fornecedor/Content'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -27,39 +18,12 @@ const ButtonsFixedRight = ({
     disabledSubmit,
     handleSubmit,
     handleSend,
-    // componentSaveReport,
     iconConclusion,
     titleConclusion
 }) => {
     const router = Router
     const { isLoading } = useLoad()
-    const { data, setData } = useGlobal()
-    const { user } = useContext(AuthContext)
-    const { id } = useContext(RouteContext)
-
-    console.log('🚀 ~ useGlobal:', id)
-    const module = currentUrl.split('/')[2]
-
-    const DocumentPdf = () => {
-        console.log('useGlobal data conclui: ', data)
-
-        return (
-            <Document>
-                <Page
-                    size='A4'
-                    style={{
-                        paddingHorizontal: 25
-                    }}
-                >
-                    <>
-                        <Header data={data} />
-                        <Content values={data} key={data} />
-                        <Footer />
-                    </>
-                </Page>
-            </Document>
-        )
-    }
+    const { data } = useGlobal()
 
     return (
         <div className='flex items-center gap-2'>
@@ -81,25 +45,20 @@ const ButtonsFixedRight = ({
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
             {btnSend && data && (
-                <BlobProvider document={<DocumentPdf />}>
-                    {({ blob, url, loading, error }) => (
-                        <Button
-                            onClick={() => {
-                                handleSend(blob)
-                                handleSubmit()
-                            }}
-                            type='button'
-                            variant='contained'
-                            size='medium'
-                            color='primary'
-                            disabled={disabled || disabledSend}
-                            sx={{ display: 'flex', gap: 2 }}
-                        >
-                            <Icon icon={iconConclusion ?? 'carbon:send-filled'} />
-                            <span className='hidden sm:block'>{titleConclusion}</span>
-                        </Button>
-                    )}
-                </BlobProvider>
+                <Button
+                    onClick={() => {
+                        handleSend()
+                    }}
+                    type='button'
+                    variant='contained'
+                    size='medium'
+                    color='primary'
+                    disabled={disabled || disabledSend}
+                    sx={{ display: 'flex', gap: 2 }}
+                >
+                    <Icon icon={iconConclusion ?? 'carbon:send-filled'} />
+                    <span className='hidden sm:block'>{titleConclusion}</span>
+                </Button>
             )}
             {btnSave && (
                 <Button
@@ -115,21 +74,6 @@ const ButtonsFixedRight = ({
                     <span className='hidden sm:block'>Salvar</span>
                 </Button>
             )}
-            {/* {(routes.find(route => route.rota === url && route.editar) ||
-                    (currentUrl === '/cadastros/profissional' && user.profissionalID == id)) && (
-                    <Button
-                        onClick={handleSubmit}
-                        type='submit'
-                        variant='contained'
-                        size='medium'
-                        color={isLoading ? 'secondary' : 'primary'}
-                        disabled={disabled || disabledSubmit || isLoading}
-                        sx={{ display: 'flex', gap: 2 }}
-                    >
-                        <Icon icon='mdi:check-bold' />
-                        <span className='hidden sm:block'>Salvar</span>
-                    </Button>
-                )} */}
             {btnNext && (
                 <Button
                     onClick={handleSubmit}

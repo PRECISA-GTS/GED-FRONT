@@ -86,21 +86,20 @@ const FormSistemaQualidade = ({ id }) => {
 
     //? Dados iniciais ao carregar página
     const getData = async () => {
-        if (type == 'new') {
-            setData({
-                fields: {
-                    nome: '',
-                    status: 1
-                }
-            })
-        }
         try {
-            const route = type === 'new' ? `${staticUrl}/new/getData` : `${staticUrl}/getData/${id}`
-            await api.post(route, { id }).then(response => {
-                setData(response.data)
-
-                reset(response.data) //* Insere os dados no formulário
-            })
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
         }

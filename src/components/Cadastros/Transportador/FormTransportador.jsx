@@ -5,9 +5,7 @@ import { Card, CardContent, Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
-import { formType } from 'src/configs/defaultConfigs'
 import FormHeader from '../../Defaults/FormHeader'
-import Loading from 'src/components/Loading'
 import { backRoute } from 'src/configs/defaultConfigs'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import { ParametersContext } from 'src/context/ParametersContext'
@@ -102,21 +100,20 @@ const FormTransportador = ({
 
     //? Dados iniciais ao carregar página
     const getData = async () => {
-        if (type == 'new') {
-            setData({
-                fields: {
-                    nome: '',
-                    unidadeMedida: '',
-                    status: 1
-                }
-            })
-        }
         try {
-            const route = type === 'new' ? `${backRoute(staticUrl)}/new/getData` : `${staticUrl}/getData/${id}`
-            await api.post(route, { id }).then(response => {
-                setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
-            })
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
         }
@@ -134,10 +131,6 @@ const FormTransportador = ({
         }
     }, [id])
 
-    // useEffect(() => {
-    //     if (newChange) handleSubmit(onSubmit)()
-    // }, [newChange])
-
     return (
         <>
             {/* {!data && <Loading />} */}
@@ -145,15 +138,15 @@ const FormTransportador = ({
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
-                        btnClose
-                        handleModalClose={handleModalClose}
+                        btnNew={handleConfirmNew ? false : true}
                         btnSave
-                        btnNew={outsideID ? false : true}
+                        manualUrl={manualUrl}
+                        btnClose={btnClose}
+                        handleModalClose={handleModalClose}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
-                        onclickDelete={() => setOpen(true)}
+                        onclickDelete={() => setOpenDelete(true)}
                         type={type}
-                        manualUrl={manualUrl}
                         outsideID={outsideID}
                     />
                     <Card>

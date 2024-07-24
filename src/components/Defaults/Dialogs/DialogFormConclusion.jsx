@@ -1,3 +1,4 @@
+import Router from 'next/router'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -5,26 +6,14 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import { AuthContext } from 'src/context/AuthContext'
-import Icon from 'src/@core/components/icon'
-import {
-    Alert,
-    Box,
-    Card,
-    CardContent,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography
-} from '@mui/material'
+import { Alert, Typography } from '@mui/material'
 import { useState, useContext } from 'react'
-import { validationEmail } from '../../../configs/validations'
-
-//* Default Form Components
 import Result from 'src/components/Defaults/Formularios/Result'
+import { BlobProvider, Document, Page } from '@react-pdf/renderer'
+import { useGlobal } from 'src/hooks/useGlobal'
+import Header from 'src/components/Reports/Header'
+import ContentFornecedor from 'src/pages/relatorio/formularios/fornecedor/Content'
+import Footer from 'src/components/Reports/Footer'
 
 const DialogFormConclusion = ({
     title,
@@ -41,13 +30,34 @@ const DialogFormConclusion = ({
     listErrors,
     canApprove,
     hasNaoConformidade,
+    handleSend,
     type,
     unity
 }) => {
-    console.log('🚀 ~ info:', unity)
     const { user, loggedUnity } = useContext(AuthContext)
     const [result, setResult] = useState({})
-    console.log('🚀 ~ result:', result)
+    const { data } = useGlobal()
+    const router = Router
+    const module = router.pathname.split('/')[2]
+
+    const DocumentPdf = () => {
+        return (
+            <Document>
+                <Page
+                    size='A4'
+                    style={{
+                        paddingHorizontal: 25
+                    }}
+                >
+                    <>
+                        <Header data={data} />
+                        {module === 'fornecedor' && <ContentFornecedor values={data} key={data} />}
+                        <Footer />
+                    </>
+                </Page>
+            </Document>
+        )
+    }
 
     return (
         <>
@@ -62,7 +72,6 @@ const DialogFormConclusion = ({
                 }}
             >
                 <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
-
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
                         {/* Formulário Pendente */}
@@ -146,19 +155,23 @@ const DialogFormConclusion = ({
                         </Button>
                     )}
                     {btnConfirm && canChange && (
-                        <Button
-                            variant='contained'
-                            disabled={
-                                info.status < 40 &&
-                                ((listErrors && listErrors.status) || (user.papelID == 1 && !result.status))
-                            }
-                            color='primary'
-                            onClick={() => {
-                                handleClose(), conclusionForm(result)
-                            }}
-                        >
-                            Concluir
-                        </Button>
+                        <BlobProvider document={<DocumentPdf />}>
+                            {({ blob, url, loading, error }) => (
+                                <Button
+                                    variant='contained'
+                                    disabled={
+                                        info.status < 40 &&
+                                        ((listErrors && listErrors.status) || (user.papelID == 1 && !result.status))
+                                    }
+                                    color='primary'
+                                    onClick={() => {
+                                        conclusionForm(result, blob)
+                                    }}
+                                >
+                                    Concluir
+                                </Button>
+                            )}
+                        </BlobProvider>
                     )}
                 </DialogActions>
             </Dialog>
