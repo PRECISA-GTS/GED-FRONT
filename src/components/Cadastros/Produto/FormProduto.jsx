@@ -41,7 +41,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
         getValues,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     // Envia dados para a API
     const onSubmit = async data => {
@@ -144,12 +144,10 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
     useEffect(() => {
         getData()
 
-        // Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     useEffect(() => {

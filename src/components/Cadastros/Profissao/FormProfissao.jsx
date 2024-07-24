@@ -36,8 +36,7 @@ const FormProfissao = () => {
         formState: { errors },
         reset
     } = useForm({
-        // defaultValues: {},
-        // mode: 'onChange',
+        mode: 'onChange',
         resolver: yupResolver(schema)
     })
 
@@ -96,6 +95,11 @@ const FormProfissao = () => {
                 }
             }
             getData()
+
+            //? Seta error nos campos obrigatórios
+            setTimeout(() => {
+                trigger()
+            }, 300)
         }
     }, [])
 

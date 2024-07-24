@@ -122,7 +122,7 @@ const FormLimpeza = ({ id }) => {
     }
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    actionsData.push(objRelatorio)
+    // actionsData.push(objRelatorio)
     if (canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {

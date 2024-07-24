@@ -43,7 +43,7 @@ const FormTransportador = ({
         control,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -124,11 +124,9 @@ const FormTransportador = ({
         getData()
 
         //? Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     return (

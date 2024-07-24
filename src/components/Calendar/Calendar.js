@@ -80,7 +80,6 @@ const Calendar = () => {
       const colorVariant = calendarEvent._def.extendedProps.variant
       const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
       let styles = `p-2 ${color}`;
-      console.log("🚀 ~ color: ", colorVariant, color)
 
       const htmlEvent = `
             <div class="${styles}">

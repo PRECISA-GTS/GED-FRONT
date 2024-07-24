@@ -12,45 +12,45 @@ import SidebarLeft from './SidebarLeft'
 import CalendarWrapper from 'src/@core/styles/libs/fullcalendar'
 
 const AppCalendar = () => {
-    // ** Hooks
-    const { settings } = useSettings()
-    const theme = useTheme()
+  // ** Hooks
+  const { settings } = useSettings()
+  const theme = useTheme()
 
 
-    // ** Vars
-    const { skin } = settings
-    const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
+  // ** Vars
+  const { skin } = settings
+  const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
 
-    // ** SidebarColors
-    const SidebarLeftColor = {
-        Personal: 'error',
-        Business: 'primary',
-        Family: 'warning',
-        Holiday: 'success',
-        ETC: 'info'
-    }
-    // ** CalendarColors
-    const CalendarColor = {
-        error: theme.palette.error.main,
-        primary: theme.palette.primary.main,
-        warning: theme.palette.warning.main,
-        success: theme.palette.success.main,
-        info: theme.palette.info.main,
-        secondary: theme.palette.secondary.main
-    }
+  // ** SidebarColors
+  const SidebarLeftColor = {
+    Personal: 'error',
+    Business: 'primary',
+    Family: 'warning',
+    Holiday: 'success',
+    ETC: 'info'
+  }
+  // ** CalendarColors
+  const CalendarColor = {
+    error: theme.palette.error.main,
+    primary: theme.palette.primary.main,
+    warning: theme.palette.warning.main,
+    success: theme.palette.success.main,
+    info: theme.palette.info.main,
+    secondary: theme.palette.secondary.main
+  }
 
-    return (
-        <>
-            <CalendarWrapper
-                className='app-calendar'
-                sx={{
-                    padding: 4,
-                    backgroundColor: settings.mode == 'dark' ? '#212b36' : '#FFF',
-                    boxShadow: skin === 'bordered' ? 0 : 6,
-                    ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
-                }}
-            >
-                {/* <SidebarLeft
+  return (
+    <>
+      <CalendarWrapper
+        className='app-calendar'
+        sx={{
+          padding: 4,
+          backgroundColor: settings.mode == 'dark' ? '#212b36' : '#FFF',
+          boxShadow: skin === 'bordered' ? 0 : 6,
+          ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
+        }}
+      >
+        {/* <SidebarLeft
                     store={store}
                     mdAbove={mdAbove}
                     dispatch={dispatch}
@@ -63,22 +63,22 @@ const AppCalendar = () => {
                     handleLeftSidebarToggle={handleLeftSidebarToggle}
                     handleAddEventSidebarToggle={handleAddEventSidebarToggle}
                 /> */}
-                <Box
-                    sx={{
-                        px: 5,
-                        pt: 3.75,
-                        flexGrow: 1,
-                        borderRadius: 1,
-                        boxShadow: 'none',
-                        backgroundColor: 'background.paper',
-                        ...(mdAbove ? { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } : {})
-                    }}
-                >
-                    <Calendar />
-                </Box>
-            </CalendarWrapper>
-        </>
-    )
+        <Box
+          sx={{
+            px: 5,
+            pt: 3.75,
+            flexGrow: 1,
+            borderRadius: 1,
+            boxShadow: 'none',
+            backgroundColor: 'background.paper',
+            ...(mdAbove ? { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } : {})
+          }}
+        >
+          <Calendar />
+        </Box>
+      </CalendarWrapper>
+    </>
+  )
 }
 
 export default AppCalendar

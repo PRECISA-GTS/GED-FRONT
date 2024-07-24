@@ -8,7 +8,7 @@ import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
 
-const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues, watch }) => {
+const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues, watch, trigger }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
@@ -164,6 +164,11 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
 
     useEffect(() => {
         getParams()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [])
 
     return (

@@ -51,7 +51,7 @@ const FormItem = ({
         control,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     // handleSave()
 
@@ -179,11 +179,9 @@ const FormItem = ({
         getData()
 
         //? Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     useEffect(() => {

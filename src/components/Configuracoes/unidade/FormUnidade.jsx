@@ -62,7 +62,7 @@ const FormUnidade = ({ id }) => {
         watch,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     //? Função que busca o CEP
     const handleCep = async cep => {
@@ -210,7 +210,7 @@ const FormUnidade = ({ id }) => {
 
         setTimeout(() => {
             trigger()
-        }, 100)
+        }, 300)
     }
     useEffect(() => {
         getData()

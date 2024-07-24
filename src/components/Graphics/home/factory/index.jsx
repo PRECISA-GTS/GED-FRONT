@@ -26,7 +26,6 @@ const Factory = () => {
     const [dataFornecedor, setDataFornecedor] = useState(null)
     const [dataRecebimentoNC, setDataRecebimentoNC] = useState(null)
     const [limpeza, setLimpeza] = useState(null)
-    const [fotoBinaria, setFotoBinaria] = useState([])
 
     const getData = async () => {
         try {
@@ -39,47 +38,17 @@ const Factory = () => {
         }
     }
 
-    const getFoto = async () => {
-        try {
-            console.log('busca foto....')
-            await api.post(`login/testeFoto/`).then(response => {
-                console.log('fotos:', response.data)
-                setFotoBinaria(response.data)
-            })
-            // setFotoBinaria(response.data.foto64)
-            // console.log('foto:', response.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    const sendFoto = async event => {
-        try {
-            const selectedFiles = event.target.files
-
-            const formData = new FormData()
-            for (let i = 0; i < selectedFiles.length; i++) {
-                formData.append('files[]', selectedFiles[i])
-            }
-
-            getFoto()
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     useEffect(() => {
         getData()
-        getFoto()
     }, [])
 
     return (
         dataFornecedor && (
             <ApexChartWrapper>
                 <Grid container spacing={6} className='match-height'>
-                    {/* Por estatus em blocos separadosç */}
-                    {dataFornecedor.map(row => (
-                        <Grid item xs={12} md={3}>
+                    {/* Por estatus em blocos separados */}
+                    {dataFornecedor.map((row, index) => (
+                        <Grid item xs={12} md={index < dataFornecedor.length - 1 ? 3 : 6}>
                             <CardStatisticsVertical
                                 stats={row.stats}
                                 color={row.color}

@@ -82,11 +82,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         getValues,
         setValue,
         control,
+        trigger,
         handleSubmit,
         clearErrors,
         setError,
         formState: { errors }
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     //* Reabre o formulário pro fornecedor alterar novamente se ainda nao estiver vinculado com recebimento
     const changeFormStatus = async values => {

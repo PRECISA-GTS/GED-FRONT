@@ -2,7 +2,7 @@ import { Alert, DialogActions, DialogContent, DialogContentText, TextField } fro
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from 'src/components/Form/Input'
 import Icon from 'src/@core/components/icon'
@@ -23,12 +23,13 @@ const DialogActs = ({
         control,
         register,
         handleSubmit,
+        trigger,
         reset,
         getValues,
         setValue,
         watch,
         formState: { errors }
-    } = useForm()
+    } = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
         handleSubmit(onSubmit)(values)
@@ -69,6 +70,7 @@ const DialogActs = ({
                                 setValue: setValue,
                                 errors: errors,
                                 watch: watch,
+                                trigger: trigger,
                                 reset: reset,
                                 onSubmit: onSubmit
                             })}

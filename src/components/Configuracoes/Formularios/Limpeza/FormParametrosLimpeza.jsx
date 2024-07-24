@@ -23,8 +23,6 @@ import HelpText from 'src/components/Defaults/HelpText'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 
 const FormParametrosLimpeza = ({ id }) => {
-    console.log('🚀 ~ id:', id)
-
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
     const [model, setModel] = useState()
@@ -74,13 +72,12 @@ const FormParametrosLimpeza = ({ id }) => {
         register,
         handleSubmit,
         reset,
+        trigger,
         getValues,
         control,
         watch,
         formState: { errors }
-    } = useForm()
-
-    // const [textCabecalho, setTextCabecalho] = useState('')
+    } = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -152,21 +149,6 @@ const FormParametrosLimpeza = ({ id }) => {
 
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
-
-    // const removeItem = (indexBlock, indexItem, arrItens) => {
-    //     if (blocks[indexBlock].itens.length == 1) {
-    //         toast.error('Você deve ter ao menos um item!')
-    //         return
-    //     }
-
-    //     const newBlocks = [...blocks]
-    //     const newItensBlock = arrItens.splice(indexItem, 1)
-    //     newBlocks[indexBlock].itens = newItensBlock
-    //     setBlocks(newBlocks)
-    //     setValue(`blocks.[${indexBlock}].itens`, newItensBlock)
-    //     refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
-    //     setChange(!change)
-    // }
 
     const removeItem = (indexBlock, indexItem, arrItens) => {
         if (blocks[indexBlock].itens.length == 1) {
@@ -311,6 +293,11 @@ const FormParametrosLimpeza = ({ id }) => {
 
     useEffect(() => {
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id, savingForm])
 
     const handleSave = async data => {

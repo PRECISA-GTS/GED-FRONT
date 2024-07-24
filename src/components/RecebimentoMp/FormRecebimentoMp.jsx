@@ -152,7 +152,7 @@ const FormRecebimentoMp = ({ id }) => {
 
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    actionsData.push(objRelatorio)
+    // actionsData.push(objRelatorio)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
