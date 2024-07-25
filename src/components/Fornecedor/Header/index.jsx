@@ -161,6 +161,7 @@ const HeaderFields = ({
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['nomeFantasia']}
+                required
             />
 
             {/* Fields dinâmicos */}
