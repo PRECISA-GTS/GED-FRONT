@@ -12,7 +12,6 @@ import Icon from 'src/@core/components/icon'
 import { Grid } from '@mui/material'
 
 const GraphLimpeza = ({ data }) => {
-    console.log('🚀 ~ GraphLimpeza: ', data)
     return (
         <Card>
             {data &&

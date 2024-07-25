@@ -20,12 +20,14 @@ import EcommerceSalesOverview from 'src/views/dashboards/ecommerce/EcommerceSale
 import AnalyticsOverview from 'src/views/dashboards/analytics/AnalyticsOverview'
 import GraphLimpeza from 'src/components/Graphics/home/factory/GraphLimpeza'
 import AppCalendar from 'src/components/Calendar/index'
+import SupplierNonCompliance from './SupplierNonCompliance'
 
 const Factory = () => {
     const { loggedUnity } = useContext(AuthContext)
     const [dataFornecedor, setDataFornecedor] = useState(null)
     const [dataRecebimentoNC, setDataRecebimentoNC] = useState(null)
     const [limpeza, setLimpeza] = useState(null)
+    const [dataSupplierNonCompliance, setDataSupplierNonCompliance] = useState(null)
 
     const getData = async () => {
         try {
@@ -33,6 +35,7 @@ const Factory = () => {
             setDataFornecedor(response.data.fornecedorPorStatus)
             setDataRecebimentoNC(response.data.totalRecebimentoNC)
             setLimpeza(response.data.limpeza)
+            setDataSupplierNonCompliance(response.data.supplierNonCompliance)
         } catch (err) {
             console.log(err)
         }
@@ -58,6 +61,11 @@ const Factory = () => {
                             />
                         </Grid>
                     ))}
+
+                    {/* Não conformidades dos fornecedores */}
+                    <Grid item xs={12} md={12}>
+                        <SupplierNonCompliance data={dataSupplierNonCompliance} />
+                    </Grid>
 
                     {/* Calendário */}
                     <Grid item xs={12} md={9}>
