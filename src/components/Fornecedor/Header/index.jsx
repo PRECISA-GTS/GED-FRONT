@@ -52,6 +52,7 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
             <Input
                 xs={12}
@@ -63,6 +64,7 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
             <Input
                 xs={12}
@@ -73,9 +75,10 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
-            {/* Data de abertura */}
+            {/* Data da avaliação */}
             <DateField
                 xs={12}
                 md={2}
@@ -91,9 +94,10 @@ const HeaderFields = ({
                 daysValidation={365}
                 dateStatus={dateStatus}
                 errors={errors?.fieldsHeader?.['data']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
-            {/* Hora de Abertura */}
+            {/* Hora da avaliacao */}
             <Input
                 xs={12}
                 md={2}
@@ -105,6 +109,7 @@ const HeaderFields = ({
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['hora']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Profissional responsável */}
@@ -121,6 +126,7 @@ const HeaderFields = ({
                 setValue={setValue}
                 control={control}
                 errors={errors?.fieldsHeader?.['profissionalPreenche']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             /> */}
 
             {/* CNPJ */}
@@ -135,6 +141,7 @@ const HeaderFields = ({
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['cnpj']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Razao Social */}
@@ -148,6 +155,7 @@ const HeaderFields = ({
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['razaoSocial']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Nome fantasia */}
@@ -161,7 +169,7 @@ const HeaderFields = ({
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['nomeFantasia']}
-                required
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Fields dinâmicos */}

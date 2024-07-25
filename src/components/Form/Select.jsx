@@ -24,6 +24,7 @@ const Select = ({
     createNew,
     handleRegistroEstabelecimento,
     helpText,
+    alertRequired,
     helpTextPosition
 }) => {
     const theme = useTheme()
@@ -60,9 +61,9 @@ const Select = ({
                                     } else {
                                         onChange && onChange(newValue)
                                         setValue(name, newValue)
-                                        type === 'registroestabelecimento'
-                                            ? handleRegistroEstabelecimento(newValue ? newValue.id : null)
-                                            : null
+                                        // type === 'registroestabelecimento'
+                                        //     ? handleRegistroEstabelecimento(newValue ? newValue.id : null)
+                                        //     : null
                                     }
                                 }}
                                 renderInput={params => (
@@ -74,7 +75,27 @@ const Select = ({
                                         sx={{
                                             '& .MuiInputBase-input': {
                                                 padding: '8px 14px' // Ajuste o valor conforme necessário
-                                            }
+                                            },
+                                            ...(alertRequired &&
+                                                !field?.value && {
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '& fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        },
+                                                        '&:hover fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        },
+                                                        '&.Mui-focused fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        }
+                                                    },
+                                                    '& .MuiInputLabel-root': {
+                                                        color: theme.palette.error.main
+                                                    },
+                                                    '& .MuiInputLabel-root.Mui-focused': {
+                                                        color: theme.palette.error.main
+                                                    }
+                                                })
                                         }}
                                     />
                                 )}

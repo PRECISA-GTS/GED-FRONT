@@ -21,7 +21,7 @@ const Fields = ({
     getValues,
     setOpenModalNew
 }) => {
-    console.log('HeaderFields dynamic...')
+    console.log('~ hasErrors: DynamicFields: ', errors)
 
     const [dateStatus, setDateStatus] = useState({})
     // const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
@@ -81,6 +81,7 @@ const Fields = ({
     return (
         fields &&
         fields.map((field, index) => {
+            console.log('field', field)
             // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
 
             return (
@@ -107,6 +108,7 @@ const Fields = ({
                             setValue={setValue}
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                             // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
@@ -129,6 +131,7 @@ const Fields = ({
                             daysValidation={365}
                             dateStatus={dateStatus}
                             register={register}
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
 
@@ -150,6 +153,7 @@ const Fields = ({
                             disabled={
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
                 </>

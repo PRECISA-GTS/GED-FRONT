@@ -383,22 +383,34 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         }
     }
 
+    let hasErrors = false
+    let arrErrors = []
+
+    const setFormError = (fieldName, fieldTitle) => {
+        setError(fieldName, {
+            type: 'manual',
+            message: 'Campo obrigatório'
+        })
+        arrErrors.push(fieldTitle)
+        hasErrors = true
+    }
+
     const checkErrors = () => {
         clearErrors()
-        let hasErrors = false
-        let arrErrors = []
 
         //? Header
+        // Fields estáticos (todos obrigatórios)
+        if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+        if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+        if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
+        if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
+
+        // Fields dinâmicos
         field?.forEach((field, index) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
             const fieldValue = getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
-                setError(fieldName, {
-                    type: 'manual',
-                    message: 'Campo obrigatório'
-                })
-                arrErrors.push(field?.nomeCampo)
-                hasErrors = true
+                setFormError(fieldName, field?.nomeCampo)
             }
         })
 
@@ -475,6 +487,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             status: hasErrors,
             errors: arrErrors
         })
+
+        // Inserir o erro em errors do react hook form
+        if (hasErrors) {
+            arrErrors.forEach(error => {
+                trigger(error)
+            })
+        }
+
+        console.log('🚀 ~ hasErrors:', hasErrors)
     }
 
     const getAddressByCep = async cepString => {
