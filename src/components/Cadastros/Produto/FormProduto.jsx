@@ -53,7 +53,6 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
             removedItems
         }
         console.log(values)
-        // return
 
         try {
             if (type === 'new') {
@@ -203,8 +202,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     md={3}
                                     title='Classificação'
                                     name='classificacao.fields'
-                                    value={data?.classificacao.fields}
-                                    required={true}
+                                    value={data?.classificacao?.fields}
                                     options={data.classificacao.options}
                                     register={register}
                                     setValue={setValue}

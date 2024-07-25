@@ -72,6 +72,7 @@ const LinkForms = ({ form, onSubmit }) => {
                                                     value={form.getValues('parFormularioID')?.name}
                                                     form={form}
                                                     options={models}
+                                                    required
                                                 />
                                             </Grid>
                                         </form>
