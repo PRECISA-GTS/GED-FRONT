@@ -5,11 +5,7 @@ import Fields from 'src/components/Defaults/Formularios/Fields'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
-import { dateConfig } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
-import { SettingsContext } from 'src/@core/context/settingsContext'
-import Router from 'next/router'
-import { RouteContext } from 'src/context/RouteContext'
 import HeaderInfo from './Info'
 
 const HeaderFields = ({
@@ -24,27 +20,8 @@ const HeaderFields = ({
     setValue,
     control
 }) => {
-    const { user, loggedUnity } = useContext(AuthContext)
-    const [dateStatus, setDateStatus] = useState({})
+    const { user } = useContext(AuthContext)
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
-    const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
-    const [fornecedor, setFornecedor] = useState(null)
-    const [produtos, setProdutos] = useState([])
-    const [change, setChange] = useState(false)
-
-    const { settings } = useContext(SettingsContext)
-    const mode = settings.mode
-    const router = Router
-    const { setId } = useContext(RouteContext)
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
 
     const getProfissionais = async () => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
@@ -120,10 +97,8 @@ const HeaderFields = ({
                                     disabled={disabled}
                                     register={register}
                                     control={control}
-                                    setDateFormat={setDateFormat}
                                     typeValidation='dataPassado'
                                     daysValidation={365}
-                                    dateStatus={dateStatus}
                                     errors={errors?.fieldsHeader?.['data']}
                                 />
                                 {/* Hora de avaliação */}
@@ -133,7 +108,6 @@ const HeaderFields = ({
                                     title='Hora da avaliação'
                                     name={`fieldsHeader.hora`}
                                     type='time'
-                                    // value={values?.hora ?? '10:20'}
                                     disabled={disabled}
                                     register={register}
                                     control={control}

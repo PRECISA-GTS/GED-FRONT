@@ -1,10 +1,9 @@
-import { Card, CardContent, Grid, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import Radio from '@mui/material/Radio'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
-import useDateFormat from 'src/hooks/useDateFormat'
 import RadioGroup from '@mui/material/RadioGroup'
 
 const FieldsFabricaConclusion = ({
@@ -18,8 +17,6 @@ const FieldsFabricaConclusion = ({
     handleChangeStatus,
     errors
 }) => {
-    const { setDateFormat, dateStatus } = useDateFormat()
-
     const optionsConclusion = [
         {
             id: 1,
@@ -95,10 +92,8 @@ const FieldsFabricaConclusion = ({
                     disabled={info.concluido || papelID != 1}
                     register={register}
                     control={control}
-                    setDateFormat={setDateFormat}
                     typeValidation='dataPassado'
                     daysValidation={999999999999}
-                    dateStatus={dateStatus}
                     errors={null}
                 />
 

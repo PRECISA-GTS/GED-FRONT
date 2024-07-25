@@ -47,8 +47,6 @@ const MapaSipeAgro = ({ sipeAgro }) => {
         ]
 
         const hasProduct = (type, column) => {
-            console.log('🚀 ~ hasProduct: type, column:', type, column)
-
             // verifica se contém sipeAgro[column] na string type
             if (sipeAgro && sipeAgro[column] && sipeAgro[column].includes(type)) {
                 return <Icon icon='lets-icons:check-fill' className='text-green-600 w-full' />

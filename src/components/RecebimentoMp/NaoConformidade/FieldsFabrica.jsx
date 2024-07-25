@@ -1,9 +1,8 @@
-import { Button, ButtonGroup, Card, CardContent, Grid } from '@mui/material'
+import { Button, ButtonGroup, Grid } from '@mui/material'
 import CheckLabel from 'src/components/Form/CheckLabel'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
-import useDateFormat from 'src/hooks/useDateFormat'
 import Icon from 'src/@core/components/icon'
 import { useState } from 'react'
 
@@ -20,13 +19,9 @@ const FieldsFabrica = ({
     setValue,
     errors
 }) => {
-    console.log('🚀 ~ FieldsFabrica:', value)
-
-    const { setDateFormat, dateStatus } = useDateFormat()
     const [ncType, setNcType] = useState(value.tipo ?? 1)
 
     const setType = type => {
-        console.log('🚀 ~ type:', type)
         setNcType(type)
         setValue(`naoConformidade.itens[${index}].tipo`, type)
     }
@@ -58,10 +53,8 @@ const FieldsFabrica = ({
                     disabled={info.concluido || papelID != 1}
                     register={register}
                     control={control}
-                    setDateFormat={setDateFormat}
                     typeValidation='dataPassado'
                     daysValidation={999999999999}
-                    dateStatus={dateStatus}
                     errors={null}
                 />
 
@@ -140,7 +133,6 @@ const FieldsFabrica = ({
                             required={item.obrigatorio == 1 ? true : false}
                             register={register}
                             control={control}
-                            // errors={errors?.naoConformidade?.itens[index]?.item?.nomeColuna}
                         />
                     ))}
             </Grid>

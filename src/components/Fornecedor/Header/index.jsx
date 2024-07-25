@@ -4,7 +4,6 @@ import Fields from 'src/components/Defaults/Formularios/Fields'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
-import useDateFormat from 'src/hooks/useDateFormat'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
 
 const HeaderFields = ({
@@ -19,9 +18,7 @@ const HeaderFields = ({
     getValues,
     getAddressByCep
 }) => {
-    console.log('🚀 ~ HeaderFields:', values)
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
-    const { setDateFormat, dateStatus } = useDateFormat()
 
     const getProfissionais = async () => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
@@ -89,10 +86,8 @@ const HeaderFields = ({
                 disabled={disabled}
                 register={register}
                 control={control}
-                setDateFormat={setDateFormat}
                 typeValidation='dataPassado'
                 daysValidation={365}
-                dateStatus={dateStatus}
                 errors={errors?.fieldsHeader?.['data']}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />

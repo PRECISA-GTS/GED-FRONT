@@ -630,6 +630,7 @@ const FormLimpeza = ({ id }) => {
                                 changeAllOptions={changeAllOptions}
                                 values={bloco}
                                 control={control}
+                                getValues={getValues}
                                 register={register}
                                 setValue={setValue}
                                 errors={errors?.blocos}

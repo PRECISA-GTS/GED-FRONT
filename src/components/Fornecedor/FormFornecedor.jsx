@@ -1006,6 +1006,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                     control={control}
                                     register={register}
                                     setValue={setValue}
+                                    getValues={getValues}
                                     errors={errors?.blocos}
                                     disabled={!canEdit.status || hasFormPending}
                                 />

@@ -17,7 +17,7 @@ const SelectModel = ({ values }) => {
     const { loggedUnity } = useAuth()
     const router = Router
     const staticUrl = router.pathname
-    const form = useForm()
+    const form = useForm({ mode: 'onChange' })
 
     const goToForm = id => {
         setId(id)

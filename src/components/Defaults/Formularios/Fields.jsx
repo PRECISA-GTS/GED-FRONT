@@ -1,7 +1,3 @@
-import { useEffect, useState } from 'react'
-// import { useWatch } from 'react-hook-form'
-import { dateConfig } from 'src/configs/defaultConfigs'
-
 //* Custom inputs
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
@@ -21,28 +17,6 @@ const Fields = ({
     getValues,
     setOpenModalNew
 }) => {
-    console.log('~ hasErrors: DynamicFields: ', errors)
-
-    const [dateStatus, setDateStatus] = useState({})
-    // const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
-
-    // Use useWatch to monitor the registroEstabelecimentoID field
-    // const watchRegistroEstabelecimento = useWatch({
-    //     control,
-    //     name: 'registroEstabelecimentoID',
-    //     defaultValue: null
-    // })
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        console.log('status', status)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
-
     const getMaskForField = fieldName => {
         switch (fieldName) {
             case 'telefone':
@@ -73,17 +47,9 @@ const Fields = ({
         setNameSelected(name)
     }
 
-    // useEffect que verifique o valor do registroEstabelecimento, se > 1, watchRegistroEstabelecimento vira true
-    // useEffect(() => {
-    //     console.log('trocou algoooooooooooo')
-    // }, [watchRegistroEstabelecimento])
-
     return (
         fields &&
         fields.map((field, index) => {
-            console.log('field', field)
-            // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
-
             return (
                 <>
                     {/* Autocomplete (int) */}
@@ -109,7 +75,6 @@ const Fields = ({
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
-                            // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
                         />
                     )}
 
@@ -126,17 +91,15 @@ const Fields = ({
                             name={`fields[${index}].${field.nomeColuna}`}
                             errors={errors?.fields?.[index]?.[field.nomeColuna]}
                             control={control}
-                            setDateFormat={setDateFormat}
                             typeValidation='dataPassado'
                             daysValidation={365}
-                            dateStatus={dateStatus}
                             register={register}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
 
                     {/* Textfield */}
-                    {field /* && field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1*/ && (
+                    {field && (
                         <Input
                             key={`input-${index}`}
                             xs={12}

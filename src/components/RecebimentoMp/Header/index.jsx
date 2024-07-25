@@ -5,11 +5,7 @@ import Fields from 'src/components/Defaults/Formularios/Fields'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
-import { dateConfig } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
-import { SettingsContext } from 'src/@core/context/settingsContext'
-import Router from 'next/router'
-import { RouteContext } from 'src/context/RouteContext'
 import HeaderInfo from './Info'
 import RecebimentoMpProdutos from '../Produtos'
 
@@ -36,26 +32,11 @@ const HeaderFields = ({
     setNewChange
 }) => {
     const { user, loggedUnity } = useContext(AuthContext)
-    const [dateStatus, setDateStatus] = useState({})
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
     const [fornecedor, setFornecedor] = useState(null)
     const [produtos, setProdutos] = useState([])
     const [change, setChange] = useState(false)
-
-    const { settings } = useContext(SettingsContext)
-    const mode = settings.mode
-    const router = Router
-    const { setId } = useContext(RouteContext)
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
 
     const getProfissionais = async () => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
@@ -80,12 +61,6 @@ const HeaderFields = ({
         const profissionalID = user.profissionalID //? Profissional logado
         const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
         if (profissional && profissional.id > 0) setValue('fieldsHeader.profissional', profissional)
-    }
-
-    // Função que envia para o formulario do fornecedor selecionado
-    const handleGoToSupplier = () => {
-        setId(fornecedor.id)
-        router.push('/formularios/fornecedor/')
     }
 
     const selectFornecedor = (e, fornecedoresAprovados, clearChecks) => {
@@ -150,6 +125,7 @@ const HeaderFields = ({
                                     value={values?.abertoPor?.dataInicio}
                                     disabled
                                     control={control}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Hora de Abertura */}
                                 <Input
@@ -161,6 +137,7 @@ const HeaderFields = ({
                                     disabled
                                     register={register}
                                     control={control}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Profissional que abriu */}
                                 <Input
@@ -172,6 +149,7 @@ const HeaderFields = ({
                                     disabled
                                     register={register}
                                     control={control}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Inputs com preenchimento */}
                                 {/* Data de avaliação */}
@@ -185,11 +163,10 @@ const HeaderFields = ({
                                     disabled={disabled}
                                     register={register}
                                     control={control}
-                                    setDateFormat={setDateFormat}
                                     typeValidation='dataPassado'
                                     daysValidation={365}
-                                    dateStatus={dateStatus}
                                     errors={errors?.fieldsHeader?.['data']}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Hora de avaliação */}
                                 <Input
@@ -198,11 +175,11 @@ const HeaderFields = ({
                                     title='Hora da avaliação'
                                     name={`fieldsHeader.hora`}
                                     type='time'
-                                    // value={values?.hora ?? '10:20'}
                                     disabled={disabled}
                                     register={register}
                                     control={control}
                                     errors={errors?.fieldsHeader?.['hora']}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Profissional que preenche */}
                                 <Select
@@ -212,12 +189,12 @@ const HeaderFields = ({
                                     name={`fieldsHeader.profissional`}
                                     type='string'
                                     options={profissionaisPreenchimento}
-                                    // value={profissionaisPreenchimento[1]}
                                     disabled={disabled}
                                     register={register}
                                     setValue={setValue}
                                     control={control}
                                     errors={errors?.fieldsHeader?.['profissional']}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                                 {/* Fields dinâmicos */}
                                 <Fields
@@ -254,6 +231,7 @@ const HeaderFields = ({
                                     setValue={setValue}
                                     control={control}
                                     errors={errors?.fieldsHeader?.['fornecedor']}
+                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                             </Grid>
                         </CardContent>

@@ -1,15 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
-import { Autocomplete, Box, Card, CardContent, FormControl, Grid, TextField, Typography } from '@mui/material'
-import { dateConfig } from 'src/configs/defaultConfigs'
+import { FormControl, Grid, Typography } from '@mui/material'
 
 //* Custom inputs
 import AnexoListMultiple from 'src/components/Anexos/ModeView/AnexoListMultiple'
 import Input from 'src/components/Form/Input'
 import RadioLabel from 'src/components/Form/RadioLabel'
-import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
-import { api } from 'src/configs/api'
 
 const Item = ({
     blockIndex,
@@ -24,6 +21,7 @@ const Item = ({
     handleRemoveAnexoItem,
     values,
     register,
+    getValues,
     control,
     errors,
     setValue,
@@ -33,18 +31,6 @@ const Item = ({
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)
     const fileInputRef = useRef(null)
-
-    const [dateStatus, setDateStatus] = useState({})
-    const [responseConfig, setResponseConfig] = useState(null)
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
 
     //? Se for tipo Data, inicializa os campos já com as validações de data, bloqueando datas anteriores ou posteriores
     useEffect(() => {
@@ -78,7 +64,16 @@ const Item = ({
 
             {/* Descrição do item */}
             <Grid item xs={12} md={6}>
-                <Typography variant='subtitle1' sx={{ fontWeight: 400 }}>
+                <Typography
+                    variant='subtitle1'
+                    sx={{
+                        fontWeight: 400,
+                        color:
+                            values.obrigatorio && getValues(`blocos[${blockIndex}].itens[${index}].resposta`) == null
+                                ? 'error.main'
+                                : 'text.primary'
+                    }}
+                >
                     {values.nome ? `${values.ordem} - ${values.nome}` : ``}
                 </Typography>
             </Grid>
@@ -127,10 +122,8 @@ const Item = ({
                                 name={`blocos[${blockIndex}].itens[${index}].resposta`}
                                 errors={errors?.[blockIndex]?.itens[index]?.resposta}
                                 control={control}
-                                setDateFormat={setDateFormat}
                                 typeValidation='dataPassado'
                                 daysValidation={365}
-                                dateStatus={dateStatus}
                                 register={register}
                             />
                         )}

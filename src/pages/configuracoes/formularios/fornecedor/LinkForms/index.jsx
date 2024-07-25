@@ -39,6 +39,10 @@ const LinkForms = ({ form, onSubmit }) => {
     useEffect(() => {
         getCategories()
         getModels()
+
+        setTimeout(() => {
+            form.trigger()
+        }, 300)
     }, [])
 
     return (

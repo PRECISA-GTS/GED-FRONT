@@ -1,6 +1,8 @@
 import { Grid, FormControl, TextField } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import { useTheme } from '@mui/material/styles'
+import { useState } from 'react'
+import { dateConfig } from 'src/configs/defaultConfigs'
 
 const DateField = ({
     xs,
@@ -11,15 +13,14 @@ const DateField = ({
     type,
     value,
     name,
-    setDateFormat,
     typeValidation,
     daysValidation,
-    dateStatus,
     errors,
     alertRequired,
     control // Add 'control' prop to receive the react-hook-form control object
 }) => {
     const theme = useTheme()
+    const [dateStatus, setDateStatus] = useState({})
 
     const formatDate = dateString => {
         const date = new Date(dateString)
@@ -27,6 +28,15 @@ const DateField = ({
         const month = (date.getMonth() + 1).toString().padStart(2, '0')
         const year = date.getFullYear()
         return `${year}-${month}-${day}`
+    }
+
+    const setDateFormat = (type, name, value, numDays) => {
+        const newDate = new Date(value)
+        const status = dateConfig(type, newDate, numDays)
+        setDateStatus(prevState => ({
+            ...prevState,
+            [name]: status
+        }))
     }
 
     return (

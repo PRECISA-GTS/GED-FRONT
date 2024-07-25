@@ -12,7 +12,6 @@ import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
 import { Button, TextField, FormControl } from '@mui/material'
 import DialogNewPasswordProfessional from 'src/components/Defaults/Dialogs/DialogNewPasswordProfessional'
-import useDateFormat from 'src/hooks/useDateFormat'
 
 const Fields = ({
     control,
@@ -35,7 +34,6 @@ const Fields = ({
     console.log('🚀 ~ data', data)
     const [lenghtPassword, setLenghtPassword] = useState(null)
     const [openModalNewPassword, setOpenModalNewPassword] = useState(false)
-    const { setDateFormat, dateStatus } = useDateFormat()
 
     const [values, setValues] = useState({
         showPassword: false,
@@ -141,13 +139,10 @@ const Fields = ({
                     value={data?.fields?.dataNascimento}
                     register={register}
                     control={control}
-                    setDateFormat={setDateFormat}
                     typeValidation='dataPassado'
                     daysValidation={9999999999999999999}
-                    dateStatus={dateStatus}
                     errors={errors?.fields?.dataNascimento}
                 />
-
                 <Input
                     xs={12}
                     md={4}
