@@ -22,14 +22,16 @@ const RecebimentoMP = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { id } = useContext(RouteContext)
-    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
+    // const { startFilter, setFilteredData, filteredData, setData } = useFilter()
+    const { startFilter, setFilteredDataRecebimentoMP, filteredDataRecebimentoMP, setDataRecebimentoMP } = useFilter()
+    console.log('🚀 ~ filteredDataRecebimentoMP:', filteredDataRecebimentoMP)
 
     const getList = async () => {
         await api
             .get(`${currentLink}/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`)
             .then(response => {
-                setFilteredData(response.data)
-                setData(response.data)
+                setFilteredDataRecebimentoMP(response.data)
+                setDataRecebimentoMP(response.data)
                 setTitle({
                     title: 'Recebimento de MP',
                     subtitle: {
@@ -42,9 +44,15 @@ const RecebimentoMP = () => {
     }
 
     useEffect(() => {
+        // const filter = router.query.filter === '2' ? true : false
         getList()
-        startFilter(<Filters />, null)
-    }, [id])
+        startFilter(<Filters />, false)
+    }, [id, router.query])
+
+    // useEffect(() => {
+    //     getList()
+    //     startFilter(<Filters />, null)
+    // }, [id])
 
     const arrColumns =
         user.papelID == 2
@@ -136,14 +144,14 @@ const RecebimentoMP = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!filteredData ? (
+            {!filteredDataRecebimentoMP ? (
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
                 <FormRecebimentoMp id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
-                <Table result={filteredData} columns={columns} />
+                <Table key={filteredDataRecebimentoMP} result={filteredDataRecebimentoMP} columns={columns} />
             )}
         </>
     )

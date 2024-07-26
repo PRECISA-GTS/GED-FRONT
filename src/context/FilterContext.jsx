@@ -7,10 +7,25 @@ const initialValues = {
     // Estados
     pageSize: 50,
     setPageSize: () => {},
+
+    // Fornecedor
+    filteredDataSupplier: [],
+    setFilteredDataSupplier: () => {},
+    dataSupplier: [],
+    setDataSupplier: () => {},
+
+    // RecebimentoMP
+    filteredDataRecebimentoMP: [],
+    setFilteredDataRecebimentoMP: () => {},
+    dataRecebimentoMP: [],
+    setDataRecebimentoMP: () => {},
+
+    //
     filteredData: [],
     setFilteredData: () => {},
     data: [],
     setData: () => {},
+
     searchText: '',
     setSearchText: () => {},
     openFilter: false,
@@ -37,6 +52,15 @@ const FilterContext = createContext(initialValues)
 
 const FilterProvider = ({ children }) => {
     const [pageSize, setPageSize] = useState(initialValues.pageSize)
+
+    // Fornecedor
+    const [filteredDataSupplier, setFilteredDataSupplier] = useState(initialValues.filteredDataSupplier)
+    const [dataSupplier, setDataSupplier] = useState(initialValues.dataSupplier)
+
+    // RecebimentoMP
+    const [filteredDataRecebimentoMP, setFilteredDataRecebimentoMP] = useState(initialValues.filteredDataRecebimentoMP)
+    const [dataRecebimentoMP, setDataRecebimentoMP] = useState(initialValues.dataRecebimentoMP)
+
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
     const [searchText, setSearchText] = useState(initialValues.searchText)
     const [data, setData] = useState(initialValues.data)
@@ -50,6 +74,20 @@ const FilterProvider = ({ children }) => {
     const startFilter = async (component, keepFilter) => {
         setComponentFilters(component)
         setNames([])
+
+        // Fornecedor
+        if (pathName === '/formularios/fornecedor') {
+            setFilteredDataSupplier(filteredDataSupplier)
+            setDataSupplier(dataSupplier)
+        }
+
+        // RecebimentoMP
+        if (pathName === '/formularios/recebimento-mp') {
+            setFilteredDataRecebimentoMP(filteredDataRecebimentoMP)
+            setDataRecebimentoMP(dataRecebimentoMP)
+        }
+
+        //
         setFilteredData(data)
         setOpenFilter(false)
         setSearchText('')
@@ -79,6 +117,8 @@ const FilterProvider = ({ children }) => {
     const clearSearch = () => {
         setSearchText('')
         setFilteredData(data)
+        setFilteredDataSupplier(dataSupplier)
+        setFilteredDataRecebimentoMP(dataRecebimentoMP)
     }
 
     //* Função para limpar todos os filtros
@@ -89,6 +129,8 @@ const FilterProvider = ({ children }) => {
             form.setValue(name, '')
         })
         setFilteredData(data)
+        setFilteredDataSupplier(dataSupplier)
+        setFilteredDataRecebimentoMP(dataRecebimentoMP)
     }
 
     //* Função para setar os valores dos filtros
@@ -155,6 +197,19 @@ const FilterProvider = ({ children }) => {
         setSearchText,
         pageSize,
         setPageSize,
+
+        // Fornecedor
+        filteredDataSupplier,
+        setFilteredDataSupplier,
+        dataSupplier,
+        setDataSupplier,
+
+        // RecebimentoMP
+        filteredDataRecebimentoMP,
+        setFilteredDataRecebimentoMP,
+        dataRecebimentoMP,
+        setDataRecebimentoMP,
+
         filteredData,
         setFilteredData,
         data,

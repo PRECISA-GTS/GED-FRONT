@@ -33,7 +33,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const { isNotFactory } = useFornecedor()
-    const { startFilter, setFilteredData, filteredData, setData } = useFilter()
+    const { startFilter, setFilteredDataSupplier, filteredDataSupplier, setDataSupplier, key } = useFilter()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -42,15 +42,19 @@ const Fornecedor = () => {
 
     const getList = async () => {
         try {
+            console.log('🚀 ~ getList ~ response antes ', loggedUnity.unidadeID, user.papelID, user.cnpj)
             const response = await api.post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
-            console.log('🚀 ~ getList ~ response', response.data)
 
-            setFilteredData(response.data)
-            setData(response.data)
+            if (!response.data) return
+
+            console.log('🚀 ~ getList ~ response depois ', response.data)
+
+            setFilteredDataSupplier(response.data)
+            setDataSupplier(response.data)
             setTitle({
                 title: 'Fornecedor',
                 subtitle: {
@@ -102,17 +106,15 @@ const Fornecedor = () => {
         }
     }
 
-    const handleLink = link => {
-        if (link) {
-            router.push(link)
-            toast.success('Link copiado com sucesso!')
-        }
-    }
+    // useEffect(() => {
+    //     setFilteredDataSupplier([])
+    //     setDataSupplier([])
+    // }, [router.query])
 
     useEffect(() => {
-        const filter = router.query.filter === '1' ? true : false
+        // const filter = router.query.filter === '1' ? true : false
         getList()
-        startFilter(<Filters />, filter)
+        startFilter(<Filters />, false)
     }, [id, router.query])
 
     // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
@@ -157,10 +159,6 @@ const Fornecedor = () => {
                   {
                       headerName: 'Quem preenche',
                       field: 'quemPreenche',
-                      //   field: {
-                      //       name: 'quemPreenche',
-                      //       cor: 'red'
-                      //   },
                       size: 1
                   },
                   {
@@ -226,7 +224,7 @@ const Fornecedor = () => {
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
-            {!filteredData ? (
+            {!filteredDataSupplier ? (
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
@@ -234,7 +232,8 @@ const Fornecedor = () => {
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table
-                    result={filteredData}
+                    key={`${key}-${filteredDataSupplier}`}
+                    result={filteredDataSupplier}
                     columns={columns}
                     openModal={user.papelID == 1 ? openModal : null}
                     btnNew={user.papelID == 1 ? true : false}
