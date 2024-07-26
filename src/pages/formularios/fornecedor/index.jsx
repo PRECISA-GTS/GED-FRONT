@@ -47,6 +47,8 @@ const Fornecedor = () => {
                 papelID: user.papelID,
                 cnpj: user.cnpj ? user.cnpj : null
             })
+            console.log('🚀 ~ getList ~ response', response.data)
+
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
@@ -65,6 +67,8 @@ const Fornecedor = () => {
     //? handleSubmit do modal de gerar um novo fornecedor
     const makeFornecedor = async values => {
         try {
+            console.log('🚀 ~ makeFornecedor:', values.fields)
+
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
@@ -106,7 +110,7 @@ const Fornecedor = () => {
     }
 
     useEffect(() => {
-        const filter = router.query.filter === 1 ? true : false
+        const filter = router.query.filter === '1' ? true : false
         getList()
         startFilter(<Filters />, filter)
     }, [id, router.query])
@@ -132,6 +136,11 @@ const Fornecedor = () => {
                   {
                       headerName: 'CNPJ',
                       field: 'cnpj',
+                      size: 1
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
                       size: 1
                   },
                   {
@@ -178,6 +187,11 @@ const Fornecedor = () => {
                   {
                       headerName: 'CNPJ',
                       field: 'cnpj',
+                      size: 1
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
                       size: 1
                   },
                   {
@@ -234,6 +248,7 @@ const Fornecedor = () => {
                 setOpenModal={setOpen}
                 openModal={open}
                 size='lg'
+                fullHeight
             >
                 <NewFornecedor />
             </DialogActs>
@@ -246,7 +261,9 @@ const Fornecedor = () => {
                 setOpenModal={setOpenModalConclusion}
                 openModal={openModalConclusion}
             >
-                <FormFornecedorConclusion values={responseConclusion} />
+                <div>
+                    <FormFornecedorConclusion values={responseConclusion} />
+                </div>
             </DialogActs>
         </>
     )

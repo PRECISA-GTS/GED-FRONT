@@ -21,22 +21,8 @@ import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import FormItem from 'src/components/Cadastros/Item/FormItem'
 import HelpText from 'src/components/Defaults/HelpText'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
-// import { IndeterminateCheckBoxOutlined } from '@mui/icons-material'
-
-// import JoditEditor from 'jodit-react'
 
 const FormParametrosFornecedor = ({ id }) => {
-    console.log('🚀 ~ id:', id)
-    //* Editor de texto
-    // const editor = useRef(null)
-    // const config = useMemo(
-    //     {
-    //         readonly: false, // all options from https://xdsoft.net/jodit/docs/,
-    //         placeholder: 'Start typings...'
-    //     },
-    //     []
-    // )
-
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
     const [model, setModel] = useState()
@@ -86,13 +72,12 @@ const FormParametrosFornecedor = ({ id }) => {
         register,
         handleSubmit,
         reset,
+        trigger,
         getValues,
         control,
         watch,
         formState: { errors }
-    } = useForm()
-
-    // const [textCabecalho, setTextCabecalho] = useState('')
+    } = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -310,6 +295,11 @@ const FormParametrosFornecedor = ({ id }) => {
 
     useEffect(() => {
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id, savingForm])
 
     const handleSave = async data => {

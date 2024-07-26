@@ -24,12 +24,12 @@ const Select = ({
     createNew,
     handleRegistroEstabelecimento,
     helpText,
+    alertRequired,
     helpTextPosition
 }) => {
     const theme = useTheme()
     const { settings } = useSettings()
     const { mode } = settings
-    console.log('🚀 ~ theme:', settings, theme)
     let optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
     return (
@@ -48,9 +48,7 @@ const Select = ({
                                 limitTags={limitTags}
                                 size='small'
                                 options={optionsWithNovo}
-                                getOptionLabel={option =>
-                                    option?.cnpj ? `${option.cnpj} - ${option.nome}` : option?.nome
-                                }
+                                getOptionLabel={option => option?.nome}
                                 value={
                                     multiple && field.value && field.value.length > 0
                                         ? field.value.map(item => options.find(option => option.id === item.id))
@@ -63,9 +61,9 @@ const Select = ({
                                     } else {
                                         onChange && onChange(newValue)
                                         setValue(name, newValue)
-                                        type === 'registroestabelecimento'
-                                            ? handleRegistroEstabelecimento(newValue ? newValue.id : null)
-                                            : null
+                                        // type === 'registroestabelecimento'
+                                        //     ? handleRegistroEstabelecimento(newValue ? newValue.id : null)
+                                        //     : null
                                     }
                                 }}
                                 renderInput={params => (
@@ -77,7 +75,27 @@ const Select = ({
                                         sx={{
                                             '& .MuiInputBase-input': {
                                                 padding: '8px 14px' // Ajuste o valor conforme necessário
-                                            }
+                                            },
+                                            ...(alertRequired &&
+                                                !field?.value && {
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '& fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        },
+                                                        '&:hover fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        },
+                                                        '&.Mui-focused fieldset': {
+                                                            borderColor: theme.palette.error.main
+                                                        }
+                                                    },
+                                                    '& .MuiInputLabel-root': {
+                                                        color: theme.palette.error.main
+                                                    },
+                                                    '& .MuiInputLabel-root.Mui-focused': {
+                                                        color: theme.palette.error.main
+                                                    }
+                                                })
                                         }}
                                     />
                                 )}

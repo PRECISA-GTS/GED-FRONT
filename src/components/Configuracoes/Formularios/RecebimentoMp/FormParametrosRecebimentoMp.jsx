@@ -23,8 +23,6 @@ import HelpText from 'src/components/Defaults/HelpText'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 
 const FormParametrosRecebimentoMp = ({ id }) => {
-    console.log('🚀 ~ id:', id)
-
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
     const [model, setModel] = useState()
@@ -74,13 +72,12 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         register,
         handleSubmit,
         reset,
+        trigger,
         getValues,
         control,
         watch,
         formState: { errors }
-    } = useForm()
-
-    // const [textCabecalho, setTextCabecalho] = useState('')
+    } = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -301,6 +298,11 @@ const FormParametrosRecebimentoMp = ({ id }) => {
 
     useEffect(() => {
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id, savingForm])
 
     const handleSave = async data => {

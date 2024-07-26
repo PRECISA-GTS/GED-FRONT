@@ -14,17 +14,6 @@ const ParametersProvider = ({ children }) => {
     })
     const router = useRouter();
 
-    // TODO Função para buscar os dados ao clicar nos cards da dashboard
-    // useEffect(() => {
-    //     if (router.query.s) {
-    //         setSearchText(router.query.s);
-    //         handleSearch(router.query.s)
-    //     } else {
-    //         setSearchText('');
-    //     }
-    // }, [title, router])
-
-
     // Funções para guardar ids dinamicos no localStorage
     const setStorageId = (id) => {
         localStorage.setItem('dynamicId', JSON.stringify(id))

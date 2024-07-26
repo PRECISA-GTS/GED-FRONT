@@ -58,7 +58,7 @@ const HistoricForm = ({ parFormularioID, id }) => {
                                 <TimelineItem>
                                     <TimelineSeparator>
                                         <TimelineDot color={statusDefault[mov.statusAtual].color} />
-                                        <TimelineConnector />
+                                        {index < historic.length - 1 && <TimelineConnector />}
                                     </TimelineSeparator>
                                     <TimelineContent sx={{ '& svg': { verticalAlign: 'bottom', mx: 4 } }}>
                                         <Box
@@ -72,32 +72,36 @@ const HistoricForm = ({ parFormularioID, id }) => {
                                             <div className='flex items-center gap-2'>
                                                 <Typography
                                                     variant='body2'
-                                                    sx={{ mr: 2, fontWeight: 600, color: 'text.primary' }}
-                                                >
-                                                    {mov.data + ' - ' + mov.hora + ' '}
-                                                    {index == 0 && (
-                                                        <CustomChip
-                                                            size='small'
-                                                            skin='light'
-                                                            color={statusDefault[mov.statusAtual].color}
-                                                            label='Atual'
-                                                            sx={{
-                                                                '& .MuiChip-label': {
-                                                                    textTransform: 'capitalize'
-                                                                }
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Typography>
-                                                <Typography
-                                                    variant='body2'
                                                     className='flex items-center'
                                                     sx={{ color: 'text.primary' }}
                                                 >
-                                                    <span>{statusDefault[mov.statusAnterior].title}</span>
+                                                    <span>
+                                                        {statusDefault[mov.statusAnterior].title == 'Inativo'
+                                                            ? 'Início'
+                                                            : statusDefault[mov.statusAnterior].title}
+                                                    </span>
                                                     <Icon icon='mdi:arrow-right' />
                                                     <span>{statusDefault[mov.statusAtual].title}</span>
                                                 </Typography>
+                                                <Typography
+                                                    variant='body2'
+                                                    sx={{ mr: 2, fontWeight: 600, color: 'text.primary' }}
+                                                >
+                                                    {mov.data + ' - ' + mov.hora + ' '}
+                                                </Typography>
+                                                {index == 0 && (
+                                                    <CustomChip
+                                                        size='small'
+                                                        skin='light'
+                                                        color={statusDefault[mov.statusAtual].color}
+                                                        label='Atual'
+                                                        sx={{
+                                                            '& .MuiChip-label': {
+                                                                textTransform: 'capitalize'
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
                                             </div>
                                             <div className='flex items-center gap-4'>
                                                 <Typography variant='caption' className='flex items-center'>

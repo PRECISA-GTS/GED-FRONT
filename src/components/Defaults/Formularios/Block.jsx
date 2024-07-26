@@ -1,20 +1,7 @@
-import {
-    Autocomplete,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    FormControl,
-    FormControlLabel,
-    Grid,
-    TextField,
-    Typography
-} from '@mui/material'
+import { Card, CardContent, FormControlLabel, Grid, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Item from 'src/components/Defaults/Formularios/Item'
-import CheckLabel from 'src/components/Form/CheckLabel'
-import RadioLabel from 'src/components/Form/RadioLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 
@@ -28,13 +15,13 @@ const Block = ({
     handleFileSelect,
     handleRemoveAnexoItem,
     register,
+    getValues,
     control,
     setValue,
     errors,
     disabled
 }) => {
     const [totalColumns, setTotalColumns] = useState(0)
-    const [newValues, setNewValues] = useState([])
 
     const updateResponse = ({ e, values, blockIndex, index }) => {
         setValue(
@@ -42,8 +29,6 @@ const Block = ({
             values.alternativas.find(item => item.id == e.target.value)
         )
         setItemResposta({
-            // parFornecedorModeloBlocoID: values.parFornecedorModeloBlocoID ?? 0,
-            // parRecebimentoMpModeloBlocoID: values.parRecebimentoMpModeloBlocoID ?? 0,
             itemID: values.itemID,
             alternativa: values.alternativas.find(item => item.id == e.target.value)
         })
@@ -121,6 +106,7 @@ const Block = ({
                                     values={item}
                                     control={control}
                                     register={register}
+                                    getValues={getValues}
                                     setValue={setValue}
                                     errors={errors}
                                     disabled={disabled}

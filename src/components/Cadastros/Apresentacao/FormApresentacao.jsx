@@ -34,9 +34,10 @@ const FormApresentacao = ({ id }) => {
         handleSubmit,
         reset,
         register,
+        watch,
         control,
         formState: { errors }
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -87,20 +88,20 @@ const FormApresentacao = ({ id }) => {
 
     //? Dados iniciais ao carregar página
     const getData = async () => {
-        if (type == 'new') {
-            setData({
-                fields: {
-                    nome: '',
-                    status: 1
-                }
-            })
-        }
         try {
-            const route = type === 'new' ? `${backRoute(staticUrl)}/new/getData` : `${staticUrl}/getData/${id}`
-            await api.post(route, { id }).then(response => {
-                setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
-            })
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
         }
@@ -111,11 +112,9 @@ const FormApresentacao = ({ id }) => {
         getData()
 
         //? Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     return (

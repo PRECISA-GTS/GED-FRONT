@@ -4,13 +4,21 @@ import Fields from 'src/components/Defaults/Formularios/Fields'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
-import useDateFormat from 'src/hooks/useDateFormat'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
 
-const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, setValue, control, getAddressByCep }) => {
-    console.log('🚀 ~ values:', values)
+const HeaderFields = ({
+    modeloID,
+    values,
+    fields,
+    disabled,
+    register,
+    errors,
+    setValue,
+    control,
+    getValues,
+    getAddressByCep
+}) => {
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
-    const { setDateFormat, dateStatus } = useDateFormat()
 
     const getProfissionais = async () => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
@@ -30,8 +38,6 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
         }
     }, [values])
 
-    console.log('renderiza fields static....')
-
     return (
         <Grid container spacing={4}>
             <Input
@@ -43,6 +49,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
             <Input
                 xs={12}
@@ -54,6 +61,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
             <Input
                 xs={12}
@@ -64,9 +72,10 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 disabled={true}
                 register={register}
                 control={control}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
-            {/* Data de abertura */}
+            {/* Data da avaliação */}
             <DateField
                 xs={12}
                 md={2}
@@ -77,14 +86,13 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 disabled={disabled}
                 register={register}
                 control={control}
-                setDateFormat={setDateFormat}
                 typeValidation='dataPassado'
                 daysValidation={365}
-                dateStatus={dateStatus}
                 errors={errors?.fieldsHeader?.['data']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
-            {/* Hora de Abertura */}
+            {/* Hora da avaliacao */}
             <Input
                 xs={12}
                 md={2}
@@ -96,6 +104,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['hora']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Profissional responsável */}
@@ -112,6 +121,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 setValue={setValue}
                 control={control}
                 errors={errors?.fieldsHeader?.['profissionalPreenche']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             /> */}
 
             {/* CNPJ */}
@@ -126,6 +136,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['cnpj']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Razao Social */}
@@ -139,6 +150,7 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['razaoSocial']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Nome fantasia */}
@@ -152,14 +164,16 @@ const HeaderFields = ({ modeloID, values, fields, disabled, register, errors, se
                 register={register}
                 control={control}
                 errors={errors?.fieldsHeader?.['nomeFantasia']}
+                alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
-            {/* Fiels dinâmicos */}
+            {/* Fields dinâmicos */}
             <Fields
                 register={register}
                 errors={errors}
                 setValue={setValue}
                 control={control}
+                getValues={getValues}
                 fields={fields}
                 values={fields}
                 getAddressByCep={getAddressByCep}

@@ -6,12 +6,14 @@ import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import { backRoute } from 'src/configs/defaultConfigs'
+import { RiStackshareLine } from 'react-icons/ri'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import useLoad from 'src/hooks/useLoad'
 
 const ListHeader = ({
+    btnConfig,
     btnNew,
     btnPrint,
     btnSave,
@@ -20,7 +22,8 @@ const ListHeader = ({
     partialRoute,
     handleSave,
     hasListChange,
-    openModal
+    openModal,
+    handleOpenConfig
 }) => {
     const router = Router
     const { setId } = useContext(RouteContext)
@@ -74,7 +77,23 @@ const ListHeader = ({
                             </Button>
                         )}
                     </div>
-                    <div className=''>
+                    <div>
+                        {btnConfig && (
+                            <Button
+                                onClick={handleOpenConfig}
+                                disabled={isLoading}
+                                type='button'
+                                variant='outlined'
+                                color={isLoading ? 'secondary' : 'primary'}
+                                size='medium'
+                                sx={{ display: 'flex', gap: 2 }}
+                            >
+                                <Icon icon='mingcute:share-2-line' />
+                                <span className='hidden sm:block'>Vincular Formulários</span>
+                            </Button>
+                        )}
+                    </div>
+                    <div>
                         {btnNew &&
                             routes.find(
                                 route =>

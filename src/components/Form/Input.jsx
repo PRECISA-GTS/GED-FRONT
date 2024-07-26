@@ -1,10 +1,9 @@
 import { Controller } from 'react-hook-form'
-import { FormControl, Grid, IconButton, InputAdornment, InputLabel, TextField } from '@mui/material'
+import { FormControl, Grid, IconButton, InputAdornment, TextField } from '@mui/material'
 import { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask } from 'src/configs/masks'
+import { useTheme } from '@mui/material/styles'
 import Icon from 'src/@core/components/icon'
 import HelpText from '../Defaults/HelpText'
-import { useFilter } from 'src/context/FilterContext'
-import { useEffect } from 'react'
 
 const Input = ({
     xs,
@@ -27,8 +26,15 @@ const Input = ({
     clearField,
     helpText,
     helpTextPosition,
+    alertRequired,
     ...props
 }) => {
+    const theme = useTheme()
+
+    if (mask == 'telefone') {
+        console.log('value: ', value, mask, cellPhoneMask(value))
+    }
+
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
             <div className='relative'>
@@ -121,7 +127,27 @@ const Input = ({
                                     sx={{
                                         '& .MuiInputBase-input': {
                                             padding: '10px 14px' // Ajuste o valor conforme necessário
-                                        }
+                                        },
+                                        ...(alertRequired &&
+                                            !field?.value && {
+                                                '& .MuiOutlinedInput-root': {
+                                                    '& fieldset': {
+                                                        borderColor: theme.palette.error.main
+                                                    },
+                                                    '&:hover fieldset': {
+                                                        borderColor: theme.palette.error.main
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: theme.palette.error.main
+                                                    }
+                                                },
+                                                '& .MuiInputLabel-root': {
+                                                    color: theme.palette.error.main
+                                                },
+                                                '& .MuiInputLabel-root.Mui-focused': {
+                                                    color: theme.palette.error.main
+                                                }
+                                            })
                                     }}
                                 />
                             </>

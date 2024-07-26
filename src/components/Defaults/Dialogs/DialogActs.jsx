@@ -2,7 +2,7 @@ import { Alert, DialogActions, DialogContent, DialogContentText, TextField } fro
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from 'src/components/Form/Input'
 import Icon from 'src/@core/components/icon'
@@ -16,17 +16,20 @@ const DialogActs = ({
     handleConclusion,
     handleCopyLink,
     handleLink,
-    size
+    size,
+    fullHeight = false
 }) => {
     const {
         control,
         register,
         handleSubmit,
+        trigger,
         reset,
         getValues,
         setValue,
+        watch,
         formState: { errors }
-    } = useForm()
+    } = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
         handleSubmit(onSubmit)(values)
@@ -39,14 +42,14 @@ const DialogActs = ({
     }
 
     return (
-        <>
+        <div className='relative'>
             <Dialog
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 fullWidth={size ? true : false}
                 maxWidth={size ? size : null}
             >
-                <form>
+                <form className={`${fullHeight && 'grid grid-rows-[60px_auto_auto] min-h-[calc(100vh-120px)]'}`}>
                     <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
                     {description && (
                         <DialogContent>
@@ -54,7 +57,6 @@ const DialogActs = ({
                         </DialogContent>
                     )}
 
-                    {/* Passa children com props */}
                     <DialogContent>
                         <DialogContentText
                             sx={{
@@ -67,6 +69,8 @@ const DialogActs = ({
                                 register: register,
                                 setValue: setValue,
                                 errors: errors,
+                                watch: watch,
+                                trigger: trigger,
                                 reset: reset,
                                 onSubmit: onSubmit
                             })}
@@ -103,7 +107,7 @@ const DialogActs = ({
                     </DialogActions>
                 </form>
             </Dialog>
-        </>
+        </div>
     )
 }
 

@@ -8,7 +8,7 @@ import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
 
-const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues }) => {
+const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues, watch, trigger }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
@@ -36,15 +36,15 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
             const response = await api.post('/formularios/fornecedor/mapaSipeAgro', {
                 cnpj: cnpj
             })
+            console.log('🚀  response sipeagro', response)
 
-            console.log('🚀 ~ sipeagro response.data:', response.data)
             setSipeAgro(response.data)
         } catch (e) {
             console.error(e)
         }
     }
 
-    // Verifica se o CNPJ já em fornecedor cadastrado no sistema
+    //? Copia dados da unidade
     const getFornecedorByCnpj = async cnpj => {
         try {
             const responseLastForm = await api.post(`/formularios/fornecedor/cnpj`, {
@@ -61,6 +61,7 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
                 produtos: responseLastForm.data.produtos,
                 gruposAnexo: responseLastForm.data.gruposAnexo
             }
+            console.log('🚀 ~ lastForm:', lastForm)
 
             //? Chama função pra obter dados da API e preencher as informações do fornecedor
             let resultAPI = ''
@@ -81,7 +82,22 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
                     : responseLastForm.data.fields.nomeFantasia,
                 email: lastForm.new ? resultAPI.data['EMAIL'] : responseLastForm.data.fields.email,
                 cidade: lastForm.new ? resultAPI.data['MUNICIPIO'] + '/' + resultAPI.data['UF'] : '',
-                preenchimento: lastForm
+                preenchimento: lastForm,
+
+                telefone: responseLastForm.data.fields.telefone,
+                cep: responseLastForm.data.fields.cep,
+                logradouro: responseLastForm.data.fields.logradouro,
+                numero: responseLastForm.data.fields.numero,
+                complemento: responseLastForm.data.fields.complemento,
+                bairro: responseLastForm.data.fields.bairro,
+                cidade: responseLastForm.data.fields.cidade,
+                estado: responseLastForm.data.fields.estado,
+                pais: responseLastForm.data.fields.pais,
+                ie: responseLastForm.data.fields.ie,
+                principaisClientes: responseLastForm.data.fields.principaisClientes,
+                registroSipeagro: responseLastForm.data.fields.registroSipeagro,
+                categoria: responseLastForm.data.fields.categoria,
+                risco: responseLastForm.data.fields.risco
             })
 
             //? Seta informações do formulário
@@ -99,6 +115,21 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
             setValue('fields.modelo', responseLastForm.data.modelo.id > 0 ? responseLastForm.data.modelo : null)
             setValue('fields.gruposAnexo', responseLastForm.data.gruposAnexo)
             setValue('fields.produtos', responseLastForm.data.produtos)
+
+            setValue('fields.telefone', responseLastForm.data.fields.telefone)
+            setValue('fields.cep', responseLastForm.data.fields.cep)
+            setValue('fields.logradouro', responseLastForm.data.fields.logradouro)
+            setValue('fields.numero', responseLastForm.data.fields.numero)
+            setValue('fields.complemento', responseLastForm.data.fields.complemento)
+            setValue('fields.bairro', responseLastForm.data.fields.bairro)
+            setValue('fields.cidade', responseLastForm.data.fields.cidade)
+            setValue('fields.estado', responseLastForm.data.fields.estado)
+            setValue('fields.pais', responseLastForm.data.fields.pais)
+            setValue('fields.ie', responseLastForm.data.fields.ie)
+            setValue('fields.principaisClientes', responseLastForm.data.fields.principaisClientes)
+            setValue('fields.registroSipeagro', responseLastForm.data.fields.registroSipeagro)
+            setValue('fields.categoria', responseLastForm.data.fields.categoria)
+            setValue('fields.risco', responseLastForm.data.fields.risco)
         } catch (err) {
             console.error(err)
         }
@@ -133,6 +164,11 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
 
     useEffect(() => {
         getParams()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [])
 
     return (
@@ -152,6 +188,7 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
                                 reset={reset}
                                 setValue={setValue}
                                 getValues={getValues}
+                                watch={watch}
                                 register={register}
                                 handleCnpj={handleCnpj}
                                 validCnpj={validationCnpj}

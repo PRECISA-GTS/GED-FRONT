@@ -3,21 +3,11 @@ import { useEffect, useState } from 'react'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
-import { dateConfig } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
 
 const FooterFields = ({ modeloID, values, fields, disabled, register, errors, setValue, control }) => {
     const [dateStatus, setDateStatus] = useState({})
     const [profissionaisAprova, setProfissionaisAprova] = useState([])
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
 
     const getProfissionais = async () => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
@@ -46,10 +36,8 @@ const FooterFields = ({ modeloID, values, fields, disabled, register, errors, se
                         disabled={disabled}
                         register={register}
                         control={control}
-                        setDateFormat={setDateFormat}
                         typeValidation='dataPassado'
                         daysValidation={365}
-                        dateStatus={dateStatus}
                         errors={errors?.fieldsFooter?.['dataAvaliacao']}
                     />
 

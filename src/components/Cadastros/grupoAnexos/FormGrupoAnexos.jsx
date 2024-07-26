@@ -44,7 +44,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
         control,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     const getData = async () => {
         try {
@@ -148,11 +148,9 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
         getData()
 
         //? Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     useEffect(() => {

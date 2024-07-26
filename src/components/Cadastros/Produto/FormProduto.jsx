@@ -41,7 +41,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
         getValues,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     // Envia dados para a API
     const onSubmit = async data => {
@@ -53,7 +53,6 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
             removedItems
         }
         console.log(values)
-        // return
 
         try {
             if (type === 'new') {
@@ -101,9 +100,11 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
     // Dados iniciais ao carregar a página
     const getData = async () => {
         try {
-            const route = type === 'new' ? `cadastros/produto/new/getData` : `${staticUrl}/getData/${id}`
+            const route =
+                type === 'new'
+                    ? `cadastros/produto/new/getData/${loggedUnity.unidadeID}`
+                    : `${staticUrl}/getData/${id}/${loggedUnity.unidadeID}`
             await api.post(route).then(response => {
-                console.log('🚀 ~ getData:', response.data)
                 setData(response.data)
                 reset(response.data)
             })
@@ -142,12 +143,10 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
     useEffect(() => {
         getData()
 
-        // Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     useEffect(() => {
@@ -177,7 +176,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                             <Grid container spacing={5}>
                                 <Input
                                     xs={11}
-                                    md={6}
+                                    md={5}
                                     title='Nome'
                                     name='fields.nome'
                                     required={true}
@@ -186,7 +185,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                 />
                                 <Select
                                     xs={12}
-                                    md={4}
+                                    md={3}
                                     title='Unidade de medida'
                                     name='unidadeMedida.fields'
                                     value={data?.unidadeMedida.fields}
@@ -197,6 +196,19 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     control={control}
                                     errors={errors?.unidadeMedida?.fields}
                                     helpText='Selecione a unidade de medida'
+                                />
+                                <Select
+                                    xs={12}
+                                    md={3}
+                                    title='Classificação'
+                                    name='classificacao.fields'
+                                    value={data?.classificacao?.fields}
+                                    options={data.classificacao.options}
+                                    register={register}
+                                    setValue={setValue}
+                                    control={control}
+                                    errors={errors?.classificacao?.fields}
+                                    helpText='Selecione a classificação'
                                 />
                                 <Check
                                     xs={1}

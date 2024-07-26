@@ -1,15 +1,12 @@
-import { Card, CardContent, Grid, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
-import useDateFormat from 'src/hooks/useDateFormat'
-import CustomChip from 'src/@core/components/mui/chip'
 import { useContext } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 
 const FieldsFornecedor = ({ index, value, info, papelID, register, control, setValue, errors }) => {
     const { settings } = useContext(SettingsContext)
-    const { setDateFormat, dateStatus } = useDateFormat()
 
     return (
         <>
@@ -45,10 +42,8 @@ const FieldsFornecedor = ({ index, value, info, papelID, register, control, setV
                             register={register}
                             disabled={info.concluido || papelID != 2}
                             control={control}
-                            setDateFormat={setDateFormat}
                             typeValidation='dataPassado'
                             daysValidation={999999999999}
-                            dateStatus={dateStatus}
                             errors={null}
                         />
 

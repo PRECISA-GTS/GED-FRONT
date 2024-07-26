@@ -3,9 +3,8 @@ import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { Box, Tooltip, Typography } from '@mui/material'
+import { Box, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
-import { useEffect, useState } from 'react'
 
 const RadioLabel = ({
     xs,
@@ -23,9 +22,6 @@ const RadioLabel = ({
 }) => {
     return (
         <Grid item xs={xs} md={md}>
-            {/* <Box display='flex' alignItems='center' sx={{ gap: 2 }}> */}
-            {/* <Grid container sx={{ backgroundColor: 'green' }}> */}
-
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>
                 {values &&
                     values.map((item, indexCol) => (
@@ -64,9 +60,6 @@ const RadioLabel = ({
                         </Grid>
                     ))}
             </RadioGroup>
-
-            {/* </Grid> */}
-            {/* </Box> */}
         </Grid>
     )
 }

@@ -20,22 +20,24 @@ import { useRouter } from 'next/router'
 import Autocomplete from 'src/layouts/components/vertical/Autocomplete'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
-import FormHeader from 'src/components/Defaults/FormHeader'
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
-import { Button, Snackbar, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import DialogSelectUnit from 'src/components/Defaults/Dialogs/DialogSelectUnit'
 
 const AppBarContent = props => {
     // ** Props
     const { hidden, settings, saveSettings, toggleNavVisibility } = props
     const { title } = useContext(ParametersContext)
-    const { id, setId } = useContext(RouteContext)
     const { notifications } = useContext(NotificationContext)
 
     const { user, setLoggedUnity, loggedUnity, unitsUser, getRoutes, getMenu } = useContext(AuthContext)
 
     // ** Hooks
     const router = useRouter()
+    const fullUrl = window.location.href; // Pega a URL completa
+
+    const apiUrl = "https://demo.gedagro.com.br";
+    const isDemo = fullUrl.includes(apiUrl) ? true : false
 
     // Controla troca de unidade
     const [openModal, setOpenModal] = useState(false);
@@ -61,7 +63,7 @@ const AppBarContent = props => {
     return (
         <>
             {/* App Bar Content */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1 '>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1'>
                 <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
                     {hidden && !settings.navHidden ? (
                         <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
@@ -70,9 +72,12 @@ const AppBarContent = props => {
                     ) : null}
                     <Autocomplete hidden={hidden} settings={settings} />
                 </Box>
-                <Box className='app-title' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Typography variant='h6' sx={{ fontWeight: 700 }} >{title.title}</Typography>
-                    <Typography variant='caption'>
+                <Box
+                    className='app-title p-1 rounded-xl'
+                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '10px' }}
+                >
+                    <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
+                    <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
                         {title.subtitle.new ? `Novo` : title.subtitle.id ? `ID: ${title.subtitle.id}` : title.subtitle.count ? `Total de registros: ${title.subtitle.count}` : ``}
                     </Typography>
                     {/* todo migalhas de pão */}

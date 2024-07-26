@@ -5,7 +5,7 @@ import Icon from 'src/@core/components/icon'
 import { backRoute } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
-import LayoutReport from 'src/components/Reports/Layout'
+// import LayoutReport from 'src/components/Reports/Layout'
 import CustomChip from 'src/@core/components/mui/chip'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import OptionsDots from './OptionsDots'
@@ -190,7 +190,7 @@ const FormHeader = ({
                             disabledSend={disabledSend}
                             disabledSubmit={disabledSubmit}
                             handleSend={handleSend}
-                            componentSaveReport={componentSaveReport}
+                            // componentSaveReport={componentSaveReport}
                             iconConclusion={iconConclusion}
                             titleConclusion={titleConclusion}
                         />
@@ -198,27 +198,27 @@ const FormHeader = ({
 
                     {/* Botões flutuantes */}
                     {/* <ButtonsFloating
-                    isVisible={isVisible}
-                    dataButtons={dataButtons}
-                    btnSave={btnSave}
-                    btnPrint={btnPrint}
-                    matches={matches}
-                    routes={routes}
-                    currentUrl={currentUrl}
-                /> */}
+                        isVisible={isVisible}
+                        dataButtons={dataButtons}
+                        btnSave={btnSave}
+                        btnPrint={btnPrint}
+                        matches={matches}
+                        routes={routes}
+                        currentUrl={currentUrl}
+                    /> */}
                     {/* <Box sx={{ mt: 4 }}>
-                    {status && !matches && (
-                        <Box display='flex' alignItems='center' justifyContent='flex-start'>
-                            <CustomChip
-                                size='small'
-                                skin='light'
-                                color={status.color}
-                                label={status.title}
-                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                            />
-                        </Box>
-                    )}
-                </Box> */}
+                        {status && !matches && (
+                            <Box display='flex' alignItems='center' justifyContent='flex-start'>
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    color={status.color}
+                                    label={status.title}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
+                            </Box>
+                        )}
+                    </Box> */}
                 </div>
             </div>
         </>

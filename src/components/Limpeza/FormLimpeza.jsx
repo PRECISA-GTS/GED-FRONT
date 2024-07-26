@@ -25,7 +25,7 @@ import HeaderFields from './Header'
 import FooterFields from './Footer'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
-import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
+// import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
 
 const FormLimpeza = ({ id }) => {
@@ -98,16 +98,16 @@ const FormLimpeza = ({ id }) => {
     }
 
     // Nomes e rotas dos relatórios passados para o componente FormHeader/MenuReports
-    const objRelatorio = {
-        id: id,
-        name: 'Formulário da Limpeza',
-        nameComponent: 'DadosRecebimentoMp',
-        type: 'report',
-        unidadeID: loggedUnity.unidadeID,
-        papelID: user.papelID,
-        route: 'recebimentoMp/dadosRecebimentoMp',
-        icon: 'fluent:print-24-regular'
-    }
+    // const objRelatorio = {
+    //     id: id,
+    //     name: 'Formulário da Limpeza',
+    //     nameComponent: 'DadosRecebimentoMp',
+    //     type: 'report',
+    //     unidadeID: loggedUnity.unidadeID,
+    //     papelID: user.papelID,
+    //     route: 'recebimentoMp/dadosRecebimentoMp',
+    //     icon: 'fluent:print-24-regular'
+    // }
     const objFormConfig = {
         id: 5,
         name: 'Configurações do formulário',
@@ -122,7 +122,7 @@ const FormLimpeza = ({ id }) => {
     }
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    actionsData.push(objRelatorio)
+    // actionsData.push(objRelatorio)
     if (canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
@@ -533,16 +533,16 @@ const FormLimpeza = ({ id }) => {
     }, [])
 
     //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
-    useEffect(() => {
-        setReportParameters({
-            id: id,
-            nameComponent: 'DadosRecebimentoMp',
-            route: 'recebimentoMp/dadosRecebimentoMp',
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID,
-            usuarioID: user.usuarioID
-        })
-    }, [])
+    // useEffect(() => {
+    //     setReportParameters({
+    //         id: id,
+    //         nameComponent: 'DadosRecebimentoMp',
+    //         route: 'recebimentoMp/dadosRecebimentoMp',
+    //         unidadeID: loggedUnity.unidadeID,
+    //         papelID: user.papelID,
+    //         usuarioID: user.usuarioID
+    //     })
+    // }, [])
 
     return (
         <>
@@ -562,7 +562,8 @@ const FormLimpeza = ({ id }) => {
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Limpeza'
-                    componentSaveReport={<DadosRecebimentoMp />}
+                    // componentSaveReport={<DadosRecebimentoMp />}
+                    componentSaveReport={null}
                     btnStatus={type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
@@ -629,6 +630,7 @@ const FormLimpeza = ({ id }) => {
                                 changeAllOptions={changeAllOptions}
                                 values={bloco}
                                 control={control}
+                                getValues={getValues}
                                 register={register}
                                 setValue={setValue}
                                 errors={errors?.blocos}

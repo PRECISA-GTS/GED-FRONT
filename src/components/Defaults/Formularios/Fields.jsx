@@ -1,6 +1,3 @@
-import { useEffect, useState, useContext } from 'react'
-import { dateConfig } from 'src/configs/defaultConfigs'
-
 //* Custom inputs
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
@@ -17,31 +14,9 @@ const Fields = ({
     control,
     setNameSelected,
     setColumnSelected,
+    getValues,
     setOpenModalNew
 }) => {
-    console.log('renderiza fields dynamic....')
-    const [dateStatus, setDateStatus] = useState({})
-    const [watchRegistroEstabelecimento, setWatchRegistroEstabelecimento] = useState(null)
-
-    const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
-        const status = dateConfig(type, newDate, numDays)
-        console.log('status', status)
-        setDateStatus(prevState => ({
-            ...prevState,
-            [name]: status
-        }))
-    }
-
-    const setRegistroEstabelecimento = () => {
-        fields &&
-            fields.map((field, index) => {
-                if (field?.nomeColuna == 'registroEstabelecimentoID') {
-                    setWatchRegistroEstabelecimento(field?.[field.tabela]?.id > 0 ? field?.[field.tabela].id : null)
-                }
-            })
-    }
-
     const getMaskForField = fieldName => {
         switch (fieldName) {
             case 'telefone':
@@ -65,10 +40,6 @@ const Fields = ({
         return false
     }
 
-    useEffect(() => {
-        setRegistroEstabelecimento()
-    }, [])
-
     // Abre modal para criar novo item
     const createNew = async (coluna, name) => {
         setColumnSelected(coluna)
@@ -79,12 +50,14 @@ const Fields = ({
     return (
         fields &&
         fields.map((field, index) => {
-            // setValue(`fields[${index}].${field.nomeColuna}`, field?.[field.nomeColuna])
+            // console.log('field value:', field?.[field.nomeColuna])
+
             return (
                 <>
                     {/* Autocomplete (int) */}
                     {field && field.tipo === 'int' && field.tabela && (
                         <Select
+                            key={`select-${index}`}
                             xs={12}
                             md={4}
                             title={field.nomeCampo}
@@ -103,49 +76,14 @@ const Fields = ({
                             setValue={setValue}
                             control={control}
                             errors={errors?.fields?.[index]?.[field.tabela]}
-                            // handleRegistroEstabelecimento={setWatchRegistroEstabelecimento}
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
-
-                    {/* Modal para criação de novo, baseado no select clicado */}
-                    {/* <DialogNewCreate
-                        title={
-                            columnSelected == 'transportadorID'
-                                ? 'Novo transportador'
-                                : columnSelected == 'tipoVeiculoID'
-                                ? 'Novo tipo de veiculo'
-                                : ''
-                        }
-                        size='md'
-                        openModal={openModalNew}
-                        setOpenModal={setOpenModalNew}
-                    >
-                        {columnSelected == 'transportadorID' ? (
-                            <FormTransportador
-                                btnClose
-                                handleModalClose={() => setOpenModalNew(false)}
-                                setNewChange={setNewChange}
-                                newChange={newChange}
-                                outsideID={true}
-                                handleConfirmNew={handleConfirmNew}
-                                manualUrl='/cadastros/transportador'
-                            />
-                        ) : columnSelected == 'tipoVeiculoID' ? (
-                            <FormTipoVeiculo
-                                btnClose
-                                handleModalClose={() => setOpenModalNew(false)}
-                                setNewChange={setNewChange}
-                                newChange={newChange}
-                                outsideID={true}
-                                handleConfirmNew={handleConfirmNew}
-                                manualUrl='/cadastros/tipo-veiculo'
-                            />
-                        ) : null}
-                    </DialogNewCreate> */}
 
                     {/* Date */}
                     {field && field.tipo == 'date' && (
                         <DateField
+                            key={`datefield-${index}`}
                             xs={12}
                             md={4}
                             title='Data da avaliação'
@@ -155,37 +93,35 @@ const Fields = ({
                             name={`fields[${index}].${field.nomeColuna}`}
                             errors={errors?.fields?.[index]?.[field.nomeColuna]}
                             control={control}
-                            setDateFormat={setDateFormat}
                             typeValidation='dataPassado'
                             daysValidation={365}
-                            dateStatus={dateStatus}
                             register={register}
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
 
                     {/* Textfield */}
-                    {field &&
-                        field.tipo == 'string' &&
-                        (field.nomeColuna != 'numeroRegistro' || watchRegistroEstabelecimento > 1) && (
-                            <Input
-                                xs={12}
-                                md={4}
-                                title={field.nomeCampo}
-                                name={`fields[${index}].${field.nomeColuna}`}
-                                register={register}
-                                control={control}
-                                value={getMaskForField ?? field?.[nomeColuna]}
-                                errors={errors?.fields?.[index]?.nomeColuna}
-                                type={field.nomeColuna}
-                                getAddressByCep={getAddressByCep}
-                                mask={getMaskForField(field.nomeColuna)}
-                                disabled={
-                                    disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj'
-                                        ? true
-                                        : false
-                                }
-                            />
-                        )}
+                    {field && (
+                        <Input
+                            key={`input-${index}`}
+                            xs={12}
+                            md={4}
+                            title={field.nomeCampo}
+                            name={`fields[${index}].${field.nomeColuna}`}
+                            register={register}
+                            control={control}
+                            // value={getMaskForField(field.nomeColuna) ?? field?.[field.nomeColuna]}
+                            value={field?.[field.nomeColuna] ?? ''}
+                            errors={errors?.fields?.[index]?.nomeColuna}
+                            type={field.nomeColuna}
+                            getAddressByCep={getAddressByCep}
+                            mask={getMaskForField(field.nomeColuna)}
+                            disabled={
+                                disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
+                            }
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                        />
+                    )}
                 </>
             )
         })

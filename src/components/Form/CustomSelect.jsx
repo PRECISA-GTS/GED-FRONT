@@ -37,10 +37,12 @@ const CustomSelect = ({
                                 key={keyProps || key}
                                 options={optionsWithNew.map(option => option.name)}
                                 // setar em setValue o id do item selecionado
-                                value={value}
+                                value={value ?? form.getValues(name)?.name}
+                                // value={value}
                                 onChange={(event, newValue) => {
                                     const selectedOption = optionsWithNew.find(option => option.name === newValue)
                                     form.setValue(name, selectedOption ?? null)
+                                    onChange && onChange(newValue)
                                 }}
                                 renderInput={params => (
                                     <TextField

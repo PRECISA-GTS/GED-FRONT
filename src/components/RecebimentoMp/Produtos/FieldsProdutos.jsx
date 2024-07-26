@@ -1,5 +1,4 @@
 import Input from 'src/components/Form/Input'
-import CheckLabel from 'src/components/Form/CheckLabel'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 
@@ -28,6 +27,8 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 control={control}
                 errors={errors?.produtos?.[index]?.dataFabricacao}
                 disabled={disabled}
+                typeValidation='dataPassado'
+                daysValidation={99999}
             />
 
             {/* Nº Lote */}
@@ -45,7 +46,7 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
             {/* Apresentação */}
             <Select
                 xs={12}
-                md={2}
+                md={4}
                 title='Apresentação'
                 name={`produtos[${index}].apresentacao`}
                 type='string'
@@ -54,18 +55,6 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 setValue={setValue}
                 control={control}
                 errors={errors?.produtos?.[index]?.apresentacao}
-                disabled={disabled}
-            />
-
-            {/* NF */}
-            <Input
-                xs={12}
-                md={2}
-                title='NF'
-                name={`produtos[${index}].nf`}
-                register={register}
-                control={control}
-                errors={errors?.produtos?.[index]?.nf}
                 disabled={disabled}
             />
 
@@ -79,6 +68,8 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 control={control}
                 errors={errors?.produtos?.[index]?.dataValidade}
                 disabled={disabled}
+                typeValidation='dataFutura'
+                daysValidation={99999}
             />
         </>
     )

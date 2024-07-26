@@ -52,7 +52,12 @@ const Produto = () => {
         {
             headerName: 'Nome',
             field: 'nome',
-            size: 0.6
+            size: 0.4
+        },
+        {
+            headerName: 'Classificação',
+            field: 'classificacao',
+            size: 0.4
         },
         {
             headerName: 'Unidade de medida',

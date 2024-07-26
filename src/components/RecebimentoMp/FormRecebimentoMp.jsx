@@ -31,7 +31,7 @@ import RecebimentoMpFooterFields from './Footer'
 import RecebimentoMpProdutos from './Produtos'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
-import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
+// import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
 import RecebimentoMpNaoConformidade from './NaoConformidade'
 import FormTransportador from '../Cadastros/Transportador/FormTransportador'
@@ -41,6 +41,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 
 const FormRecebimentoMp = ({ id }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
+    console.log('🚀 ~ FormRecebimentoMp ~ user', user)
     const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
@@ -76,9 +77,7 @@ const FormRecebimentoMp = ({ id }) => {
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [columnSelected, setColumnSelected] = useState(null)
-    console.log('🚀 ~ columnSelected:', columnSelected)
     const [nameSelected, setNameSelected] = useState(null)
-    console.log('🚀 ~ nameSelected:', nameSelected)
 
     const [canEdit, setCanEdit] = useState({
         status: false,
@@ -127,17 +126,17 @@ const FormRecebimentoMp = ({ id }) => {
         router.push(`/configuracoes/formularios/recebimento-mp/`)
     }
 
-    // Nomes e rotas dos relatórios passados para o componente FormHeader/MenuReports
-    const objRelatorio = {
-        id: id,
-        name: 'Formulário do Recebimento de MP',
-        nameComponent: 'DadosRecebimentoMp',
-        type: 'report',
-        unidadeID: loggedUnity.unidadeID,
-        papelID: user.papelID,
-        route: 'recebimentoMp/dadosRecebimentoMp',
-        icon: 'fluent:print-24-regular'
-    }
+    // const objRelatorio = {
+    //     name: 'Formulário do Recebimento de MP',
+    //     icon: 'fluent:print-24-regular',
+    //     nameComponent: 'DadosRecebimentoMp',
+    //     type: 'report',
+    //     params: {
+    //         recebimentoMPID: id,
+    //         unidadeID: loggedUnity.unidadeID,
+    //         papelID: user.papelID
+    //     }
+    // }
     const objFormConfig = {
         id: 5,
         name: 'Configurações do formulário',
@@ -153,7 +152,7 @@ const FormRecebimentoMp = ({ id }) => {
 
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    actionsData.push(objRelatorio)
+    // actionsData.push(objRelatorio)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
@@ -176,8 +175,6 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             })
                 .then(response => {
-                    console.log('getData: ', response.data)
-
                     setFieldsHeader(response.data.fieldsHeader)
                     // setFornecedor(response.data.fieldsHeader.fornecedor)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -223,27 +220,37 @@ const FormRecebimentoMp = ({ id }) => {
         }
     }
 
-    const checkErrors = validateForm => {
-        console.log('checkErrors => validateForm: ', validateForm, errors)
+    let hasErrors = false
+    let arrErrors = []
 
+    const setFormError = (fieldName, fieldTitle) => {
+        setError(fieldName, {
+            type: 'manual',
+            message: 'Campo obrigatório'
+        })
+        arrErrors.push(fieldTitle)
+        hasErrors = true
+    }
+
+    const checkErrors = validateForm => {
         clearErrors()
-        let hasErrors = false
-        let arrErrors = []
 
         if (validateForm) {
             //? Header
+            // Fields estáticos (todos obrigatórios)
+            if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+            if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+            if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
+            if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
+
+            // Fields dinâmicos
             field?.forEach((field, index) => {
                 const fieldName = field.tabela
                     ? `fields[${index}].${field.tabela}`
                     : `fields[${index}].${field.nomeColuna}`
                 const fieldValue = getValues(fieldName)
                 if (field.obrigatorio === 1 && !fieldValue) {
-                    setError(fieldName, {
-                        type: 'manual',
-                        message: 'Campo obrigatório'
-                    })
-                    arrErrors.push(field?.nomeCampo)
-                    hasErrors = true
+                    setFormError(fieldName, field?.nomeCampo)
                 }
             })
 
@@ -375,7 +382,6 @@ const FormRecebimentoMp = ({ id }) => {
     }
 
     const conclusionForm = async values => {
-        console.log('🚀 ~ conclusionForm:', values)
         sendPdfToServer(id, blobSaveReport, 'recebimento-mp')
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
@@ -445,7 +451,6 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ data do submit:', data)
         startLoading()
         if (id == true) return
         try {
@@ -672,16 +677,16 @@ const FormRecebimentoMp = ({ id }) => {
     }, [])
 
     //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
-    useEffect(() => {
-        setReportParameters({
-            id: id,
-            nameComponent: 'DadosRecebimentoMp',
-            route: 'recebimentoMp/dadosRecebimentoMp',
-            unidadeID: loggedUnity.unidadeID,
-            papelID: user.papelID,
-            usuarioID: user.usuarioID
-        })
-    }, [])
+    // useEffect(() => {
+    //     setReportParameters({
+    //         id: id,
+    //         nameComponent: 'DadosRecebimentoMp',
+    //         route: 'recebimentoMp/dadosRecebimentoMp',
+    //         unidadeID: loggedUnity.unidadeID,
+    //         papelID: user.papelID,
+    //         usuarioID: user.usuarioID
+    //     })
+    // }, [])
 
     const handleConfirmNew = async data => {
         console.log('🚀 ~ data de noivvovov:', data)
@@ -707,7 +712,7 @@ const FormRecebimentoMp = ({ id }) => {
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Recebimento de MP'
-                    componentSaveReport={<DadosRecebimentoMp />}
+                    // componentSaveReport={<DadosRecebimentoMp />}
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
@@ -785,6 +790,7 @@ const FormRecebimentoMp = ({ id }) => {
                                 values={bloco}
                                 control={control}
                                 register={register}
+                                getValues={getValues}
                                 setValue={setValue}
                                 errors={errors?.blocos}
                                 disabled={!canEdit.status}

@@ -1,19 +1,22 @@
 import { Button, Menu, MenuItem } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import DialogActs from '../Dialogs/DialogActs'
-import { useState } from 'react'
-import { useContext } from 'react'
-import { AuthContext } from 'src/context/AuthContext'
-import { useFormContext } from 'src/context/FormContext'
+import { useContext, useState } from 'react'
+import { api_url } from 'src/configs/api'
 
 const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
-    const { setReportParameters } = useFormContext()
 
-    // Ao clicar em um item e ele for do tipo report
-    const handleClickReport = item => {
-        setReportParameters(item)
+    const handleOpenReport = item => {
+        if (item.status >= 50) {
+            //? Já concluído, abre PDF já salvo no servidor
+            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-${item.module}.pdf`
+            window.open(url, '_blank')
+        } else {
+            //? Não concluído, gera o relatório
+            window.open(`/relatorio/${item.route}`, '_blank')
+        }
     }
 
     return (
@@ -61,7 +64,6 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                             key={item.id}
                             onClick={() => {
                                 handleClose()
-                                handleClickReport(item)
                             }}
                             disabled={item.disabled ? true : false}
                             style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -75,9 +77,7 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
                             )}
 
                             {item.type == 'report' ? (
-                                <a href={`/relatorio`} target='_blank'>
-                                    {item.name}
-                                </a>
+                                <a onClick={() => handleOpenReport(item)}>{item.name}</a>
                             ) : (
                                 <p
                                     onClick={
@@ -101,11 +101,11 @@ const OptionsDots = ({ anchorEl, open, handleClose, handleClick, actionsData }) 
             {item && (
                 <DialogActs
                     title={item.name}
-                    description={item.description}
                     handleConclusion={item.action}
                     size={item.size}
                     setOpenModal={setOpenModal}
                     openModal={openModal}
+                    fullHeight={item.fullHeight}
                 >
                     {item.component}
                 </DialogActs>

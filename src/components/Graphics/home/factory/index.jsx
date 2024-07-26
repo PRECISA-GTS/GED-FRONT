@@ -20,13 +20,14 @@ import EcommerceSalesOverview from 'src/views/dashboards/ecommerce/EcommerceSale
 import AnalyticsOverview from 'src/views/dashboards/analytics/AnalyticsOverview'
 import GraphLimpeza from 'src/components/Graphics/home/factory/GraphLimpeza'
 import AppCalendar from 'src/components/Calendar/index'
+import SupplierNonCompliance from './SupplierNonCompliance'
 
 const Factory = () => {
     const { loggedUnity } = useContext(AuthContext)
     const [dataFornecedor, setDataFornecedor] = useState(null)
     const [dataRecebimentoNC, setDataRecebimentoNC] = useState(null)
     const [limpeza, setLimpeza] = useState(null)
-    const [fotoBinaria, setFotoBinaria] = useState([])
+    const [dataSupplierNonCompliance, setDataSupplierNonCompliance] = useState(null)
 
     const getData = async () => {
         try {
@@ -34,35 +35,7 @@ const Factory = () => {
             setDataFornecedor(response.data.fornecedorPorStatus)
             setDataRecebimentoNC(response.data.totalRecebimentoNC)
             setLimpeza(response.data.limpeza)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    const getFoto = async () => {
-        try {
-            console.log('busca foto....')
-            await api.post(`login/testeFoto/`).then(response => {
-                console.log('fotos:', response.data)
-                setFotoBinaria(response.data)
-            })
-            // setFotoBinaria(response.data.foto64)
-            // console.log('foto:', response.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    const sendFoto = async event => {
-        try {
-            const selectedFiles = event.target.files
-
-            const formData = new FormData()
-            for (let i = 0; i < selectedFiles.length; i++) {
-                formData.append('files[]', selectedFiles[i])
-            }
-
-            getFoto()
+            setDataSupplierNonCompliance(response.data.supplierNonCompliance)
         } catch (err) {
             console.log(err)
         }
@@ -70,16 +43,15 @@ const Factory = () => {
 
     useEffect(() => {
         getData()
-        getFoto()
     }, [])
 
     return (
         dataFornecedor && (
             <ApexChartWrapper>
                 <Grid container spacing={6} className='match-height'>
-                    {/* Por estatus em blocos separadosç */}
-                    {dataFornecedor.map(row => (
-                        <Grid item xs={12} md={3}>
+                    {/* Por estatus em blocos separados */}
+                    {dataFornecedor.map((row, index) => (
+                        <Grid item xs={12} md={index < dataFornecedor.length - 1 ? 3 : 6}>
                             <CardStatisticsVertical
                                 stats={row.stats}
                                 color={row.color}
@@ -89,6 +61,11 @@ const Factory = () => {
                             />
                         </Grid>
                     ))}
+
+                    {/* Não conformidades dos fornecedores */}
+                    <Grid item xs={12} md={12}>
+                        <SupplierNonCompliance data={dataSupplierNonCompliance} />
+                    </Grid>
 
                     {/* Calendário */}
                     <Grid item xs={12} md={9}>

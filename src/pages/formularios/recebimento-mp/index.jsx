@@ -43,7 +43,7 @@ const RecebimentoMP = () => {
 
     useEffect(() => {
         getList()
-        startFilter(<Filters />)
+        startFilter(<Filters />, null)
     }, [id])
 
     const arrColumns =
@@ -82,6 +82,11 @@ const RecebimentoMP = () => {
                           cor: 'cor'
                       },
                       size: 0.2
+                  },
+                  {
+                      headerName: 'Não Conformidade',
+                      field: 'naoConformidade',
+                      size: 0.2
                   }
               ]
             : [
@@ -117,6 +122,11 @@ const RecebimentoMP = () => {
                           name: 'status',
                           cor: 'cor'
                       },
+                      size: 0.2
+                  },
+                  {
+                      headerName: 'Não Conformidade',
+                      field: 'naoConformidade',
                       size: 0.2
                   }
               ]

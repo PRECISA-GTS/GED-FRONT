@@ -2,13 +2,9 @@ import React from 'react'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
 import Remove from 'src/components/Form/Remove'
-import useDateFormat from 'src/hooks/useDateFormat'
 
 const CargoFuncao = ({ data, getValues, control, register, name, errors, removeItem }) => {
-    const { setDateFormat, dateStatus } = useDateFormat()
-
     return getValues('cargosFuncoes').map((item, index) => {
-        console.log('🚀 ~ item:', item[index])
         return (
             <>
                 <DateField
@@ -18,17 +14,13 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     type='date'
                     required
                     name={`cargosFuncoes.${[index]}.data`}
-                    // disabled={disabled}
                     register={register}
                     control={control}
-                    setDateFormat={setDateFormat}
                     value={item.data}
                     typeValidation='dataPassado'
-                    daysValidation={9999999999999999999}
-                    dateStatus={dateStatus}
+                    daysValidation={999999}
                     errors={errors?.cargosFuncoes?.[index]?.data}
                 />
-
                 <Input
                     xs={12}
                     md={4}
@@ -54,13 +46,10 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     type='date'
                     value={item.dataInativacao}
                     control={control}
-                    setDateFormat={setDateFormat}
                     typeValidation='dataPassado'
-                    daysValidation={9999999999999999999}
-                    dateStatus={dateStatus}
+                    daysValidation={9999999999}
                     errors={errors?.cargosFuncoes?.[index]?.dataInativacao}
                 />
-
                 <Remove
                     xs={4}
                     md={1}
@@ -68,7 +57,6 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     index={index}
                     removeItem={removeItem}
                     item={item}
-                    // pending={item.hasPending}
                     textSuccess='Remover este item'
                     textError='Este item não pode mais ser removido pois possui anexo vinculado a ele'
                 />

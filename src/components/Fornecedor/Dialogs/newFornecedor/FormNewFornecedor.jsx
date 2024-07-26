@@ -3,7 +3,7 @@ import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
-import { Box, Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import FormGrupoAnexos from 'src/components/Cadastros/grupoAnexos/FormGrupoAnexos'
 import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
@@ -22,12 +22,14 @@ const FormNewFornecedor = ({
     errors,
     setValue,
     register,
+    watch,
     reset
 }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState([])
     const [products, setProducts] = useState([])
     const [gruposAnexo, setGruposAnexo] = useState([])
+    const [categories, setCategories] = useState([])
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [titleModal, setTitleModal] = useState('')
@@ -49,6 +51,13 @@ const FormNewFornecedor = ({
         setGruposAnexo(result.data)
     }
 
+    const getCategories = async () => {
+        const result = await api.post(`/configuracoes/formularios/fornecedor/getCategories`, {
+            unidadeID: loggedUnity.unidadeID
+        })
+        setCategories(result.data)
+    }
+
     const clearCnpj = () => {
         setFields(null)
         setValue('fields.cnpj', '')
@@ -64,6 +73,7 @@ const FormNewFornecedor = ({
         getModels()
         getProducts()
         getGruposAnexo()
+        getCategories()
     }, [])
 
     const handleConfirmNew = async (data, name) => {
@@ -129,7 +139,6 @@ const FormNewFornecedor = ({
                                 register={register}
                                 name='habilitaQuemPreencheFormFornecedor'
                                 setValue={setValue}
-                                // setIsNotFactory={setIsNotFactory}
                             />
                         </div>
                     )}
@@ -188,7 +197,44 @@ const FormNewFornecedor = ({
                         errors={errors?.fields?.email}
                     />
                 )}
-                <Select
+                {!isNotFactory && (
+                    <>
+                        <Select
+                            xs={12}
+                            md={12}
+                            title='Categoria'
+                            name='fields.categoria'
+                            value={fields?.categoria}
+                            disabled={!validCnpj}
+                            onChange={newValue => {
+                                setValue('fields.risco', null)
+                                setValue('fields.categoria', newValue)
+                                watch('fields.categoria')
+                            }}
+                            required
+                            options={categories ?? []}
+                            register={register}
+                            setValue={setValue}
+                            control={control}
+                            errors={errors?.fields?.categoria}
+                        />
+                        <Select
+                            xs={12}
+                            md={12}
+                            disabled={getValues('fields.categoria') == null}
+                            title='Risco'
+                            name='fields.risco'
+                            value={fields?.risco}
+                            required
+                            options={getValues('fields.categoria')?.riscos ?? []}
+                            register={register}
+                            setValue={setValue}
+                            control={control}
+                            errors={errors?.fields?.risco}
+                        />
+                    </>
+                )}
+                {/* <Select
                     xs={12}
                     md={12}
                     title='Modelo de Formulário'
@@ -201,8 +247,8 @@ const FormNewFornecedor = ({
                     setValue={setValue}
                     control={control}
                     errors={errors?.fields?.modelo}
-                />
-                <Select
+                /> */}
+                {/* <Select
                     xs={12}
                     md={12}
                     title='Grupos de Anexo'
@@ -218,7 +264,7 @@ const FormNewFornecedor = ({
                     setValue={setValue}
                     control={control}
                     errors={errors?.fields?.gruposAnexo}
-                />
+                /> */}
                 <Select
                     xs={12}
                     md={12}

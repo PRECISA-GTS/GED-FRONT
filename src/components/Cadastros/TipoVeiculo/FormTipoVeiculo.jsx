@@ -45,7 +45,7 @@ const FormTipoVeiculo = ({
         control,
         formState: { errors },
         register
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -101,20 +101,20 @@ const FormTipoVeiculo = ({
 
     //? Dados iniciais ao carregar página
     const getData = async () => {
-        if (type == 'new') {
-            setData({
-                fields: {
-                    nome: '',
-                    status: 1
-                }
-            })
-        }
         try {
-            const route = type === 'new' ? `${backRoute(staticUrl)}/new/getData` : `${staticUrl}/getData/${id}`
-            await api.post(route, { id }).then(response => {
-                setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
-            })
+            if (type === 'edit') {
+                await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
+            } else {
+                setData({
+                    fields: {
+                        nome: '',
+                        status: 1
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
         }
@@ -125,16 +125,10 @@ const FormTipoVeiculo = ({
         getData()
 
         //? Seta error nos campos obrigatórios
-        if (type === 'new') {
-            setTimeout(() => {
-                trigger()
-            }, 300)
-        }
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
-
-    // useEffect(() => {
-    //     if (newChange) handleSubmit(onSubmit)()
-    // }, [newChange])
 
     return (
         <>
@@ -142,16 +136,16 @@ const FormTipoVeiculo = ({
             {data && (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormHeader
-                        btnClose
-                        handleModalClose={handleModalClose}
                         btnCancel
+                        btnNew={handleConfirmNew ? false : true}
                         btnSave
-                        btnNew={outsideID ? false : true}
+                        manualUrl={manualUrl}
+                        btnClose={btnClose}
+                        handleModalClose={handleModalClose}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
-                        onclickDelete={() => setOpen(true)}
+                        onclickDelete={() => setOpenDelete(true)}
                         type={type}
-                        manualUrl={manualUrl}
                         outsideID={outsideID}
                     />
                     <Card>

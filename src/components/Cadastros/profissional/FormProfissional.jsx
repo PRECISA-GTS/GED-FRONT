@@ -54,9 +54,10 @@ const FormProfissional = ({ id }) => {
         setValue,
         getValues,
         watch,
+        trigger,
         register,
         formState: { errors }
-    } = useForm({})
+    } = useForm({ mode: 'onChange' })
 
     const resetFields = () => {
         setUserNewVerifyCPF(false)
@@ -274,6 +275,11 @@ const FormProfissional = ({ id }) => {
     // Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     useEffect(() => {
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id])
 
     // Ao iniciar verifica se o profissional é usuario

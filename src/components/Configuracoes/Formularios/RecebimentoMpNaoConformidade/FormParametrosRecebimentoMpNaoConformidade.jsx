@@ -23,8 +23,6 @@ import HelpText from 'src/components/Defaults/HelpText'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 
 const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
-    console.log('🚀 ~ id:', id)
-
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
     const [model, setModel] = useState()
@@ -71,6 +69,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
 
     const {
         setValue,
+        trigger,
         register,
         handleSubmit,
         reset,
@@ -78,9 +77,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         control,
         watch,
         formState: { errors }
-    } = useForm()
-
-    // const [textCabecalho, setTextCabecalho] = useState('')
+    } = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -300,6 +297,11 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
 
     useEffect(() => {
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            trigger()
+        }, 300)
     }, [id, savingForm])
 
     const handleSave = async data => {
