@@ -31,6 +31,10 @@ const Input = ({
 }) => {
     const theme = useTheme()
 
+    if (mask == 'telefone') {
+        console.log('value: ', value, mask, cellPhoneMask(value))
+    }
+
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
             <div className='relative'>

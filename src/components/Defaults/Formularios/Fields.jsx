@@ -50,6 +50,8 @@ const Fields = ({
     return (
         fields &&
         fields.map((field, index) => {
+            // console.log('field value:', field?.[field.nomeColuna])
+
             return (
                 <>
                     {/* Autocomplete (int) */}
@@ -108,7 +110,8 @@ const Fields = ({
                             name={`fields[${index}].${field.nomeColuna}`}
                             register={register}
                             control={control}
-                            value={getMaskForField ?? field?.[nomeColuna]}
+                            // value={getMaskForField(field.nomeColuna) ?? field?.[field.nomeColuna]}
+                            value={field?.[field.nomeColuna] ?? ''}
                             errors={errors?.fields?.[index]?.nomeColuna}
                             type={field.nomeColuna}
                             getAddressByCep={getAddressByCep}

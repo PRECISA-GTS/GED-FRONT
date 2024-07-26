@@ -213,7 +213,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         component: (
             <FormNotification
                 data={{
-                    email: field.find(row => row.nomeColuna == 'email')?.email
+                    email: field?.find(row => row.nomeColuna == 'email')?.email
                 }}
             />
         ),
@@ -242,9 +242,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         nameComponent: 'indexFormulario',
         type: 'report',
         unidadeID: unidade?.unidadeID, //* Unidade da fábrica
-        usuarioID: info.usuarioID, //* Usuário que criou o formulário (ficará no nome do pdf salvo)
-        papelID: user.papelID,
-        status: info.status,
+        usuarioID: info?.usuarioID, //* Usuário que criou o formulário (ficará no nome do pdf salvo)
+        papelID: user?.papelID,
+        status: info?.status,
         route: 'formularios/fornecedor',
         icon: 'fluent:print-24-regular',
         module: 'fornecedor'
@@ -278,7 +278,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const actionsData = []
     if (user.papelID == 1) {
         actionsData.push(objNovoFormulario)
-        if (info.status >= 40) actionsData.push(objReOpenForm)
+        if (info?.status >= 40) actionsData.push(objReOpenForm)
     }
     actionsData.push(objGerarNotificacao)
     actionsData.push(objCopiarLink)
@@ -302,6 +302,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             api.post(`${staticUrl}/getData/${id}`, { type: type, unidadeID: loggedUnity.unidadeID })
                 .then(response => {
                     console.log('getData: ', response.data)
+                    if (!response.data) return
 
                     //! Sem modelo (aguardando preenchimento do fornecedor)
                     if (!response.data.hasModel) {
@@ -620,6 +621,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
+        // console.log('🚀 ~ onSubmit: ', data)
 
         try {
             if (type == 'edit') {
@@ -858,9 +860,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     useEffect(() => {
+        console.log('renderiiiiza')
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
-    }, [id, savingForm])
+    }, [savingForm])
 
     useEffect(() => {
         checkErrors()
