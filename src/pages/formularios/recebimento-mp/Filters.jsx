@@ -5,22 +5,29 @@ import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, filterDate, SelectFilterByName, data, setFilteredData, handleSearch, key, searchText } =
-        useFilter()
+    const {
+        form,
+        setNames,
+        filterDate,
+        SelectFilterByName,
+        dataRecebimentoMP,
+        setFilteredDataRecebimentoMP,
+        handleSearch,
+        key,
+        searchText
+    } = useFilter()
     const { commonData } = useCommonData()
-    let dataFiltered = data
+    let dataFiltered = dataRecebimentoMP
 
     const onSubmit = async () => {
-        console.log('🚀 ~ onSubmit ~ dataFiltered', dataFiltered)
         dataFiltered = await handleSearch(dataFiltered)
         dataFiltered = await filterDate(dataFiltered)
         dataFiltered = await SelectFilterByName(dataFiltered, 'status')
         dataFiltered = await SelectFilterByName(dataFiltered, 'profissional')
         dataFiltered = await SelectFilterByName(dataFiltered, 'modelo')
-        setFilteredData(dataFiltered)
+        setFilteredDataRecebimentoMP(dataFiltered)
     }
 
-    //* Função para acionar o formulario de filtro do contexto (useFilter())
     //* Função para acionar o formulario de filtro do contexto (useFilter())
     useEffect(() => {
         onSubmit()

@@ -5,16 +5,26 @@ import { useCommonData } from 'src/context/CommonDataContext'
 import { useFilter } from 'src/context/FilterContext'
 
 const Filters = () => {
-    const { form, setNames, filterDate, SelectFilterByName, data, setFilteredData, handleSearch, key } = useFilter()
+    const {
+        form,
+        setNames,
+        filterDate,
+        SelectFilterByName,
+        dataSupplier,
+        setFilteredDataSupplier,
+        handleSearch,
+        key,
+        setKey
+    } = useFilter()
     const { commonData } = useCommonData()
-    let dataFiltered = data
+    let dataFiltered = dataSupplier
 
     const onSubmit = async () => {
         dataFiltered = await handleSearch(dataFiltered)
         dataFiltered = await filterDate(dataFiltered)
         dataFiltered = await SelectFilterByName(dataFiltered, 'status')
         dataFiltered = await SelectFilterByName(dataFiltered, 'quemPreenche')
-        setFilteredData(dataFiltered)
+        setFilteredDataSupplier(dataFiltered)
     }
 
     const arrQuemPreenche = [
@@ -39,7 +49,7 @@ const Filters = () => {
 
     return (
         <>
-            <CustomInputDate xs={12} md={6} title='Data inicio da avaliacão' name='dataInicio' form={form} />
+            <CustomInputDate xs={12} md={6} title='Data início da avaliacão' name='dataInicio' form={form} />
             <CustomInputDate xs={12} md={6} title='Data Fim da avaliação' name='dataFim' form={form} />
             <CustomSelect
                 xs={12}
