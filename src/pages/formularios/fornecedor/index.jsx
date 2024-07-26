@@ -42,7 +42,6 @@ const Fornecedor = () => {
 
     const getList = async () => {
         try {
-            console.log('🚀 ~ getList ~ response antes ', loggedUnity.unidadeID, user.papelID, user.cnpj)
             const response = await api.post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
@@ -50,8 +49,6 @@ const Fornecedor = () => {
             })
 
             if (!response.data) return
-
-            console.log('🚀 ~ getList ~ response depois ', response.data)
 
             setFilteredDataSupplier(response.data)
             setDataSupplier(response.data)
@@ -71,8 +68,6 @@ const Fornecedor = () => {
     //? handleSubmit do modal de gerar um novo fornecedor
     const makeFornecedor = async values => {
         try {
-            console.log('🚀 ~ makeFornecedor:', values.fields)
-
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
@@ -93,7 +88,6 @@ const Fornecedor = () => {
                 }
             }
         } catch (err) {
-            console.error(err)
             console.error('Erro ao enviar email', err)
         }
     }
@@ -112,7 +106,6 @@ const Fornecedor = () => {
     // }, [router.query])
 
     useEffect(() => {
-        // const filter = router.query.filter === '1' ? true : false
         getList()
         startFilter(<Filters />, false)
     }, [id, router.query])
