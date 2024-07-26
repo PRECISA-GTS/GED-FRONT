@@ -98,7 +98,7 @@ const QuickSearchToolbar = (props) => {
         {((searchText && searchText.length > 0) || filledFields > 0) && (
           <Button size='medium' title='Clear' color='secondary' variant='outlined' aria-label='Clear' onClick={handleClear} className='hidden sm:block !capitalize'>
             <div className='flex items-center gap-1'>
-              <span>Filtro: {filteredData.length}</span>
+              <span>Filtro: {props.rows.length}</span>
               <Icon icon='mdi:close' fontSize={20} className='text-red-500' />
             </div>
           </Button>

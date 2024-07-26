@@ -74,6 +74,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
         componentsProps={{
           toolbar: {
             buttonsHeader: buttonsHeader,
+            rows: rows,
           }
         }}
         className='min-h-[85vh]'
