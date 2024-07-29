@@ -35,7 +35,7 @@ import { useGlobal } from 'src/hooks/useGlobal'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
-    const [hasModel, setHasModel] = useState(false)
+    const [hasModel, setHasModel] = useState(true)
     const [noModelInfo, setNoModelInfo] = useState(null)
     const { menu, user, loggedUnity } = useContext(AuthContext)
     const [savingForm, setSavingForm] = useState(false)
@@ -301,7 +301,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         try {
             api.post(`${staticUrl}/getData/${id}`, { type: type, unidadeID: loggedUnity.unidadeID })
                 .then(response => {
-                    console.log('getData: ', response.data)
                     if (!response.data) return
 
                     //! Sem modelo (aguardando preenchimento do fornecedor)
@@ -310,7 +309,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         setNoModelInfo(response.data)
                     }
 
-                    setHasModel(true)
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
@@ -619,9 +617,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID
-            }
+            },
+            status: values.info.status
         }
-        // console.log('🚀 ~ onSubmit: ', data)
 
         try {
             if (type == 'edit') {
@@ -872,12 +870,14 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormHeader
                 btnCancel
-                btnDelete={info.status < 40 ? true : false}
+                btnDelete={info?.status < 40 ? true : false}
                 onclickDelete={() => setOpenModalDeleted(true)}
                 btnSave={canEdit.status}
                 btnSend={
-                    (user.papelID == 1 && info.status >= 30 && info.status <= 40) ||
-                    (user.papelID == 2 && info.status < 40)
+                    (user.papelID == 1 &&
+                        ((info.status >= 30 && info.status < 40 && unidade.quemPreenche == 1) ||
+                            (info.status == 40 && unidade.quemPreenche == 2))) ||
+                    (user.papelID == 2 && info.status < 40 && unidade.quemPreenche == 2)
                         ? true
                         : false
                 }
