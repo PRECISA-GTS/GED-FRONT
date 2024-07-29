@@ -162,7 +162,8 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1
+                      size: 1,
+                      type: 'statusSteps'
                   }
               ]
             : user.papelID == 2
@@ -209,7 +210,8 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1
+                      size: 1,
+                      type: 'statusSteps'
                   }
               ]
             : []

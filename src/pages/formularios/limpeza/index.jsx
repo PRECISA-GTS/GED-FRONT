@@ -74,7 +74,8 @@ const Limpeza = () => {
                 name: 'status',
                 cor: 'cor'
             },
-            size: 0.2
+            size: 0.2,
+            type: 'statusSteps'
         }
     ]
 

@@ -89,7 +89,8 @@ const RecebimentoMP = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 0.2
+                      size: 0.2,
+                      type: 'statusSteps'
                   },
                   {
                       headerName: 'Não Conformidade',
@@ -130,7 +131,8 @@ const RecebimentoMP = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 0.2
+                      size: 0.2,
+                      type: 'statusSteps'
                   },
                   {
                       headerName: 'Não Conformidade',

@@ -4,7 +4,6 @@ import { Tooltip, Typography } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import { formatDate } from './conversions'
 
-
 // ** Next
 import Link from 'next/link'
 
@@ -19,6 +18,7 @@ import { api } from 'src/configs/api'
 import axios from 'axios'
 import { tr } from 'date-fns/locale'
 import { truncateString } from './functions'
+import StatusSteps from 'src/components/Defaults/StatusSteps/Index'
 
 // Status Default
 const statusDefault = {
@@ -36,7 +36,6 @@ const statusDefault = {
 }
 
 const configColumns = (currentLink, arrColumns) => {
-
   return arrColumns.map((column, i) => {
     const currentColumns = arrColumns[i].field
 
@@ -49,16 +48,17 @@ const configColumns = (currentLink, arrColumns) => {
             arrColumns.map((c, j) => {
               if (c.field === currentColumns) {
                 if (c.field.name == 'status') {
-                  return (
-                    <CustomChip
+                  return c.type === 'statusSteps' ? (
+                    <StatusSteps statusID={params?.row.statusID} />
+                  ) :
+                    (<CustomChip
                       key={j}
                       size='small'
                       skin='light'
                       color={params?.row.cor}
                       label={params?.row.status}
                       sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                    />
-                  )
+                    />)
 
                 } else if (c.field == 'produtos') {
                   return (

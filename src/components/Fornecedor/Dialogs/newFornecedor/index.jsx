@@ -148,6 +148,7 @@ const NewFornecedor = ({
             if (getValues('fields.email')) clearErrors('fields.email')
             if (getValues('fields.categoria')) clearErrors('fields.categoria')
             if (getValues('fields.risco')) clearErrors('fields.risco')
+            if (getValues('fields.produtos')) clearErrors('fields.produtos')
         } catch (err) {
             console.error(err)
         }
