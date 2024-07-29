@@ -8,7 +8,18 @@ import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
 
-const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getValues, watch, trigger }) => {
+const NewFornecedor = ({
+    cnpj,
+    control,
+    setValue,
+    register,
+    errors,
+    clearErrors,
+    reset,
+    getValues,
+    watch,
+    trigger
+}) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
@@ -17,6 +28,7 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
     const [validationCnpj, setValidationCnpj] = useState(null)
 
     const handleCnpj = cnpj => {
+        console.log('🚀 ~ handleCnpj cnpj:', cnpj)
         if (cnpj.length == 18) {
             if (validationCNPJ(cnpj)) {
                 setValidationCnpj(true)
@@ -61,7 +73,6 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
                 produtos: responseLastForm.data.produtos,
                 gruposAnexo: responseLastForm.data.gruposAnexo
             }
-            console.log('🚀 ~ lastForm:', lastForm)
 
             //? Chama função pra obter dados da API e preencher as informações do fornecedor
             let resultAPI = ''
@@ -130,6 +141,13 @@ const NewFornecedor = ({ cnpj, control, setValue, register, errors, reset, getVa
             setValue('fields.registroSipeagro', responseLastForm.data.fields.registroSipeagro)
             setValue('fields.categoria', responseLastForm.data.fields.categoria)
             setValue('fields.risco', responseLastForm.data.fields.risco)
+
+            //? Atualiza campos pra remover erro de preenchimento
+            if (getValues('fields.razaoSocial')) clearErrors('fields.razaoSocial')
+            if (getValues('fields.nomeFantasia')) clearErrors('fields.nomeFantasia')
+            if (getValues('fields.email')) clearErrors('fields.email')
+            if (getValues('fields.categoria')) clearErrors('fields.categoria')
+            if (getValues('fields.risco')) clearErrors('fields.risco')
         } catch (err) {
             console.error(err)
         }

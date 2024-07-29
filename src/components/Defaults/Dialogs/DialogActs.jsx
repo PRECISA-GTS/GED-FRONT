@@ -28,6 +28,7 @@ const DialogActs = ({
         getValues,
         setValue,
         watch,
+        clearErrors,
         formState: { errors }
     } = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
@@ -69,6 +70,7 @@ const DialogActs = ({
                                 register: register,
                                 setValue: setValue,
                                 errors: errors,
+                                clearErrors: clearErrors,
                                 watch: watch,
                                 trigger: trigger,
                                 reset: reset,

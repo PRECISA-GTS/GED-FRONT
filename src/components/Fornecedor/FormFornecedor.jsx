@@ -333,7 +333,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         const nomeCampo = response.data.fields[i].nomeCampo
 
                         for (let propriedade in loggedUnity) {
-                            if (nomeColuna == 'telefone') {
+                            if (nomeColuna == 'telefone' && !getValues(`fields[${i}].${nomeColuna}`)) {
                                 const telefoneColuna = loggedUnity.telefone1 ?? loggedUnity.telefone2
                                 setValue(`fields[${i}].${nomeColuna}`, telefoneColuna ?? '')
                             }
@@ -860,7 +860,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     useEffect(() => {
-        console.log('renderiiiiza')
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
     }, [savingForm])
