@@ -84,17 +84,18 @@ const RecebimentoMP = () => {
                       size: 0.2
                   },
                   {
+                      headerName: 'Não Conformidade',
+                      field: 'naoConformidade',
+                      size: 0.2
+                  },
+                  {
                       headerName: 'Status',
                       field: {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 0.2
-                  },
-                  {
-                      headerName: 'Não Conformidade',
-                      field: 'naoConformidade',
-                      size: 0.2
+                      size: 0.2,
+                      type: 'statusSteps'
                   }
               ]
             : [
@@ -125,17 +126,18 @@ const RecebimentoMP = () => {
                       size: 0.2
                   },
                   {
+                      headerName: 'Não Conformidade',
+                      field: 'naoConformidade',
+                      size: 0.2
+                  },
+                  {
                       headerName: 'Status',
                       field: {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 0.2
-                  },
-                  {
-                      headerName: 'Não Conformidade',
-                      field: 'naoConformidade',
-                      size: 0.2
+                      size: 0.2,
+                      type: 'statusSteps'
                   }
               ]
 

@@ -14,23 +14,28 @@ const FornecedorContext = createContext(defaultProvider)
 
 const FornecedorProvider = ({ children }) => {
   const router = useRouter();
-  const { loggedUnity } = useContext(AuthContext)
+  const { loggedUnity, user } = useContext(AuthContext)
   // Validação do tipo de formulário a ser preenchido (fornecedor ou fábrica)
   const [isNotFactory, setIsNotFactory] = useState(false)
 
   const verifySupplierRisk = async () => {
-    if (!loggedUnity) return
-    const response = await api.post(`dashboard/fornecedor/myData`, { unidadeID: loggedUnity.unidadeID })
-    //? Fornecedor ainda não possui categoria/risco, redireciona pra rota /meus-dados
-    if (loggedUnity.papelID === 2 && response.data && response.data.possuiRisco !== 1) {
-      router.push('/meus-dados')
-      return
+    if (loggedUnity && user && loggedUnity.unidadeID && user.usuarioID) {
+      const response = await api.post(`dashboard/fornecedor/myData`, {
+        usuarioID: user.usuarioID,
+        unidadeID: loggedUnity.unidadeID
+      })
+
+      //? Fornecedor ainda não possui categoria/risco ou é primeiro acesso, redireciona pra rota /meus-dados
+      if (loggedUnity.papelID === 2 && response.data && (response.data.possuiRisco !== 1 || response.data.primeiroAcesso === 1)) {
+        router.push('/meus-dados')
+        return
+      }
     }
   }
 
   useEffect(() => {
     verifySupplierRisk()
-  }, [loggedUnity, router.pathname])
+  }, [user, loggedUnity, router.pathname])
 
   const values = {
     setIsNotFactory,

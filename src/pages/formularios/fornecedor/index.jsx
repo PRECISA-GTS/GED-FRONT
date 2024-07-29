@@ -74,7 +74,9 @@ const Fornecedor = () => {
                 profissionalID: user.profissionalID,
                 unidadeID: loggedUnity.unidadeID,
                 values: values.fields,
-                habilitaQuemPreencheFormFornecedor: values.habilitaQuemPreencheFormFornecedor
+                habilitaQuemPreencheFormFornecedor: values.habilitaQuemPreencheFormFornecedor,
+                fornecedorCategoriaID: values.fields?.categoria?.fornecedorCategoriaID,
+                fornecedorCategoriaRiscoID: values.fields?.risco?.fornecedorCategoriaRiscoID
             })
 
             if (response.status == 200) {
@@ -84,7 +86,7 @@ const Fornecedor = () => {
                     setResponseConclusion(response.data.result)
                     getList()
                 } else {
-                    setId(response.data.fornecedorID)
+                    setId(response.data.result.fornecedorID)
                 }
             }
         } catch (err) {
@@ -160,7 +162,8 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1
+                      size: 1,
+                      type: 'statusSteps'
                   }
               ]
             : user.papelID == 2
@@ -207,7 +210,8 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1
+                      size: 1,
+                      type: 'statusSteps'
                   }
               ]
             : []

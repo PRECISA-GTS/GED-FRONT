@@ -10,6 +10,7 @@ const SupplierNonCompliance = ({ data }) => {
     if (!data) return
 
     const theme = useTheme()
+    console.log('🚀 ~ theme:', theme.palette.mode)
     const series = [
         {
             name: 'Total',
@@ -40,7 +41,8 @@ const SupplierNonCompliance = ({ data }) => {
             style: {
                 fontWeight: 600,
                 fontSize: '0.875rem',
-                colors: [theme.palette.text.default]
+                // colors: [theme.palette.text.default]
+                colors: [theme.palette.warning.light]
             }
         },
         grid: {
@@ -59,7 +61,7 @@ const SupplierNonCompliance = ({ data }) => {
                 bottom: 10
             }
         },
-        colors: [hexToRGBA(theme.palette.warning.light, 1)],
+        colors: [theme.palette.mode === 'dark' ? '#49483A' : '#F7E8CC'],
         legend: { show: false },
         states: {
             hover: {
