@@ -221,6 +221,8 @@ const FormUnidade = ({ id }) => {
         fileInputRef.current.click()
     }
 
+    console.log('Foto atual', photoProfile)
+
     // Ao selecionar a foto, ela é enviada para o servidor e salva no banco de dados, como resposta atualiza a foto atual
     const handleFileSelect = async event => {
         const selectedFile = event.target.files[0]
