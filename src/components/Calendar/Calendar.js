@@ -16,6 +16,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Legend from './Legend'
 import DialogActs from '../Defaults/Dialogs/DialogActs'
 import Event from './Event'
+import Icon from 'src/@core/components/icon'
 
 const Calendar = () => {
   const router = Router
@@ -24,6 +25,7 @@ const Calendar = () => {
   const [events, setEvents] = useState([])
   const [open, setOpen] = useState(false)
   const [event, setEvent] = useState(null)
+
 
   const getEvents = async () => {
     const data = {
@@ -79,18 +81,14 @@ const Calendar = () => {
     eventContent({ event: calendarEvent }) {
       const colorVariant = calendarEvent._def.extendedProps.variant
       const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
-      let styles = `p-2 ${color}`;
+      let styles = `p-0 m-0 h-full ${color}`;
 
       const htmlEvent = `
-            <div class="${styles}">
-                <div>
-                    ${calendarEvent._def.extendedProps.type}<br/>
-                </div>
-                <div class="font-bold whitespace-normal">
-                    ${calendarEvent.title}
-                </div>
-            </div>
-            `
+      <div class="${styles}">
+          <div class="font-bold text-center text-lg h-full flex items-center justify-center">
+              4
+          </div>
+      </div>`
 
       return { html: htmlEvent }
     },

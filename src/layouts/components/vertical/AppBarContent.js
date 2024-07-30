@@ -25,108 +25,108 @@ import { Button, Typography } from '@mui/material'
 import DialogSelectUnit from 'src/components/Defaults/Dialogs/DialogSelectUnit'
 
 const AppBarContent = props => {
-    // ** Props
-    const { hidden, settings, saveSettings, toggleNavVisibility } = props
-    const { title } = useContext(ParametersContext)
-    const { notifications } = useContext(NotificationContext)
+  // ** Props
+  const { hidden, settings, saveSettings, toggleNavVisibility } = props
+  const { title } = useContext(ParametersContext)
+  const { notifications } = useContext(NotificationContext)
 
-    const { user, setLoggedUnity, loggedUnity, unitsUser, getRoutes, getMenu } = useContext(AuthContext)
+  const { user, setLoggedUnity, loggedUnity, unitsUser, getRoutes, getMenu } = useContext(AuthContext)
 
-    // ** Hooks
-    const router = useRouter()
-    const fullUrl = window.location.href; // Pega a URL completa
+  // ** Hooks
+  const router = useRouter()
+  const fullUrl = window.location.href; // Pega a URL completa
 
-    const apiUrl = "https://demo.gedagro.com.br";
-    const isDemo = fullUrl.includes(apiUrl) ? true : false
+  const apiUrl = "https://app.gedagro.com.br";
+  const isDemo = fullUrl.includes(apiUrl) ? true : false
 
-    // Controla troca de unidade
-    const [openModal, setOpenModal] = useState(false);
-    const [unity, setSelectedUnit] = useState(null);
-    const handleCloseModalSelectUnits = () => setOpenModal(false);
+  // Controla troca de unidade
+  const [openModal, setOpenModal] = useState(false);
+  const [unity, setSelectedUnit] = useState(null);
+  const handleCloseModalSelectUnits = () => setOpenModal(false);
 
-    // Troca de unidade
-    const handleConfirmUnity = () => {
-        // Atualizar contexto e localStorage
-        setLoggedUnity(unity)
-        localStorage.setItem('loggedUnity', JSON.stringify(unity))
+  // Troca de unidade
+  const handleConfirmUnity = () => {
+    // Atualizar contexto e localStorage
+    setLoggedUnity(unity)
+    localStorage.setItem('loggedUnity', JSON.stringify(unity))
 
-        getMenu(unity?.papelID)
+    getMenu(unity?.papelID)
 
-        // Recebe usuário e unidade e seta rotas de acordo com o perfil
-        getRoutes(user.usuarioID, unity?.unidadeID, user.admin, unity?.papelID)
+    // Recebe usuário e unidade e seta rotas de acordo com o perfil
+    getRoutes(user.usuarioID, unity?.unidadeID, user.admin, unity?.papelID)
 
-        setOpenModal(false)
-        router.replace('/home')
-        toast.success('Unidade alterada com sucesso!')
-    }
+    setOpenModal(false)
+    router.replace('/home')
+    toast.success('Unidade alterada com sucesso!')
+  }
 
-    return (
-        <>
-            {/* App Bar Content */}
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1'>
-                <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-                    {hidden && !settings.navHidden ? (
-                        <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
-                            <Icon icon='mdi:menu' />
-                        </IconButton>
-                    ) : null}
-                    <Autocomplete hidden={hidden} settings={settings} />
-                </Box>
-                <Box
-                    className='app-title p-1 rounded-xl'
-                    sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '10px' }}
-                >
-                    <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
-                    <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
-                        {title.subtitle.new ? `Novo` : title.subtitle.id ? `ID: ${title.subtitle.id}` : title.subtitle.count ? `Total de registros: ${title.subtitle.count}` : ``}
-                    </Typography>
-                    {/* todo migalhas de pão */}
-                    {/* <BreadcrumbsBasic /> */}
-                </Box>
-                <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-                    <div className='hidden sm:block'>
-                        {
-                            unitsUser && unitsUser.length > 1 ? (
-                                <Button
-                                    color="secondary"
-                                    endIcon={<Icon icon='material-symbols:keyboard-arrow-down-rounded' />}
-                                    onClick={() => setOpenModal(true)}
-                                    style={{ textTransform: 'none' }}>
-                                    {loggedUnity?.nomeFantasia}
-                                </Button>
-                            ) : (
-                                <Button
-                                    color="secondary"
-                                    style={{
-                                        textTransform: 'none',
-                                        pointerEvents: 'none'
-                                    }}>
-                                    {`${loggedUnity?.nomeFantasia} - ${user?.nome}`}
-                                </Button>
-                            )
-                        }
-                    </div>
-                    <div className='hidden sm:block'>
-                        <ModeToggler settings={settings} saveSettings={saveSettings} />
-                    </div>
-                    <div className='hidden sm:block'>
-                        <NotificationDropdown settings={settings} notifications={notifications} />
-                    </div>
+  return (
+    <>
+      {/* App Bar Content */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} className='w-full mx-4 py-1'>
+        <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+          {hidden && !settings.navHidden ? (
+            <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
+              <Icon icon='mdi:menu' />
+            </IconButton>
+          ) : null}
+          <Autocomplete hidden={hidden} settings={settings} />
+        </Box>
+        <Box
+          className='app-title p-1 rounded-xl'
+          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '10px' }}
+        >
+          <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
+          <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
+            {title.subtitle.new ? `Novo` : title.subtitle.id ? `ID: ${title.subtitle.id}` : title.subtitle.count ? `Total de registros: ${title.subtitle.count}` : ``}
+          </Typography>
+          {/* todo migalhas de pão */}
+          {/* <BreadcrumbsBasic /> */}
+        </Box>
+        <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+          <div className='hidden sm:block'>
+            {
+              unitsUser && unitsUser.length > 1 ? (
+                <Button
+                  color="secondary"
+                  endIcon={<Icon icon='material-symbols:keyboard-arrow-down-rounded' />}
+                  onClick={() => setOpenModal(true)}
+                  style={{ textTransform: 'none' }}>
+                  {loggedUnity?.nomeFantasia}
+                </Button>
+              ) : (
+                <Button
+                  color="secondary"
+                  style={{
+                    textTransform: 'none',
+                    pointerEvents: 'none'
+                  }}>
+                  {`${loggedUnity?.nomeFantasia} - ${user?.nome}`}
+                </Button>
+              )
+            }
+          </div>
+          <div className='hidden sm:block'>
+            <ModeToggler settings={settings} saveSettings={saveSettings} />
+          </div>
+          <div className='hidden sm:block'>
+            <NotificationDropdown settings={settings} notifications={notifications} />
+          </div>
 
-                    <UserDropdown settings={settings} />
+          <UserDropdown settings={settings} />
 
-                </Box>
-            </Box >
+        </Box>
+      </Box >
 
-            <DialogSelectUnit
-                openModal={openModal}
-                handleClose={handleCloseModalSelectUnits}
-                handleSubmit={handleConfirmUnity}
-                unidades={unitsUser}
-                setSelectedUnit={setSelectedUnit}
-            />
-        </>
-    )
+      <DialogSelectUnit
+        openModal={openModal}
+        handleClose={handleCloseModalSelectUnits}
+        handleSubmit={handleConfirmUnity}
+        unidades={unitsUser}
+        setSelectedUnit={setSelectedUnit}
+      />
+    </>
+  )
 }
 
 export default AppBarContent

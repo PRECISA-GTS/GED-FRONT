@@ -49,6 +49,15 @@ const Factory = () => {
         dataFornecedor && (
             <ApexChartWrapper>
                 <Grid container spacing={6} className='match-height'>
+                    {/* Calendário */}
+                    <Grid item xs={12} md={6}>
+                        <AppCalendar />
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <p>uasusahu</p>
+                    </Grid>
+
                     {/* Por estatus em blocos separados */}
                     {dataFornecedor.map((row, index) => (
                         <Grid item xs={12} md={index < dataFornecedor.length - 1 ? 3 : 6}>
@@ -65,11 +74,6 @@ const Factory = () => {
                     {/* Não conformidades dos fornecedores */}
                     <Grid item xs={12} md={12}>
                         <SupplierNonCompliance data={dataSupplierNonCompliance} />
-                    </Grid>
-
-                    {/* Calendário */}
-                    <Grid item xs={12} md={9}>
-                        <AppCalendar />
                     </Grid>
 
                     <Grid item xs={12} md={3}>

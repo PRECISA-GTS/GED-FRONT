@@ -107,7 +107,6 @@ code[class*='language-'] {
 }
 
 @keyframes animate-custom-bounce {
-
     0%,
     100% {
         transform: translateY(-5%);

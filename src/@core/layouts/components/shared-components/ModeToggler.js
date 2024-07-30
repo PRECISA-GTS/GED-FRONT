@@ -22,7 +22,7 @@ const ModeToggler = props => {
 
   return (
     <IconButton color='inherit' aria-haspopup='true' onClick={handleModeToggle}>
-      <Icon icon={settings.mode === 'dark' ? 'mdi:weather-sunny' : 'mdi:weather-night'} />
+      <Icon icon={settings.mode === 'dark' ? 'line-md:moon-alt-to-sunny-outline-loop-transition' : 'line-md:moon-alt-loop'} />
       {
         text && (
           <p className='text-base pl-2'>{settings.mode === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</p>
