@@ -85,8 +85,8 @@ const Calendar = () => {
 
       const htmlEvent = `
       <div class="${styles}">
-          <div class="font-bold text-center text-lg h-full flex items-center justify-center">
-              4
+          <div class="font-bold text-center h-full p-2 whitespace-normal">
+              ${calendarEvent._def.title}
           </div>
       </div>`
 
