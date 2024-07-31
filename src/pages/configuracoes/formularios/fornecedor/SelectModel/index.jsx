@@ -38,7 +38,7 @@ const SelectModel = ({ values }) => {
             unidadeID: loggedUnity.unidadeID
         }
         try {
-            const response = await api.put(`${staticUrl}/updateLinkingForms`, formatData)
+            const response = await api.post(`${staticUrl}/updateLinkingForms`, formatData)
             if (response.status === 200) {
                 toast.success('Formulários vinculados com sucesso!')
             }
