@@ -240,8 +240,8 @@ const FormRecebimentoMp = ({ id }) => {
             // Fields estáticos (todos obrigatórios)
             if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
             if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
-            if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
-            if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
+            // if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
+            // if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
 
             // Fields dinâmicos
             field?.forEach((field, index) => {
