@@ -34,6 +34,7 @@ const Calendar = () => {
     }
     try {
       const response = await api.post('calendario/getEvents', data);
+      console.log("🚀 ~ response getEvents:", response.data)
       setEvents(response.data);
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
@@ -79,14 +80,14 @@ const Calendar = () => {
     eventContent({ event: calendarEvent }) {
       const colorVariant = calendarEvent._def.extendedProps.variant
       const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
-      let styles = `p-2 ${color}`;
+      let styles = `text-center p-2 ${color}`;
 
       const htmlEvent = `
             <div class="${styles}">
                 <div>
-                    ${calendarEvent._def.extendedProps.type}<br/>
+                    Eventos<br/>
                 </div>
-                <div class="font-bold whitespace-normal">
+                <div class="font-bold text-lg">
                     ${calendarEvent.title}
                 </div>
             </div>
@@ -116,10 +117,10 @@ const Calendar = () => {
       <Legend />
       {/* Modal pra ver o evento */}
       <DialogActs
-        title={`Calendário de ${event?._def?.extendedProps?.type}`}
+        title={`${event?._def?.title} ${event?._def?.title == 1 ? 'evento' : 'eventos'} em ${event?._def?.extendedProps?.eventDate_} (${event?._def?.extendedProps?.dayWeek})`}
         setOpenModal={setOpen}
         openModal={open}
-        size='xs'
+        size='lg'
         handleLink={handleEventLink}
       >
         <Event values={event} />
