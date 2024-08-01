@@ -15,7 +15,6 @@ import { toast } from 'react-hot-toast'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-
 // ** Components
 import Autocomplete from 'src/layouts/components/vertical/Autocomplete'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
@@ -35,9 +34,8 @@ const AppBarContent = props => {
   // ** Hooks
   const router = useRouter()
   const fullUrl = window.location.href; // Pega a URL completa
-
-  const apiUrl = "https://app.gedagro.com.br";
-  const isDemo = fullUrl.includes(apiUrl) ? true : false
+  const isDemo = fullUrl.includes('demo.gedagro.com.br/') ? true : false
+  console.log("🚀 ~ isDemo:", fullUrl, isDemo)
 
   // Controla troca de unidade
   const [openModal, setOpenModal] = useState(false);
