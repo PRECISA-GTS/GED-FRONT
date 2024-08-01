@@ -14,6 +14,7 @@ import { configColumns } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
 import { Card } from '@material-ui/core'
 import SelectModel from './SelectModel'
+import EmptyForms from '../EmptyForms'
 
 const ListParametrosRecebimentoMpNaoConformidade = () => {
     const [result, setResult] = useState(null)
@@ -64,8 +65,10 @@ const ListParametrosRecebimentoMpNaoConformidade = () => {
             id && id > 0 ? (
                 <FormParametrosRecebimentoMpNaoConformidade id={id} />
             ) : (
-                //? Lista cards
-                <SelectModel values={result} />
+                <>
+                    {result && result.length > 0 && <SelectModel values={result} />}
+                    {result && result.length === 0 && <EmptyForms />}
+                </>
             )}
         </>
     )

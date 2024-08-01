@@ -618,7 +618,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID
             },
-            status: values.info.status
+            currentStatus: values.info.status
         }
 
         try {
