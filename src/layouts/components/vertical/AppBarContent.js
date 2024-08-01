@@ -15,7 +15,6 @@ import { toast } from 'react-hot-toast'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-
 // ** Components
 import Autocomplete from 'src/layouts/components/vertical/Autocomplete'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
@@ -23,7 +22,6 @@ import UserDropdown from 'src/@core/layouts/components/shared-components/UserDro
 import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 import { Button, Typography } from '@mui/material'
 import DialogSelectUnit from 'src/components/Defaults/Dialogs/DialogSelectUnit'
-import { api_url } from 'src/configs/api'
 
 const AppBarContent = props => {
   // ** Props

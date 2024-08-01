@@ -48,42 +48,39 @@ const Factory = () => {
     return (
         dataFornecedor && (
             <ApexChartWrapper>
-                <Grid container spacing={6} className='match-height'>
-                    {/* Por estatus em blocos separados */}
-                    {dataFornecedor.map((row, index) => (
-                        <Grid item xs={12} md={index < dataFornecedor.length - 1 ? 3 : 6}>
-                            <CardStatisticsVertical
-                                stats={row.stats}
-                                color={row.color}
-                                title={row.title ?? '0'}
-                                chipText='Last 4 Month'
-                                icon={<Icon icon='mdi:truck-fast-outline' />}
-                            />
-                        </Grid>
-                    ))}
-
-                    {/* Não conformidades dos fornecedores */}
-                    <Grid item xs={12} md={12}>
-                        <SupplierNonCompliance data={dataSupplierNonCompliance} />
-                    </Grid>
-
+                <Grid container spacing={6}>
                     {/* Calendário */}
-                    <Grid item xs={12} md={9}>
+                    <Grid item xs={12} md={6}>
                         <AppCalendar />
                     </Grid>
 
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={6}>
                         <Grid container spacing={6} className='match-height'>
-                            <Grid item xs={12}>
-                                {/* Limpeza e Higienização */}
-                                <GraphLimpeza data={limpeza} />
+                            <Grid item xs={12} md={12}>
+                                <SupplierNonCompliance data={dataSupplierNonCompliance} />
                             </Grid>
                             <Grid item xs={12}>
-                                {/* Recebimento MP e Não Conformidade */}
                                 <CrmWeeklyOverview data={dataRecebimentoNC} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <GraphLimpeza data={limpeza} />
                             </Grid>
                         </Grid>
                     </Grid>
+
+                    {/* <Grid container spacing={6} >
+                        {dataFornecedor.map((row, index) => (
+                            <Grid item xs={12} md={3}>
+                                <CardStatisticsVertical
+                                    stats={row.stats}
+                                    color={row.color}
+                                    title={row.title ?? '0'}
+                                    chipText='Last 4 Month'
+                                    icon={<Icon icon='mdi:truck-fast-outline' />}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid> */}
                 </Grid>
             </ApexChartWrapper>
         )
