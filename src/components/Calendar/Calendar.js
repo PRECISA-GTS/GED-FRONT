@@ -1,5 +1,3 @@
-import Router from 'next/router'
-import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
 // ** Full Calendar & it's Plugins
@@ -18,9 +16,7 @@ import DialogActs from '../Defaults/Dialogs/DialogActs'
 import Event from './Event'
 
 const Calendar = () => {
-  const router = Router
   const { user, loggedUnity } = useContext(AuthContext)
-  const { setId } = useContext(RouteContext)
   const [events, setEvents] = useState([])
   const [open, setOpen] = useState(false)
   const [event, setEvent] = useState(null)
@@ -34,18 +30,10 @@ const Calendar = () => {
     }
     try {
       const response = await api.post('calendario/getEvents', data);
-      console.log("🚀 ~ response getEvents:", response.data)
       setEvents(response.data);
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
     }
-  }
-
-  const handleEventLink = () => {
-    const { rota, id } = event._def.extendedProps.link
-    if (!rota) return
-    router.push(rota)
-    setId(id)
   }
 
   useEffect(() => {
@@ -120,8 +108,7 @@ const Calendar = () => {
         title={`${event?._def?.title} ${event?._def?.title == 1 ? 'evento' : 'eventos'} em ${event?._def?.extendedProps?.eventDate_} (${event?._def?.extendedProps?.dayWeek})`}
         setOpenModal={setOpen}
         openModal={open}
-        size='lg'
-        handleLink={handleEventLink}
+        size='md'
       >
         <Event values={event} />
       </DialogActs>

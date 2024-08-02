@@ -1,12 +1,19 @@
+import { useRouter } from 'next/router'
 import { Grid, Typography } from "@mui/material"
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
-import CustomChip from 'src/@core/components/mui/chip'
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "src/context/AuthContext"
+import { api } from "src/configs/api"
+import { useTheme } from '@mui/material/styles'
+import { RouteContext } from 'src/context/RouteContext'
 
 const Event = ({ values }) => {
   const { user, loggedUnity } = useContext(AuthContext)
+  const { setId } = useContext(RouteContext)
+  const [events, setEvents] = useState([])
+  const theme = useTheme()
+  const router = useRouter()
 
   const data = {
     ...values._def.extendedProps,
@@ -14,9 +21,9 @@ const Event = ({ values }) => {
     eventDate: values?._def?.extendedProps?.eventDate
   }
 
-  const getLabel = () => {
-    const label = data.variant == 'info' ? 'Dentro do prazo' : data.variant == 'warning' ? 'Vence hoje' : data.variant == 'error' ? 'Vencido' : 'Concluído'
-    return label
+  const getIcon = (tipo) => {
+    const icon = tipo === 'Fornecedor' ? 'mdi:truck-fast-outline' : tipo === 'Recebimento de MP' ? 'icon-park-outline:receive' : tipo === 'Limpeza' ? 'carbon:clean' : 'ph:bell'
+    return icon
   }
 
   const getEventsOfDay = async () => {
@@ -29,14 +36,20 @@ const Event = ({ values }) => {
       papelID: user.papelID,
       admin: user.admin
     }
-    console.log("🚀 ~ params:", params)
 
     try {
       const response = await api.post('calendario/getEventsOfDay', params);
-      console.log("🚀 ~ response:", response.data)
+      setEvents(response.data);
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleClick = (event) => {
+    if (!event.origemID) return
+
+    router.push(`${event.rota}`)
+    setId(event.origemID)
   }
 
   useEffect(() => {
@@ -46,33 +59,41 @@ const Event = ({ values }) => {
   return (
 
     <Grid container spacing={4}>
-      <Grid item xs={6} md={3} >
-        <CustomAvatar skin='light' variant='rounded' color="secondary" sx={{ width: '100%', height: '100%' }}>
-          <Icon icon={data.icon} />
-        </CustomAvatar>
-      </Grid>
-      <Grid item xs={6} md={8} >
-        <div className="flex flex-col gap-1">
-          <Typography variant="h5">
-            {data.title}
-          </Typography>
-          <div className='flex items-end gap-2'>
-            <div>
-              <Typography variant="caption">
-                Vencimento
-              </Typography>
-              <Typography variant="body1">
-                {data.eventDate}
-              </Typography>
+      <Grid item xs={6} md={12} >
+        <div className="flex flex-col gap-2">
+          {events.length > 0 && events.map((event, index) => (
+            <div
+              key={index}
+              className={`flex justify-between py-6 px-5 rounded-lg border ${theme.palette.mode === 'dark' ? 'border-[#2f363f] hover:bg-[#2f363f]' : 'border-[##F5F5F5] hover:bg-[#F5F5F5]'}  ${event.origemID > 0 ? 'cursor-pointer' : ''}`}
+              onClick={() => handleClick(event)}
+            >
+              <div>
+                <div className="flex items-center gap-2">
+                  <Typography variant="body1" fontWeight="bold">
+                    {event.titulo} - {event.variant}
+                  </Typography>
+                  {event.origemID > 0 && (
+                    <Icon icon="tabler:external-link" />
+                  )}
+                </div>
+
+                <Typography variant="body2">
+                  {event.descricao}
+                </Typography>
+                <Typography variant="body2">
+                  {event.hora}
+                </Typography>
+              </div>
+
+              <div className='flex items-center gap-2'>
+                <Typography variant='body1'>{event.tipo}</Typography>
+                <CustomAvatar skin='light' variant='rounded' color={event.variant}>
+                  <Icon icon={getIcon(event.tipo)} className='text-base' />
+                </CustomAvatar>
+              </div>
+
             </div>
-            <CustomChip
-              skin='light'
-              size='small'
-              label={getLabel()}
-              color={data.variant}
-              sx={{ height: 20, fontWeight: 500, fontSize: '0.75rem' }}
-            />
-          </div>
+          ))}
         </div>
       </Grid>
     </Grid>
