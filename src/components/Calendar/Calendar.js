@@ -55,7 +55,7 @@ const Calendar = () => {
       }
     },
     /* Enable dragging and resizing event */
-    editable: true,
+    editable: false,
     /* Enable resizing event from start */
     eventResizableFromStart: true,
     locale: ptBr,
@@ -72,10 +72,7 @@ const Calendar = () => {
 
       const htmlEvent = `
             <div class="${styles}">
-                <div>
-                    Eventos<br/>
-                </div>
-                <div class="font-bold text-lg">
+                <div class="font-bold text-3xl">
                     ${calendarEvent.title}
                 </div>
             </div>
