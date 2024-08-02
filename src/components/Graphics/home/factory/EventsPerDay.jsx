@@ -78,9 +78,8 @@ const EventsPerDay = ({ eventDate }) => {
                                 {event.origemID > 0 && <Icon icon='tabler:external-link' />}
                             </div>
 
-                            <Typography variant='body2'>{event.descricao}</Typography>
                             <Typography variant='body2' className='opacity-50'>
-                                Farelo de soja, Milho
+                                {event.subtitulo != '' ? event.subtitulo : '[Sem produto]'}
                             </Typography>
                         </div>
 
