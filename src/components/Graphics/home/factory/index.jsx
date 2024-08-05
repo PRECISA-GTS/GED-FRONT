@@ -43,28 +43,6 @@ const Factory = () => {
     return (
         dataFornecedor && (
             <ApexChartWrapper>
-<<<<<<< HEAD
-                <Grid container spacing={6} className='match-height'>
-                    {/* Por estatus em blocos separados */}
-                    {dataFornecedor.map((row, index) => (
-                        <Grid item xs={12} md={index < dataFornecedor.length - 1 ? 3 : 6}>
-                            <CardStatisticsVertical
-                                stats={row.stats}
-                                color={row.color}
-                                title={row.title ?? '0'}
-                                chipText='Last 4 Month'
-                                icon={<Icon icon='mdi:truck-fast-outline' />}
-                            />
-                        </Grid>
-                    ))}
-
-                    {/* Não conformidades dos fornecedores */}
-                    <Grid item xs={12} md={12}>
-                        <SupplierNonCompliance data={dataSupplierNonCompliance} />
-                    </Grid>
-
-                    <Grid item xs={12} md={3}>
-=======
                 <Grid container spacing={6}>
                     {/* Calendário */}
                     <Grid item xs={12} md={6}>
@@ -72,7 +50,6 @@ const Factory = () => {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
->>>>>>> f3ed6780cb2b95710c9111943f702e3d1c39bb6c
                         <Grid container spacing={6} className='match-height'>
                             <Grid item xs={12} md={12}>
                                 <Card>
@@ -99,12 +76,6 @@ const Factory = () => {
                         </Grid>
                     </Grid>
 
-<<<<<<< HEAD
-                    {/* Calendário */}
-                    <Grid item xs={12} md={9}>
-                        <AppCalendar />
-                    </Grid>
-=======
                     {/* <Grid container spacing={6} >
                         {dataFornecedor.map((row, index) => (
                             <Grid item xs={12} md={3}>
@@ -118,7 +89,6 @@ const Factory = () => {
                             </Grid>
                         ))}
                     </Grid> */}
->>>>>>> f3ed6780cb2b95710c9111943f702e3d1c39bb6c
                 </Grid>
             </ApexChartWrapper>
         )

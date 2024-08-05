@@ -70,16 +70,6 @@ const Calendar = () => {
     eventContent({ event: calendarEvent }) {
       const colorVariant = calendarEvent._def.extendedProps.variant
       const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
-<<<<<<< HEAD
-      let styles = `p-0 m-0 h-full ${color}`;
-
-      const htmlEvent = `
-      <div class="${styles}">
-          <div class="font-bold text-center h-full p-2 whitespace-normal">
-              ${calendarEvent._def.title}
-          </div>
-      </div>`
-=======
       let styles = `cursor-pointer text-center p-2 ${color}`;
 
       const htmlEvent = `
@@ -89,7 +79,6 @@ const Calendar = () => {
                 </div>
             </div>
             `
->>>>>>> f3ed6780cb2b95710c9111943f702e3d1c39bb6c
 
       return { html: htmlEvent }
     },
