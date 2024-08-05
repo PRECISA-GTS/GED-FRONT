@@ -1,5 +1,3 @@
-import Router from 'next/router'
-import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext, useEffect, useState } from 'react'
 // ** Full Calendar & it's Plugins
@@ -19,9 +17,7 @@ import Event from './Event'
 import Icon from 'src/@core/components/icon'
 
 const Calendar = () => {
-  const router = Router
   const { user, loggedUnity } = useContext(AuthContext)
-  const { setId } = useContext(RouteContext)
   const [events, setEvents] = useState([])
   const [open, setOpen] = useState(false)
   const [event, setEvent] = useState(null)
@@ -40,13 +36,6 @@ const Calendar = () => {
     } catch (error) {
       console.error('Erro ao buscar eventos:', error);
     }
-  }
-
-  const handleEventLink = () => {
-    const { rota, id } = event._def.extendedProps.link
-    if (!rota) return
-    router.push(rota)
-    setId(id)
   }
 
   useEffect(() => {
@@ -68,7 +57,7 @@ const Calendar = () => {
       }
     },
     /* Enable dragging and resizing event */
-    editable: true,
+    editable: false,
     /* Enable resizing event from start */
     eventResizableFromStart: true,
     locale: ptBr,
@@ -81,6 +70,7 @@ const Calendar = () => {
     eventContent({ event: calendarEvent }) {
       const colorVariant = calendarEvent._def.extendedProps.variant
       const color = colorVariant == 'info' ? `text-[#26C6F9]` : colorVariant == 'error' ? `text-[#FF4D49]` : colorVariant == 'warning' ? `text-[#FDB528]` : `text-[#6D788D]`
+<<<<<<< HEAD
       let styles = `p-0 m-0 h-full ${color}`;
 
       const htmlEvent = `
@@ -89,6 +79,17 @@ const Calendar = () => {
               ${calendarEvent._def.title}
           </div>
       </div>`
+=======
+      let styles = `cursor-pointer text-center p-2 ${color}`;
+
+      const htmlEvent = `
+            <div class="${styles}">
+                <div class="font-bold text-3xl">
+                    ${calendarEvent.title}
+                </div>
+            </div>
+            `
+>>>>>>> f3ed6780cb2b95710c9111943f702e3d1c39bb6c
 
       return { html: htmlEvent }
     },
@@ -114,11 +115,10 @@ const Calendar = () => {
       <Legend />
       {/* Modal pra ver o evento */}
       <DialogActs
-        title={`Calendário de ${event?._def?.extendedProps?.type}`}
+        title={`${event?._def?.title} ${event?._def?.title == 1 ? 'evento' : 'eventos'} em ${event?._def?.extendedProps?.eventDate_} (${event?._def?.extendedProps?.dayWeek})`}
         setOpenModal={setOpen}
         openModal={open}
-        size='xs'
-        handleLink={handleEventLink}
+        size='md'
       >
         <Event values={event} />
       </DialogActs>

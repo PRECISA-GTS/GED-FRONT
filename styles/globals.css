@@ -160,3 +160,11 @@ input::-ms-reveal {
 .fc-event {
     border: none !important;
 }
+<<<<<<< HEAD
+=======
+
+/* fc-day fc-day-thu fc-day-future fc-daygrid-day => height: 0;*/
+td .fc-scrollgrid-sync-inner {
+    height: 0 !important;
+}
+>>>>>>> f3ed6780cb2b95710c9111943f702e3d1c39bb6c

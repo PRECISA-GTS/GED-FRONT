@@ -33,7 +33,17 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const { isNotFactory } = useFornecedor()
-    const { startFilter, setFilteredDataSupplier, filteredDataSupplier, setDataSupplier, key } = useFilter()
+    const {
+        form,
+        dataSupplier,
+        startFilter,
+        SelectFilterByName,
+        setFilteredDataSupplier,
+        filteredDataSupplier,
+        setDataSupplier,
+        setKey,
+        key
+    } = useFilter()
 
     //* Controles modal pra inserir fornecedor
     const openModal = () => {
@@ -41,6 +51,7 @@ const Fornecedor = () => {
     }
 
     const getList = async () => {
+        console.log('getList')
         try {
             const response = await api.post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
@@ -102,19 +113,32 @@ const Fornecedor = () => {
         }
     }
 
-    // useEffect(() => {
-    //     setFilteredDataSupplier([])
-    //     setDataSupplier([])
-    // }, [router.query])
+    useEffect(() => {
+        setFilteredDataSupplier([])
+        setDataSupplier([])
+    }, [router.query])
+
+    // const filterRouteByStatus = async status => {
+    //     let filtered = dataSupplier.filter(row => {
+    //         return row.status == status
+    //     })
+    //     setFilteredDataSupplier(filtered)
+    //     setTimeout(() => {
+    //         setKey(!key)
+    //     }, 1200)
+    // }
 
     useEffect(() => {
         getList()
-        startFilter(<Filters />, false)
+        startFilter(<Filters />)
     }, [id, router.query])
 
     // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
     useEffect(() => {
         if (router.query.f) setId(router.query.f)
+        // if (router.query.s) {
+        //     filterRouteByStatus(router.query.s)
+        // }
     }, [router.query])
 
     const arrColumns =

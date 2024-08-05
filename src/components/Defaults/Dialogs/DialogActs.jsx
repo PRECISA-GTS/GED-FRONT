@@ -79,7 +79,7 @@ const DialogActs = ({
                         </DialogContentText>
                     </DialogContent>
 
-                    <DialogActions className='dialog-actions-dense'>
+                    <DialogActions className='dialog-actions-dense m-2'>
                         <Button variant='outlined' color='primary' onClick={() => setOpenModal(false)}>
                             Fechar
                         </Button>
