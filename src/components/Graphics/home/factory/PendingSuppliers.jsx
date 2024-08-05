@@ -9,6 +9,11 @@ const PendingSuppliers = ({ data }) => {
     const theme = useTheme()
     const router = Router
 
+    const qtdPendentes = data.find(item => item.status === 10)?.qtd ?? 0
+    const qtdAcessou = data.find(item => item.status === 20)?.qtd ?? 0
+    const qtdPreenchimento = data.find(item => item.status === 30)?.qtd ?? 0
+    const qtdConcluido = data.find(item => item.status === 40)?.qtd ?? 0
+
     const Step = ({ filled, title }) => {
         return (
             <Tooltip title={title}>
@@ -53,9 +58,11 @@ const PendingSuppliers = ({ data }) => {
                     <Tooltip title='Total pendentes'>
                         <p
                             className='text-center text-2xl font-semibold relative -top-[8px]'
-                            style={{ color: theme.palette.error.main }}
+                            style={{
+                                color: qtdPendentes > 0 ? theme.palette.error.main : theme.palette.text.primary
+                            }}
                         >
-                            {data.find(item => item.status === 10)?.qtd ?? 0}
+                            {qtdPendentes}
                         </p>
                     </Tooltip>
                 </div>
@@ -70,9 +77,9 @@ const PendingSuppliers = ({ data }) => {
                     <Tooltip title='Total que acessou o formulário'>
                         <p
                             className='text-center text-2xl font-semibold relative -top-[8px]'
-                            style={{ color: theme.palette.error.main }}
+                            style={{ color: qtdAcessou > 0 ? theme.palette.error.main : theme.palette.text.primary }}
                         >
-                            {data.find(item => item.status === 20)?.qtd ?? 0}
+                            {qtdAcessou}
                         </p>
                     </Tooltip>
                 </div>
@@ -87,9 +94,11 @@ const PendingSuppliers = ({ data }) => {
                     <Tooltip title='Total em preenchimento'>
                         <p
                             className='text-center text-2xl font-semibold relative -top-[8px]'
-                            style={{ color: theme.palette.error.main }}
+                            style={{
+                                color: qtdPreenchimento > 0 ? theme.palette.error.main : theme.palette.text.primary
+                            }}
                         >
-                            {data.find(item => item.status === 30)?.qtd ?? 0}
+                            {qtdPreenchimento}
                         </p>
                     </Tooltip>
                 </div>
@@ -104,9 +113,9 @@ const PendingSuppliers = ({ data }) => {
                     <Tooltip title='Total concluídos'>
                         <p
                             className='text-center text-2xl font-semibold relative -top-[8px]'
-                            style={{ color: theme.palette.error.main }}
+                            style={{ color: qtdConcluido > 0 ? theme.palette.error.main : theme.palette.text.primary }}
                         >
-                            {data.find(item => item.status === 40)?.qtd ?? 0}
+                            {qtdConcluido}
                         </p>
                     </Tooltip>
                 </div>
