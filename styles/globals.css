@@ -107,7 +107,6 @@ code[class*='language-'] {
 }
 
 @keyframes animate-custom-bounce {
-
     0%,
     100% {
         transform: translateY(-5%);
@@ -160,4 +159,9 @@ input::-ms-reveal {
 /* Calendar */
 .fc-event {
     border: none !important;
+}
+
+/* fc-day fc-day-thu fc-day-future fc-daygrid-day => height: 0;*/
+td .fc-scrollgrid-sync-inner {
+    height: 0 !important;
 }
