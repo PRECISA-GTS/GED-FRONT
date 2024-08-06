@@ -99,7 +99,7 @@ const Fields = ({
                     )}
 
                     {/* Textfield */}
-                    {field && (
+                    {field && field.tipo == 'string' && (
                         <Input
                             key={`input-${index}`}
                             xs={12}

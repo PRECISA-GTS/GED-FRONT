@@ -89,6 +89,8 @@ const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setCurrentRoute(router.pathname)
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      console.log("🚀 ~ stored token:", storedToken)
+
       if (storedToken) {
 
         setLoading(true)
@@ -128,6 +130,7 @@ const AuthProvider = ({ children }) => {
       }
     }
     initAuth()
+    // handleLogout()
   }, [])
 
   //* Login da fabrica (CPF)

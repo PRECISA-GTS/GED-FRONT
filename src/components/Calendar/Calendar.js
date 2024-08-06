@@ -14,12 +14,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Legend from './Legend'
 import DialogActs from '../Defaults/Dialogs/DialogActs'
 import Event from './Event'
+import Icon from 'src/@core/components/icon'
 
 const Calendar = () => {
   const { user, loggedUnity } = useContext(AuthContext)
   const [events, setEvents] = useState([])
   const [open, setOpen] = useState(false)
   const [event, setEvent] = useState(null)
+
 
   const getEvents = async () => {
     const data = {

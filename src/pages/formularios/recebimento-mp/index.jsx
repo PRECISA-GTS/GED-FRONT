@@ -21,10 +21,8 @@ const RecebimentoMP = () => {
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
-    const { id } = useContext(RouteContext)
-    // const { startFilter, setFilteredData, filteredData, setData } = useFilter()
+    const { id, setId } = useContext(RouteContext)
     const { startFilter, setFilteredDataRecebimentoMP, filteredDataRecebimentoMP, setDataRecebimentoMP } = useFilter()
-    console.log('🚀 ~ filteredDataRecebimentoMP:', filteredDataRecebimentoMP)
 
     const getList = async () => {
         await api
@@ -47,7 +45,7 @@ const RecebimentoMP = () => {
         // const filter = router.query.filter === '2' ? true : false
         getList()
         startFilter(<Filters />, false)
-    }, [id, router.query])
+    }, [id, setId, router.query])
 
     // useEffect(() => {
     //     getList()
@@ -150,7 +148,7 @@ const RecebimentoMP = () => {
                 <Loading show />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <FormRecebimentoMp id={id} />
+                <FormRecebimentoMp id={id} model={null} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table key={filteredDataRecebimentoMP} result={filteredDataRecebimentoMP} columns={columns} />

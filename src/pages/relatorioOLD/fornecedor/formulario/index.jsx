@@ -11,7 +11,7 @@ const indexFormulario = () => {
     const { data } = useGlobal()
     if (!data || Object.keys(data).length === 0) return
     const route =
-        process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api/' : 'https://demo.gedagro.com.br/api/'
+        process.env.NODE_ENV === 'development' ? 'http://localhost:3333/api/' : 'https://app.gedagro.com.br/api/'
 
     if (data?.report?.status > 40 && data?.user?.papelID === 1) {
         const newUrl = `${route}uploads/${data?.user?.unidadeID}/fornecedor/relatorio/original/${data?.user?.usuarioID}-${data?.report?.id}-fornecedor.pdf`

@@ -24,15 +24,11 @@ const RecebimentoMpNaoConformidade = ({
     setValue,
     errors
 }) => {
-    console.log('🚀 ~ RecebimentoMpNaoConformidade => values: ', values)
-
     const { user, loggedUnity } = useContext(AuthContext)
-
     const { settings } = useContext(SettingsContext)
     const [change, setChange] = useState(false)
     const [models, setModels] = useState([])
     const [openSelectionModel, setOpenSelectionModel] = useState(false)
-    console.log('🚀 ~ models:', models)
 
     const handlePreenchimentoFornecedor = () => {
         setChange(!change)
