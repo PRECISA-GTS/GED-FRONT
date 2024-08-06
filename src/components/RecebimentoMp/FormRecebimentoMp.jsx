@@ -383,6 +383,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     const conclusionForm = async values => {
         // sendPdfToServer(id, blobSaveReport, 'recebimento-mp')
+        setOpenModal(false)
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
     }
