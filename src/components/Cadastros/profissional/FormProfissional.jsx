@@ -39,8 +39,6 @@ const FormProfissional = ({ id }) => {
     const [userNewVerifyCPF, setUserNewVerifyCPF] = useState(false)
     // Se usuarioID vindo no getData for maior que 0  adiciona true
     const [userExistDefault, setUserExistDefault] = useState(false)
-    console.log('🚀 ~ userExistDefault:', userExistDefault)
-
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname

@@ -31,7 +31,6 @@ const Fields = ({
     userExistDefault,
     type
 }) => {
-    console.log('🚀 ~ data', data)
     const [lenghtPassword, setLenghtPassword] = useState(null)
     const [openModalNewPassword, setOpenModalNewPassword] = useState(false)
 
@@ -140,7 +139,6 @@ const Fields = ({
                     register={register}
                     control={control}
                     typeValidation='dataPassado'
-                    daysValidation={9999999999999999999}
                     errors={errors?.fields?.dataNascimento}
                 />
                 <Input

@@ -198,7 +198,7 @@ const dateOptions = (type, date, numDays) => {
     const newStatus = isWithinRange ? true : false;
 
     if (!isWithinRange && !newStatus) {
-      console.log("é diferente do periodo")
+      console.log("é diferente do período")
       errorMessageAlert()
     }
 

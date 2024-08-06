@@ -1,7 +1,7 @@
 import { Grid, FormControl, TextField } from '@mui/material'
 import { Controller } from 'react-hook-form'
 import { useTheme } from '@mui/material/styles'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { dateConfig } from 'src/configs/defaultConfigs'
 
 const DateField = ({
@@ -14,13 +14,19 @@ const DateField = ({
     value,
     name,
     typeValidation,
-    daysValidation,
     errors,
     alertRequired,
-    control // Add 'control' prop to receive the react-hook-form control object
+    control
 }) => {
     const theme = useTheme()
     const [dateStatus, setDateStatus] = useState({})
+    const [inputError, setInputError] = useState(null)
+
+    useEffect(() => {
+        if (typeValidation && value) {
+            setDateFormat(typeValidation, name, value)
+        }
+    }, [typeValidation, value, name])
 
     const formatDate = dateString => {
         const date = new Date(dateString)
@@ -39,6 +45,25 @@ const DateField = ({
         }))
     }
 
+    const validateDate = dateValue => {
+        const currentDate = new Date()
+        const selectedDate = new Date(dateValue)
+
+        if (typeValidation === 'dataAtual' && selectedDate.toDateString() !== currentDate.toDateString()) {
+            setInputError('A data deve ser a data atual')
+            return false
+        } else if (typeValidation === 'dataPassado' && selectedDate >= currentDate) {
+            setInputError('A data deve ser do passado')
+            return false
+        } else if (typeValidation === 'dataFutura' && selectedDate <= currentDate) {
+            setInputError('A data deve ser do futuro')
+            return false
+        } else {
+            setInputError(null)
+            return true
+        }
+    }
+
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }}>
             <FormControl fullWidth>
@@ -53,10 +78,14 @@ const DateField = ({
                             label={title}
                             disabled={disabled ? true : false}
                             defaultValue={value ? formatDate(value) : ''}
-                            error={errors}
+                            error={!!errors || !!inputError}
+                            helperText={inputError}
                             onChange={e => {
-                                field.onChange(e) // Manually update the field value
-                                if (typeValidation) setDateFormat(typeValidation, type, e.target.value, daysValidation)
+                                const dateValue = e.target.value
+                                if (validateDate(dateValue)) {
+                                    field.onChange(dateValue)
+                                    if (typeValidation) setDateFormat(typeValidation, name, dateValue)
+                                }
                             }}
                             variant='outlined'
                             fullWidth
@@ -64,8 +93,14 @@ const DateField = ({
                                 shrink: true
                             }}
                             inputProps={{
-                                min: dateStatus?.[type]?.dataIni,
-                                max: dateStatus?.[type]?.dataFim
+                                min:
+                                    typeValidation === 'dataFutura'
+                                        ? new Date().toISOString().split('T')[0]
+                                        : undefined,
+                                max:
+                                    typeValidation === 'dataPassado'
+                                        ? new Date().toISOString().split('T')[0]
+                                        : undefined
                             }}
                             sx={{
                                 ...(alertRequired &&

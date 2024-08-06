@@ -31,15 +31,14 @@ const FormItem = ({
     const [open, setOpen] = useState(false)
     const [change, setChange] = useState(false)
     const [data, setData] = useState(null)
-    console.log('🚀 ~ data:', data)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
     const { title } = useContext(ParametersContext)
     const { setId } = useContext(RouteContext)
     const { loggedUnity, user } = useContext(AuthContext)
-    console.log('🚀 ~ user:', user)
     const { startLoading, stopLoading } = useLoad()
+    const formType = router.pathname.split('/')[3] ?? 'item' //? novo, item, fornecedor, recebimento-mp, limpeza, ...
 
     const {
         trigger,
@@ -52,8 +51,6 @@ const FormItem = ({
         formState: { errors },
         register
     } = useForm({ mode: 'onChange' })
-
-    // handleSave()
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -114,10 +111,14 @@ const FormItem = ({
     const getData = async () => {
         try {
             const route = type === 'new' ? 'cadastros/item/new/getData' : `cadastros/item/getData/${id}`
-            await api.post(route).then(response => {
-                setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
-            })
+            await api
+                .post(route, {
+                    type: formType
+                })
+                .then(response => {
+                    setData(response.data)
+                    reset(response.data) //* Insere os dados no formulário
+                })
         } catch (error) {
             console.log(error)
         }
@@ -218,7 +219,8 @@ const FormItem = ({
                                         name='fields.formulario'
                                         value={data?.fields?.formulario}
                                         required
-                                        options={data?.fields?.formulario?.opcoes}
+                                        options={data?.fields?.opcoesForm}
+                                        disabled={formType !== 'novo' && formType !== 'item'}
                                         register={register}
                                         setValue={setValue}
                                         control={control}
