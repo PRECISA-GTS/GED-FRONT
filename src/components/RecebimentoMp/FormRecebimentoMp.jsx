@@ -39,9 +39,10 @@ import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 
-const FormRecebimentoMp = ({ id }) => {
+const FormRecebimentoMp = ({ id, model }) => {
+    console.log('🚀 ~ id model:', id, model)
+
     const { menu, user, loggedUnity } = useContext(AuthContext)
-    console.log('🚀 ~ FormRecebimentoMp ~ user', user)
     const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
@@ -73,7 +74,6 @@ const FormRecebimentoMp = ({ id }) => {
     const { startLoading, stopLoading } = useLoad()
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const { setReportParameters, sendPdfToServer } = useFormContext()
-
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [columnSelected, setColumnSelected] = useState(null)
@@ -87,7 +87,7 @@ const FormRecebimentoMp = ({ id }) => {
 
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
-    const staticUrl = router.pathname
+    const staticUrl = type == 'edit' ? router.pathname : backRoute(router.pathname)
 
     const {
         reset,
@@ -167,14 +167,23 @@ const FormRecebimentoMp = ({ id }) => {
     }
 
     const getData = () => {
+        console.log('getData')
         startLoading()
         try {
-            api.post(`${staticUrl}/getData/${id}`, {
+            const route = type == 'edit' ? `${staticUrl}/getData/${id}` : `${staticUrl}/getData/new/${id}`
+
+            console.log('🚀 ~ staticUrl:', staticUrl)
+            api.post(`${staticUrl}/getData`, {
+                id: id ?? 0,
                 type: type,
                 profissionalID: user.profissionalID,
-                unidadeID: loggedUnity.unidadeID
+                unidadeID: loggedUnity.unidadeID,
+                modeloID: model ?? 0
             })
                 .then(response => {
+                    console.log('model --> fazendo requisição backend: ', response.data)
+                    // return
+
                     setFieldsHeader(response.data.fieldsHeader)
                     // setFornecedor(response.data.fieldsHeader.fornecedor)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -451,6 +460,7 @@ const FormRecebimentoMp = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
+        console.log('🚀 ~ onSubmit data:', data)
         startLoading()
         if (id == true) return
         try {
@@ -465,8 +475,8 @@ const FormRecebimentoMp = ({ id }) => {
                     manageNotifications(values.status, values.naoConformidade, idNãoConformidade)
                 })
             } else if (type == 'new') {
-                await api.post(`${backRoute(staticUrl)}/insertData`, data).then(response => {
-                    router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
+                await api.post(`${staticUrl}/insertData`, data).then(response => {
+                    router.push(`${staticUrl}`)
                     console.log('🚀 ~ response new email:', response)
 
                     setId(response.data)
@@ -669,7 +679,8 @@ const FormRecebimentoMp = ({ id }) => {
     }
 
     useEffect(() => {
-        type == 'edit' ? getData() : null
+        // type == 'edit' ? getData() : null
+        getData()
     }, [id, savingForm])
 
     useEffect(() => {
