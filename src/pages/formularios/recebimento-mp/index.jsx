@@ -21,7 +21,7 @@ const RecebimentoMP = () => {
     const router = useRouter()
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
-    const { id } = useContext(RouteContext)
+    const { id, setId } = useContext(RouteContext)
     const { startFilter, setFilteredDataRecebimentoMP, filteredDataRecebimentoMP, setDataRecebimentoMP } = useFilter()
 
     const getList = async () => {
@@ -45,7 +45,7 @@ const RecebimentoMP = () => {
         // const filter = router.query.filter === '2' ? true : false
         getList()
         startFilter(<Filters />, false)
-    }, [id, router.query])
+    }, [id, setId, router.query])
 
     // useEffect(() => {
     //     getList()

@@ -40,8 +40,6 @@ import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 
 const FormRecebimentoMp = ({ id, model }) => {
-    console.log('🚀 ~ id model:', id, model)
-
     const { menu, user, loggedUnity } = useContext(AuthContext)
     const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
@@ -84,7 +82,6 @@ const FormRecebimentoMp = ({ id, model }) => {
         message: 'Você não tem permissões',
         messageType: 'info'
     })
-
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = type == 'edit' ? router.pathname : backRoute(router.pathname)
@@ -167,12 +164,8 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const getData = () => {
-        console.log('getData')
         startLoading()
         try {
-            const route = type == 'edit' ? `${staticUrl}/getData/${id}` : `${staticUrl}/getData/new/${id}`
-
-            console.log('🚀 ~ staticUrl:', staticUrl)
             api.post(`${staticUrl}/getData`, {
                 id: id ?? 0,
                 type: type,
@@ -181,8 +174,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 modeloID: model ?? 0
             })
                 .then(response => {
-                    console.log('model --> fazendo requisição backend: ', response.data)
-                    // return
+                    console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
                     // setFornecedor(response.data.fieldsHeader.fornecedor)
@@ -372,7 +364,6 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const handleSendForm = blob => {
-        console.log('abre o modal')
         setBlobSaveReport(blob)
         checkErrors(true)
         setOpenModal(true)
@@ -468,7 +459,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                 setSavingForm(true)
                 await api.post(`${staticUrl}/updateData/${id}`, data).then(response => {
                     toast.success(toastMessage.successUpdate)
-                    console.log('🚀 ~ response edit email:', response)
                     setSavingForm(false)
                     let idNãoConformidade = null
                     //? Trata notificações
@@ -476,10 +466,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                 })
             } else if (type == 'new') {
                 await api.post(`${staticUrl}/insertData`, data).then(response => {
+                    setId(response.data.recebimentoMpID)
                     router.push(`${staticUrl}`)
-                    console.log('🚀 ~ response new email:', response)
-
-                    setId(response.data)
                     toast.success(toastMessage.successNew)
                 })
             } else {
@@ -700,7 +688,6 @@ const FormRecebimentoMp = ({ id, model }) => {
     // }, [])
 
     const handleConfirmNew = async data => {
-        console.log('🚀 ~ data de noivvovov:', data)
         setOpenModalNew(false)
         // setValue(`'${nameSelected}'`, 'ALAAAA')
     }
@@ -723,7 +710,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Recebimento de MP'
-                    // componentSaveReport={<DadosRecebimentoMp />}
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
