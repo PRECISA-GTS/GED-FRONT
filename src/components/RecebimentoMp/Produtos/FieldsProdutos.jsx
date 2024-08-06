@@ -28,7 +28,6 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 errors={errors?.produtos?.[index]?.dataFabricacao}
                 disabled={disabled}
                 typeValidation='dataPassado'
-                daysValidation={99999}
             />
 
             {/* Nº Lote */}
@@ -68,8 +67,6 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 control={control}
                 errors={errors?.produtos?.[index]?.dataValidade}
                 disabled={disabled}
-                typeValidation='dataFutura'
-                daysValidation={99999}
             />
         </>
     )

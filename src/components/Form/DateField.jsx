@@ -97,10 +97,13 @@ const DateField = ({
                                     typeValidation === 'dataFutura'
                                         ? new Date().toISOString().split('T')[0]
                                         : undefined,
+                                // hoje, ou +50 anos
                                 max:
                                     typeValidation === 'dataPassado'
                                         ? new Date().toISOString().split('T')[0]
-                                        : undefined
+                                        : new Date(new Date().setFullYear(new Date().getFullYear() + 50))
+                                              .toISOString()
+                                              .split('T')[0]
                             }}
                             sx={{
                                 ...(alertRequired &&
