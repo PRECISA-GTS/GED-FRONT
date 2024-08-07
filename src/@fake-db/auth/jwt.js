@@ -34,7 +34,7 @@ const jwtConfig = {
   expirationTime: '1m',
   refreshTokenSecret: '7c4c1c50-3230-45bf-9eae-c9b2e401c767'
 }
-console.log("🚀 ~ jwtConfig:", jwtConfig)
+
 mock.onPost('/jwt/login').reply(request => {
   const { email, password } = JSON.parse(request.data)
 

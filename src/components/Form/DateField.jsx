@@ -29,15 +29,15 @@ const DateField = ({
     }, [typeValidation, value, name])
 
     const formatDate = dateString => {
-        const date = new Date(dateString)
-        const day = date.getDate().toString().padStart(2, '0')
-        const month = (date.getMonth() + 1).toString().padStart(2, '0')
-        const year = date.getFullYear()
+        const date = new Date(dateString + 'T00:00:00')
+        const day = date.getUTCDate().toString().padStart(2, '0')
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, '0')
+        const year = date.getUTCFullYear()
         return `${year}-${month}-${day}`
     }
 
     const setDateFormat = (type, name, value, numDays) => {
-        const newDate = new Date(value)
+        const newDate = new Date(value + 'T00:00:00')
         const status = dateConfig(type, newDate, numDays)
         setDateStatus(prevState => ({
             ...prevState,
@@ -47,7 +47,7 @@ const DateField = ({
 
     const validateDate = dateValue => {
         const currentDate = new Date()
-        const selectedDate = new Date(dateValue)
+        const selectedDate = new Date(dateValue + 'T00:00:00')
 
         if (typeValidation === 'dataAtual' && selectedDate.toDateString() !== currentDate.toDateString()) {
             setInputError('A data deve ser a data atual')
@@ -97,7 +97,7 @@ const DateField = ({
                                     typeValidation === 'dataFutura'
                                         ? new Date().toISOString().split('T')[0]
                                         : undefined,
-                                // hoje, ou +50 anos
+
                                 max:
                                     typeValidation === 'dataPassado'
                                         ? new Date().toISOString().split('T')[0]
