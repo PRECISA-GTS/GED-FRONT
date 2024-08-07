@@ -1,10 +1,9 @@
-import { DialogActions, DialogContent, DialogContentText, Typography } from '@mui/material'
-import Button from '@mui/material/Button'
+import { DialogContent, DialogContentText } from '@mui/material'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import React from 'react'
 
-const DialogNewCreate = ({ title, description, setOpenModal, openModal, children, size }) => {
+const DialogNewCreate = ({ title, setOpenModal, openModal, children, size }) => {
     return (
         <>
             <Dialog

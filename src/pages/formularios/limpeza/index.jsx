@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
 import FormLimpeza from 'src/components/Limpeza/FormLimpeza'
@@ -57,11 +57,6 @@ const Limpeza = () => {
             field: 'data',
             size: 0.1,
             type: 'date'
-        },
-        {
-            headerName: 'Profissional',
-            field: 'profissional',
-            size: 0.4
         },
         {
             headerName: 'Modelo',

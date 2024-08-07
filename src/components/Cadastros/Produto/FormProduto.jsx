@@ -18,6 +18,8 @@ import { AuthContext } from 'src/context/AuthContext'
 import Icon from 'src/@core/components/icon'
 import AnexosList from './AnexosList'
 import useLoad from 'src/hooks/useLoad'
+import FormClassificacaoProduto from '../ClassificacaoProduto/FormClassificacaoProduto'
+import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 
 const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChange, manualUrl, outsideID }) => {
     const [open, setOpen] = useState(false)
@@ -31,6 +33,10 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
     const [removedItems, setRemovedItems] = useState([])
     const [change, setChange] = useState(false)
     const { startLoading, stopLoading } = useLoad()
+
+    // Modal cadastro nova classificação
+    const [openClassification, setOpenClassification] = useState(false)
+    const [newChangeClassification, setNewChangeClassification] = useState(false)
 
     const {
         trigger,
@@ -139,6 +145,20 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
         setChange(!change)
     }
 
+    const createNewClassification = () => {
+        setOpenClassification(true)
+    }
+
+    const handleSave = async () => {
+        setNewChangeClassification(true)
+    }
+
+    const handleConfirmNewClassification = data => {
+        setOpenClassification(false)
+        setValue('classificacao.fields', data)
+        setNewChangeClassification(!newChangeClassification)
+    }
+
     // Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
     useEffect(() => {
         getData()
@@ -209,6 +229,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     control={control}
                                     errors={errors?.classificacao?.fields}
                                     helpText='Selecione a classificação'
+                                    createNew={createNewClassification}
                                 />
                                 <Check
                                     xs={1}
@@ -264,6 +285,24 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                 btnCancel
                 btnConfirm
             />
+
+            {/* Modal para criação de nova classificação */}
+            <DialogNewCreate
+                title='Nova Classificação de Produto'
+                size='md'
+                openModal={openClassification}
+                setOpenModal={setOpenClassification}
+                handleSave={handleSave}
+            >
+                <FormClassificacaoProduto
+                    manualUrl='/cadastros/classificacao-produto'
+                    btnClose
+                    handleModalClose={() => setOpenClassification(false)}
+                    newChange={newChangeClassification}
+                    handleConfirmNew={handleConfirmNewClassification}
+                    outsideID={true}
+                />
+            </DialogNewCreate>
         </>
     )
 }
