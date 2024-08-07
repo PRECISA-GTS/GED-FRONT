@@ -73,22 +73,23 @@ const configColumns = (currentLink, arrColumns) => {
                       </Tooltip>
                     </div>
                   )
-                } else if (c.field == 'naoConformidade') {
+                } else {
                   return (
-                    params?.row.naoConformidade === 1 &&
-                    <Tooltip
-                      title='Este formulário contém não conformidades'
-                      placement='top'
-                      arrow
-                    >
-                      <p>
-                        <Icon icon='typcn:warning' color='#FFC107' />
-                      </p>
-                    </Tooltip>
+                    <div className='flex items-center gap-1'>
+                      {params.row[c.field]}
+                      {c.variant == 'naoConformidade' && params?.row.naoConformidade === 1 && (
+                        <Tooltip
+                          title='Este formulário contém não conformidade(s)'
+                          placement='top'
+                          arrow
+                        >
+                          <p>
+                            <Icon icon='typcn:warning' color='#FFC107' />
+                          </p>
+                        </Tooltip>
+                      )}
+                    </div>
                   )
-                }
-                else {
-                  return params.row[c.field]
                 }
               }
             })}

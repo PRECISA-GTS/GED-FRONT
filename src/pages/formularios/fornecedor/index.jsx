@@ -150,29 +150,19 @@ const Fornecedor = () => {
                       size: 0.2
                   },
                   {
-                      headerName: 'Fornecedor',
-                      field: 'fornecedor',
-                      size: 2
-                  },
-                  {
-                      headerName: 'CNPJ',
-                      field: 'cnpj',
-                      size: 1
-                  },
-                  {
-                      headerName: 'Produtos',
-                      field: 'produtos',
-                      size: 1
-                  },
-                  {
                       headerName: 'Data da Avaliação',
                       field: 'data',
                       size: 0.7,
                       type: 'date'
                   },
                   {
-                      headerName: 'Cidade',
-                      field: 'cidade',
+                      headerName: 'Fornecedor',
+                      field: 'fornecedor',
+                      size: 2
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
                       size: 1
                   },
                   {
@@ -198,29 +188,19 @@ const Fornecedor = () => {
                       size: 1
                   },
                   {
-                      headerName: 'Fábrica',
-                      field: 'fabrica',
-                      size: 1
-                  },
-                  {
-                      headerName: 'CNPJ',
-                      field: 'cnpj',
-                      size: 1
-                  },
-                  {
-                      headerName: 'Produtos',
-                      field: 'produtos',
-                      size: 1
-                  },
-                  {
                       headerName: 'Data da Avaliação',
                       field: 'data',
                       size: 1,
                       type: 'date'
                   },
                   {
-                      headerName: 'Cidade',
-                      field: 'cidade',
+                      headerName: 'Fábrica',
+                      field: 'fabrica',
+                      size: 1
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
                       size: 1
                   },
                   {

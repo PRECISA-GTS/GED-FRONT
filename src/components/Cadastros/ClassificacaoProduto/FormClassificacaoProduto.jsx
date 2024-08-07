@@ -1,14 +1,12 @@
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
-import { Button, Card, CardContent, Grid } from '@mui/material'
+import { Card, CardContent, Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
-import { formType } from 'src/configs/defaultConfigs'
 import Loading from 'src/components/Loading'
 import FormHeader from '../../Defaults/FormHeader'
-import { backRoute } from 'src/configs/defaultConfigs'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
@@ -18,7 +16,15 @@ import Check from 'src/components/Form/Check'
 import useLoad from 'src/hooks/useLoad'
 import { AuthContext } from 'src/context/AuthContext'
 
-const FormClassificacaoProduto = ({ id }) => {
+const FormClassificacaoProduto = ({
+    id,
+    newChange,
+    manualUrl,
+    handleModalClose,
+    handleConfirmNew,
+    btnClose,
+    outsideID
+}) => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
     const router = Router
@@ -45,16 +51,22 @@ const FormClassificacaoProduto = ({ id }) => {
             usuarioID: user.usuarioID,
             unidadeID: loggedUnity.unidadeID
         }
+
         startLoading()
         try {
             if (type === 'new') {
-                await api.post(`${backRoute(staticUrl)}/new/insertData`, values).then(response => {
-                    router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
-                    setId(response.data)
+                await api.post(`/cadastros/classificacao-produto/new/insertData`, values).then(response => {
+                    if (outsideID) {
+                        handleConfirmNew(response.data)
+                        // handleModalClose()
+                    } else {
+                        router.push(`/cadastros/classificacao-produto`) //? backRoute pra remover 'novo' da rota
+                        setId(response.data)
+                    }
                     toast.success(toastMessage.successNew)
                 })
             } else if (type === 'edit') {
-                await api.post(`${staticUrl}/updateData/${id}`, values)
+                await api.post(`/cadastros/classificacao-produto/updateData/${id}`, values)
                 toast.success(toastMessage.successUpdate)
             }
         } catch (error) {
@@ -120,15 +132,20 @@ const FormClassificacaoProduto = ({ id }) => {
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} id='formItem'>
                     <FormHeader
                         btnCancel
-                        btnSave
                         btnNew
+                        btnSave
+                        disabled={false}
+                        manualUrl={manualUrl}
+                        btnClose={btnClose}
+                        handleModalClose={handleModalClose}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
+                        outsideID={outsideID}
                     />
                     <Card>
                         <CardContent>

@@ -64,7 +64,8 @@ const RecebimentoMP = () => {
                       headerName: 'Data',
                       field: 'data',
                       size: 0.1,
-                      type: 'date'
+                      type: 'date',
+                      variant: 'naoConformidade'
                   },
                   {
                       headerName: 'Fábrica',
@@ -72,18 +73,18 @@ const RecebimentoMP = () => {
                       size: 0.2
                   },
                   {
-                      headerName: 'Profissional',
-                      field: 'profissional',
-                      size: 0.2
+                      headerName: 'NF',
+                      field: 'nf',
+                      size: 1
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
+                      size: 1
                   },
                   {
                       headerName: 'Modelo',
                       field: 'modelo',
-                      size: 0.2
-                  },
-                  {
-                      headerName: 'Não Conformidade',
-                      field: 'naoConformidade',
                       size: 0.2
                   },
                   {
@@ -105,28 +106,29 @@ const RecebimentoMP = () => {
                   {
                       headerName: 'Data',
                       field: 'data',
-                      size: 0.1,
-                      type: 'date'
+                      size: 0.7,
+                      type: 'date',
+                      variant: 'naoConformidade'
                   },
                   {
                       headerName: 'Fornecedor',
                       field: 'fornecedor',
-                      size: 0.2
+                      size: 1
                   },
                   {
-                      headerName: 'Profissional',
-                      field: 'profissional',
-                      size: 0.2
+                      headerName: 'NF',
+                      field: 'nf',
+                      size: 0.6
+                  },
+                  {
+                      headerName: 'Produtos',
+                      field: 'produtos',
+                      size: 1
                   },
                   {
                       headerName: 'Modelo',
                       field: 'modelo',
-                      size: 0.2
-                  },
-                  {
-                      headerName: 'Não Conformidade',
-                      field: 'naoConformidade',
-                      size: 0.2
+                      size: 1
                   },
                   {
                       headerName: 'Status',
@@ -134,7 +136,7 @@ const RecebimentoMP = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 0.2,
+                      size: 1,
                       type: 'statusSteps'
                   }
               ]

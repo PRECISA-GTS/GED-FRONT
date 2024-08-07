@@ -132,42 +132,20 @@ const RecebimentoMpNaoConformidade = ({
             <div className='flex flex-col gap-2'>
                 <div
                     className={`${
-                        settings.mode == 'dark' ? 'bg-[#4B3537]' : 'bg-[#F8E2E2]'
-                    } p-5 rounded-xl border border-[#FF4D49] text-center`}
+                        settings.mode == 'dark' ? 'bg-[#3C2F38]' : 'bg-[#F8E2E2]'
+                    } p-3 rounded-xl  text-center`}
                 >
                     <Typography color='error' variant='subtitle1' sx={{ fontWeight: 700 }}>
                         Plano de Ação
                     </Typography>
                 </div>
 
-                <Card>
-                    <CardContent>
-                        <Typography variant='subtitle1'>
-                            Deve ser preenchido pelos colaboradores responsáveis pelas ações de monitoramento e/ou
-                            verificação e/ou responsável pela execução da ação corretiva.
-                        </Typography>
-                    </CardContent>
-                </Card>
-
                 {getValues('naoConformidade.itens') &&
                     getValues('naoConformidade.itens').map((value, index) => (
                         <Card key={index}>
                             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                <div className='flex items-center gap-2'>
-                                    <Typography variant='subtitle1' color='error' sx={{ fontWeight: 700 }}>
-                                        <div className='flex items-center gap-1'>
-                                            <Icon icon='typcn:warning' color='#FF4D49' />
-                                            <p>Não Conformidade {index + 1}</p>
-                                        </div>
-                                    </Typography>
-                                    <CustomChip
-                                        size='small'
-                                        skin='light'
-                                        label={value.modelo.nome}
-                                        color='error'
-                                        sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                    />
-                                </div>
+                                <Typography variant='body1'>{value.modelo.nome}</Typography>
+
                                 <FieldsFabrica
                                     key={index}
                                     index={index}

@@ -343,26 +343,13 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                 <Input
                                     className='order-1'
                                     xs={12}
-                                    md={8}
+                                    md={11}
                                     title='Modelo'
                                     name={`model.nome`}
                                     value={model.nome}
                                     required={true}
                                     control={control}
                                     errors={errors?.model?.nome}
-                                />
-                                <Input
-                                    className='order-1'
-                                    xs={12}
-                                    md={3}
-                                    type='number'
-                                    title={`Ciclo (dias)`}
-                                    name={`model.ciclo`}
-                                    value={model.ciclo}
-                                    required={true}
-                                    control={control}
-                                    helpText='Ciclo de vencimento deste formulário.'
-                                    errors={errors?.model?.ciclo}
                                 />
                                 <Check
                                     className='order-2 md:order-3'
