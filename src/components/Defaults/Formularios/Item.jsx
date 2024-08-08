@@ -115,8 +115,6 @@ const Item = ({
                                 name={`blocos[${blockIndex}].itens[${index}].resposta`}
                                 errors={errors?.[blockIndex]?.itens[index]?.resposta}
                                 control={control}
-                                typeValidation='dataPassado'
-                                daysValidation={365}
                                 register={register}
                             />
                         )}

@@ -87,13 +87,13 @@ const RecebimentoMpProdutos = ({ produtos, setProdutos, getValues, setValue, reg
                             <Grid item xs={12} md={8}>
                                 <Box display='flex' alignItems='center' justifyContent='end' sx={{ gap: 4, mt: 3 }}>
                                     <Typography variant='body2'>Última avaliação: {produto.ultimaAvaliacao}</Typography>
-                                    <Typography variant='body2'>
+                                    {/* <Typography variant='body2'>
                                         Próxima avaliação: {produto.proximaAvialacao} (
                                         {produto.diasRestantes == 1
                                             ? `${produto.diasRestantes} dia`
                                             : `${produto.diasRestantes} dias`}
                                         )
-                                    </Typography>
+                                    </Typography> */}
                                     {/* <Button variant='outlined' size='small'>
                                         <Box display='flex' alignItems='center' sx={{ gap: 1 }}>
                                             <Icon icon='fluent:form-new-20-regular' width={18} height={18} />
