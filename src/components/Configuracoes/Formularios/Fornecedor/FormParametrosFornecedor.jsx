@@ -7,7 +7,7 @@ import { api } from 'src/configs/api'
 import FormHeader from 'src/components/Defaults/FormHeader'
 import { AuthContext } from 'src/context/AuthContext'
 import toast from 'react-hot-toast'
-import { backRoute, toastMessage } from 'src/configs/defaultConfigs'
+import { toastMessage } from 'src/configs/defaultConfigs'
 import Loading from 'src/components/Loading'
 import Icon from 'src/@core/components/icon'
 
