@@ -15,6 +15,7 @@ const FieldsProdutos = ({ value, index, apresentacoes, setValue, register, contr
                 control={control}
                 errors={errors?.produtos?.[index]?.quantidade}
                 disabled={disabled}
+                mask='fractioned3' //? Ex.: 1.580.000,587
             />
 
             {/* Data de fabricação */}

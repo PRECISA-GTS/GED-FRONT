@@ -7,7 +7,7 @@ import { api } from 'src/configs/api'
 import FormHeader from 'src/components/Defaults/FormHeader'
 import { AuthContext } from 'src/context/AuthContext'
 import toast from 'react-hot-toast'
-import { backRoute, toastMessage } from 'src/configs/defaultConfigs'
+import { toastMessage } from 'src/configs/defaultConfigs'
 import Loading from 'src/components/Loading'
 import Icon from 'src/@core/components/icon'
 
@@ -359,7 +359,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                     value={model.ciclo}
                                     required={true}
                                     control={control}
-                                    helpText='Clico de vencimento deste formulário. Caso não tenha ciclo, use dias igual a 0 (zero)'
+                                    helpText='Ciclo de vencimento deste formulário. Caso não tenha ciclo, use dias igual a 0 (zero)'
                                     errors={errors?.model?.ciclo}
                                 />
                                 <Check

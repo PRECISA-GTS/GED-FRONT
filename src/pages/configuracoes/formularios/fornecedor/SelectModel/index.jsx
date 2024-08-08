@@ -18,6 +18,7 @@ const SelectModel = ({ values }) => {
     const router = Router
     const staticUrl = router.pathname
     const form = useForm({ mode: 'onChange' })
+    const [linkedsForm, setLinkedsForm] = useState([])
 
     const goToForm = id => {
         setId(id)
@@ -26,7 +27,9 @@ const SelectModel = ({ values }) => {
     const getLinkingForms = async () => {
         try {
             const response = await api.post(`${staticUrl}/getLinkingForms`, { unidadeID: loggedUnity.unidadeID })
-            form.reset(response.data)
+            console.log('🚀 ~ getLinkingForms: ', response.data)
+            form.reset(response.data.result)
+            setLinkedsForm(response.data.arrLinkedsForm)
         } catch (error) {
             console.log(error)
         }
@@ -41,6 +44,7 @@ const SelectModel = ({ values }) => {
             const response = await api.post(`${staticUrl}/updateLinkingForms`, formatData)
             if (response.status === 200) {
                 toast.success('Formulários vinculados com sucesso!')
+                await getLinkingForms() // Atualiza os dados após o envio do formulário
             }
         } catch (error) {
             toast.error('Erro ao vincular formulários!')
@@ -71,10 +75,12 @@ const SelectModel = ({ values }) => {
                             xs={12}
                             md={3}
                             icon='fluent:form-multiple-48-regular'
+                            id={value.id}
                             title={value.nome}
                             subtitle={`Ciclo de ${value.ciclo} dias`}
                             action='edit'
                             handleClick={() => goToForm(value.id)}
+                            linkedsForms={linkedsForm}
                         />
                     ))}
             </Grid>

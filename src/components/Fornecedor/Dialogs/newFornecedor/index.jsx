@@ -28,7 +28,6 @@ const NewFornecedor = ({
     const [validationCnpj, setValidationCnpj] = useState(null)
 
     const handleCnpj = cnpj => {
-        console.log('🚀 ~ handleCnpj cnpj:', cnpj)
         if (cnpj.length == 18) {
             if (validationCNPJ(cnpj)) {
                 setValidationCnpj(true)

@@ -27,12 +27,14 @@ import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 // import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
+import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
+import HistoricForm from '../Defaults/HistoricForm'
 
 const FormLimpeza = ({ id }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
-    const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
     const [savingForm, setSavingForm] = useState(false)
+    const [loadingFileItem, setLoadingFileItem] = useState(false)
     const [hasFormPending, setHasFormPending] = useState(false) //? Tem pendencia no formulário (já vinculado em formulário de recebimento, não altera mais o status)
     const [unidade, setUnidade] = useState(null)
     const [grupoAnexo, setGrupoAnexo] = useState([])
@@ -51,7 +53,7 @@ const FormLimpeza = ({ id }) => {
     const [blobSaveReport, setBlobSaveReport] = useState(null) // Salva o blob do relatório que sera salvo no back
     const { settings } = useContext(SettingsContext)
     const { setId } = useContext(RouteContext)
-    const { startLoading, stopLoading } = useLoad()
+    const { isLoading, startLoading, stopLoading } = useLoad()
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const { setReportParameters, sendPdfToServer } = useFormContext()
 
@@ -97,17 +99,48 @@ const FormLimpeza = ({ id }) => {
         router.push(`/configuracoes/formularios/limpeza/`)
     }
 
-    // Nomes e rotas dos relatórios passados para o componente FormHeader/MenuReports
-    // const objRelatorio = {
-    //     id: id,
-    //     name: 'Formulário da Limpeza',
-    //     nameComponent: 'DadosRecebimentoMp',
-    //     type: 'report',
-    //     unidadeID: loggedUnity.unidadeID,
-    //     papelID: user.papelID,
-    //     route: 'recebimentoMp/dadosRecebimentoMp',
-    //     icon: 'fluent:print-24-regular'
-    // }
+    //* Reabre o formulário
+    const changeFormStatus = async values => {
+        const data = {
+            status: 30,
+            observacao: values?.obs,
+            auth: {
+                usuarioID: user.usuarioID,
+                papelID: user.papelID,
+                unidadeID: loggedUnity.unidadeID
+            }
+        }
+
+        setSavingForm(true)
+        try {
+            await api.post(`${staticUrl}/changeFormStatus/${id}`, data).then(response => {
+                toast.success(toastMessage.successUpdate)
+                setSavingForm(false)
+
+                //? Trata notificações
+                manageNotifications(status, null, null)
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setChange(!change)
+        }
+    }
+
+    const objReOpenForm = {
+        id: 1,
+        name: 'Reabrir formulário',
+        description: 'Reabrir formulário para preenchimento.',
+        component: <DialogReOpenForm />,
+        disabled: hasFormPending ? true : false,
+        route: null,
+        type: null,
+        action: changeFormStatus,
+        modal: true,
+        size: 'sm',
+        icon: 'heroicons:lock-open',
+        identification: null
+    }
     const objFormConfig = {
         id: 5,
         name: 'Configurações do formulário',
@@ -122,7 +155,7 @@ const FormLimpeza = ({ id }) => {
     }
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    // actionsData.push(objRelatorio)
+    if (info.status >= 40) actionsData.push(objReOpenForm)
     if (canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
@@ -137,7 +170,7 @@ const FormLimpeza = ({ id }) => {
     }
 
     const getData = () => {
-        setLoading(true)
+        startLoading()
         try {
             api.post(`${staticUrl}/getData/${id}`, {
                 type: type,
@@ -145,8 +178,6 @@ const FormLimpeza = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             })
                 .then(response => {
-                    setLoading(false)
-
                     console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
@@ -184,91 +215,85 @@ const FormLimpeza = ({ id }) => {
                 })
                 .catch(error => {
                     console.log('🚀 ~ error:', error)
-                    setLoading(false)
                 })
         } catch (error) {
             console.log('🚀 ~ error:', error)
-            setLoading(false)
+        } finally {
+            stopLoading()
         }
     }
 
-    const checkErrors = validateForm => {
-        console.log('checkErrors => validateForm: ', validateForm, errors)
-
+    const checkErrors = () => {
         clearErrors()
         let hasErrors = false
         let arrErrors = []
 
-        if (validateForm) {
-            //? Header
-            field?.forEach((field, index) => {
-                const fieldName = field.tabela
-                    ? `fields[${index}].${field.tabela}`
-                    : `fields[${index}].${field.nomeColuna}`
-                const fieldValue = getValues(fieldName)
-                if (field.obrigatorio === 1 && !fieldValue) {
-                    setError(fieldName, {
+        //? Header
+        field?.forEach((field, index) => {
+            const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
+            const fieldValue = getValues(fieldName)
+            if (field.obrigatorio === 1 && !fieldValue) {
+                setError(fieldName, {
+                    type: 'manual',
+                    message: 'Campo obrigatório'
+                })
+                arrErrors.push(field?.nomeCampo)
+                hasErrors = true
+            }
+        })
+
+        //? Blocos
+        blocos.forEach((block, indexBlock) => {
+            block.itens.forEach((item, indexItem) => {
+                const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                //? Valida resposta do item
+                if (item?.obrigatorio === 1 && !fieldValue) {
+                    setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
                         type: 'manual',
-                        message: 'Campo obrigatório'
+                        message: 'Campo obrigatário'
                     })
-                    arrErrors.push(field?.nomeCampo)
+                    arrErrors.push(item?.nome)
                     hasErrors = true
                 }
+
+                //? Valida anexos do item
+                if (
+                    item.respostaConfig &&
+                    item.respostaConfig.anexo == 1 &&
+                    item.respostaConfig.anexosSolicitados.length > 0
+                ) {
+                    item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
+                        if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
+                            setError(
+                                `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
+                                {
+                                    type: 'manual',
+                                    message: 'Campo obrigatário'
+                                }
+                            )
+                            arrErrors.push(`Anexo: ${item?.nome} / ${anexo?.nome}`)
+                            hasErrors = true
+                        }
+                    })
+                }
             })
+        })
 
-            //? Blocos
-            blocos.forEach((block, indexBlock) => {
-                block.itens.forEach((item, indexItem) => {
-                    const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
-                    //? Valida resposta do item
-                    if (item?.obrigatorio === 1 && !fieldValue) {
-                        setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
-                            type: 'manual',
-                            message: 'Campo obrigatário'
-                        })
-                        arrErrors.push(item?.nome)
-                        hasErrors = true
-                    }
-
-                    //? Valida anexos do item
-                    if (
-                        item.respostaConfig &&
-                        item.respostaConfig.anexo == 1 &&
-                        item.respostaConfig.anexosSolicitados.length > 0
-                    ) {
-                        item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
-                            if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                                setError(
-                                    `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
-                                    {
-                                        type: 'manual',
-                                        message: 'Campo obrigatário'
-                                    }
-                                )
-                                arrErrors.push(`Anexo: ${item?.nome} / ${anexo?.nome}`)
-                                hasErrors = true
-                            }
-                        })
-                    }
-                })
-            })
-
-            //? Grupos de anexo
-            // if (grupoAnexo && grupoAnexo.length > 0) {
-            //     grupoAnexo.forEach((grupo, indexGrupo) => {
-            //         grupo.itens.forEach((item, indexItem) => {
-            //             if (item.obrigatorio === 1 && item.anexos.length == 0) {
-            //                 setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
-            //                     type: 'manual',
-            //                     message: 'Campo obrigatário'
-            //                 })
-            //                 arrErrors.push(`Anexo: ${grupo?.nome} / ${item?.nome}`)
-            //                 hasErrors = true
-            //             }
-            //         })
-            //     })
-            // }
-        }
+        //? Grupos de anexo
+        // if (grupoAnexo && grupoAnexo.length > 0) {
+        //     grupoAnexo.forEach((grupo, indexGrupo) => {
+        //         grupo.itens.forEach((item, indexItem) => {
+        //             if (item.obrigatorio === 1 && item.anexos.length == 0) {
+        //                 setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+        //                     type: 'manual',
+        //                     message: 'Campo obrigatário'
+        //                 })
+        //                 arrErrors.push(`Anexo: ${grupo?.nome} / ${item?.nome}`)
+        //                 hasErrors = true
+        //             }
+        //         })
+        //     })
+        // }
 
         setListErrors({
             status: hasErrors,
@@ -278,13 +303,12 @@ const FormLimpeza = ({ id }) => {
 
     const handleSendForm = blob => {
         setBlobSaveReport(blob)
-        checkErrors(true)
+        checkErrors()
         setOpenModal(true)
     }
 
     const conclusionForm = async values => {
-        console.log('🚀 ~ conclusionForm:', values)
-        // sendPdfToServer(id, blobSaveReport, 'limpeza')
+        setOpenModal(false)
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
     }
@@ -353,14 +377,12 @@ const FormLimpeza = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ data:', data)
         startLoading()
         try {
             if (type == 'edit') {
                 setSavingForm(true)
                 await api.post(`${staticUrl}/updateData/${id}`, data).then(response => {
                     toast.success(toastMessage.successUpdate)
-                    console.log('🚀 ~ response edit email:', response)
                     setSavingForm(false)
                     let idNãoConformidade = null
                     //? Trata notificações
@@ -369,8 +391,6 @@ const FormLimpeza = ({ id }) => {
             } else if (type == 'new') {
                 await api.post(`${backRoute(staticUrl)}/insertData`, data).then(response => {
                     router.push(`${backRoute(staticUrl)}`) //? backRoute pra remover 'novo' da rota
-                    console.log('🚀 ~ response new email:', response)
-
                     setId(response.data)
                     toast.success(toastMessage.successNew)
                 })
@@ -381,6 +401,7 @@ const FormLimpeza = ({ id }) => {
             console.log('errro da função update/email', error)
         } finally {
             stopLoading()
+            setChange(!change)
         }
     }
 
@@ -524,13 +545,20 @@ const FormLimpeza = ({ id }) => {
         onSubmit(values)
     }
 
+    //* Envia o formulário mesmo havendo erros (salva rascunho)
+    const customSubmit = e => {
+        e.preventDefault()
+        const values = getValues()
+        onSubmit(values)
+    }
+
     useEffect(() => {
         type == 'edit' ? getData() : null
     }, [id, savingForm])
 
     useEffect(() => {
-        checkErrors(false)
-    }, [])
+        checkErrors()
+    }, [isLoading])
 
     //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
     // useEffect(() => {
@@ -547,7 +575,7 @@ const FormLimpeza = ({ id }) => {
     return (
         <>
             <Loading show={isLoading} />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
                     btnCancel
                     btnSave={!info.concluido}
@@ -592,6 +620,19 @@ const FormLimpeza = ({ id }) => {
                 </div>
 
                 <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
+                    {/* Última movimentação do formulário */}
+                    {movimentacao && (
+                        <Alert severity='info'>
+                            {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
+                            {movimentacao.observacao && (
+                                <p>
+                                    <br />
+                                    Mensagem: "{movimentacao.observacao}"
+                                </p>
+                            )}
+                        </Alert>
+                    )}
+
                     {/* Cabeçalho do modelo */}
                     {info && info.cabecalhoModelo != '' && (
                         <Card>
@@ -704,21 +745,11 @@ const FormLimpeza = ({ id }) => {
                         </Typography>
                     )}
 
-                    {/* Mensagem */}
-                    {canEdit.message && <Alert severity='warning'>{canEdit.message}</Alert>}
-
-                    {/* Última movimentação do formulário */}
-                    {movimentacao && (
-                        <Alert severity='info'>
-                            {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
-                            {movimentacao.observacao && (
-                                <p>
-                                    <br />
-                                    Mensagem: "{movimentacao.observacao}"
-                                </p>
-                            )}
-                        </Alert>
-                    )}
+                    <HistoricForm
+                        key={change}
+                        id={id}
+                        parFormularioID={4} // Limpeza
+                    />
 
                     {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
                     {openModalStatus && (
@@ -742,7 +773,7 @@ const FormLimpeza = ({ id }) => {
                     <DialogFormConclusion
                         openModal={openModal}
                         handleClose={() => {
-                            setOpenModal(false), checkErrors(false)
+                            setOpenModal(false), checkErrors()
                         }}
                         title='Concluir Formulário'
                         text={`Deseja realmente concluir este formulário?`}
