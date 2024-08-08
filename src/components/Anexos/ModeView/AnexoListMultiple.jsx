@@ -22,8 +22,6 @@ const AnexoList = ({
     modeTheme,
     inputRef
 }) => {
-    console.log('🚀 >>>>> AnexoList error:', error)
-
     return (
         <Grid item xs={12} md={12}>
             <div

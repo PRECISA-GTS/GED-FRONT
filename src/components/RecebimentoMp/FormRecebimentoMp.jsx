@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 
 //* Default Form Components
-import Fields from 'src/components/Defaults/Formularios/Fields'
 import Block from 'src/components/Defaults/Formularios/Block'
 import DialogFormStatus from '../Defaults/Dialogs/DialogFormStatus'
 
@@ -11,10 +10,9 @@ import DialogFormStatus from '../Defaults/Dialogs/DialogFormStatus'
 import Input from 'src/components/Form/Input'
 import AnexoModeView from 'src/components/Anexos/ModeView'
 import CustomChip from 'src/@core/components/mui/chip'
-import { Alert, Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
+import { Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
-import { Avatar } from '@mui/material'
 import { api } from 'src/configs/api'
 import FormHeader from 'src/components/Defaults/FormHeader'
 import { RouteContext } from 'src/context/RouteContext'
@@ -24,24 +22,20 @@ import Loading from 'src/components/Loading'
 import toast from 'react-hot-toast'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
-import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
-import DateField from 'src/components/Form/DateField'
 import HeaderFields from './Header'
 import RecebimentoMpFooterFields from './Footer'
-import RecebimentoMpProdutos from './Produtos'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
-// import DadosRecebimentoMp from 'src/components/Reports/Formularios/RecebimentoMp/DadosRecebimentoMp'
 import { useFormContext } from 'src/context/FormContext'
 import RecebimentoMpNaoConformidade from './NaoConformidade'
 import FormTransportador from '../Cadastros/Transportador/FormTransportador'
 import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
+import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, loggedUnity } = useContext(AuthContext)
-    const [isLoading, setLoading] = useState(false)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
@@ -69,7 +63,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const [blobSaveReport, setBlobSaveReport] = useState(null) // Salva o blob do relatório que sera salvo no back
     const { settings } = useContext(SettingsContext)
     const { setId } = useContext(RouteContext)
-    const { startLoading, stopLoading } = useLoad()
+    const { isLoading, startLoading, stopLoading } = useLoad()
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const { setReportParameters, sendPdfToServer } = useFormContext()
     const [newChange, setNewChange] = useState(false)
@@ -123,22 +117,52 @@ const FormRecebimentoMp = ({ id, model }) => {
         router.push(`/configuracoes/formularios/recebimento-mp/`)
     }
 
-    // const objRelatorio = {
-    //     name: 'Formulário do Recebimento de MP',
-    //     icon: 'fluent:print-24-regular',
-    //     nameComponent: 'DadosRecebimentoMp',
-    //     type: 'report',
-    //     params: {
-    //         recebimentoMPID: id,
-    //         unidadeID: loggedUnity.unidadeID,
-    //         papelID: user.papelID
-    //     }
-    // }
+    //* Reabre o formulário
+    const changeFormStatus = async values => {
+        const data = {
+            status: 30,
+            observacao: values?.obs,
+            auth: {
+                usuarioID: user.usuarioID,
+                papelID: user.papelID,
+                unidadeID: loggedUnity.unidadeID
+            }
+        }
+
+        try {
+            setSavingForm(true)
+            await api.post(`${staticUrl}/changeFormStatus/${id}`, data).then(response => {
+                toast.success(toastMessage.successUpdate)
+                setSavingForm(false)
+
+                //? Trata notificações
+                manageNotifications(status, null, null)
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setChange(!change)
+        }
+    }
+
+    const objReOpenForm = {
+        id: 1,
+        name: 'Reabrir formulário',
+        description: 'Reabrir formulário para preenchimento.',
+        component: <DialogReOpenForm />,
+        disabled: hasFormPending ? true : false,
+        route: null,
+        type: null,
+        action: changeFormStatus,
+        modal: true,
+        size: 'sm',
+        icon: 'heroicons:lock-open',
+        identification: null
+    }
     const objFormConfig = {
-        id: 5,
+        id: 2,
         name: 'Configurações do formulário',
         description: 'Alterar as configurações do modelo de formulário.',
-        // component: <NewFornecedor />,
         route: null,
         type: null,
         action: goToFormConfig,
@@ -149,7 +173,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     // Monta array de ações baseado nas permissões
     const actionsData = []
-    // actionsData.push(objRelatorio)
+    if (user.papelID == 1 && info.status >= 40) actionsData.push(objReOpenForm)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
@@ -233,97 +257,94 @@ const FormRecebimentoMp = ({ id, model }) => {
         hasErrors = true
     }
 
-    const checkErrors = validateForm => {
+    const checkErrors = () => {
         clearErrors()
 
-        if (validateForm) {
-            //? Header
-            // Fields estáticos (todos obrigatórios)
-            if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
-            if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
-            // if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
-            // if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
+        //? Header
+        // Fields estáticos (todos obrigatórios)
+        if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+        if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+        // if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
+        // if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
 
-            // Fields dinâmicos
-            field?.forEach((field, index) => {
-                const fieldName = field.tabela
-                    ? `fields[${index}].${field.tabela}`
-                    : `fields[${index}].${field.nomeColuna}`
-                const fieldValue = getValues(fieldName)
-                if (field.obrigatorio === 1 && !fieldValue) {
-                    setFormError(fieldName, field?.nomeCampo)
-                }
-            })
-
-            //? Produtos
-            if (produtos && produtos.length > 0) {
-                produtos.forEach((produto, indexProduto) => {
-                    produto.produtoAnexosDescricao &&
-                        produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
-                            if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-                                setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
-                                    type: 'manual',
-                                    message: 'Campo obrigatório'
-                                })
-                                arrErrors.push(`Anexo: ${produto?.nome} / ${anexo?.nome}`)
-                                hasErrors = true
-                            }
-                        })
-                })
+        // Fields dinâmicos
+        field?.forEach((field, index) => {
+            const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
+            const fieldValue = getValues(fieldName)
+            if (field.obrigatorio === 1 && !fieldValue) {
+                setFormError(fieldName, field?.nomeCampo)
             }
+        })
 
-            //? Blocos
-            blocos.forEach((block, indexBlock) => {
-                block.itens.forEach((item, indexItem) => {
-                    const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
-                    //? Valida resposta do item
-                    if (item?.obrigatorio === 1 && !fieldValue) {
-                        setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
-                            type: 'manual',
-                            message: 'Campo obrigatário'
-                        })
-                        arrErrors.push(item?.nome)
-                        hasErrors = true
-                    }
-
-                    //? Valida anexos do item
-                    if (
-                        item.respostaConfig &&
-                        item.respostaConfig.anexo == 1 &&
-                        item.respostaConfig.anexosSolicitados.length > 0
-                    ) {
-                        item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
-                            if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                                setError(
-                                    `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
-                                    {
-                                        type: 'manual',
-                                        message: 'Campo obrigatário'
-                                    }
-                                )
-                                arrErrors.push(`Anexo: ${item?.nome} / ${anexo?.nome}`)
-                                hasErrors = true
-                            }
-                        })
-                    }
-                })
-            })
-
-            //? Grupos de anexo
-            if (grupoAnexo && grupoAnexo.length > 0) {
-                grupoAnexo.forEach((grupo, indexGrupo) => {
-                    grupo.itens.forEach((item, indexItem) => {
-                        if (item.obrigatorio === 1 && item.anexos.length == 0) {
-                            setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+        //? Produtos
+        if (produtos && produtos.length > 0) {
+            produtos.forEach((produto, indexProduto) => {
+                produto.produtoAnexosDescricao &&
+                    produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
+                        if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
+                            setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
                                 type: 'manual',
-                                message: 'Campo obrigatário'
+                                message: 'Campo obrigatório'
                             })
-                            arrErrors.push(`Anexo: ${grupo?.nome} / ${item?.nome}`)
+                            arrErrors.push(`Anexo: ${produto?.nome} / ${anexo?.nome}`)
                             hasErrors = true
                         }
                     })
+            })
+        }
+
+        //? Blocos
+        console.log('🚀 ~ block:', blocos)
+        blocos.forEach((block, indexBlock) => {
+            block.itens.forEach((item, indexItem) => {
+                const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                //? Valida resposta do item
+                if (item?.obrigatorio === 1 && !fieldValue) {
+                    setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
+                        type: 'manual',
+                        message: 'Campo obrigatário'
+                    })
+                    arrErrors.push(item?.nome)
+                    hasErrors = true
+                }
+
+                //? Valida anexos do item
+                if (
+                    item.respostaConfig &&
+                    item.respostaConfig.anexo == 1 &&
+                    item.respostaConfig.anexosSolicitados.length > 0
+                ) {
+                    item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
+                        if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
+                            setError(
+                                `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
+                                {
+                                    type: 'manual',
+                                    message: 'Campo obrigatário'
+                                }
+                            )
+                            arrErrors.push(`Anexo: ${item?.nome} / ${anexo?.nome}`)
+                            hasErrors = true
+                        }
+                    })
+                }
+            })
+        })
+
+        //? Grupos de anexo
+        if (grupoAnexo && grupoAnexo.length > 0) {
+            grupoAnexo.forEach((grupo, indexGrupo) => {
+                grupo.itens.forEach((item, indexItem) => {
+                    if (item.obrigatorio === 1 && item.anexos.length == 0) {
+                        setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+                            type: 'manual',
+                            message: 'Campo obrigatário'
+                        })
+                        arrErrors.push(`Anexo: ${grupo?.nome} / ${item?.nome}`)
+                        hasErrors = true
+                    }
                 })
-            }
+            })
         }
 
         setListErrors({
@@ -365,7 +386,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     const handleSendForm = blob => {
         setBlobSaveReport(blob)
-        checkErrors(true)
+        checkErrors()
         setOpenModal(true)
     }
 
@@ -382,7 +403,6 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const conclusionForm = async values => {
-        // sendPdfToServer(id, blobSaveReport, 'recebimento-mp')
         setOpenModal(false)
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
@@ -478,6 +498,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             console.log('errro da função update/email', error)
         } finally {
             stopLoading()
+            setChange(!change)
         }
     }
 
@@ -667,36 +688,29 @@ const FormRecebimentoMp = ({ id, model }) => {
         onSubmit(values)
     }
 
+    //* Envia o formulário mesmo havendo erros (salva rascunho)
+    const customSubmit = e => {
+        e.preventDefault()
+        const values = getValues()
+        onSubmit(values)
+    }
+
     useEffect(() => {
-        // type == 'edit' ? getData() : null
         getData()
     }, [id, savingForm])
 
     useEffect(() => {
-        checkErrors(false)
-    }, [])
-
-    //? Seta informações do relatório no localstorage através do contexto (pra gravar arquivo .pdf na conclusão do formulário)
-    // useEffect(() => {
-    //     setReportParameters({
-    //         id: id,
-    //         nameComponent: 'DadosRecebimentoMp',
-    //         route: 'recebimentoMp/dadosRecebimentoMp',
-    //         unidadeID: loggedUnity.unidadeID,
-    //         papelID: user.papelID,
-    //         usuarioID: user.usuarioID
-    //     })
-    // }, [])
+        checkErrors()
+    }, [isLoading])
 
     const handleConfirmNew = async data => {
         setOpenModalNew(false)
-        // setValue(`'${nameSelected}'`, 'ALAAAA')
     }
 
     return (
         <>
             <Loading show={isLoading} />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
                     btnCancel
                     btnSave={!info.concluido}
@@ -876,6 +890,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     )}
 
                     <HistoricForm
+                        key={change}
                         id={id}
                         parFormularioID={2} // Recebimento MP
                     />
@@ -902,7 +917,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     <DialogFormConclusion
                         openModal={openModal}
                         handleClose={() => {
-                            setOpenModal(false), checkErrors(false)
+                            setOpenModal(false), checkErrors()
                         }}
                         title='Concluir Formulário'
                         text={`Deseja realmente concluir este formulário?`}

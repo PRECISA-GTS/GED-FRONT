@@ -1,6 +1,15 @@
 import { Controller } from 'react-hook-form'
 import { FormControl, Grid, IconButton, InputAdornment, TextField } from '@mui/material'
-import { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask } from 'src/configs/masks'
+import {
+    cnpjMask,
+    cellPhoneMask,
+    cepMask,
+    ufMask,
+    cpfMask,
+    rgMask,
+    currencyMask,
+    fractioned3Mask
+} from 'src/configs/masks'
 import { useTheme } from '@mui/material/styles'
 import Icon from 'src/@core/components/icon'
 import HelpText from '../Defaults/HelpText'
@@ -74,6 +83,10 @@ const Input = ({
                                             ? (value = cpfMask(value))
                                             : mask === 'rg'
                                             ? (value = rgMask(value))
+                                            : mask === 'currency'
+                                            ? (value = currencyMask(value))
+                                            : mask === 'fractioned3'
+                                            ? (value = fractioned3Mask(value))
                                             : null
 
                                         field.onChange(value)

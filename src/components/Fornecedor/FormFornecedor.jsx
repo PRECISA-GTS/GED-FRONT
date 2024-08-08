@@ -28,10 +28,10 @@ import HeaderFields from './Header'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
-import ReOpenFornecedor from './Dialogs/ReOpenFornecedor'
 import HistoricForm from '../Defaults/HistoricForm'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
+import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
@@ -112,6 +112,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             })
         } catch (error) {
             console.log(error)
+        } finally {
+            setChange(!change)
         }
     }
 
@@ -264,7 +266,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         id: 6,
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
-        component: <ReOpenFornecedor />,
+        component: <DialogReOpenForm />,
         disabled: hasFormPending ? true : false,
         route: null,
         type: null,
@@ -493,8 +495,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 trigger(error)
             })
         }
-
-        console.log('🚀 ~ hasErrors:', hasErrors)
     }
 
     const getAddressByCep = async cepString => {
@@ -604,11 +604,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const onSubmit = async (values, param = false) => {
+        console.log('no onSubmit...')
         setOpenModal(false)
         startLoading()
         if (param.conclusion === true) {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
+        } else {
+            console.log('no onSubmit...2')
+            clearErrors()
         }
 
         const data = {
@@ -652,6 +656,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             console.log(error)
         } finally {
             stopLoading()
+            setChange(!change)
         }
     }
 
@@ -857,6 +862,13 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         onSubmit(values)
     }
 
+    //* Envia o formulário mesmo havendo erros (salva rascunho)
+    const customSubmit = e => {
+        e.preventDefault()
+        const values = getValues()
+        onSubmit(values)
+    }
+
     useEffect(() => {
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
@@ -864,10 +876,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
     useEffect(() => {
         checkErrors()
-    }, [])
+    }, [isLoading])
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={e => customSubmit(e)}>
             <FormHeader
                 btnCancel
                 btnDelete={info?.status < 40 ? true : false}
@@ -1108,7 +1120,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             unity={unidade}
                         />
 
-                        <HistoricForm parFormularioID={1} id={id} />
+                        <HistoricForm key={change} parFormularioID={1} id={id} />
                     </Box>
                 </>
             )}

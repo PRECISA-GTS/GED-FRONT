@@ -32,13 +32,6 @@ const Item = ({
     const [selectedItem, setSelectedItem] = useState(null)
     const fileInputRef = useRef(null)
 
-    //? Se for tipo Data, inicializa os campos já com as validações de data, bloqueando datas anteriores ou posteriores
-    useEffect(() => {
-        if (values.alternativa === 'Data') {
-            setDateFormat('dataPassado', null, values.resposta, 365)
-        }
-    }, [])
-
     //? Anexos
     const handleFileClick = item => {
         item[blockKey] = values[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc

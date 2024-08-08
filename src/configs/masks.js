@@ -62,4 +62,42 @@ function ufMask(uf) {
   return uf;
 }
 
-export { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask }
+const currencyMask = (value) => {
+  const cleanValue = value.replace(/\D/g, "");
+  const numberValue = parseFloat(cleanValue);
+  if (isNaN(numberValue)) {
+    return "R$ 0,00";
+  }
+  const decimalValue = numberValue / 100;
+  return decimalValue.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+};
+
+// Ex.: 1.580.000,587
+const fractioned3Mask = (value) => {
+  // Remove todos os caracteres que não são dígitos
+  const cleanValue = value.replace(/\D/g, "");
+
+  // Converte o valor limpo para número flutuante
+  const numberValue = parseFloat(cleanValue);
+
+  if (isNaN(numberValue)) {
+    return "0,000";
+  }
+
+  // Converte o valor em uma string com 3 casas decimais
+  const decimalValue = (numberValue / 1000).toFixed(3);
+
+  // Separa a parte inteira da parte decimal
+  const [integerPart, decimalPart] = decimalValue.split(".");
+
+  // Adiciona os separadores de milhar
+  const integerWithThousandSeparator = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  // Retorna o valor formatado
+  return `${integerWithThousandSeparator},${decimalPart}`;
+}
+
+export { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask, currencyMask, fractioned3Mask }

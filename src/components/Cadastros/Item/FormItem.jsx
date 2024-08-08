@@ -116,6 +116,7 @@ const FormItem = ({
                     type: formType
                 })
                 .then(response => {
+                    console.log('🚀 ~ formType response.data:', response.data)
                     setData(response.data)
                     reset(response.data) //* Insere os dados no formulário
                 })
