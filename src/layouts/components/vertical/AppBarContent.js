@@ -35,7 +35,6 @@ const AppBarContent = props => {
   const router = useRouter()
   const fullUrl = window.location.href; // Pega a URL completa
   const isDemo = fullUrl.includes('demo.gedagro.com.br/') ? true : false
-  console.log("🚀 ~ isDemo:", fullUrl, isDemo)
 
   // Controla troca de unidade
   const [openModal, setOpenModal] = useState(false);

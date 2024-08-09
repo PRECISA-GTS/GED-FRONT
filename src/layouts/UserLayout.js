@@ -26,8 +26,6 @@ const UserLayout = ({ children, contentHeightFixed }) => {
   const { settings, saveSettings } = useSettings()
   const { newVersionAvailable, setNewVersionAvailable, setOpenModalUpdate, openModalUpdate, latestVersionState, setLatestVersionState } = useContext(AuthContext)
 
-  console.log("🚀 ~ version latestVersionState:", latestVersionState, newVersionAvailable)
-
   const mode = settings.mode
 
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
@@ -39,6 +37,7 @@ const UserLayout = ({ children, contentHeightFixed }) => {
   const ClickUpdateAcept = () => {
     localStorage.setItem('latestVersion', newVersionAvailable.version)
     setNewVersionAvailable({ status: false, version: '' })
+    setLatestVersionState(newVersionAvailable.version)
     window.location.reload()
   }
 

@@ -7,39 +7,41 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 import { versions } from 'src/data/versions'
 
 const FooterContent = () => {
-    // ** Var
-    const hidden = useMediaQuery(theme => theme.breakpoints.down('md'))
-    const { latestVersionState } = useContext(AuthContext)
-    const { settings } = useSettings()
-    const mode = settings.mode
+  // ** Var
+  const hidden = useMediaQuery(theme => theme.breakpoints.down('md'))
+  const { latestVersionState } = useContext(AuthContext)
+  const { settings } = useSettings()
+  const mode = settings.mode
 
-    return (
-        <div className='flex justify-between sm:justify-end items-center '>
-            {/* Mobile */}
-            <span
-                className={
-                    `block sm:hidden text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`
-                }
-            >
-                v {versions[versions.length - 1].version}
-            </span>
+  return (
+    <div className='flex justify-between sm:justify-end items-center '>
+      {/* Mobile */}
+      <span
+        className={
+          `block sm:hidden text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`
+        }
+      >
+        {/* v {versions[versions.length - 1].version} */}
+        v {latestVersionState}
+      </span>
 
-            <div>
-                <p className='text-sm pr-2 md:text-sm flex gap-1'>
-                    {`© ${new Date().getFullYear()}, por `}
-                    <Link target='_blank' href='https://sisprecisa.com.br/'>
-                        Precisa Tecnologia
-                    </Link>
-                    {/* Desktop */}
-                    <span
-                        className={`hidden sm:block text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`}
-                    >
-                        versão {versions[versions.length - 1].version}
-                    </span>
-                </p>
-            </div>
-        </div>
-    )
+      <div>
+        <p className='text-sm pr-2 md:text-sm flex gap-1'>
+          {`© ${new Date().getFullYear()}, por `}
+          <Link target='_blank' href='https://sisprecisa.com.br/'>
+            Precisa Tecnologia
+          </Link>
+          {/* Desktop */}
+          <span
+            className={`hidden sm:block text-sm ${mode === 'light' || mode === 'semi-dark' ? 'text-[#757575]' : 'text-[#bdbdbd]'}`}
+          >
+            {/* versão {versions[versions.length - 1].version} */}
+            versão {latestVersionState}
+          </span>
+        </p>
+      </div>
+    </div>
+  )
 }
 
 export default FooterContent

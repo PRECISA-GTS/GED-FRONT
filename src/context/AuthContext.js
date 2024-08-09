@@ -89,7 +89,6 @@ const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setCurrentRoute(router.pathname)
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
-      console.log("🚀 ~ stored token:", storedToken)
 
       if (storedToken) {
 
@@ -304,46 +303,47 @@ const AuthProvider = ({ children }) => {
 
 
   //! Quando carregar o sistema, faz uma requisicao ao github para saber a versão atual do sistema
-  // async function getLatestVersion() {
-  //     await axios.get("https://api.github.com/repos/PRECISACHAPECO/ged-frontend/releases")
-  //         .then((response) => {
-  //             localStorage.setItem('latestVersion', response.data[0].tag_name)
-  //             setLatestVersionState(response.data[0].tag_name)
-  //         })
-  //         .catch((error) => {
-  //             console.log(error);
-  //         });
-  // }
+  const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
+  async function getLatestVersion() {
+    await axios.get(API_GITHUB)
+      .then((response) => {
+        localStorage.setItem('latestVersion', response.data[0].name)
+        setLatestVersionState(response.data[0].name)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-  // // //*? faz um get ao github para saber a versão atual do sistema
-  // useEffect(() => {
-  //     getLatestVersion();
-  // }, [])
+  //*? faz um get ao github para saber a versão atual do sistema
+  useEffect(() => {
+    getLatestVersion();
+  }, [])
 
   //! Verifica se a versão atual é diferente da versão do localStorage, se for, abre o modal de atualização
-  // useEffect(() => {
-  //     function getLatestTag() {
-  //         axios.get("https://api.github.com/repos/PRECISACHAPECO/ged-frontend/releases")
-  //             .then((response) => {
-  //                 if (response.data[0].tag_name !== localStorage.getItem('latestVersion')) {
-  //                     setNewVersionAvailable({
-  //                         status: true,
-  //                         version: response.data[0].tag_name,
-  //                     })
-  //                     setOpenModalUpdate(true)
-  //                 }
-  //             })
-  //             .catch((error) => {
-  //                 console.log(error);
-  //             });
-  //     }
-  //     const interval = setInterval(() => {
-  //         getLatestTag();
-  //     }, 10000);
-  //     return () => {
-  //         clearInterval(interval);
-  //     };
-  // }, []);
+  useEffect(() => {
+    function getLatestTag() {
+      axios.get(API_GITHUB)
+        .then((response) => {
+          if (response.data[0].name !== localStorage.getItem('latestVersion')) {
+            setNewVersionAvailable({
+              status: true,
+              version: response.data[0].name,
+            })
+            setOpenModalUpdate(true)
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    const interval = setInterval(() => {
+      getLatestTag();
+    }, 10000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   //! se rota atual for igual a /fornecedor, limpar o localstorage e dar reload na pagina, faça o reaload apenas uma vez
   // useEffect(() => {
@@ -366,9 +366,6 @@ const AuthProvider = ({ children }) => {
       router.replace(rota)
     }
   }, [router.query.f, router.query.r])
-
-  // http://localhost:3001/fornecedor?r=25
-
 
   const values = {
     user,
