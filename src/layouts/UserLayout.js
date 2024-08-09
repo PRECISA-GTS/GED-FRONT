@@ -5,12 +5,8 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import Layout from 'src/@core/layouts/Layout'
 
 // ** Navigation Imports
-// import VerticalNavItems from 'src/navigation/vertical'
-import VerticalNavItems from 'src/components/DynamicMenu' // Custom dynamic component for menu
-
-
+import VerticalNavItems from 'src/components/DynamicMenu'
 import HorizontalNavItems from 'src/navigation/horizontal'
-
 import VerticalAppBarContent from './components/vertical/AppBarContent'
 import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 
@@ -18,15 +14,13 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
-import { Alert, Button, Snackbar, Typography } from '@mui/material'
+import { Alert, Button, Snackbar } from '@mui/material'
 
 const UserLayout = ({ children, contentHeightFixed }) => {
 
   // ** Hooks
   const { settings, saveSettings } = useSettings()
   const { newVersionAvailable, setNewVersionAvailable, setOpenModalUpdate, openModalUpdate, latestVersionState, setLatestVersionState } = useContext(AuthContext)
-
-  const mode = settings.mode
 
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
   if (hidden && settings.layout === 'horizontal') {

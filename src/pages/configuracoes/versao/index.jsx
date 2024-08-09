@@ -58,12 +58,12 @@ const Versao = () => {
         {
             title: 'Nome',
             field: 'nome',
-            size: 0.3
+            size: 0.2
         },
         {
             title: 'Itens',
             field: 'itens',
-            size: 0.4
+            size: 0.5
         }
     ]
 
