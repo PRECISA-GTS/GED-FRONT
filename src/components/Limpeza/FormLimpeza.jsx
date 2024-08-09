@@ -513,36 +513,57 @@ const FormLimpeza = ({ id }) => {
         }
     }
 
+    // const changeAllOptions = colIndex => {
+    //     const tempBlocos = [...blocos]
+
+    //     //? Formulário
+    //     tempBlocos.map((bloco, index) => {
+    //         // bloco
+    //         bloco.itens.map((item, indexItem) => {
+    //             // item
+    //             setValue(`blocos[${index}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
+    //         })
+    //     })
+
+    //     //? Estado
+    //     setBlocos(prev =>
+    //         prev.map(bloco => ({
+    //             ...bloco,
+    //             itens: bloco.itens.map(item => ({
+    //                 ...item,
+    //                 resposta:
+    //                     item.alternativas[colIndex] && item.alternativas[colIndex].id > 0
+    //                         ? item.alternativas[colIndex]
+    //                         : null
+    //             }))
+    //         }))
+    //     )
+    //     setChange(!change)
+
+    //     //* Submete formulário pra atualizar configurações dos produtos
+    //     const values = getValues()
+    //     onSubmit(values)
+    // }
     const changeAllOptions = colIndex => {
         const tempBlocos = [...blocos]
 
-        //? Formulário
-        tempBlocos.map((bloco, index) => {
-            // bloco
-            bloco.itens.map((item, indexItem) => {
-                // item
-                setValue(`blocos[${index}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
+        tempBlocos.forEach((bloco, blocoIndex) => {
+            bloco.itens.forEach((item, itemIndex) => {
+                const newResposta = item.alternativas[colIndex]
+
+                // Atualiza o valor no formulário
+                setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
+
+                // Atualiza o estado local (blocos)
+                item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
             })
         })
 
-        //? Estado
-        setBlocos(prev =>
-            prev.map(bloco => ({
-                ...bloco,
-                itens: bloco.itens.map(item => ({
-                    ...item,
-                    resposta:
-                        item.alternativas[colIndex] && item.alternativas[colIndex].id > 0
-                            ? item.alternativas[colIndex]
-                            : null
-                }))
-            }))
-        )
-        setChange(!change)
+        // Atualiza o estado com o novo array de blocos
+        setBlocos(tempBlocos)
 
-        //* Submete formulário pra atualizar configurações dos produtos
-        const values = getValues()
-        onSubmit(values)
+        // Troca o estado de change para forçar a renderização (se necessário)
+        setChange(prevChange => !prevChange)
     }
 
     //* Envia o formulário mesmo havendo erros (salva rascunho)
