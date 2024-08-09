@@ -682,10 +682,6 @@ const FormRecebimentoMp = ({ id, model }) => {
             }))
         )
         setChange(!change)
-
-        //* Submete formulário pra atualizar configurações dos produtos
-        const values = getValues()
-        onSubmit(values)
     }
 
     //* Envia o formulário mesmo havendo erros (salva rascunho)

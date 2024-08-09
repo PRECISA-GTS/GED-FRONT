@@ -308,16 +308,6 @@ const AuthProvider = ({ children }) => {
     try {
       localStorage.setItem('latestVersion', version)
       setLatestVersionState(version)
-
-      // await axios.get(API_GITHUB)
-      //   .then((response) => {
-      //     console.log("🚀 ~ response.data[0]:", response.data[0])
-      //     localStorage.setItem('latestVersion', response.data[0].name)
-      //     setLatestVersionState(response.data[0].name)
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     } catch (error) {
       console.log(error)
     }
@@ -341,20 +331,6 @@ const AuthProvider = ({ children }) => {
           })
           setOpenModalUpdate(true)
         }
-
-        // axios.get(API_GITHUB)
-        //   .then((response) => {
-        //     if (response.data[0].name !== localStorage.getItem('latestVersion')) {
-        //       setNewVersionAvailable({
-        //         status: true,
-        //         version: response.data[0].name,
-        //       })
-        //       setOpenModalUpdate(true)
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
       } catch (error) {
         console.log(error)
       }
