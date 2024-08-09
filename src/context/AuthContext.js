@@ -1,6 +1,6 @@
 // ** React Imports
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api } from 'src/configs/api'
+import { api, version } from 'src/configs/api'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -303,16 +303,24 @@ const AuthProvider = ({ children }) => {
 
 
   //! Quando carregar o sistema, faz uma requisicao ao github para saber a versão atual do sistema
-  const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
+  // const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
   async function getLatestVersion() {
-    await axios.get(API_GITHUB)
-      .then((response) => {
-        localStorage.setItem('latestVersion', response.data[0].name)
-        setLatestVersionState(response.data[0].name)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      localStorage.setItem('latestVersion', version)
+      setLatestVersionState(version)
+
+      // await axios.get(API_GITHUB)
+      //   .then((response) => {
+      //     console.log("🚀 ~ response.data[0]:", response.data[0])
+      //     localStorage.setItem('latestVersion', response.data[0].name)
+      //     setLatestVersionState(response.data[0].name)
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   //*? faz um get ao github para saber a versão atual do sistema
@@ -323,19 +331,33 @@ const AuthProvider = ({ children }) => {
   //! Verifica se a versão atual é diferente da versão do localStorage, se for, abre o modal de atualização
   useEffect(() => {
     function getLatestTag() {
-      axios.get(API_GITHUB)
-        .then((response) => {
-          if (response.data[0].name !== localStorage.getItem('latestVersion')) {
-            setNewVersionAvailable({
-              status: true,
-              version: response.data[0].name,
-            })
-            setOpenModalUpdate(true)
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        // const version = version
+        console.log("🚀 ~ version:", version)
+        if (version !== localStorage.getItem('latestVersion')) {
+          setNewVersionAvailable({
+            status: true,
+            version: version
+          })
+          setOpenModalUpdate(true)
+        }
+
+        // axios.get(API_GITHUB)
+        //   .then((response) => {
+        //     if (response.data[0].name !== localStorage.getItem('latestVersion')) {
+        //       setNewVersionAvailable({
+        //         status: true,
+        //         version: response.data[0].name,
+        //       })
+        //       setOpenModalUpdate(true)
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
+      } catch (error) {
+        console.log(error)
+      }
     }
     const interval = setInterval(() => {
       getLatestTag();

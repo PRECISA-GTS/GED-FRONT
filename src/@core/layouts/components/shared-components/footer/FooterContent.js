@@ -9,6 +9,7 @@ import ListVersions from 'src/components/Configuracoes/Versao/ListVersions'
 const FooterContent = () => {
   // ** Var
   const { latestVersionState } = useContext(AuthContext)
+  console.log("🚀 ~ latestVersionState:", latestVersionState)
   const [open, setOpen] = useState(false)
 
   const handleOpenVersions = () => {
