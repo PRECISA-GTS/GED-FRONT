@@ -684,27 +684,27 @@ const FormRecebimentoMp = ({ id, model }) => {
     //     setChange(!change)
     // }
 
-    const changeAllOptions = colIndex => {
-        const tempBlocos = [...blocos]
+    // const changeAllOptions = colIndex => {
+    //     const tempBlocos = [...blocos]
 
-        tempBlocos.forEach((bloco, blocoIndex) => {
-            bloco.itens.forEach((item, itemIndex) => {
-                const newResposta = item.alternativas[colIndex]
+    //     tempBlocos.forEach((bloco, blocoIndex) => {
+    //         bloco.itens.forEach((item, itemIndex) => {
+    //             const newResposta = item.alternativas[colIndex]
 
-                // Atualiza o valor no formulário
-                setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
+    //             // Atualiza o valor no formulário
+    //             setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
 
-                // Atualiza o estado local (blocos)
-                item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
-            })
-        })
+    //             // Atualiza o estado local (blocos)
+    //             item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
+    //         })
+    //     })
 
-        // Atualiza o estado com o novo array de blocos
-        setBlocos(tempBlocos)
+    //     // Atualiza o estado com o novo array de blocos
+    //     setBlocos(tempBlocos)
 
-        // Troca o estado de change para forçar a renderização (se necessário)
-        setChange(prevChange => !prevChange)
-    }
+    //     // Troca o estado de change para forçar a renderização (se necessário)
+    //     setChange(prevChange => !prevChange)
+    // }
 
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
@@ -806,24 +806,46 @@ const FormRecebimentoMp = ({ id, model }) => {
                     )}
 
                     {/* Blocos */}
-                    {blocos &&
+                    {/* {blocos &&
                         blocos.map((bloco, index) => (
                             <Block
-                                key={change}
+                                key={index}
                                 index={index}
-                                blockKey={`parRecebimentoMpModeloBlocoID`}
+                                blockKey={`parFornecedorModeloBlocoID`}
                                 handleFileSelect={handleFileSelectItem}
                                 setItemResposta={setItemResposta}
                                 handleRemoveAnexoItem={handleRemoveAnexoItem}
                                 setBlocos={setBlocos}
-                                changeAllOptions={changeAllOptions}
                                 values={bloco}
                                 control={control}
                                 register={register}
-                                getValues={getValues}
                                 setValue={setValue}
+                                getValues={getValues}
                                 errors={errors?.blocos}
-                                disabled={!canEdit.status}
+                                disabled={!canEdit.status || hasFormPending}
+                                blocos={blocos}
+                            />
+                        ))} */}
+
+                    {getValues('blocos') &&
+                        getValues('blocos').length > 0 &&
+                        getValues('blocos').map((bloco, index) => (
+                            <Block
+                                key={index}
+                                index={index}
+                                blockKey={`parFornecedorModeloBlocoID`}
+                                handleFileSelect={handleFileSelectItem}
+                                setItemResposta={setItemResposta}
+                                handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                setBlocos={setBlocos}
+                                values={bloco}
+                                control={control}
+                                register={register}
+                                setValue={setValue}
+                                getValues={getValues}
+                                errors={errors?.blocos}
+                                disabled={!canEdit.status || hasFormPending}
+                                blocos={blocos}
                             />
                         ))}
 

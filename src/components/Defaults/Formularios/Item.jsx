@@ -31,6 +31,7 @@ const Item = ({
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)
     const fileInputRef = useRef(null)
+    console.log('RENDERIZA ITEM.....')
 
     //? Anexos
     const handleFileClick = item => {
