@@ -201,7 +201,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                     console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
-                    // setFornecedor(response.data.fieldsHeader.fornecedor)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
                     setProdutos(response.data.produtos)
@@ -827,11 +826,21 @@ const FormRecebimentoMp = ({ id, model }) => {
                             />
                         ))} */}
 
-                    {getValues('blocos') &&
-                        getValues('blocos').length > 0 &&
-                        getValues('blocos').map((bloco, index) => (
+                    <Block
+                        setBlocos={setBlocos}
+                        setValue={setValue}
+                        blocos={blocos}
+                        getValues={getValues}
+                        register={register}
+                        control={control}
+                        disabled={!canEdit.status || hasFormPending}
+                        errors={errors?.blocos}
+                    />
+
+                    {/* {blocos &&
+                        blocos.map((bloco, index) => (
                             <Block
-                                key={index}
+                                key={Math.random()}
                                 index={index}
                                 blockKey={`parFornecedorModeloBlocoID`}
                                 handleFileSelect={handleFileSelectItem}
@@ -847,7 +856,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 disabled={!canEdit.status || hasFormPending}
                                 blocos={blocos}
                             />
-                        ))}
+                        ))} */}
 
                     {/* Grupo de anexos */}
                     {grupoAnexo &&

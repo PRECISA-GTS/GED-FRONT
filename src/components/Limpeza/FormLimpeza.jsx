@@ -679,7 +679,17 @@ const FormLimpeza = ({ id }) => {
                     )}
 
                     {/* Blocos */}
-                    {blocos &&
+                    <Block
+                        setBlocos={setBlocos}
+                        setValue={setValue}
+                        blocos={blocos}
+                        getValues={getValues}
+                        register={register}
+                        control={control}
+                        disabled={!canEdit.status}
+                        errors={errors?.blocos}
+                    />
+                    {/* {blocos &&
                         blocos.map((bloco, index) => (
                             <Block
                                 key={change}
@@ -698,7 +708,7 @@ const FormLimpeza = ({ id }) => {
                                 errors={errors?.blocos}
                                 disabled={!canEdit.status}
                             />
-                        ))}
+                        ))} */}
 
                     {/* Grupo de anexos */}
                     {/* {grupoAnexo &&

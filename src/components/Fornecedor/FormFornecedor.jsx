@@ -1017,7 +1017,17 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             )}
 
                             {/* Blocos */}
-                            {blocos &&
+                            <Block
+                                setBlocos={setBlocos}
+                                setValue={setValue}
+                                blocos={blocos}
+                                getValues={getValues}
+                                register={register}
+                                control={control}
+                                disabled={!canEdit.status || hasFormPending}
+                                errors={errors?.blocos}
+                            />
+                            {/* {blocos &&
                                 blocos.map((bloco, index) => (
                                     <Block
                                         key={change}
@@ -1036,7 +1046,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                         errors={errors?.blocos}
                                         disabled={!canEdit.status || hasFormPending}
                                     />
-                                ))}
+                                ))} */}
 
                             {/* Grupo de anexos */}
                             {grupoAnexo &&

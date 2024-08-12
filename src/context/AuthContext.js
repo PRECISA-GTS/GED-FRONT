@@ -88,45 +88,45 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       setCurrentRoute(router.pathname)
-      // const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
 
-      // if (storedToken) {
-      // setLoading(true)
-      // const data = JSON.parse(window.localStorage.getItem('userData'))
+      if (storedToken) {
+        setLoading(true)
+        const data = JSON.parse(window.localStorage.getItem('userData'))
 
-      // const match = window.location.pathname.match(/\/(\d+)\/?$/); // Expressão regular corrigida
-      // if (match) {
-      //   router.push(staticUrl);
-      // }
+        const match = window.location.pathname.match(/\/(\d+)\/?$/); // Expressão regular corrigida
+        if (match) {
+          router.push(staticUrl);
+        }
 
-      // setUnitsUser(JSON.parse(window.localStorage.getItem('userUnits')))
-      // setLoggedUnity(JSON.parse(window.localStorage.getItem('loggedUnity')))
-      // setRoutes(JSON.parse(window.localStorage.getItem('routes')))
-      // setMenu(JSON.parse(window.localStorage.getItem('menu')))
-      // if (data) {
-      //   setUser({ ...data })
-      //   setLoading(false)
-      //   return
-      // }
+        setUnitsUser(JSON.parse(window.localStorage.getItem('userUnits')))
+        setLoggedUnity(JSON.parse(window.localStorage.getItem('loggedUnity')))
+        setRoutes(JSON.parse(window.localStorage.getItem('routes')))
+        setMenu(JSON.parse(window.localStorage.getItem('menu')))
+        if (data) {
+          setUser({ ...data })
+          setLoading(false)
+          return
+        }
 
-      // Desloga
-      localStorage.removeItem('userData')
-      localStorage.removeItem('userUnits')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('loggedUnity')
-      localStorage.removeItem('routes')
-      localStorage.removeItem('menu')
-      localStorage.removeItem('unreadNotifications')
-      localStorage.removeItem('latestVersion')
-      setUser(null)
-      setLoading(false)
-      if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-        router.replace('/login')
+        // Desloga
+        localStorage.removeItem('userData')
+        localStorage.removeItem('userUnits')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('loggedUnity')
+        localStorage.removeItem('routes')
+        localStorage.removeItem('menu')
+        localStorage.removeItem('unreadNotifications')
+        localStorage.removeItem('latestVersion')
+        setUser(null)
+        setLoading(false)
+        if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+          router.replace('/login')
+        }
+      } else {
+        setLoading(false)
       }
-      // } else {
-      //   setLoading(false)
-      // }
     }
     initAuth()
   }, [])
