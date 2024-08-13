@@ -24,8 +24,6 @@ const RadioLabel = ({
     handleChange,
     blockForm
 }) => {
-    console.log('renderiza RadioLabel....', item)
-
     return (
         <Grid item xs={xs} md={md}>
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>

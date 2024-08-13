@@ -198,7 +198,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 modeloID: model ?? 0
             })
                 .then(response => {
-                    console.log('getData: ', response.data)
+                    console.log('getData: ', response.data.blocos)
 
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -562,6 +562,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const handleFileSelectItem = async (event, item) => {
+        console.log('🚀 ~ handleFileSelectItem item:', item)
         setLoadingFileItem(true)
         const selectedFile = event.target.files
 
@@ -827,6 +828,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         ))} */}
 
                     <Block
+                        blockKey={`parRecebimentoMpModeloBlocoID`}
                         setBlocos={setBlocos}
                         setValue={setValue}
                         blocos={blocos}
@@ -835,6 +837,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                         control={control}
                         disabled={!canEdit.status || hasFormPending}
                         errors={errors?.blocos}
+                        handleFileSelect={handleFileSelectItem}
+                        handleRemoveAnexoItem={handleRemoveAnexoItem}
                     />
 
                     {/* {blocos &&

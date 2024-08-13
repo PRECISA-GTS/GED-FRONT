@@ -1,6 +1,6 @@
 import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import Item from './ItemOLD'
+import Item from './Item'
 import { useFormContext } from 'react-hook-form'
 import RadioLabel from 'src/components/Form/RadioLabel'
 import ItemObservacao from './ItemObservacao'
