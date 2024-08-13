@@ -5,6 +5,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { Box, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
+import Input from './Input'
 
 const RadioLabel = ({
     xs,
@@ -12,8 +13,11 @@ const RadioLabel = ({
     index,
     values,
     totalColumns,
+    blockIndex,
+    item,
     defaultValue,
     name,
+    control,
     changeAllOptions,
     disabled,
     errors,
@@ -25,7 +29,7 @@ const RadioLabel = ({
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>
                 {values &&
                     values.map((item, indexCol) => (
-                        <Grid item xs={12} md={3}>
+                        <Grid key={indexCol} item xs={12} md={3}>
                             <Box display='flex' alignItems='center' sx={{ gap: 2 }}>
                                 <FormControlLabel
                                     key={indexCol}

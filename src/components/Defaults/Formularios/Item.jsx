@@ -1,31 +1,24 @@
+import { FormControl, Grid, Typography } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
-import { FormControl, Grid, Typography } from '@mui/material'
-
-//* Custom inputs
 import AnexoListMultiple from 'src/components/Anexos/ModeView/AnexoListMultiple'
 import Input from 'src/components/Form/Input'
 import RadioLabel from 'src/components/Form/RadioLabel'
 import DateField from 'src/components/Form/DateField'
 
 const Item = ({
-    blockIndex,
-    index,
-    setBlocos,
-    changeAllOptions,
-    totalColumns,
     blockKey,
-    handleFileSelect,
-    setItemResposta,
-    updateResponse,
-    handleRemoveAnexoItem,
-    values,
+    index,
+    indexItem,
+    item,
+    errors,
+    disabled,
+    control,
     register,
     getValues,
-    control,
-    errors,
-    setValue,
-    disabled
+    updateResponse,
+    handleFileSelect,
+    handleRemoveAnexoItem
 }) => {
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
@@ -33,10 +26,10 @@ const Item = ({
     const fileInputRef = useRef(null)
 
     //? Anexos
-    const handleFileClick = item => {
-        item[blockKey] = values[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
+    const handleFileClick = values => {
+        values[blockKey] = item[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
         fileInputRef.current.click()
-        setSelectedItem(item)
+        setSelectedItem(values)
     }
 
     useEffect(() => {
@@ -46,13 +39,13 @@ const Item = ({
     }, [handleFileSelect])
 
     return (
-        <Grid index={index} container spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
+        <Grid container key={indexItem} spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
             {/* Hidden do itemID */}
             <input
                 type='hidden'
-                name={`blocos[${blockIndex}].itens[${index}].itemID`}
-                defaultValue={values.itemID}
-                {...register(`blocos[${blockIndex}].itens[${index}].itemID`)}
+                name={`blocos[${index}].itens[${indexItem}].itemID`}
+                defaultValue={item.itemID}
+                {...register(`blocos[${index}].itens[${indexItem}].itemID`)}
             />
 
             {/* Descrição do item */}
@@ -62,89 +55,87 @@ const Item = ({
                     sx={{
                         fontWeight: 400,
                         color:
-                            values.obrigatorio && getValues(`blocos[${blockIndex}].itens[${index}].resposta`) == null
+                            item.obrigatorio && getValues(`blocos[${index}].itens[${indexItem}].resposta`) == null
                                 ? 'error.main'
                                 : 'text.primary'
                     }}
                 >
-                    {values.nome ? `${values.ordem} - ${values.nome}` : ``}
+                    {item.nome ? `${item.ordem} - ${item.nome}` : ``}
                 </Typography>
             </Grid>
 
-            {/* Alternativas de respostas */}
             <Grid item xs={12} md={6}>
                 <Grid container spacing={2}>
                     {/* Tipo de alternativa  */}
                     <input
                         type='hidden'
-                        name={`blocos[${blockIndex}].itens[${index}].tipoAlternativa`}
-                        defaultValue={values.alternativa}
-                        {...register(`blocos[${blockIndex}].itens[${index}].tipoAlternativa`)}
+                        name={`blocos[${index}].itens[${indexItem}].tipoAlternativa`}
+                        defaultValue={item.alternativa}
+                        {...register(`blocos[${index}].itens[${indexItem}].tipoAlternativa`)}
                     />
 
                     {/* +1 opção pra selecionar (Radio) */}
-                    {values && values.alternativas && values.alternativas.length > 1 && (
+                    {item && item.alternativas && item.alternativas.length > 1 && (
                         <RadioLabel
+                            key={`${index}-${indexItem}`}
                             xs={12}
                             md={12}
-                            index={index}
-                            defaultValue={values?.resposta?.id}
-                            totalColumns={totalColumns}
-                            values={values.alternativas}
-                            name={`blocos[${blockIndex}].itens[${index}].resposta`}
-                            changeAllOptions={changeAllOptions}
+                            blockIndex={index}
+                            control={control}
+                            index={indexItem}
+                            defaultValue={item?.resposta?.id}
+                            values={item.alternativas}
+                            name={`blocos[${index}].itens[${indexItem}].resposta`}
+                            item={item}
                             disabled={disabled}
-                            handleChange={e => updateResponse({ e, values, blockIndex, index })}
-                            errors={errors?.[blockIndex]?.itens[index]?.resposta}
-                            blockForm={values.respostaConfig?.bloqueiaFormulario == 1 ? true : false}
+                            handleChange={e => updateResponse({ e, item, index, indexItem })}
+                            errors={errors?.[index]?.itens[indexItem]?.resposta}
+                            blockForm={item.respostaConfig?.bloqueiaFormulario == 1 ? true : false}
                         />
                     )}
 
                     {/* Data */}
-                    {values &&
-                        values.alternativas &&
-                        values.alternativas.length == 0 &&
-                        values.alternativa == 'Data' && (
-                            <DateField
-                                xs={12}
-                                md={6}
-                                title='Data da avaliação'
-                                disabled={disabled}
-                                value={values.resposta}
-                                type={null}
-                                name={`blocos[${blockIndex}].itens[${index}].resposta`}
-                                errors={errors?.[blockIndex]?.itens[index]?.resposta}
-                                control={control}
-                                register={register}
-                            />
-                        )}
+                    {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Data' && (
+                        <DateField
+                            xs={12}
+                            md={6}
+                            title='Data da avaliação'
+                            disabled={disabled}
+                            value={item.resposta}
+                            type={null}
+                            name={`blocos[${index}].itens[${indexItem}].resposta`}
+                            errors={errors?.[index]?.itens[indexItem]?.resposta}
+                            control={control}
+                            register={register}
+                        />
+                    )}
 
                     {/* Dissertativa */}
-                    {values &&
-                        values.alternativas &&
-                        values.alternativas.length == 0 &&
-                        values.alternativa == 'Dissertativa' && (
+                    {item &&
+                        item.alternativas &&
+                        item.alternativas.length == 0 &&
+                        item.alternativa == 'Dissertativa' && (
                             <Input
                                 xs={12}
                                 md={6}
                                 title='Descreva a resposta'
-                                name={`blocos[${blockIndex}].itens[${index}].resposta`}
-                                value={values.resposta}
+                                name={`blocos[${index}].itens[${indexItem}].resposta`}
+                                value={item.resposta}
                                 multiline
                                 disabled={disabled}
                                 control={control}
-                                errors={errors?.[blockIndex]?.itens[index]?.resposta}
+                                errors={errors?.[index]?.itens[indexItem]?.resposta}
                             />
                         )}
 
                     {/* Obs */}
-                    {values && values.respostaConfig?.observacao == 1 && (
+                    {item && item?.resposta?.observacao == 1 && (
                         <Input
                             xs={12}
-                            md={6}
+                            md={12}
                             title='Observação'
-                            name={`blocos[${blockIndex}].itens[${index}].observacao`}
-                            value={values?.observacao}
+                            name={`blocos[${index}].itens[${indexItem}].observacao`}
+                            value={item?.observacao}
                             multiline
                             disabled={disabled}
                             control={control}
@@ -154,32 +145,29 @@ const Item = ({
             </Grid>
 
             {/* Texto longo (linha inteira) */}
-            {values &&
-                values.alternativas &&
-                values.alternativas.length == 0 &&
-                values.alternativa == 'Dissertativa longa' && (
-                    <FormControl fullWidth>
-                        <Input
-                            xs={12}
-                            md={12}
-                            title='Descreva a resposta'
-                            name={`blocos[${blockIndex}].itens[${index}].resposta`}
-                            rows={6}
-                            value={values.resposta}
-                            multiline
-                            disabled={disabled}
-                            control={control}
-                            errors={errors?.blocos?.[blockIndex]?.itens[index]?.resposta}
-                        />
-                    </FormControl>
-                )}
+            {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Dissertativa longa' && (
+                <FormControl fullWidth>
+                    <Input
+                        xs={12}
+                        md={12}
+                        title='Descreva a resposta'
+                        name={`blocos[${index}].itens[${indexItem}].resposta`}
+                        rows={6}
+                        value={item.resposta}
+                        multiline
+                        disabled={disabled}
+                        control={control}
+                        errors={errors?.blocos?.[index]?.itens[indexItem]?.resposta}
+                    />
+                </FormControl>
+            )}
 
             {/* Configs da resposta (se houver) */}
-            {values &&
-                values.respostaConfig &&
-                values.respostaConfig.anexo == 1 &&
-                values.respostaConfig.anexosSolicitados.length > 0 &&
-                values.respostaConfig.anexosSolicitados.map((anexo, indexAnexo) => (
+            {item &&
+                item?.resposta?.anexo == 1 &&
+                item?.resposta?.anexosSolicitados &&
+                item?.resposta?.anexosSolicitados.length > 0 &&
+                item?.resposta?.anexosSolicitados.map((anexo, indexAnexo) => (
                     <Grid item xs={12} md={12} sx={{ mb: 5 }}>
                         <AnexoListMultiple
                             modeTheme={modeTheme}
@@ -194,8 +182,8 @@ const Item = ({
                             inputRef={fileInputRef}
                             item={anexo}
                             loadingFile={null}
-                            indexBlock={blockIndex}
-                            indexItem={index}
+                            indexBlock={index}
+                            indexItem={indexItem}
                             indexAnexo={indexAnexo}
                             handleFileSelect={handleFileSelect}
                             folder='item'

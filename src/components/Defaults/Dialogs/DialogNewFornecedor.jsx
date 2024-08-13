@@ -139,9 +139,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
             })
     }
 
-    const onSubmit = values => {
-        console.log('🚀 ~ onSubmit ~ values:', values)
-    }
+    const onSubmit = values => {}
 
     useEffect(() => {
         getGruposAnexo()

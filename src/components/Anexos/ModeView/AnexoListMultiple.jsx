@@ -22,6 +22,8 @@ const AnexoList = ({
     modeTheme,
     inputRef
 }) => {
+    if (!item) return null
+
     return (
         <Grid item xs={12} md={12}>
             <div
@@ -34,7 +36,7 @@ const AnexoList = ({
                         : modeTheme === 'dark'
                         ? 'bg-[#212b36]'
                         : ' bg-[#F6F6F8] '
-                } px-4 py-2 rounded-lg flex flex-col relative gap-2 z-10`}
+                } px-4 py-2 rounded-lg flex flex-col relative z-10`}
             >
                 <div className=''>
                     <p className='font-medium text-sm '>{item.nome}</p>
@@ -60,7 +62,7 @@ const AnexoList = ({
                 </div>
 
                 {/* Listagem dos anexos inseridos */}
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col'>
                     {item &&
                         item?.anexos?.length > 0 &&
                         item.anexos.map((anexo, index) => (
