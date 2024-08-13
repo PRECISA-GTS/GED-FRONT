@@ -311,7 +311,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         setNoModelInfo(response.data)
                     }
 
-                    console.log('🚀 ~ getData:', response.data.blocos)
+                    console.log('🚀 ~ getData:', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)

@@ -86,7 +86,6 @@ const FormProfissional = ({ id }) => {
             })),
             removedItems
         }
-        console.log('🚀 ~ values:', values)
 
         try {
             if (type === 'new') {

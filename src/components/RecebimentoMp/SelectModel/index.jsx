@@ -79,8 +79,6 @@ const SelectModel = () => {
     }
 
     const selectModel = modelID => {
-        console.log('🚀 ~ modelID:', modelID)
-
         setModel(modelID)
         // router.push(`/formularios/recebimento-mp/`)
     }

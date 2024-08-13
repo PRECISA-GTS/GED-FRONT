@@ -198,7 +198,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 modeloID: model ?? 0
             })
                 .then(response => {
-                    console.log('getData: ', response.data.blocos)
+                    console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
