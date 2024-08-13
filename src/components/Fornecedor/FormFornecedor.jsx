@@ -311,6 +311,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         setNoModelInfo(response.data)
                     }
 
+                    console.log('🚀 ~ getData:', response.data.blocos)
+
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
@@ -1018,6 +1020,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
                             {/* Blocos */}
                             <Block
+                                blockKey={`parFornecedorModeloBlocoID`}
                                 setBlocos={setBlocos}
                                 setValue={setValue}
                                 blocos={blocos}
@@ -1026,6 +1029,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 control={control}
                                 disabled={!canEdit.status || hasFormPending}
                                 errors={errors?.blocos}
+                                handleFileSelect={handleFileSelectItem}
+                                handleRemoveAnexoItem={handleRemoveAnexoItem}
                             />
                             {/* {blocos &&
                                 blocos.map((bloco, index) => (

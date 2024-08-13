@@ -680,6 +680,7 @@ const FormLimpeza = ({ id }) => {
 
                     {/* Blocos */}
                     <Block
+                        blockKey={`parLimpezaModeloBlocoID`}
                         setBlocos={setBlocos}
                         setValue={setValue}
                         blocos={blocos}
@@ -688,6 +689,8 @@ const FormLimpeza = ({ id }) => {
                         control={control}
                         disabled={!canEdit.status}
                         errors={errors?.blocos}
+                        handleFileSelect={handleFileSelectItem}
+                        handleRemoveAnexoItem={handleRemoveAnexoItem}
                     />
                     {/* {blocos &&
                         blocos.map((bloco, index) => (
