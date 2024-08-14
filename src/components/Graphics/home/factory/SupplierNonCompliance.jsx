@@ -101,6 +101,7 @@ const SupplierNonCompliance = ({ data }) => {
             }
         }
     }
+
     return (
         <Card>
             <CardContent>

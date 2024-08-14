@@ -1,6 +1,6 @@
 // ** React Imports
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api, version } from 'src/configs/api'
+import { api } from 'src/configs/api'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -47,12 +47,6 @@ const AuthProvider = ({ children }) => {
   // Menu
   const [menu, setMenu] = useState([])
   const [routeBackend, setRouteBackend] = useState()
-  const [openModalUpdate, setOpenModalUpdate] = useState(false)
-  const [latestVersionState, setLatestVersionState] = useState()
-  const [newVersionAvailable, setNewVersionAvailable] = useState({
-    status: false,
-    version: null,
-  })
   const [paramsReport, setParamsReport] = useState({})
   const { setData, data: dataGlobal } = useGlobal()
 
@@ -122,6 +116,7 @@ const AuthProvider = ({ children }) => {
         setUser(null)
         setLoading(false)
         if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+          console.log('expiration token on auth context')
           router.replace('/login')
         }
       } else {
@@ -131,9 +126,8 @@ const AuthProvider = ({ children }) => {
     initAuth()
   }, [])
 
-  useEffect(() => {
-    console.log('AQUIIIIIIIIIII')
-  }, [])
+  // useEffect(() => {
+  // }, [])
 
   //* Login da fabrica (CPF)
   const handleLogin = (params, errorCallback) => {
@@ -291,60 +285,6 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  //* Quando o usuario mudar de rota atualizar o currentRoute
-  // useEffect(() => {
-  //     setCurrentRoute(router.pathname)
-  //     if (currentRoute) {
-  //         //  Se a rota atual for dinamica, remove o id da rota
-  //         removeDynamicRouteId()
-  //         const permission = routes.find(rota => rota.rota === currentRoute)
-  //         if (!permission?.rota && currentRoute !== '/' && currentRoute !== '/login' && currentRoute !== '/login-fornecedor' && currentRoute !== currentRoute !== '/redefinir-senha' && currentRoute !== '/fornecedor' && currentRoute !== '/registro' && currentRoute !== '/home' && currentRoute !== '/401' && currentRoute !== '/relatorio') {
-  //             router.push('/401')
-  //         }
-  //     }
-  // }, [currentRoute])
-
-
-  //! Quando carregar o sistema, faz uma requisicao ao github para saber a versão atual do sistema
-  // const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
-  async function getLatestVersion() {
-    try {
-      localStorage.setItem('latestVersion', version)
-      setLatestVersionState(version)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  //*? faz um get ao github para saber a versão atual do sistema
-  useEffect(() => {
-    getLatestVersion();
-  }, [])
-
-  //! Verifica se a versão atual é diferente da versão do localStorage, se for, abre o modal de atualização
-  useEffect(() => {
-    function getLatestTag() {
-      try {
-        // const version = version
-        console.log("🚀 ~ version:", version)
-        if (version !== localStorage.getItem('latestVersion')) {
-          setNewVersionAvailable({
-            status: true,
-            version: version
-          })
-          setOpenModalUpdate(true)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const interval = setInterval(() => {
-      getLatestTag();
-    }, 20000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   //! se rota atual for igual a /fornecedor, limpar o localstorage e dar reload na pagina, faça o reaload apenas uma vez
   // useEffect(() => {
@@ -363,6 +303,7 @@ const AuthProvider = ({ children }) => {
     const route = router.query.f ? 'fornecedor?f=' : 'fornecedor?r='
 
     if (paramns && !storedToken) {
+      console.log('useEffect en authcontext')
       const rota = `/${route}${paramns}`
       router.replace(rota)
     }
@@ -387,14 +328,7 @@ const AuthProvider = ({ children }) => {
     loginFornecedor: handleLoginFornecedor,
     logout: handleLogout,
     register: handleRegister,
-    latestVersionState,
-    setLatestVersionState,
-    newVersionAvailable,
-    setNewVersionAvailable,
-    setOpenModalUpdate,
-    openModalUpdate,
     paramsReport, setParamsReport
-
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

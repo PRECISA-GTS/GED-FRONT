@@ -11,33 +11,29 @@ import Spinner from 'src/@core/components/spinner'
 import { useAuth } from 'src/hooks/useAuth'
 
 export const getHomeRoute = role => {
-    if (role === 'client') return '/acl'
-    else return '/home'
+  if (role === 'client') return '/acl'
+  else return '/home'
 }
 const Home = () => {
-    // ** Hooks
-    const auth = useAuth()
-    const router = useRouter()
+  // ** Hooks
+  const auth = useAuth()
+  const router = useRouter()
 
-    console.log('Home....')
+  useEffect(() => {
+    if (!router.isReady) {
+      return
+    }
 
-    useEffect(() => {
-        if (!router.isReady) {
-            return
-        }
-
-        if (auth.user && auth.user.role) {
-            console.log('useEffect no index.js')
-            const homeRoute = getHomeRoute(auth.user.role)
-
-            // Redirect user to Home URL
-            router.replace(homeRoute)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    if (auth.user && auth.user.role) {
+      console.log('useEffect no index.js')
+      const homeRoute = getHomeRoute(auth.user.role)
+      router.replace(homeRoute)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
 
-    return <Spinner />
+  return <Spinner />
 }
 
 export default Home
