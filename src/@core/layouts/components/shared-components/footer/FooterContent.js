@@ -1,7 +1,6 @@
 // ** MUI Imports
 import Link from '@mui/material/Link'
-import { AuthContext } from 'src/context/AuthContext'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import ListVersions from 'src/components/Configuracoes/Versao/ListVersions'

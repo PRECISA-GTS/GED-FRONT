@@ -161,7 +161,7 @@ const App = props => {
     }, [])
 
     return (
-        <CacheProvider value={emotionCache}>
+        <>
             <Head>
                 {/* Next PWA */}
                 <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
@@ -225,7 +225,7 @@ const App = props => {
                     </AuthProvider>
                 </ParametersProvider>
             </RouteProvider>
-        </CacheProvider>
+        </>
     )
 }
 
