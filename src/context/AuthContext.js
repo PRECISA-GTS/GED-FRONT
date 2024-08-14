@@ -47,12 +47,12 @@ const AuthProvider = ({ children }) => {
   // Menu
   const [menu, setMenu] = useState([])
   const [routeBackend, setRouteBackend] = useState()
-  const [openModalUpdate, setOpenModalUpdate] = useState(false)
-  const [latestVersionState, setLatestVersionState] = useState()
-  const [newVersionAvailable, setNewVersionAvailable] = useState({
-    status: false,
-    version: null,
-  })
+  // const [openModalUpdate, setOpenModalUpdate] = useState(false)
+  // const [latestVersionState, setLatestVersionState] = useState()
+  // const [newVersionAvailable, setNewVersionAvailable] = useState({
+  //   status: false,
+  //   version: null,
+  // })
   const [paramsReport, setParamsReport] = useState({})
   const { setData, data: dataGlobal } = useGlobal()
 
@@ -292,65 +292,6 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  //* Quando o usuario mudar de rota atualizar o currentRoute
-  // useEffect(() => {
-  //     setCurrentRoute(router.pathname)
-  //     if (currentRoute) {
-  //         //  Se a rota atual for dinamica, remove o id da rota
-  //         removeDynamicRouteId()
-  //         const permission = routes.find(rota => rota.rota === currentRoute)
-  //         if (!permission?.rota && currentRoute !== '/' && currentRoute !== '/login' && currentRoute !== '/login-fornecedor' && currentRoute !== currentRoute !== '/redefinir-senha' && currentRoute !== '/fornecedor' && currentRoute !== '/registro' && currentRoute !== '/home' && currentRoute !== '/401' && currentRoute !== '/relatorio') {
-  //             router.push('/401')
-  //         }
-  //     }
-  // }, [currentRoute])
-
-
-  //! Quando carregar o sistema, faz uma requisicao ao github para saber a versão atual do sistema
-  // const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
-  // async function getLatestVersion() {
-  //   try {
-  //     localStorage.setItem('latestVersion', version)
-  //     setLatestVersionState(version)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  //*? faz um get ao github para saber a versão atual do sistema
-  // useEffect(() => {
-  //   getLatestVersion();
-  // }, [])
-
-  //! Verifica se a versão atual é diferente da versão do localStorage, se for, abre o modal de atualização
-  // const getLatestTag = async () => {
-  //   try {
-  //     // const version = version
-
-  //     console.log("🚀 ~ new version req")
-  //     const version = await api.get('/configuracoes/versao/getLatestVersion')
-  //     console.log("🚀 ~ new version res:", version)
-
-  //     if (version && version !== localStorage.getItem('latestVersion')) {
-  //       setNewVersionAvailable({
-  //         status: true,
-  //         version: version
-  //       })
-  //       setOpenModalUpdate(true)
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getLatestTag();
-  //   // const interval = setInterval(() => {
-  //   // }, 10000);
-  //   // return () => {
-  //   //   clearInterval(interval);
-  //   // };
-  // }, []);
 
   //! se rota atual for igual a /fornecedor, limpar o localstorage e dar reload na pagina, faça o reaload apenas uma vez
   // useEffect(() => {
@@ -394,14 +335,7 @@ const AuthProvider = ({ children }) => {
     loginFornecedor: handleLoginFornecedor,
     logout: handleLogout,
     register: handleRegister,
-    latestVersionState,
-    setLatestVersionState,
-    newVersionAvailable,
-    setNewVersionAvailable,
-    setOpenModalUpdate,
-    openModalUpdate,
     paramsReport, setParamsReport
-
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

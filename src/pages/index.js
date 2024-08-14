@@ -32,9 +32,9 @@ const Home = () => {
 
       // Redirect user to Home URL
       // window.redirect = homeRoute
-      // router.replace(homeRoute)
+      router.replace(homeRoute)
       //   router.reload()
-      window.location.replace(homeRoute)
+      // window.location.replace(homeRoute)
       // window.location.replace('/home')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

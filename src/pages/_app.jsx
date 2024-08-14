@@ -115,6 +115,11 @@ const App = props => {
             const version = await api.get('/configuracoes/versao/getLatestVersion')
             const latestVersion = version.data
             const storedVersion = window.localStorage.getItem('latestVersion')
+            // Primeiro acesso
+            if (!storedVersion) {
+                window.localStorage.setItem('latestVersion', latestVersion)
+                return
+            }
             if (latestVersion && latestVersion !== storedVersion) {
                 toast.custom(
                     t =>
