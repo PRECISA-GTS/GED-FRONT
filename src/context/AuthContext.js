@@ -47,12 +47,6 @@ const AuthProvider = ({ children }) => {
   // Menu
   const [menu, setMenu] = useState([])
   const [routeBackend, setRouteBackend] = useState()
-  // const [openModalUpdate, setOpenModalUpdate] = useState(false)
-  // const [latestVersionState, setLatestVersionState] = useState()
-  // const [newVersionAvailable, setNewVersionAvailable] = useState({
-  //   status: false,
-  //   version: null,
-  // })
   const [paramsReport, setParamsReport] = useState({})
   const { setData, data: dataGlobal } = useGlobal()
 
@@ -132,9 +126,8 @@ const AuthProvider = ({ children }) => {
     initAuth()
   }, [])
 
-  useEffect(() => {
-    console.log('AQUIIIIIIIIIII')
-  }, [])
+  // useEffect(() => {
+  // }, [])
 
   //* Login da fabrica (CPF)
   const handleLogin = (params, errorCallback) => {

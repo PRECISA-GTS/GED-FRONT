@@ -19,8 +19,6 @@ const Home = () => {
   const auth = useAuth()
   const router = useRouter()
 
-  console.log('Home....')
-
   useEffect(() => {
     if (!router.isReady) {
       return
@@ -29,13 +27,7 @@ const Home = () => {
     if (auth.user && auth.user.role) {
       console.log('useEffect no index.js')
       const homeRoute = getHomeRoute(auth.user.role)
-
-      // Redirect user to Home URL
-      // window.redirect = homeRoute
       router.replace(homeRoute)
-      //   router.reload()
-      // window.location.replace(homeRoute)
-      // window.location.replace('/home')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

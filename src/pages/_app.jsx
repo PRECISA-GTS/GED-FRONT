@@ -156,9 +156,6 @@ const App = props => {
 
     //? Verifica nova versão a cada troca de rota
     useEffect(() => {
-        // console.log('abriu navegador')
-        // window.location.reload()
-
         const handleRouteChange = () => {
             handleVersion()
         }
