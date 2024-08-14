@@ -122,6 +122,7 @@ const AuthProvider = ({ children }) => {
         setUser(null)
         setLoading(false)
         if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+          console.log('expiration token on auth context')
           router.replace('/login')
         }
       } else {
@@ -368,6 +369,7 @@ const AuthProvider = ({ children }) => {
     const route = router.query.f ? 'fornecedor?f=' : 'fornecedor?r='
 
     if (paramns && !storedToken) {
+      console.log('useEffect en authcontext')
       const rota = `/${route}${paramns}`
       router.replace(rota)
     }
