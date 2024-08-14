@@ -102,23 +102,20 @@ const App = props => {
     const aclAbilities = Component.acl ?? defaultACLObj
 
     const handleUpdate = latestVersion => {
-        window.localStorage.setItem('latestVersion', latestVersion)
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem('latestVersion', latestVersion)
+            window.location.reload()
+        }
     }
 
-    let toastDisplayed = false
-
     const handleVersion = async () => {
-        if (toastDisplayed) return // Não exibe se já houver um toast visível
+        if (typeof window === 'undefined') return
 
         try {
             const version = await api.get('/configuracoes/versao/getLatestVersion')
             const latestVersion = version.data
             const storedVersion = window.localStorage.getItem('latestVersion')
-
             if (latestVersion && latestVersion !== storedVersion) {
-                toastDisplayed = true // Marca o toast como exibido
-
                 toast.custom(
                     t =>
                         !t.visible && (
@@ -131,7 +128,7 @@ const App = props => {
                                     <div className='flex items-start'>
                                         <div className='ml-3 flex-1'>
                                             <p className='text-lg text-white'>🚀 Nova versão disponível</p>
-                                            <p className='text-sm text-gray-300'>v {latestVersion}</p>
+                                            <p className='text-sm text-gray-300'>versão {latestVersion}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -144,10 +141,7 @@ const App = props => {
                                     </button>
                                 </div>
                             </div>
-                        ),
-                    {
-                        duration: 10000
-                    }
+                        )
                 )
             }
         } catch (error) {
@@ -155,7 +149,16 @@ const App = props => {
         }
     }
 
-    handleVersion()
+    //? Verifica nova versão a cada troca de rota
+    useEffect(() => {
+        const handleRouteChange = () => {
+            handleVersion()
+        }
+        Router.events.on('routeChangeComplete', handleRouteChange)
+        return () => {
+            Router.events.off('routeChangeComplete', handleRouteChange)
+        }
+    }, [])
 
     return (
         <CacheProvider value={emotionCache}>
