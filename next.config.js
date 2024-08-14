@@ -26,16 +26,25 @@ module.exports = withPWA(
     experimental: {
       esmExternals: false
     },
-    webpack(config) {
-      // Sua configuração de alias e outras customizações webpack aqui
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
+    // webpack(config) {
+    //   // Sua configuração de alias e outras customizações webpack aqui
+    //   config.resolve.alias = {
+    //     ...config.resolve.alias,
+    //     apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
+    //   }
+
+    //   // Aqui você pode adicionar outras personalizações webpack, se necessário
+
+    //   return config
+    // },
+
+    webpack(config, { dev, isServer }) {
+      if (!dev && !isServer) {
+        // Configure o Webpack para adicionar hashes aos nomes dos arquivos
+        config.output.filename = 'static/chunks/[name].[contenthash].js';
+        config.output.chunkFilename = 'static/chunks/[name].[contenthash].js';
       }
-
-      // Aqui você pode adicionar outras personalizações webpack, se necessário
-
-      return config
+      return config;
     },
 
   }),

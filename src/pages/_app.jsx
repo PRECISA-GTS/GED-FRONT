@@ -151,6 +151,9 @@ const App = props => {
 
     //? Verifica nova versão a cada troca de rota
     useEffect(() => {
+        // console.log('abriu navegador')
+        // window.location.reload()
+
         const handleRouteChange = () => {
             handleVersion()
         }
@@ -176,7 +179,7 @@ const App = props => {
                     name='description'
                     content={`${themeConfig.templateName} – Software para as Boas Práticas de Fabricação (BPF)`}
                 />
-                <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+                <meta name='keywords' content='GED, Agro, BPF, MAPA, Ministério da Agricultura, Gestão de Documentos' />
                 <meta name='viewport' content='initial-scale=1, width=device-width' />
             </Head>
             <RouteProvider>
