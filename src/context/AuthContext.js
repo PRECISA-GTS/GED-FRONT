@@ -1,6 +1,6 @@
 // ** React Imports
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api, version } from 'src/configs/api'
+import { api } from 'src/configs/api'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -307,44 +307,49 @@ const AuthProvider = ({ children }) => {
 
   //! Quando carregar o sistema, faz uma requisicao ao github para saber a versão atual do sistema
   // const API_GITHUB = 'https://api.github.com/repos/PRECISA-GTS/GED-FRONT/releases'
-  async function getLatestVersion() {
-    try {
-      localStorage.setItem('latestVersion', version)
-      setLatestVersionState(version)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // async function getLatestVersion() {
+  //   try {
+  //     localStorage.setItem('latestVersion', version)
+  //     setLatestVersionState(version)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   //*? faz um get ao github para saber a versão atual do sistema
-  useEffect(() => {
-    getLatestVersion();
-  }, [])
+  // useEffect(() => {
+  //   getLatestVersion();
+  // }, [])
 
   //! Verifica se a versão atual é diferente da versão do localStorage, se for, abre o modal de atualização
-  useEffect(() => {
-    function getLatestTag() {
-      try {
-        // const version = version
-        console.log("🚀 ~ version:", version)
-        if (version !== localStorage.getItem('latestVersion')) {
-          setNewVersionAvailable({
-            status: true,
-            version: version
-          })
-          setOpenModalUpdate(true)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const interval = setInterval(() => {
-      getLatestTag();
-    }, 20000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  // const getLatestTag = async () => {
+  //   try {
+  //     // const version = version
+
+  //     console.log("🚀 ~ new version req")
+  //     const version = await api.get('/configuracoes/versao/getLatestVersion')
+  //     console.log("🚀 ~ new version res:", version)
+
+  //     if (version && version !== localStorage.getItem('latestVersion')) {
+  //       setNewVersionAvailable({
+  //         status: true,
+  //         version: version
+  //       })
+  //       setOpenModalUpdate(true)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getLatestTag();
+  //   // const interval = setInterval(() => {
+  //   // }, 10000);
+  //   // return () => {
+  //   //   clearInterval(interval);
+  //   // };
+  // }, []);
 
   //! se rota atual for igual a /fornecedor, limpar o localstorage e dar reload na pagina, faça o reaload apenas uma vez
   // useEffect(() => {

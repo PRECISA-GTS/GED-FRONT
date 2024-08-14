@@ -8,8 +8,7 @@ import ListVersions from 'src/components/Configuracoes/Versao/ListVersions'
 
 const FooterContent = () => {
   // ** Var
-  const { latestVersionState } = useContext(AuthContext)
-  console.log("🚀 ~ latestVersionState:", latestVersionState)
+  const latestVersionState = localStorage.getItem('latestVersion')
   const [open, setOpen] = useState(false)
 
   const handleOpenVersions = () => {
@@ -26,7 +25,7 @@ const FooterContent = () => {
             `block sm:hidden text-sm text-[#4A8B57]`
           }
         >
-          v {latestVersionState}
+          v {latestVersionState ?? '1.0.0'}
         </span>
 
         <div>
@@ -42,7 +41,7 @@ const FooterContent = () => {
                 onClick={handleOpenVersions}
                 className={`hidden sm:block cursor-pointer text-sm hover:underline text-[#4A8B57]`}
               >
-                versão {latestVersionState}
+                versão {latestVersionState ?? '1.0.0'}
               </span>
             </Tooltip>
           </p>

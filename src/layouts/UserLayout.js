@@ -75,9 +75,6 @@ const UserLayout = ({ children, contentHeightFixed }) => {
       {children}
       {
         //! Mostra se tiver uma nova versão do sistema
-      }
-      {
-
         <Snackbar
           open={openModalUpdate}
           onClose={handleClose}

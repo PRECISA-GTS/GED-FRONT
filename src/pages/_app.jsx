@@ -17,7 +17,7 @@ import themeConfig from 'src/configs/themeConfig'
 import 'src/@fake-db'
 
 // ** Third Party Import
-import { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 
 // ** Component Imports
 import UserLayout from 'src/layouts/UserLayout'
@@ -59,6 +59,8 @@ import { FormProvider } from 'src/context/FormContext'
 import { FornecedorProvider } from 'src/context/FornecedorContext'
 import { FilterProvider } from 'src/context/FilterContext'
 import { CommonDataProvider } from 'src/context/CommonDataContext'
+import { api } from 'src/configs/api'
+import { useEffect } from 'react'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -98,6 +100,62 @@ const App = props => {
     const authGuard = Component.authGuard ?? true
     const guestGuard = Component.guestGuard ?? false
     const aclAbilities = Component.acl ?? defaultACLObj
+
+    const handleUpdate = latestVersion => {
+        console.log('handleUpdate clicked...')
+        window.localStorage.setItem('latestVersion', latestVersion)
+        window.location.reload()
+    }
+
+    let toastDisplayed = false
+
+    const handleVersion = async () => {
+        if (toastDisplayed) return // Não exibe se já houver um toast visível
+
+        try {
+            const version = await api.get('/configuracoes/versao/getLatestVersion')
+            const latestVersion = version.data
+            const storedVersion = window.localStorage.getItem('latestVersion')
+
+            if (latestVersion && latestVersion !== storedVersion) {
+                toastDisplayed = true // Marca o toast como exibido
+
+                toast.custom(
+                    t => (
+                        <div
+                            className={`${
+                                t.visible ? 'animate-enter' : 'animate-leave'
+                            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                        >
+                            <div className='flex-1 w-0 p-4'>
+                                <div className='flex items-start'>
+                                    <div className='ml-3 flex-1'>
+                                        <p className='font-semibold text-black'>Nova versão disponível</p>
+                                        <p className='text-sm text-gray-500'>v {latestVersion}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='flex border-l border-gray-200'>
+                                <button
+                                    onClick={() => handleUpdate(latestVersion)}
+                                    className='w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm text-green-700 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                >
+                                    Atualizar
+                                </button>
+                            </div>
+                        </div>
+                    ),
+                    {
+                        duration: 5000
+                    }
+                )
+            }
+        } catch (error) {
+            console.error('Erro ao buscar a versão mais recente:', error)
+        }
+    }
+
+    handleVersion()
 
     return (
         <CacheProvider value={emotionCache}>
