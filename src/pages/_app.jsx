@@ -148,7 +148,7 @@ const App = props => {
                         </div>
                     ),
                     {
-                        duration: 20000
+                        duration: 10000
                     }
                 )
             }
