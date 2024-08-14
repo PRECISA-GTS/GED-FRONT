@@ -102,9 +102,7 @@ const App = props => {
     const aclAbilities = Component.acl ?? defaultACLObj
 
     const handleUpdate = latestVersion => {
-        console.log('handleUpdate clicked...')
         window.localStorage.setItem('latestVersion', latestVersion)
-        // window.localStorage.removeItem('userData')
         window.location.reload()
     }
 
@@ -114,7 +112,6 @@ const App = props => {
         if (toastDisplayed) return // Não exibe se já houver um toast visível
 
         try {
-            console.log('verifica versão...')
             const version = await api.get('/configuracoes/versao/getLatestVersion')
             const latestVersion = version.data
             const storedVersion = window.localStorage.getItem('latestVersion')
@@ -123,30 +120,31 @@ const App = props => {
                 toastDisplayed = true // Marca o toast como exibido
 
                 toast.custom(
-                    t => (
-                        <div
-                            className={`${
-                                t.visible ? 'animate-enter' : 'animate-leave'
-                            } max-w-md w-full bg-[#4A8B57] bg-opacity-95 shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-                        >
-                            <div className='flex-1 w-0 p-4'>
-                                <div className='flex items-start'>
-                                    <div className='ml-3 flex-1'>
-                                        <p className='text-lg text-white'>🚀 Nova versão disponível</p>
-                                        <p className='text-sm text-gray-300'>v {latestVersion}</p>
+                    t =>
+                        !t.visible && (
+                            <div
+                                className={`${
+                                    t.visible ? 'animate-enter' : 'animate-leave'
+                                } max-w-md w-full bg-[#4A8B57] bg-opacity-95 shadow-lg rounded-xl pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+                            >
+                                <div className='flex-1 w-0 p-4'>
+                                    <div className='flex items-start'>
+                                        <div className='ml-3 flex-1'>
+                                            <p className='text-lg text-white'>🚀 Nova versão disponível</p>
+                                            <p className='text-sm text-gray-300'>v {latestVersion}</p>
+                                        </div>
                                     </div>
                                 </div>
+                                <div className='flex border-l border-green-300'>
+                                    <button
+                                        onClick={() => handleUpdate(latestVersion)}
+                                        className='w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-white hover:text-green-300'
+                                    >
+                                        Atualizar
+                                    </button>
+                                </div>
                             </div>
-                            <div className='flex border-l border-green-300'>
-                                <button
-                                    onClick={() => handleUpdate(latestVersion)}
-                                    className='w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-white hover:text-green-300'
-                                >
-                                    Atualizar
-                                </button>
-                            </div>
-                        </div>
-                    ),
+                        ),
                     {
                         duration: 10000
                     }
