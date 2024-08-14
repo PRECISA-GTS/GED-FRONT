@@ -1,16 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 
-// Importe as configurações de withPWA e withTM
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  disable: true, //process.env.NODE_ENV === 'development',
-  skipWaiting: true,
-  runtimeCaching: [], // Desativa o cache do navegador
-  buildExcludes: [/middleware-manifest.json$/],
-})
-
 const withTM = require('next-transpile-modules')([
   '@fullcalendar/common',
   '@fullcalendar/react',
@@ -19,33 +9,19 @@ const withTM = require('next-transpile-modules')([
   '@fullcalendar/timegrid',
 ])
 
-module.exports = withPWA(
-  withTM({
-    trailingSlash: true,
-    reactStrictMode: false,
-    experimental: {
-      esmExternals: false
-    },
-    // webpack(config) {
-    //   // Sua configuração de alias e outras customizações webpack aqui
-    //   config.resolve.alias = {
-    //     ...config.resolve.alias,
-    //     apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
-    //   }
+module.exports = withTM({
+  trailingSlash: true,
+  reactStrictMode: false,
+  experimental: {
+    esmExternals: false
+  },
 
-    //   // Aqui você pode adicionar outras personalizações webpack, se necessário
-
-    //   return config
-    // },
-
-    webpack(config, { dev, isServer }) {
-      if (!dev && !isServer) {
-        // Configure o Webpack para adicionar hashes aos nomes dos arquivos
-        config.output.filename = 'static/chunks/[name].[contenthash].js';
-        config.output.chunkFilename = 'static/chunks/[name].[contenthash].js';
-      }
-      return config;
-    },
-
-  }),
-)
+  webpack(config, { dev, isServer }) {
+    if (!dev && !isServer) {
+      // Configure o Webpack para adicionar hashes aos nomes dos arquivos
+      config.output.filename = 'static/chunks/[name].[contenthash].js';
+      config.output.chunkFilename = 'static/chunks/[name].[contenthash].js';
+    }
+    return config;
+  },
+})
