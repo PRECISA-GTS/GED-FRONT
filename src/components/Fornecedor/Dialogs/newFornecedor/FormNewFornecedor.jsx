@@ -8,7 +8,6 @@ import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import FormGrupoAnexos from 'src/components/Cadastros/grupoAnexos/FormGrupoAnexos'
 import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import ToggleButtonLabel from 'src/components/Form/ToggleButtonLabel'
-import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const FormNewFornecedor = ({
     fields,
@@ -23,18 +22,21 @@ const FormNewFornecedor = ({
     setValue,
     register,
     watch,
-    reset
+    reset,
+
+    setIsNotFactory,
+    isNotFactory
 }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState([])
     const [products, setProducts] = useState([])
     const [gruposAnexo, setGruposAnexo] = useState([])
-    const [categories, setCategories] = useState([])
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [titleModal, setTitleModal] = useState('')
     const [componetSelect, setComponetSelect] = useState(null)
-    const { isNotFactory, setIsNotFactory } = useContext(FornecedorContext)
+    const [categories, setCategories] = useState([])
+    const [risks, setRisks] = useState([])
 
     const getModels = async () => {
         const result = await api.post(`/formularios/fornecedor/getModels`, { unidadeID: loggedUnity.unidadeID })
@@ -56,6 +58,12 @@ const FormNewFornecedor = ({
             unidadeID: loggedUnity.unidadeID
         })
         setCategories(result.data)
+        updateRisks(result.data, getValues('fields.categoria')?.id)
+    }
+
+    const updateRisks = (categories, categoriaID) => {
+        const arrRisks = categories.find(row => row.id == categoriaID)?.riscos
+        setRisks(arrRisks)
     }
 
     const clearCnpj = () => {
@@ -139,6 +147,7 @@ const FormNewFornecedor = ({
                                 register={register}
                                 name='habilitaQuemPreencheFormFornecedor'
                                 setValue={setValue}
+                                setIsNotFactory={setIsNotFactory}
                             />
                         </div>
                     )}
@@ -148,7 +157,10 @@ const FormNewFornecedor = ({
                         title='CNPJ'
                         name='fields.cnpj'
                         value={fields?.cnpj}
-                        onChange={handleCnpj}
+                        onChange={e => {
+                            handleCnpj(e)
+                            getCategories()
+                        }}
                         clearField={getValues('fields.cnpj') ? clearCnpj : null}
                         mask='cnpj'
                         required
@@ -209,7 +221,7 @@ const FormNewFornecedor = ({
                             onChange={newValue => {
                                 setValue('fields.risco', null)
                                 setValue('fields.categoria', newValue)
-                                watch('fields.categoria')
+                                updateRisks(categories, newValue.id)
                             }}
                             required
                             options={categories ?? []}
@@ -226,7 +238,7 @@ const FormNewFornecedor = ({
                             name='fields.risco'
                             value={fields?.risco}
                             required
-                            options={getValues('fields.categoria')?.riscos ?? []}
+                            options={risks ?? []}
                             register={register}
                             setValue={setValue}
                             control={control}

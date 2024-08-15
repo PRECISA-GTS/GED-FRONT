@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Button, ButtonGroup } from '@mui/material'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
 import Icon from 'src/@core/components/icon'
-import { useFornecedor } from 'src/context/FornecedorContext'
 
-const ToggleButtonLabel = React.memo(({ xs, md, name, register, setValue }) => {
+const ToggleButtonLabel = React.memo(({ xs, md, name, register, setValue, setIsNotFactory }) => {
     const [selectedOption, setSelectedOption] = useState(1)
-    const { setIsNotFactory } = useFornecedor()
 
     useEffect(() => {
         if (name && register) {
             setValue(name, selectedOption)
-            // setSelectedOption(selectedOption === 1 ? false : true)
         }
     }, [name, register, selectedOption, setValue, setIsNotFactory])
 

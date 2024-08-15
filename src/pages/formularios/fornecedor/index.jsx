@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react'
-import Router from 'next/router'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
 import FormFornecedor from 'src/components/Fornecedor/FormFornecedor'
@@ -32,7 +31,8 @@ const Fornecedor = () => {
     const [open, setOpen] = useState(false)
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
-    const { isNotFactory } = useFornecedor()
+    const [isNotFactory, setIsNotFactory] = useState(false)
+
     const {
         form,
         dataSupplier,
@@ -250,7 +250,7 @@ const Fornecedor = () => {
                 size='lg'
                 fullHeight
             >
-                <NewFornecedor />
+                <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>
 
             {/* Modal que exibe mensagem de novo fornecedor habilitado */}

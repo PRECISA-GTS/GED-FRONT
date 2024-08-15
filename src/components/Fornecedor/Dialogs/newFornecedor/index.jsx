@@ -18,7 +18,9 @@ const NewFornecedor = ({
     reset,
     getValues,
     watch,
-    trigger
+    trigger,
+    setIsNotFactory,
+    isNotFactory
 }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
@@ -182,6 +184,7 @@ const NewFornecedor = ({
 
     useEffect(() => {
         getParams()
+        setIsNotFactory(false)
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
@@ -210,6 +213,8 @@ const NewFornecedor = ({
                                 register={register}
                                 handleCnpj={handleCnpj}
                                 validCnpj={validationCnpj}
+                                setIsNotFactory={setIsNotFactory}
+                                isNotFactory={isNotFactory}
                             />
                         </Box>
 

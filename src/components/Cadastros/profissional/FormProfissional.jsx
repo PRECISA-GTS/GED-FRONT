@@ -409,8 +409,6 @@ const FormProfissional = ({ id }) => {
                         </CardContent>
                     </Card>
                     {
-                        // routes.find(route => route.rota === staticUrl && route.ler) &&
-                        // (userNewVerifyCPF || userExistDefault) &&
                         <Card>
                             <CardHeader title='Cargos / Funções' />
                             <CardContent>
@@ -441,9 +439,6 @@ const FormProfissional = ({ id }) => {
                             </CardContent>
                         </Card>
                     }
-
-                    {/* userExistVerifyCPF */}
-                    {/* routes.find(route => route.rota === staticUrl && route.editar) */}
 
                     {routes.find(route => route.rota === staticUrl && route.ler) &&
                         (userNewVerifyCPF || userExistDefault) && (
