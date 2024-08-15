@@ -23,7 +23,6 @@ const FormNewFornecedor = ({
     register,
     watch,
     reset,
-
     setIsNotFactory,
     isNotFactory
 }) => {
@@ -57,8 +56,8 @@ const FormNewFornecedor = ({
         const result = await api.post(`/configuracoes/formularios/fornecedor/getCategories`, {
             unidadeID: loggedUnity.unidadeID
         })
-        setCategories(result.data)
         updateRisks(result.data, getValues('fields.categoria')?.id)
+        setCategories(result.data)
     }
 
     const updateRisks = (categories, categoriaID) => {
@@ -76,13 +75,25 @@ const FormNewFornecedor = ({
         setValue('fields.produtos', [])
     }
 
+    const handleCnpjChange = async e => {
+        handleCnpj(e)
+        await getCategories()
+    }
+
     useEffect(() => {
         reset()
         getModels()
         getProducts()
-        getGruposAnexo()
+        // getGruposAnexo()
         getCategories()
     }, [])
+
+    useEffect(() => {
+        // Atualiza os riscos quando categories ou categoria mudam
+        if (categories.length > 0 && getValues('fields.categoria')) {
+            updateRisks(categories, getValues('fields.categoria').id)
+        }
+    }, [categories, getValues('fields.categoria')])
 
     const handleConfirmNew = async (data, name) => {
         setOpenModalNew(false)
@@ -158,8 +169,9 @@ const FormNewFornecedor = ({
                         name='fields.cnpj'
                         value={fields?.cnpj}
                         onChange={e => {
-                            handleCnpj(e)
-                            getCategories()
+                            handleCnpjChange(e)
+                            // handleCnpj(e)
+                            // getCategories()
                         }}
                         clearField={getValues('fields.cnpj') ? clearCnpj : null}
                         mask='cnpj'
@@ -219,9 +231,9 @@ const FormNewFornecedor = ({
                             value={fields?.categoria}
                             disabled={!validCnpj}
                             onChange={newValue => {
-                                setValue('fields.risco', null)
                                 setValue('fields.categoria', newValue)
-                                updateRisks(categories, newValue.id)
+                                setValue('fields.risco', null)
+                                updateRisks(categories, newValue ? newValue.id : null)
                             }}
                             required
                             options={categories ?? []}
