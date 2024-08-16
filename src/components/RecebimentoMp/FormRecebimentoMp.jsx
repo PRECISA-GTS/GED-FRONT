@@ -806,61 +806,24 @@ const FormRecebimentoMp = ({ id, model }) => {
                     )}
 
                     {/* Blocos */}
-                    {/* {blocos &&
+                    {blocos &&
                         blocos.map((bloco, index) => (
                             <Block
-                                key={index}
+                                bloco={bloco}
                                 index={index}
-                                blockKey={`parFornecedorModeloBlocoID`}
-                                handleFileSelect={handleFileSelectItem}
-                                setItemResposta={setItemResposta}
-                                handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                blockKey={`parRecebimentoMpModeloBlocoID`}
                                 setBlocos={setBlocos}
-                                values={bloco}
-                                control={control}
-                                register={register}
                                 setValue={setValue}
-                                getValues={getValues}
-                                errors={errors?.blocos}
-                                disabled={!canEdit.status || hasFormPending}
                                 blocos={blocos}
-                            />
-                        ))} */}
-
-                    <Block
-                        blockKey={`parRecebimentoMpModeloBlocoID`}
-                        setBlocos={setBlocos}
-                        setValue={setValue}
-                        blocos={blocos}
-                        getValues={getValues}
-                        register={register}
-                        control={control}
-                        disabled={!canEdit.status || hasFormPending}
-                        errors={errors?.blocos}
-                        handleFileSelect={handleFileSelectItem}
-                        handleRemoveAnexoItem={handleRemoveAnexoItem}
-                    />
-
-                    {/* {blocos &&
-                        blocos.map((bloco, index) => (
-                            <Block
-                                key={Math.random()}
-                                index={index}
-                                blockKey={`parFornecedorModeloBlocoID`}
+                                getValues={getValues}
+                                register={register}
+                                control={control}
+                                disabled={!canEdit.status || hasFormPending}
+                                errors={errors?.blocos}
                                 handleFileSelect={handleFileSelectItem}
-                                setItemResposta={setItemResposta}
                                 handleRemoveAnexoItem={handleRemoveAnexoItem}
-                                setBlocos={setBlocos}
-                                values={bloco}
-                                control={control}
-                                register={register}
-                                setValue={setValue}
-                                getValues={getValues}
-                                errors={errors?.blocos}
-                                disabled={!canEdit.status || hasFormPending}
-                                blocos={blocos}
                             />
-                        ))} */}
+                        ))}
 
                     {/* Grupo de anexos */}
                     {grupoAnexo &&

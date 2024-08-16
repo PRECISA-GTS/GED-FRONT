@@ -44,6 +44,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
     const [indexNewBloco, setIndexNewBloco] = useState(null)
     const [indexNewItem, setIndexNewItem] = useState(null)
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
+    const [setores, setSetores] = useState([])
 
     const createNew = (indexBloco, indexItem) => {
         setOpenModalNew(true)
@@ -172,8 +173,6 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         setChange(!change)
     }
 
-    console.log('allOptions:', allOptions)
-
     const removeBlock = (block, index) => {
         if (blocks.length == 1) {
             toast.error('Você deve ter ao menos um bloco!')
@@ -237,6 +236,17 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         setBlocks(newBlock)
     }
 
+    const getSetores = async () => {
+        if (!loggedUnity) return
+
+        try {
+            const res = await api.post('/cadastros/setor', { unidadeID: loggedUnity.unidadeID })
+            setSetores(res.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const getProfissionaisModelo = async model => {
         const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
             formularioID: 2, // recebimento MP
@@ -298,6 +308,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
 
     useEffect(() => {
         getData()
+        getSetores()
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
@@ -379,7 +390,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                 {/* Profissionais que preenchem */}
                                 {profissionais && (
                                     <>
-                                        <Select
+                                        {/* <Select
                                             xs={12}
                                             md={6}
                                             className='order-5'
@@ -391,11 +402,11 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                             register={register}
                                             setValue={setValue}
                                             control={control}
-                                        />
+                                        /> */}
 
                                         <Select
                                             xs={12}
-                                            md={6}
+                                            md={12}
                                             className='order-5'
                                             multiple
                                             title='Profissionais que aprovam'
@@ -405,31 +416,10 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                             register={register}
                                             setValue={setValue}
                                             control={control}
+                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                     </>
                                 )}
-
-                                {/* <Grid item xs={12}>
-                                    <JoditEditor
-                                        ref={editor}
-                                        value={textCabecalho}
-                                        // name={`model.cabecalho`}
-                                        // register={register}
-                                        config={{
-                                            height: 300,
-                                            readonly: false // all options from https://xdsoft.net/jodit/doc/
-                                        }}
-                                        tabIndex={1} // tabIndex of textarea
-                                        onChange={newContent => {
-                                            console.log('🚀 ~ newContent:', newContent)
-                                            setTextCabecalho(newContent)
-                                        }}
-                                        onBlur={newContent => {
-                                            console.log('🚀 ~ newContent:', newContent)
-                                            setTextCabecalho(newContent)
-                                        }}
-                                    />
-                                </Grid> */}
                             </Grid>
                         </CardContent>
                     </Card>
@@ -564,6 +554,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                         createNew={createNew}
                         viewItem={viewItem}
                         key={change}
+                        setores={setores}
                     />
                 )}
                 {/* Botão inserir bloco */}

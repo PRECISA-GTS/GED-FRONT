@@ -1019,39 +1019,24 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             )}
 
                             {/* Blocos */}
-                            <Block
-                                blockKey={`parFornecedorModeloBlocoID`}
-                                setBlocos={setBlocos}
-                                setValue={setValue}
-                                blocos={blocos}
-                                getValues={getValues}
-                                register={register}
-                                control={control}
-                                disabled={!canEdit.status || hasFormPending}
-                                errors={errors?.blocos}
-                                handleFileSelect={handleFileSelectItem}
-                                handleRemoveAnexoItem={handleRemoveAnexoItem}
-                            />
-                            {/* {blocos &&
+                            {blocos &&
                                 blocos.map((bloco, index) => (
                                     <Block
-                                        key={change}
+                                        bloco={bloco}
                                         index={index}
                                         blockKey={`parFornecedorModeloBlocoID`}
-                                        handleFileSelect={handleFileSelectItem}
-                                        changeAllOptions={changeAllOptions}
-                                        setItemResposta={setItemResposta}
-                                        handleRemoveAnexoItem={handleRemoveAnexoItem}
                                         setBlocos={setBlocos}
-                                        values={bloco}
-                                        control={control}
-                                        register={register}
                                         setValue={setValue}
+                                        blocos={blocos}
                                         getValues={getValues}
-                                        errors={errors?.blocos}
+                                        register={register}
+                                        control={control}
                                         disabled={!canEdit.status || hasFormPending}
+                                        errors={errors?.blocos}
+                                        handleFileSelect={handleFileSelectItem}
+                                        handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     />
-                                ))} */}
+                                ))}
 
                             {/* Grupo de anexos */}
                             {grupoAnexo &&

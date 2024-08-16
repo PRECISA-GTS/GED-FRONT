@@ -108,6 +108,9 @@ const DateField = ({
                             }}
                             sx={{
                                 opacity: opacity ? 0.4 : 1,
+                                '& .MuiInputBase-input': {
+                                    padding: '10px 14px' // Ajuste o valor conforme necessário
+                                },
                                 ...(alertRequired &&
                                     !field?.value && {
                                         '& .MuiOutlinedInput-root': {

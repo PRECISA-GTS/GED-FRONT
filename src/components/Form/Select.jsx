@@ -76,7 +76,7 @@ const Select = ({
                                         sx={{
                                             opacity: opacity ? 0.4 : 1,
                                             '& .MuiInputBase-input': {
-                                                padding: '8px 14px' // Ajuste o valor conforme necessário
+                                                padding: '4px 14px !important' // Ajuste o valor conforme necessário
                                             },
                                             ...(alertRequired &&
                                                 !field?.value && {

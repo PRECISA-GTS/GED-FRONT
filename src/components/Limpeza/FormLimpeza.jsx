@@ -653,7 +653,6 @@ const FormLimpeza = ({ id }) => {
                             )}
                         </Alert>
                     )}
-
                     {/* Cabeçalho do modelo */}
                     {info && info.cabecalhoModelo != '' && (
                         <Card>
@@ -662,7 +661,6 @@ const FormLimpeza = ({ id }) => {
                             </CardContent>
                         </Card>
                     )}
-
                     {unidade && (
                         <HeaderFields
                             recebimentoMpID={id}
@@ -677,21 +675,25 @@ const FormLimpeza = ({ id }) => {
                             control={control}
                         />
                     )}
-
                     {/* Blocos */}
-                    <Block
-                        blockKey={`parLimpezaModeloBlocoID`}
-                        setBlocos={setBlocos}
-                        setValue={setValue}
-                        blocos={blocos}
-                        getValues={getValues}
-                        register={register}
-                        control={control}
-                        disabled={!canEdit.status}
-                        errors={errors?.blocos}
-                        handleFileSelect={handleFileSelectItem}
-                        handleRemoveAnexoItem={handleRemoveAnexoItem}
-                    />
+                    {blocos &&
+                        blocos.map((bloco, index) => (
+                            <Block
+                                bloco={bloco}
+                                index={index}
+                                blockKey={`parLimpezaModeloBlocoID`}
+                                setBlocos={setBlocos}
+                                setValue={setValue}
+                                blocos={blocos}
+                                getValues={getValues}
+                                register={register}
+                                control={control}
+                                disabled={!canEdit.status}
+                                errors={errors?.blocos}
+                                handleFileSelect={handleFileSelectItem}
+                                handleRemoveAnexoItem={handleRemoveAnexoItem}
+                            />
+                        ))}
                     {/* {blocos &&
                         blocos.map((bloco, index) => (
                             <Block
@@ -712,7 +714,6 @@ const FormLimpeza = ({ id }) => {
                                 disabled={!canEdit.status}
                             />
                         ))} */}
-
                     {/* Grupo de anexos */}
                     {/* {grupoAnexo &&
                         grupoAnexo.map((grupo, indexGrupo) => (
@@ -730,7 +731,6 @@ const FormLimpeza = ({ id }) => {
                                 }}
                             />
                         ))} */}
-
                     {/* Observação do formulário */}
                     {info && (
                         <>
@@ -758,7 +758,6 @@ const FormLimpeza = ({ id }) => {
                             </Card>
                         </>
                     )}
-
                     {/* Rodapé inserir assinatura, data e hora */}
                     {unidade && fieldsFooter && !fieldsFooter.concluded && (
                         <FooterFields
@@ -771,20 +770,17 @@ const FormLimpeza = ({ id }) => {
                             control={control}
                         />
                     )}
-
                     {/* Rodapé com informações de conclusão */}
                     {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
                         <Typography variant='caption'>
                             {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
                         </Typography>
                     )}
-
                     <HistoricForm
                         key={change}
                         id={id}
                         parFormularioID={4} // Limpeza
                     />
-
                     {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
                     {openModalStatus && (
                         <DialogFormStatus
@@ -802,7 +798,6 @@ const FormLimpeza = ({ id }) => {
                             handleSubmit={false}
                         />
                     )}
-
                     {/* Dialog de confirmação de envio */}
                     <DialogFormConclusion
                         openModal={openModal}
@@ -825,7 +820,6 @@ const FormLimpeza = ({ id }) => {
                         type='limpeza'
                         unity={unidade}
                     />
-
                     {/* Modal que deleta formulario */}
                     <DialogDelete
                         title='Excluir Formulário'

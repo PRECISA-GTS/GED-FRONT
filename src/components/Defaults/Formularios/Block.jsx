@@ -1,13 +1,13 @@
 import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
-import { useContext, useState } from 'react'
-import AnexoList from 'src/components/Anexos/ModeView/AnexoListMultiple'
-import DateField from 'src/components/Form/DateField'
-import Input from 'src/components/Form/Input'
-import RadioLabel from 'src/components/Form/RadioLabel'
+import { useContext, useEffect, useState } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import Item from './Item'
+import InfoSetores from './InfoSetores'
+import { AuthContext } from 'src/context/AuthContext'
 
 const Block = ({
+    bloco,
+    index,
     blockKey,
     setBlocos,
     setValue,
@@ -20,20 +20,19 @@ const Block = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
-    if (!blocos) return null
+    if (!bloco) return null
 
+    const { user } = useContext(AuthContext)
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
+    const [blockPermission, setBlockPermission] = useState(false)
 
     const updateResponse = ({ e, item, index, indexItem }) => {
         const newBlocos = [...blocos]
         const newResponse = item.alternativas.find(item => item.id == e.target.value)
-        console.log('🚀 ~ newResponse:', newResponse)
-        // Estado
         newBlocos[index].itens[indexItem].resposta = newResponse
         setBlocos(newBlocos)
-        // Form
         setValue(`blocos[${index}].itens[${indexItem}].resposta`, newResponse)
     }
 
@@ -82,13 +81,42 @@ const Block = ({
         return total
     }
 
-    return blocos.map((bloco, index) => (
+    const validateBlockPermission = () => {
+        //? Sem setor pro bloco, todos acessam
+        if (!disabled && (user.admin === 1 || bloco.setores.length === 0)) {
+            setBlockPermission(true)
+            return
+        }
+
+        //? Se bloco for do setor do profissional, ele tem acesso
+        bloco.profissionais &&
+            bloco.profissionais.map(prof => {
+                if (!disabled && prof.id === user.profissionalID) {
+                    setBlockPermission(true)
+                    return
+                }
+            })
+    }
+
+    useEffect(() => {
+        validateBlockPermission()
+    }, [])
+
+    return (
         <Card key={Math.random()}>
             <CardContent>
                 <Grid container>
                     <Grid item xs={12} md={6}>
                         <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>
                             {bloco?.nome}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
+                        {bloco?.setores && <InfoSetores data={bloco.setores} />}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>
+                            Itens
                         </Typography>
                     </Grid>
 
@@ -103,7 +131,9 @@ const Block = ({
                                     <Grid item xs={12} md={3} key={indexCol}>
                                         <FormControlLabel
                                             value={indexCol}
-                                            control={<Radio disabled={disabled} error={errors ? true : false} />}
+                                            control={
+                                                <Radio disabled={!blockPermission} error={errors ? true : false} />
+                                            }
                                             onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
                                             label='Todos'
                                             fullWidth
@@ -132,7 +162,7 @@ const Block = ({
                             indexItem={indexItem}
                             item={item}
                             errors={errors}
-                            disabled={disabled}
+                            disabled={!blockPermission}
                             control={control}
                             register={register}
                             getValues={getValues}
@@ -144,7 +174,7 @@ const Block = ({
                 </Grid>
             </CardContent>
         </Card>
-    ))
+    )
 }
 
 export default Block
