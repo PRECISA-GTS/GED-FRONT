@@ -5,7 +5,7 @@ import { SettingsContext } from 'src/@core/context/settingsContext'
 import { api } from 'src/configs/api'
 import Icon from 'src/@core/components/icon'
 import { Card, CardContent, Grid, Button, CardHeader, Tooltip, IconButton, FormControl, Avatar } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import FormHeader from '../../Defaults/FormHeader'
 import { backRoute } from 'src/configs/defaultConfigs'
@@ -18,6 +18,7 @@ import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
 import { ParametersContext } from 'src/context/ParametersContext'
 import useLoad from 'src/hooks/useLoad'
 import Select from 'src/components/Form/Select'
+import Setor from './Setor'
 
 const FormProfissional = ({ id }) => {
     const fileInputRef = useRef(null)
@@ -86,6 +87,12 @@ const FormProfissional = ({ id }) => {
             })),
             removedItems
         }
+        console.log('🚀 ~ onSubmit:', values)
+
+        if (!validateUniqueEntry(values)) {
+            toast.error('Não é permitido repetir setor ativo em um profissional!')
+            return
+        }
 
         try {
             if (type === 'new') {
@@ -110,6 +117,25 @@ const FormProfissional = ({ id }) => {
         }
     }
 
+    //?  Não pode repetir os setores
+    const validateUniqueEntry = data => {
+        let unique = true
+
+        if (data.fields.setores && data.fields.setores.length > 1) {
+            data.fields.setores.map((row1, index1) => {
+                data.fields.setores.map((row2, index2) => {
+                    if (index1 !== index2) {
+                        if (row1.setor.id === row2.setor.id && !row1.dataFim && !row2.dataFim) {
+                            unique = false
+                        }
+                    }
+                })
+            })
+        }
+
+        return unique
+    }
+
     // Dados iniciais ao carregar página
     const getData = async () => {
         const route =
@@ -131,7 +157,6 @@ const FormProfissional = ({ id }) => {
     // Deleta os dados
     const handleClickDelete = async () => {
         try {
-            // await api.delete(`${staticUrl}/${id}`)
             await api.delete(`${staticUrl}/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`)
             setId(null)
             setOpen(false)
@@ -286,6 +311,12 @@ const FormProfissional = ({ id }) => {
         }
     }, [data])
 
+    //? Gerencia o array de setores
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'fields.setores'
+    })
+
     return (
         data && (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -408,42 +439,52 @@ const FormProfissional = ({ id }) => {
                             </Grid>
                         </CardContent>
                     </Card>
-                    {
-                        // routes.find(route => route.rota === staticUrl && route.ler) &&
-                        // (userNewVerifyCPF || userExistDefault) &&
-                        <Card>
-                            <CardHeader title='Cargos / Funções' />
-                            <CardContent>
-                                <Grid container spacing={5}>
-                                    {/* Cargo / Função do profissonal */}
-                                    {data && (
-                                        <CargoFuncao
-                                            getValues={getValues}
-                                            control={control}
-                                            register={register}
-                                            errors={errors}
-                                            removeItem={removeItem}
-                                            key={change}
-                                        />
-                                    )}
-                                    <Button
-                                        variant='outlined'
-                                        color='primary'
-                                        sx={{ mt: 4, ml: 4 }}
-                                        startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
-                                        onClick={() => {
-                                            addItem()
-                                        }}
-                                    >
-                                        Inserir item
-                                    </Button>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    }
 
-                    {/* userExistVerifyCPF */}
-                    {/* routes.find(route => route.rota === staticUrl && route.editar) */}
+                    <Setor
+                        data={data}
+                        getValues={getValues}
+                        setValue={setValue}
+                        control={control}
+                        register={register}
+                        errors={errors}
+                        removeItem={removeItem}
+                        trigger={trigger}
+                        key={change}
+                        fields={fields}
+                        append={append}
+                        remove={remove}
+                    />
+
+                    <Card>
+                        <CardHeader title='Cargos e Funções' />
+                        <CardContent>
+                            <Grid container spacing={5}>
+                                {/* Cargo / Função do profissonal */}
+                                {data && (
+                                    <CargoFuncao
+                                        data={data}
+                                        getValues={getValues}
+                                        control={control}
+                                        register={register}
+                                        errors={errors}
+                                        removeItem={removeItem}
+                                        key={change}
+                                    />
+                                )}
+                                <Button
+                                    variant='outlined'
+                                    color='primary'
+                                    sx={{ mt: 4, ml: 4 }}
+                                    startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
+                                    onClick={() => {
+                                        addItem()
+                                    }}
+                                >
+                                    Inserir cargo
+                                </Button>
+                            </Grid>
+                        </CardContent>
+                    </Card>
 
                     {routes.find(route => route.rota === staticUrl && route.ler) &&
                         (userNewVerifyCPF || userExistDefault) && (

@@ -1,22 +1,17 @@
 // ** React Imports
 import { useRouter } from 'next/router';
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import { AuthContext } from './AuthContext';
 import { api } from 'src/configs/api';
 
 // ** Defaults
-const defaultProvider = {
-  setIsNotFactory: () => Boolean,
-  isNotFactory: false
-}
+const defaultProvider = null
 
 const FornecedorContext = createContext(defaultProvider)
 
 const FornecedorProvider = ({ children }) => {
   const router = useRouter();
   const { loggedUnity, user } = useContext(AuthContext)
-  // Validação do tipo de formulário a ser preenchido (fornecedor ou fábrica)
-  const [isNotFactory, setIsNotFactory] = useState(false)
 
   const verifySupplierRisk = async () => {
     if (loggedUnity && user && loggedUnity.unidadeID && user.usuarioID) {
@@ -37,10 +32,7 @@ const FornecedorProvider = ({ children }) => {
     verifySupplierRisk()
   }, [user, loggedUnity, router.pathname])
 
-  const values = {
-    setIsNotFactory,
-    isNotFactory
-  }
+  const values = null
 
   return <FornecedorContext.Provider value={values}>{children}</FornecedorContext.Provider>
 }

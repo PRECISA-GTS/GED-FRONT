@@ -138,8 +138,8 @@ const Fields = ({
                     value={data?.fields?.dataNascimento}
                     register={register}
                     control={control}
-                    typeValidation='dataPassado'
                     errors={errors?.fields?.dataNascimento}
+                    typeValidation='dataPassado'
                 />
                 <Input
                     xs={12}
