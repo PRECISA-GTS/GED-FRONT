@@ -9,21 +9,6 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
     return getValues('cargosFuncoes').map((item, index) => {
         return (
             <>
-                <DateField
-                    xs={12}
-                    md={2}
-                    title='Data'
-                    type='date'
-                    required
-                    name={`cargosFuncoes.${[index]}.data`}
-                    register={register}
-                    control={control}
-                    value={item.data}
-                    typeValidation='dataPassado'
-                    daysValidation={999999}
-                    errors={errors?.cargosFuncoes?.[index]?.data}
-                    opacity={item.status === 0 ? true : false}
-                />
                 <Input
                     xs={12}
                     md={4}
@@ -41,6 +26,21 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     name={`cargosFuncoes.${[index]}.conselho`}
                     control={control}
                     errors={errors?.cargosFuncoes?.[index]?.conselho}
+                    opacity={item.status === 0 ? true : false}
+                />
+                <DateField
+                    xs={12}
+                    md={2}
+                    title='Data'
+                    type='date'
+                    required
+                    name={`cargosFuncoes.${[index]}.data`}
+                    register={register}
+                    control={control}
+                    value={item.data}
+                    typeValidation='dataPassado'
+                    daysValidation={999999}
+                    errors={errors?.cargosFuncoes?.[index]?.data}
                     opacity={item.status === 0 ? true : false}
                 />
                 <DateField
