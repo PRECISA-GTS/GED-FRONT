@@ -21,13 +21,8 @@ const Setor = ({
     remove
 }) => {
     const { loggedUnity } = useContext(AuthContext)
-
     const [setores, setSetores] = useState([])
     const today = new Date().toISOString().substring(0, 10)
-
-    console.log('🚀 ~ fields:', fields)
-    console.log('🚀 ~ setores:', setores)
-    console.log('🚀 ~ today:', today)
 
     const getSetores = async () => {
         try {
@@ -65,6 +60,7 @@ const Setor = ({
                                 setValue={setValue}
                                 control={control}
                                 errors={errors?.fields?.setores?.[index]?.setor}
+                                opacity={item.status === 0 ? true : false}
                             />
 
                             <DateField
@@ -77,6 +73,7 @@ const Setor = ({
                                 register={register}
                                 control={control}
                                 errors={errors?.fields?.setores?.[index]?.dataInicio}
+                                opacity={item.status === 0 ? true : false}
                             />
 
                             <DateField
@@ -87,6 +84,7 @@ const Setor = ({
                                 value={data?.fields?.setores?.[index]?.dataFim}
                                 register={register}
                                 control={control}
+                                opacity={item.status === 0 ? true : false}
                             />
 
                             <Grid item xs={12} md={1} className='flex items-center'>

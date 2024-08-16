@@ -22,6 +22,7 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     typeValidation='dataPassado'
                     daysValidation={999999}
                     errors={errors?.cargosFuncoes?.[index]?.data}
+                    opacity={item.status === 0 ? true : false}
                 />
                 <Input
                     xs={12}
@@ -31,6 +32,7 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     name={`cargosFuncoes.${[index]}.formacaoCargo`}
                     control={control}
                     errors={errors?.cargosFuncoes?.[index]?.formacaoCargo}
+                    opacity={item.status === 0 ? true : false}
                 />
                 <Input
                     xs={12}
@@ -39,6 +41,7 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     name={`cargosFuncoes.${[index]}.conselho`}
                     control={control}
                     errors={errors?.cargosFuncoes?.[index]?.conselho}
+                    opacity={item.status === 0 ? true : false}
                 />
                 <DateField
                     xs={12}
@@ -48,9 +51,8 @@ const CargoFuncao = ({ data, getValues, control, register, name, errors, removeI
                     type='date'
                     value={item.dataInativacao}
                     control={control}
-                    typeValidation='dataPassado'
-                    daysValidation={9999999999}
                     errors={errors?.cargosFuncoes?.[index]?.dataInativacao}
+                    opacity={item.status === 0 ? true : false}
                 />
                 <Grid item xs={12} md={1} className='flex items-center'>
                     <IconButton

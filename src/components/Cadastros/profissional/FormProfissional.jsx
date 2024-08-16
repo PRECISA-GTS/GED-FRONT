@@ -87,6 +87,7 @@ const FormProfissional = ({ id }) => {
             })),
             removedItems
         }
+        console.log('🚀 ~ onSubmit:', values)
 
         if (!validateUniqueEntry(values)) {
             toast.error('Não é permitido repetir setor ativo em um profissional!')
@@ -120,7 +121,7 @@ const FormProfissional = ({ id }) => {
     const validateUniqueEntry = data => {
         let unique = true
 
-        if (data.fields.setores.length > 1) {
+        if (data.fields.setores && data.fields.setores.length > 1) {
             data.fields.setores.map((row1, index1) => {
                 data.fields.setores.map((row2, index2) => {
                     if (index1 !== index2) {
@@ -461,6 +462,7 @@ const FormProfissional = ({ id }) => {
                                 {/* Cargo / Função do profissonal */}
                                 {data && (
                                     <CargoFuncao
+                                        data={data}
                                         getValues={getValues}
                                         control={control}
                                         register={register}

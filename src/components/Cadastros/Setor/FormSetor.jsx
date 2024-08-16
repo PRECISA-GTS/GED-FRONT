@@ -50,6 +50,8 @@ const FormSetor = ({ id }) => {
             unidadeID: loggedUnity.unidadeID
         }
 
+        console.log('🚀 ~ onSubmit:', values)
+
         if (!validateUniqueEntry(data)) {
             toast.error('Não é permitido repetir profissional ativo em um setor!')
             return
@@ -231,6 +233,7 @@ const FormSetor = ({ id }) => {
                                             setValue={setValue}
                                             control={control}
                                             errors={errors?.fields?.profissionais?.[index]?.profissional}
+                                            opacity={item.status === 0 ? true : false}
                                         />
 
                                         <DateField
@@ -243,6 +246,7 @@ const FormSetor = ({ id }) => {
                                             register={register}
                                             control={control}
                                             errors={errors?.fields?.profissionais?.[index]?.dataInicio}
+                                            opacity={item.status === 0 ? true : false}
                                         />
 
                                         <DateField
@@ -253,6 +257,7 @@ const FormSetor = ({ id }) => {
                                             value={data?.fields?.profissionais?.[index]?.dataFim}
                                             register={register}
                                             control={control}
+                                            opacity={item.status === 0 ? true : false}
                                         />
 
                                         <Grid item xs={12} md={1} className='flex items-center'>

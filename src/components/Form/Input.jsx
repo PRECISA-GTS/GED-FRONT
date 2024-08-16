@@ -36,6 +36,7 @@ const Input = ({
     helpText,
     helpTextPosition,
     alertRequired,
+    opacity,
     ...props
 }) => {
     const theme = useTheme()
@@ -138,6 +139,7 @@ const Input = ({
                                         )
                                     }}
                                     sx={{
+                                        opacity: opacity ? 0.4 : 1,
                                         '& .MuiInputBase-input': {
                                             padding: '10px 14px' // Ajuste o valor conforme necessário
                                         },

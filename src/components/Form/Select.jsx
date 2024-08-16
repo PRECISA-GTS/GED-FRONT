@@ -25,7 +25,8 @@ const Select = ({
     handleRegistroEstabelecimento,
     helpText,
     alertRequired,
-    helpTextPosition
+    helpTextPosition,
+    opacity
 }) => {
     const theme = useTheme()
     const { settings } = useSettings()
@@ -73,6 +74,7 @@ const Select = ({
                                         placeholder={title}
                                         error={errors ? true : false}
                                         sx={{
+                                            opacity: opacity ? 0.4 : 1,
                                             '& .MuiInputBase-input': {
                                                 padding: '8px 14px' // Ajuste o valor conforme necessário
                                             },

@@ -16,7 +16,8 @@ const DateField = ({
     typeValidation,
     errors,
     alertRequired,
-    control
+    control,
+    opacity
 }) => {
     const theme = useTheme()
     const [dateStatus, setDateStatus] = useState({})
@@ -106,6 +107,7 @@ const DateField = ({
                                               .split('T')[0]
                             }}
                             sx={{
+                                opacity: opacity ? 0.4 : 1,
                                 ...(alertRequired &&
                                     !field?.value && {
                                         '& .MuiOutlinedInput-root': {
