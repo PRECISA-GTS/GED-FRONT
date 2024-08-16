@@ -14,7 +14,6 @@ import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
-import { Add, Remove } from '@mui/icons-material'
 import useLoad from 'src/hooks/useLoad'
 import Icon from 'src/@core/components/icon'
 import Check from 'src/components/Form/Check'
@@ -50,7 +49,11 @@ const FormSetor = ({ id }) => {
             usuarioID: user.usuarioID,
             unidadeID: loggedUnity.unidadeID
         }
-        console.log('🚀 ~ values:', values)
+
+        if (!validateUniqueEntry(data)) {
+            toast.error('Não é permitido repetir profissional ativo em um setor!')
+            return
+        }
 
         try {
             if (type === 'new') {
@@ -72,6 +75,25 @@ const FormSetor = ({ id }) => {
         } finally {
             stopLoading()
         }
+    }
+
+    //?  Não pode repetir as pessoas
+    const validateUniqueEntry = data => {
+        let unique = true
+
+        if (data.fields.profissionais.length > 1) {
+            data.fields.profissionais.map((row1, index1) => {
+                data.fields.profissionais.map((row2, index2) => {
+                    if (index1 !== index2) {
+                        if (row1.profissional.id === row2.profissional.id && !row1.dataFim && !row2.dataFim) {
+                            unique = false
+                        }
+                    }
+                })
+            })
+        }
+
+        return unique
     }
 
     //? Função que deleta os dados
@@ -96,8 +118,6 @@ const FormSetor = ({ id }) => {
         try {
             if (type === 'edit') {
                 const response = await api.post(`${staticUrl}/getData/${id}`, { id })
-
-                console.log('🚀 ~ getData: ', response.data)
                 setData(response.data)
                 reset(response.data)
             } else {
@@ -132,17 +152,13 @@ const FormSetor = ({ id }) => {
     useEffect(() => {
         getData()
         getProfissionais()
-        append({
-            id: null,
-            dataInicio: today
-        })
 
         setTimeout(() => {
             trigger()
         }, 300)
     }, [id])
 
-    //? Gerencia o array de itens (descrição e link)
+    //? Gerencia o array de profissionais
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'fields.profissionais'

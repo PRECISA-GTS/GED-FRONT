@@ -119,7 +119,7 @@ code[class*='language-'] {
     }
 }
 
-/*!Scroll costumizado */
+/*!Scroll customizado */
 ::-webkit-scrollbar {
     width: 0.5rem;
     height: 1rem;
