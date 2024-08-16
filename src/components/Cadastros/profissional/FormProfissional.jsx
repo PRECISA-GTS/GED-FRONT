@@ -88,8 +88,10 @@ const FormProfissional = ({ id }) => {
             removedItems
         }
 
-        console.log('🚀 ~ onSubmit: ', values)
-        return
+        if (!validateUniqueEntry(values)) {
+            toast.error('Não é permitido repetir setor ativo em um profissional!')
+            return
+        }
 
         try {
             if (type === 'new') {
@@ -112,6 +114,25 @@ const FormProfissional = ({ id }) => {
         } finally {
             stopLoading()
         }
+    }
+
+    //?  Não pode repetir os setores
+    const validateUniqueEntry = data => {
+        let unique = true
+
+        if (data.fields.setores.length > 1) {
+            data.fields.setores.map((row1, index1) => {
+                data.fields.setores.map((row2, index2) => {
+                    if (index1 !== index2) {
+                        if (row1.setor.id === row2.setor.id && !row1.dataFim && !row2.dataFim) {
+                            unique = false
+                        }
+                    }
+                })
+            })
+        }
+
+        return unique
     }
 
     // Dados iniciais ao carregar página
@@ -457,7 +478,7 @@ const FormProfissional = ({ id }) => {
                                         addItem()
                                     }}
                                 >
-                                    Inserir item
+                                    Inserir cargo
                                 </Button>
                             </Grid>
                         </CardContent>
