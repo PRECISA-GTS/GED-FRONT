@@ -44,6 +44,7 @@ const FormProfissional = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
     const routeVeryfyCNP = type == 'edit' ? `${staticUrl}/verifyCPF` : `${backRoute(staticUrl)}/verifyCPF`
+    const today = new Date().toISOString().substring(0, 10)
 
     const {
         control,
@@ -66,6 +67,7 @@ const FormProfissional = ({ id }) => {
 
     // Função que atualiza os dados ou cria novo dependendo do tipo da rota
     const onSubmit = async data => {
+        console.log('🚀 ~ data:', data)
         startLoading()
         const values = {
             ...data,
@@ -88,6 +90,7 @@ const FormProfissional = ({ id }) => {
             removedItems
         }
         console.log('🚀 ~ onSubmit:', values)
+        // return
 
         if (!validateUniqueEntry(values)) {
             toast.error('Não é permitido repetir setor ativo em um profissional!')
@@ -187,41 +190,47 @@ const FormProfissional = ({ id }) => {
         }
     }
 
+    const addSetor = () => {
+        const newValue = {
+            setor: null,
+            dataInicio: today,
+            dataFim: '',
+            status: true
+        }
+        append(newValue)
+    }
+
     // Adiciona novo Cargo | Função
     const addItem = () => {
-        const currentDate = new Date()
-        const formattedDate = `${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(
-            currentDate.getDate()
-        ).padStart(2, '0')}/${currentDate.getFullYear()}`
-
         const newValue = {
             conselho: '',
-            data: formattedDate,
+            data: today,
             dataInativacao: '',
             formacaoCargo: '',
             status: true
         }
 
-        const updatedData = [...getValues('cargosFuncoes'), newValue]
-        setValue('cargosFuncoes', updatedData)
-        setChange(!change)
+        appendCargoFuncao(newValue)
     }
 
     // Remove Cargo | Função existente
     const removeItem = (value, index) => {
-        if (data.cargosFuncoes.length === 1) {
+        console.log('🚀 ~ value:', value)
+        if (cargosFuncoesFields.length === 1) {
             toast.error('É necessário ter pelo menos um Cargo/Função!')
             return
         }
 
         //* Adiciona item removido ao array
-        if (value.id) {
-            setRemovedItems([...removedItems, value.id])
+        if (value.profissionalCargoID) {
+            setRemovedItems([...removedItems, value.profissionalCargoID])
         }
 
-        const newValue = getValues('cargosFuncoes').filter((_, i) => i !== index)
-        setValue(`cargosFuncoes`, newValue) //* Remove item do formulário
-        setChange(!change)
+        removeCargoFuncao(index)
+
+        // const newValue = getValues('cargosFuncoes').filter((_, i) => i !== index)
+        // setValue(`cargosFuncoes`, newValue) //* Remove item do formulário
+        // setChange(!change)
     }
 
     const handleFileSelect = async event => {
@@ -331,6 +340,16 @@ const FormProfissional = ({ id }) => {
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'fields.setores'
+    })
+
+    //? Gerencia o array de cargos
+    const {
+        fields: cargosFuncoesFields,
+        append: appendCargoFuncao,
+        remove: removeCargoFuncao
+    } = useFieldArray({
+        control,
+        name: 'cargosFuncoes'
     })
 
     return (
@@ -456,45 +475,62 @@ const FormProfissional = ({ id }) => {
                         </CardContent>
                     </Card>
 
-                    <Setor
-                        data={data}
-                        getValues={getValues}
-                        setValue={setValue}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        removeItem={removeItem}
-                        trigger={trigger}
-                        key={change}
-                        fields={fields}
-                        append={append}
-                        remove={remove}
-                    />
+                    <Card>
+                        <CardHeader title='Setores' />
+                        <CardContent>
+                            <Grid container spacing={5}>
+                                {fields &&
+                                    fields.map((item, index) => (
+                                        <Setor
+                                            key={item.id}
+                                            item={item}
+                                            index={index}
+                                            setValue={setValue}
+                                            control={control}
+                                            register={register}
+                                            errors={errors}
+                                            remove={() => remove(index)}
+                                        />
+                                    ))}
+
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant='outlined'
+                                        color='primary'
+                                        onClick={addSetor}
+                                        startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
+                                    >
+                                        Inserir Setor
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
 
                     <Card>
                         <CardHeader title='Cargos e Funções' />
                         <CardContent>
                             <Grid container spacing={5}>
                                 {/* Cargo / Função do profissonal */}
-                                {data && (
-                                    <CargoFuncao
-                                        data={data}
-                                        getValues={getValues}
-                                        control={control}
-                                        register={register}
-                                        errors={errors}
-                                        removeItem={removeItem}
-                                        key={change}
-                                    />
-                                )}
+                                {cargosFuncoesFields &&
+                                    cargosFuncoesFields.map((field, index) => (
+                                        <CargoFuncao
+                                            key={field.id}
+                                            item={field}
+                                            index={index}
+                                            control={control}
+                                            register={register}
+                                            errors={errors}
+                                            remove={() => removeItem(field, index)}
+                                        />
+                                    ))}
+
                                 <Button
                                     variant='outlined'
                                     color='primary'
                                     sx={{ mt: 4, ml: 4 }}
                                     startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
-                                    onClick={() => {
-                                        addItem()
-                                    }}
+                                    onClick={addItem}
                                 >
                                     Inserir cargo
                                 </Button>

@@ -35,7 +35,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 
 const FormRecebimentoMp = ({ id, model }) => {
-    const { menu, user, loggedUnity } = useContext(AuthContext)
+    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
@@ -220,7 +220,12 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setStatus(objStatus)
 
                     setCanEdit({
-                        status: user.papelID == 1 && response.data.info.status < 40 ? true : false,
+                        status:
+                            user.papelID == 1 &&
+                            response.data.info.status < 40 &&
+                            hasSectorPermission(response.data.fieldsHeader?.setores ?? [])
+                                ? true
+                                : false,
                         message:
                             response.data.info.status > 40
                                 ? 'Esse formulário já foi concluído, não é mais possível alterar as informações!'
@@ -822,10 +827,11 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 getValues={getValues}
                                 register={register}
                                 control={control}
-                                disabled={!canEdit.status || hasFormPending}
+                                disabled={hasFormPending}
                                 errors={errors?.blocos}
                                 handleFileSelect={handleFileSelectItem}
                                 handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                status={info.status}
                             />
                         ))}
 

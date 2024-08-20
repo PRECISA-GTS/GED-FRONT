@@ -18,8 +18,10 @@ const Block = ({
     disabled,
     errors,
     handleFileSelect,
-    handleRemoveAnexoItem
+    handleRemoveAnexoItem,
+    status
 }) => {
+    console.log('🚀 ~ status:', status)
     if (!bloco) return null
 
     const { user } = useContext(AuthContext)
@@ -82,6 +84,11 @@ const Block = ({
     }
 
     const validateBlockPermission = () => {
+        if (status >= 40 || user.papelID !== 1) {
+            setBlockPermission(false)
+            return
+        }
+
         //? Sem setor pro bloco, todos acessam
         if (!disabled && (user.admin === 1 || bloco.setores.length === 0)) {
             setBlockPermission(true)

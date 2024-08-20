@@ -46,12 +46,19 @@ const DialogFormConclusion = ({
 }) => {
     if (!modeloID) return null
 
-    const { user, loggedUnity } = useContext(AuthContext)
+    const { user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [result, setResult] = useState({})
     const { data } = useGlobal()
     const router = Router
     const module = router.pathname.split('/')[2]
 
+    // Hora atual: HH:mm
+    const getTimeNow = () => {
+        const date = new Date()
+        const hour = date.getHours()
+        const minute = date.getMinutes()
+        return `${hour}:${minute}`
+    }
     const [profissionaisAprova, setProfissionaisAprova] = useState([])
 
     const DocumentPdf = () => {
@@ -119,6 +126,13 @@ const DialogFormConclusion = ({
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
+                        {!hasSectorPermission(values?.setores ?? []) && (
+                            <Alert severity='warning' sx={{ mb: 4 }}>
+                                <Typography variant='body2'>
+                                    Seu setor não está habilitado para concluir este formulário!
+                                </Typography>
+                            </Alert>
+                        )}
                         {/* Formulário Pendente */}
                         {info.status <= 40 && (
                             <>
@@ -175,6 +189,7 @@ const DialogFormConclusion = ({
                                         title='Hora da conclusão'
                                         name={`fieldsFooter.horaConclusao`}
                                         type='time'
+                                        value={values?.horaConclusao ?? getTimeNow()}
                                         required
                                         register={register}
                                         control={control}
@@ -254,8 +269,10 @@ const DialogFormConclusion = ({
                                 <Button
                                     variant='contained'
                                     disabled={
-                                        info.status < 40 &&
-                                        ((listErrors && listErrors.status) || (user.papelID == 1 && !result.status))
+                                        !hasSectorPermission(values?.setores ?? []) ||
+                                        (info.status < 40 &&
+                                            ((listErrors && listErrors.status) ||
+                                                (user.papelID == 1 && !result.status)))
                                     }
                                     color='primary'
                                     onClick={() => {

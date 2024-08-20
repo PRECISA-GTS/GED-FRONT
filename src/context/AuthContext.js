@@ -26,7 +26,8 @@ const defaultProvider = {
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   loggedUnity: null,
-  setLoggedUnity: () => Promise.resolve()
+  setLoggedUnity: () => Promise.resolve(),
+  hasSectorPermission: () => Boolean
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -309,6 +310,12 @@ const AuthProvider = ({ children }) => {
     }
   }, [router.query.f, router.query.r])
 
+  const hasSectorPermission = setores => {
+    if (!setores || setores.length == 0 || user.admin === 1) return true
+    const hasPermission = setores.some(row => user.setores.some(userSetor => userSetor.id === row.id))
+    return hasPermission
+  }
+
   const values = {
     user,
     getMenu,
@@ -328,7 +335,8 @@ const AuthProvider = ({ children }) => {
     loginFornecedor: handleLoginFornecedor,
     logout: handleLogout,
     register: handleRegister,
-    paramsReport, setParamsReport
+    paramsReport, setParamsReport,
+    hasSectorPermission
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

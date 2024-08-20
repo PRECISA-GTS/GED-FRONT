@@ -4,79 +4,24 @@ import Router from 'next/router'
 import Link from 'next/link'
 import useLoad from 'src/hooks/useLoad'
 import { useGlobal } from 'src/hooks/useGlobal'
-import { AuthContext } from 'src/context/AuthContext'
-import { useContext, useEffect, useState } from 'react'
 
 const ButtonsFixedRight = ({
     btnSend,
     btnSave,
     btnNew,
     btnNext,
-    manualUrl,
     routes,
-    currentUrl,
     disabled,
     disabledSend,
     disabledSubmit,
     handleSubmit,
     handleSend,
     iconConclusion,
-    titleConclusion,
-    setores
+    titleConclusion
 }) => {
-    const { user } = useContext(AuthContext)
     const router = Router
     const { isLoading } = useLoad()
     const { data } = useGlobal()
-    const [sectorPermission, setSectorPermission] = useState(null)
-
-    console.log('🚀 ~ setores profissional:', user.setores)
-
-    const validateConclusionPermissions = () => {
-        if (user.admin === 1 && !disabled && !disabledSend) {
-            setSectorPermission({
-                status: true,
-                message: 'Todos os setores podem concluir este modelo de formulário.'
-            })
-            return
-        }
-
-        if (disabled || disabledSend) {
-            setSectorPermission({
-                status: false,
-                message: 'Este formulário não está aberto para conclusão.'
-            })
-            return
-        }
-
-        if (setores && setores.length === 0) {
-            setSectorPermission({
-                status: true,
-                message: 'Todos os setores podem concluir este modelo de formulário.'
-            })
-            return
-        }
-
-        if (setores && setores.length > 0) {
-            const sectorIncluded = setores.some(setor => user.setores.some(userSetor => userSetor.id === setor.id))
-            if (sectorIncluded) {
-                setSectorPermission({
-                    status: true,
-                    message: 'Seu setor está configurado para concluir este modelo de formulário.'
-                })
-                return
-            }
-        }
-
-        setSectorPermission({
-            status: false,
-            message: 'Seu setor não está configurado para concluir este modelo de formulário.'
-        })
-    }
-
-    useEffect(() => {
-        validateConclusionPermissions()
-    }, [])
 
     return (
         <div className='flex items-center gap-2'>
@@ -98,28 +43,22 @@ const ButtonsFixedRight = ({
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
             {btnSend && data && (
-                <Tooltip title={sectorPermission?.message} placement='bottom'>
-                    <Button
-                        onClick={() => {
-                            if (sectorPermission?.status === true) {
-                                handleSend()
-                            }
-                        }}
-                        type='button'
-                        variant='contained'
-                        size='medium'
-                        color='primary'
-                        readOnly
-                        sx={{
-                            opacity: sectorPermission?.status === false ? 0.5 : 1,
-                            display: 'flex',
-                            gap: 2
-                        }}
-                    >
-                        <Icon icon={iconConclusion ?? 'carbon:send-filled'} />
-                        <span className='hidden sm:block'>{titleConclusion}</span>
-                    </Button>
-                </Tooltip>
+                <Button
+                    onClick={handleSend}
+                    type='button'
+                    variant='contained'
+                    size='medium'
+                    color='primary'
+                    readOnly
+                    disabled={disabled || disabledSend}
+                    sx={{
+                        display: 'flex',
+                        gap: 2
+                    }}
+                >
+                    <Icon icon={iconConclusion ?? 'carbon:send-filled'} />
+                    <span className='hidden sm:block'>{titleConclusion}</span>
+                </Button>
             )}
             {btnSave && (
                 <Button
@@ -127,7 +66,6 @@ const ButtonsFixedRight = ({
                     type='submit'
                     variant='contained'
                     size='medium'
-                    // color={isLoading ? 'secondary' : 'primary'}
                     disabled={disabled || disabledSubmit}
                     sx={{ display: 'flex', gap: 2 }}
                 >
