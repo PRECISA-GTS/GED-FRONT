@@ -112,7 +112,7 @@ const Block = ({
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                        {bloco?.setores && <InfoSetores data={bloco.setores} />}
+                        <InfoSetores data={bloco?.setores ?? []} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>

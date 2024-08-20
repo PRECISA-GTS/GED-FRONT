@@ -27,7 +27,7 @@ const FormSetor = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
     const { title } = useContext(ParametersContext)
-    const { loggedUnity, user } = useContext(AuthContext)
+    const { loggedUnity, user, setUser } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
     const [profissionais, setProfissionais] = useState([])
     const today = new Date().toISOString().substring(0, 10)
@@ -42,6 +42,57 @@ const FormSetor = ({ id }) => {
         register
     } = useForm({ mode: 'onChange' })
 
+    const updateProfessionalSector = values => {
+        //? Atualiza setores ativos no contexto e localstorage
+        const profissionalLogadoAtivoSetor = values.fields.profissionais.find(
+            row =>
+                row.profissional.id === user.profissionalID &&
+                (!row.dataFim || row.dataFim == '' || row.dataFim == null || row.dataFim == '0000-00-00')
+        )
+            ? true
+            : false
+
+        const contextHasSector = user.setores.find(row => row.id === id) ? true : false
+
+        if (profissionalLogadoAtivoSetor && !contextHasSector) {
+            setUser({
+                ...user,
+                setores: [
+                    ...user.setores,
+                    {
+                        id: values.fields.setorID,
+                        nome: values.fields.nome
+                    }
+                ]
+            })
+            localStorage.setItem(
+                'userData',
+                JSON.stringify({
+                    ...user,
+                    setores: [
+                        ...user.setores,
+                        {
+                            id: values.fields.setorID,
+                            nome: values.fields.nome
+                        }
+                    ]
+                })
+            )
+        } else if (!profissionalLogadoAtivoSetor && contextHasSector) {
+            setUser({
+                ...user,
+                setores: user.setores.filter(row => row.id !== id)
+            })
+            localStorage.setItem(
+                'userData',
+                JSON.stringify({
+                    ...user,
+                    setores: user.setores.filter(row => row.id !== id)
+                })
+            )
+        }
+    }
+
     //? Envia dados para a api
     const onSubmit = async data => {
         const values = {
@@ -50,12 +101,12 @@ const FormSetor = ({ id }) => {
             unidadeID: loggedUnity.unidadeID
         }
 
-        console.log('🚀 ~ onSubmit:', values)
-
         if (!validateUniqueEntry(data)) {
             toast.error('Não é permitido repetir profissional ativo em um setor!')
             return
         }
+
+        updateProfessionalSector(values)
 
         try {
             if (type === 'new') {

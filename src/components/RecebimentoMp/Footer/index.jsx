@@ -5,19 +5,21 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
+import { unix } from 'moment'
+import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const RecebimentoMpFooterFields = ({ modeloID, values, disabled, register, errors, setValue, control }) => {
-    const { user } = useContext(AuthContext)
+    const { user, loggedUnity } = useContext(AuthContext)
     const [profissionaisAprova, setProfissionaisAprova] = useState([])
 
-    const getProfissionais = async () => {
-        const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
+    const getProfissionaisSetores = async () => {
+        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
             formularioID: 2, // recebimento de mp
-            modeloID: modeloID
+            modeloID: modeloID,
+            unidadeID: loggedUnity.unidadeID
         })
-        console.log('🚀 ~ response.data:', response.data)
-        setProfissionaisAprova(response.data.aprova)
-        setDefaultProfissional(response.data.aprova)
+        setProfissionaisAprova(response.data.conclui)
+        setDefaultProfissional(response.data.conclui)
     }
 
     const setDefaultProfissional = arrProfissionais => {
@@ -27,13 +29,17 @@ const RecebimentoMpFooterFields = ({ modeloID, values, disabled, register, error
     }
 
     useEffect(() => {
-        getProfissionais()
+        getProfissionaisSetores()
     }, [])
 
     return (
         <Card>
             <CardContent>
                 <Grid container spacing={4}>
+                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                        <InfoSetores data={values?.setores ?? []} />
+                    </Grid>
+
                     {/* Data de abertura */}
                     <DateField
                         xs={12}

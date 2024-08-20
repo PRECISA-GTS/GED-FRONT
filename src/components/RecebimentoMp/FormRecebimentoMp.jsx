@@ -402,7 +402,6 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const conclusionForm = async values => {
-        setOpenModal(false)
         values['conclusion'] = true
         await handleSubmit(onSubmit)(values)
     }
@@ -472,8 +471,10 @@ const FormRecebimentoMp = ({ id, model }) => {
             }
         }
         console.log('🚀 ~ onSubmit data:', data)
+
         startLoading()
         if (id == true) return
+        setOpenModal(false)
         try {
             if (type == 'edit') {
                 setSavingForm(true)
@@ -729,25 +730,28 @@ const FormRecebimentoMp = ({ id, model }) => {
         <>
             <Loading show={isLoading} />
             <form onSubmit={e => customSubmit(e)}>
-                <FormHeader
-                    btnCancel
-                    btnSave={!info.concluido}
-                    btnSend={user.papelID == 1 && info.status >= 30 && !info.concluido}
-                    btnPrint={type == 'edit' ? true : false}
-                    btnDelete={info.status < 40 ? true : false}
-                    onclickDelete={() => setOpenModalDeleted(true)}
-                    actionsData={actionsData}
-                    actions
-                    handleSubmit={() => handleSubmit(onSubmit)}
-                    handleSend={handleSendForm}
-                    iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
-                    title='Recebimento de MP'
-                    btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
-                    handleBtnStatus={() => setOpenModalStatus(true)}
-                    type={type}
-                    status={status}
-                />
+                {!isLoading && (
+                    <FormHeader
+                        btnCancel
+                        btnSave={!info.concluido}
+                        btnSend={user.papelID == 1 && info.status >= 30 && !info.concluido}
+                        btnPrint={type == 'edit' ? true : false}
+                        btnDelete={info.status < 40 ? true : false}
+                        onclickDelete={() => setOpenModalDeleted(true)}
+                        actionsData={actionsData}
+                        actions
+                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSend={handleSendForm}
+                        iconConclusion={'mdi:check-bold'}
+                        titleConclusion={'Concluir Formulário'}
+                        title='Recebimento de MP'
+                        btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
+                        handleBtnStatus={() => setOpenModalStatus(true)}
+                        type={type}
+                        status={status}
+                        setores={fieldsFooter?.setores ?? []}
+                    />
+                )}
                 {/* Div superior com tags e status */}
                 <div className='flex gap-2 mb-2'>
                     {status && (
@@ -872,7 +876,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     )}
 
                     {/* Rodapé inserir assinatura, data e hora */}
-                    {unidade && fieldsFooter && !fieldsFooter.concluded && (
+                    {/* {unidade && fieldsFooter && !fieldsFooter.concluded && (
                         <RecebimentoMpFooterFields
                             modeloID={unidade.modelo.id}
                             values={fieldsFooter}
@@ -882,7 +886,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                             setValue={setValue}
                             control={control}
                         />
-                    )}
+                    )} */}
 
                     {/* Rodapé com informações de conclusão */}
                     {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
@@ -942,6 +946,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         register={register}
                         setValue={setValue}
                         getValues={getValues}
+                        control={control}
                         btnCancel
                         btnConfirm
                         btnConfirmColor='primary'
@@ -951,6 +956,10 @@ const FormRecebimentoMp = ({ id, model }) => {
                         hasNaoConformidade={true}
                         type='recebimentoMp'
                         unity={unidade}
+                        values={fieldsFooter}
+                        formularioID={2} // Recebimento MP
+                        errors={errors}
+                        modeloID={unidade?.modelo?.id}
                     />
 
                     {/* Modal que deleta formulario */}

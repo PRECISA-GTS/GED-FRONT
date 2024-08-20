@@ -28,7 +28,6 @@ const FormParametrosRecebimentoMp = ({ id }) => {
     const [model, setModel] = useState()
     const [headers, setHeaders] = useState()
     const [allOptions, setAllOptions] = useState(null)
-    const [profissionais, setProfissionais] = useState(null)
     const [blocks, setBlocks] = useState()
     const [orientacoes, setOrientacoes] = useState()
     const [openModalConfirmScore, setOpenModalConfirmScore] = useState(false)
@@ -93,6 +92,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
             orientacoes: values.orientations ?? null
         }
         console.log('🚀 ~ onSubmit: ', data)
+        // return
 
         setHeaders(null) //? Pra exibir loading
 
@@ -247,14 +247,14 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         }
     }
 
-    const getProfissionaisModelo = async model => {
-        const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
+    const getSetoresModelo = async model => {
+        const response = await api.post(`/cadastros/setor/getSetoresAssinatura`, {
             formularioID: 2, // recebimento MP
             modeloID: id
         })
         const updatedModel = { ...model }
-        updatedModel.profissionaisPreenchem = response.data.preenche
-        updatedModel.profissionaisAprovam = response.data.aprova
+        updatedModel.setoresPreenchem = response.data.preenche
+        updatedModel.setoresConcluem = response.data.conclui
         reset({
             ...getValues(),
             model: updatedModel
@@ -285,13 +285,13 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                     setAllOptions({
                         itens: response.data.options?.itens
                     })
-                    setProfissionais(response.data.options?.profissionais)
+                    setSetores(response.data.options?.setores)
                     setOrientacoes(response.data.orientations)
 
                     //* Insere os dados no formulário
                     reset(response.data)
 
-                    getProfissionaisModelo(response.data.model)
+                    getSetoresModelo(response.data.model)
 
                     setTimeout(() => {
                         response.data.blocks &&
@@ -348,9 +348,9 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                     handleClose={() => setOpenModalDeleted(false)}
                 />
                 {/* Modelo */}
-                {model && (
-                    <Card>
-                        <CardContent>
+                <Card>
+                    <CardContent>
+                        {model && (
                             <Grid container spacing={4}>
                                 <Input
                                     className='order-1'
@@ -373,10 +373,44 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                     register={register}
                                 />
 
+                                {/* Setores que preenchem */}
+                                {setores && (
+                                    <>
+                                        <Select
+                                            xs={12}
+                                            md={6}
+                                            className='order-5'
+                                            multiple
+                                            title='Setores que preenchem cabeçalho'
+                                            name={`model.setoresPreenchem`}
+                                            options={setores ?? []}
+                                            value={model?.setoresPreenchem ?? []}
+                                            register={register}
+                                            setValue={setValue}
+                                            control={control}
+                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                        />
+                                        <Select
+                                            xs={12}
+                                            md={6}
+                                            className='order-5'
+                                            multiple
+                                            title='Setores que concluem o formulário'
+                                            name={`model.setoresConcluem`}
+                                            options={setores ?? []}
+                                            value={model?.setoresConcluem ?? []}
+                                            register={register}
+                                            setValue={setValue}
+                                            control={control}
+                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                        />
+                                    </>
+                                )}
+
                                 <Input
                                     xs={12}
                                     md={12}
-                                    className='order-4'
+                                    className='order-6'
                                     title='Cabeçalho'
                                     name={`model.cabecalho`}
                                     required={false}
@@ -386,50 +420,12 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                     control={control}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
-
-                                {/* Profissionais que preenchem */}
-                                {profissionais && (
-                                    <>
-                                        {/* <Select
-                                            xs={12}
-                                            md={6}
-                                            className='order-5'
-                                            multiple
-                                            title='Profissionais que preenchem'
-                                            name={`model.profissionaisPreenchem`}
-                                            options={profissionais ?? []}
-                                            value={model?.profissionaisPreenchem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                        /> */}
-
-                                        <Select
-                                            xs={12}
-                                            md={12}
-                                            className='order-5'
-                                            multiple
-                                            title='Profissionais que aprovam'
-                                            name={`model.profissionaisAprovam`}
-                                            options={profissionais ?? []}
-                                            value={model?.profissionaisAprovam ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
-                                        />
-                                    </>
-                                )}
                             </Grid>
-                        </CardContent>
-                    </Card>
-                )}
+                        )}
 
-                {/* Cabeçalho */}
-                {headers && (
-                    <Card sx={{ mt: 4 }}>
-                        <CardContent>
-                            {/* Lista campos */}
+                        {/* Cabeçalho */}
+                        {headers && (
+                            /* Lista campos */
                             <List component='nav' aria-label='main mailbox'>
                                 <Grid container spacing={2}>
                                     {/* Cabeçalho */}
@@ -528,9 +524,9 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                     ))}
                                 </Grid>
                             </List>
-                        </CardContent>
-                    </Card>
-                )}
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* Blocos */}
                 {!blocks && <Loading />}

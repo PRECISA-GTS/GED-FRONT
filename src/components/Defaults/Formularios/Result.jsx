@@ -20,7 +20,7 @@ const Result = ({ title, name, value, papelID, register, setValue, setResult, op
     console.log('🚀 ~ Result:', name)
 
     return (
-        <Grid container spacing={2} sx={{ mt: 4 }}>
+        <Grid container spacing={2}>
             {/* Somente fábrica */}
             {papelID && papelID == 1 && (
                 <>

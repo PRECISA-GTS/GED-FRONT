@@ -149,6 +149,22 @@ const FormProfissional = ({ id }) => {
             reset(response.data)
             setPhotoProfile(response.data.imagem)
             setData(response.data)
+
+            //? Atualiza setores ativos no contexto e localstorage
+            if (id === user.profissionalID) {
+                const activeSectors = response.data.fields.setores.filter(row => row.status === 1).map(row => row.setor)
+                setUser({
+                    ...user,
+                    setores: activeSectors
+                })
+                localStorage.setItem(
+                    'userData',
+                    JSON.stringify({
+                        ...user,
+                        setores: activeSectors
+                    })
+                )
+            }
         } catch (error) {
             console.log(error)
         }

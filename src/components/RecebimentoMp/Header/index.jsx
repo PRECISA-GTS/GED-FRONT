@@ -8,6 +8,7 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import HeaderInfo from './Info'
 import RecebimentoMpProdutos from '../Produtos'
+import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const HeaderFields = ({
     recebimentoMpID,
@@ -38,10 +39,11 @@ const HeaderFields = ({
     const [produtos, setProdutos] = useState([])
     const [change, setChange] = useState(false)
 
-    const getProfissionais = async () => {
-        const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
+    const getProfissionaisSetores = async () => {
+        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
             formularioID: 2, // recebimento de MP
-            modeloID: modelo.id
+            modeloID: modelo.id,
+            unidadeID: loggedUnity.unidadeID
         })
         setProfissionaisPreenchimento(response.data.preenche)
         setDefaultProfissional(response.data.preenche)
@@ -102,17 +104,21 @@ const HeaderFields = ({
 
     useEffect(() => {
         getFornecedoresAprovados()
-        getProfissionais()
+        getProfissionaisSetores()
     }, [])
 
     return (
         <>
-            <Grid container alignItems='stretch' spacing={6}>
-                {/* Bloco esquerda (cabeçalho) */}
-                <Grid item xs={12} md={9}>
-                    <Card style={{ height: '100%' }}>
-                        {/* Header */}
-                        <CardContent>
+            <Card style={{ height: '100%' }}>
+                <CardContent>
+                    <Grid container alignItems='stretch' spacing={6}>
+                        <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                            <InfoSetores data={values?.setores ?? []} />
+                        </Grid>
+
+                        {/* Bloco esquerda (cabeçalho) */}
+                        <Grid item xs={12} md={10}>
+                            {/* Header */}
                             <Grid container spacing={4}>
                                 {/* Inputs fixos */}
                                 {/* Data de abertura */}
@@ -234,31 +240,30 @@ const HeaderFields = ({
                                     alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                             </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
+                        </Grid>
 
-                {/* Bloco direita (informações do fornecedor) */}
-                <Grid item xs={12} md={3}>
-                    <HeaderInfo value={fornecedor} />
-                </Grid>
-            </Grid>
+                        {/* Bloco direita (informações do fornecedor) */}
+                        <Grid item xs={12} md={2}>
+                            <HeaderInfo value={fornecedor} />
+                        </Grid>
+                    </Grid>
 
-            {/* Produtos */}
-            <Card>
-                <CardContent>
-                    {/* Listagem dos produtos selecionados pra esse fornecedor */}
-                    <RecebimentoMpProdutos
-                        key={change}
-                        produtos={produtos}
-                        setProdutos={setProdutos}
-                        getValues={getValues}
-                        setValue={setValue}
-                        register={register}
-                        control={control}
-                        errors={errors}
-                        disabled={disabled}
-                    />
+                    {/* Produtos */}
+                    <Grid container alignItems='stretch' spacing={6} sx={{ mt: 2 }}>
+                        <Grid item xs={12}>
+                            <RecebimentoMpProdutos
+                                key={change}
+                                produtos={produtos}
+                                setProdutos={setProdutos}
+                                getValues={getValues}
+                                setValue={setValue}
+                                register={register}
+                                control={control}
+                                errors={errors}
+                                disabled={disabled}
+                            />
+                        </Grid>
+                    </Grid>
                 </CardContent>
             </Card>
         </>

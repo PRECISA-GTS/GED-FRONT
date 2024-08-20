@@ -6,14 +6,19 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import { AuthContext } from 'src/context/AuthContext'
-import { Alert, Typography } from '@mui/material'
-import { useState, useContext } from 'react'
+import { Alert, Grid, Typography } from '@mui/material'
+import { useState, useContext, useEffect } from 'react'
 import Result from 'src/components/Defaults/Formularios/Result'
 import { BlobProvider, Document, Page } from '@react-pdf/renderer'
 import { useGlobal } from 'src/hooks/useGlobal'
 import Header from 'src/components/Reports/Header'
 import ContentFornecedor from 'src/pages/relatorio/formularios/fornecedor/Content'
 import Footer from 'src/components/Reports/Footer'
+import InfoSetores from '../Formularios/InfoSetores'
+import DateField from 'src/components/Form/DateField'
+import Input from 'src/components/Form/Input'
+import Select from 'src/components/Form/Select'
+import { api } from 'src/configs/api'
 
 const DialogFormConclusion = ({
     title,
@@ -30,15 +35,24 @@ const DialogFormConclusion = ({
     listErrors,
     canApprove,
     hasNaoConformidade,
+    control,
     handleSend,
     type,
-    unity
+    unity,
+    values,
+    errors,
+    formularioID,
+    modeloID
 }) => {
+    if (!modeloID) return null
+
     const { user, loggedUnity } = useContext(AuthContext)
     const [result, setResult] = useState({})
     const { data } = useGlobal()
     const router = Router
     const module = router.pathname.split('/')[2]
+
+    const [profissionaisAprova, setProfissionaisAprova] = useState([])
 
     const DocumentPdf = () => {
         return (
@@ -59,9 +73,31 @@ const DialogFormConclusion = ({
         )
     }
 
+    const getProfissionaisSetores = async () => {
+        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
+            formularioID: formularioID, // fornecedor, recebimento de mp, limpeza...
+            modeloID: modeloID,
+            unidadeID: loggedUnity.unidadeID
+        })
+        setProfissionaisAprova(response.data.conclui)
+        setDefaultProfissional(response.data.conclui)
+    }
+
+    const setDefaultProfissional = arrProfissionais => {
+        const profissionalID = user.profissionalID //? Profissional logado
+        const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
+        if (profissional && profissional.id > 0) setValue('fieldsFooter.profissional', profissional)
+    }
+
+    useEffect(() => {
+        getProfissionaisSetores()
+    }, [])
+
     return (
         <>
             <Dialog
+                fullWidth
+                maxWidth='md'
                 open={openModal}
                 aria-labelledby='form-dialog-title'
                 disableEscapeKeyDown
@@ -71,7 +107,16 @@ const DialogFormConclusion = ({
                     }
                 }}
             >
-                <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
+                <DialogTitle id='form-dialog-title'>
+                    <Grid container spacing={6}>
+                        <Grid item xs={12} md={6}>
+                            {title}
+                        </Grid>
+                        <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
+                            <InfoSetores data={values?.setores ?? []} />
+                        </Grid>
+                    </Grid>
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
                         {/* Formulário Pendente */}
@@ -106,36 +151,85 @@ const DialogFormConclusion = ({
                                     </Alert>
                                 )}
 
-                                {user.papelID == 1 && (
-                                    <Result
-                                        title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
-                                        name={'status'}
-                                        value={result}
+                                <Grid container spacing={4} sx={{ mt: 4 }}>
+                                    {/* Data da conclusão */}
+                                    <DateField
+                                        xs={12}
+                                        md={3}
+                                        title='Data da conclusão'
+                                        name={`fieldsFooter.dataConclusao`}
+                                        type='date'
+                                        value={values?.dataConclusao ?? new Date()}
+                                        register={register}
+                                        control={control}
+                                        typeValidation='dataPassado'
+                                        daysValidation={365}
+                                        required
+                                        errors={errors?.fieldsFooter?.dataConclusao}
+                                    />
+
+                                    {/* Hora de Abertura */}
+                                    <Input
+                                        xs={12}
+                                        md={3}
+                                        title='Hora da conclusão'
+                                        name={`fieldsFooter.horaConclusao`}
+                                        type='time'
+                                        required
+                                        register={register}
+                                        control={control}
+                                        errors={errors?.fieldsFooter?.horaConclusao}
+                                    />
+
+                                    {/* Profissional responsável */}
+                                    <Select
+                                        xs={12}
+                                        md={6}
+                                        title='Profissional que aprova'
+                                        name={`fieldsFooter.profissional`}
+                                        type='string'
+                                        required
+                                        options={profissionaisAprova ?? []}
                                         register={register}
                                         setValue={setValue}
-                                        setResult={setResult}
-                                        papelID={user.papelID}
-                                        hasNaoConformidade={hasNaoConformidade}
-                                        options={[
-                                            {
-                                                value: 70,
-                                                color: 'success',
-                                                label: 'Aprovado',
-                                                disabled: canApprove ? false : true
-                                            },
-                                            {
-                                                value: 60,
-                                                color: 'warning',
-                                                label: 'Aprovado Parcial'
-                                            },
-                                            {
-                                                value: 50,
-                                                color: 'error',
-                                                label: 'Reprovado'
-                                            }
-                                        ]}
+                                        control={control}
+                                        errors={errors?.fieldsFooter?.profissional}
                                     />
-                                )}
+
+                                    {/* Resultado */}
+                                    <Grid item xs={12}>
+                                        {user.papelID == 1 && (
+                                            <Result
+                                                title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
+                                                name={'status'}
+                                                value={result}
+                                                register={register}
+                                                setValue={setValue}
+                                                setResult={setResult}
+                                                papelID={user.papelID}
+                                                hasNaoConformidade={hasNaoConformidade}
+                                                options={[
+                                                    {
+                                                        value: 70,
+                                                        color: 'success',
+                                                        label: 'Aprovado',
+                                                        disabled: canApprove ? false : true
+                                                    },
+                                                    {
+                                                        value: 60,
+                                                        color: 'warning',
+                                                        label: 'Aprovado Parcial'
+                                                    },
+                                                    {
+                                                        value: 50,
+                                                        color: 'error',
+                                                        label: 'Reprovado'
+                                                    }
+                                                ]}
+                                            />
+                                        )}
+                                    </Grid>
+                                </Grid>
                             </>
                         )}
 

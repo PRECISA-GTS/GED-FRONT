@@ -43,8 +43,10 @@ const FormHeader = ({
     type,
     status,
     partialRoute,
-    outsideID
+    outsideID,
+    setores
 }) => {
+    console.log('🚀 ~ status:', setores)
     const router = Router
     const { routes } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)
@@ -193,6 +195,7 @@ const FormHeader = ({
                             // componentSaveReport={componentSaveReport}
                             iconConclusion={iconConclusion}
                             titleConclusion={titleConclusion}
+                            setores={setores}
                         />
                     </div>
 
