@@ -1,4 +1,4 @@
-import { Card, CardContent, Grid } from '@mui/material'
+import { Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material'
 import { useEffect, useState, useContext } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import Fields from 'src/components/Defaults/Formularios/Fields'
@@ -8,13 +8,13 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import HeaderInfo from './Info'
 import RecebimentoMpProdutos from '../Produtos'
+import Icon from 'src/@core/components/icon'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const HeaderFields = ({
     recebimentoMpID,
     modelo,
     values,
-    produtosRecebimento,
     fields,
     disabled,
     register,
@@ -30,14 +30,16 @@ const HeaderFields = ({
     openModalNew,
     setOpenModalNew,
     newChange,
-    setNewChange
+    setNewChange,
+
+    setProdutos,
+    produtos
 }) => {
+    console.log('🚀 ~ produtos:', produtos)
     const { user, loggedUnity } = useContext(AuthContext)
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
     const [fornecedor, setFornecedor] = useState(null)
-    const [produtos, setProdutos] = useState([])
-    const [change, setChange] = useState(false)
 
     const getProfissionaisSetores = async () => {
         const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
@@ -56,7 +58,7 @@ const HeaderFields = ({
             modelo: modelo
         })
         setFornecedoresAprovados(response.data)
-        selectFornecedor(values.fornecedor, response.data, false)
+        selectFornecedor(values.fornecedor, response.data)
     }
 
     const setDefaultProfissional = arrProfissionais => {
@@ -65,47 +67,40 @@ const HeaderFields = ({
         if (profissional && profissional.id > 0) setValue('fieldsHeader.profissional', profissional)
     }
 
-    const selectFornecedor = (e, fornecedoresAprovados, clearChecks) => {
-        setChange(!change)
-
+    const selectFornecedor = (e, fornecedoresAprovados) => {
         if (!e) {
             setFornecedor(null)
             setProdutos([])
             return
         }
-
-        fornecedoresAprovados &&
-            fornecedoresAprovados.forEach(fornecedor => {
-                if (fornecedor.id === e.id) {
-                    if (!clearChecks) {
-                        //? Carregou a página, marca os produtos que estão no recebimento e no fornecedor
-                        produtosRecebimento &&
-                            produtosRecebimento.length > 0 &&
-                            produtosRecebimento.map(produtoRecebimento => {
-                                fornecedor.produtos.forEach(produto => {
-                                    if (produto.produtoID === produtoRecebimento.produto.id) {
-                                        produto.checked_ = true
-                                    }
-                                })
-                            })
-                    }
-
-                    if (clearChecks) {
-                        //? Trocou o fornecedor
-                        fornecedor.produtos.forEach(produto => {
-                            produto.checked_ = false
-                        })
-                    }
-                    setFornecedor(fornecedor)
-                    setProdutos(fornecedor.produtos)
+        const checkedProducts = produtos.filter(row => row.checked_ === true).map(row => row.produtoID)
+        const newProducts = fornecedoresAprovados
+            .find(row => row.id === e.id)
+            ?.produtos.map(produto => {
+                if (checkedProducts.includes(produto.produtoID)) {
+                    return { ...produto, checked_: true }
                 }
+                return produto
             })
+        setProdutos(newProducts)
+        setValue('produtos', newProducts)
+    }
+
+    const handleCheck = (e, index) => {
+        const { checked } = e.target
+        setValue(`produtos[${index}].checked_`, checked)
+
+        const updatedProducts = produtos.map((produto, i) =>
+            i === index ? { ...produto, checked_: checked } : produto
+        )
+
+        setProdutos(updatedProducts)
     }
 
     useEffect(() => {
         getFornecedoresAprovados()
         getProfissionaisSetores()
-    }, [])
+    }, [values])
 
     return (
         <>
@@ -230,7 +225,7 @@ const HeaderFields = ({
                                     name={`fieldsHeader.fornecedor`}
                                     type='string'
                                     options={fornecedoresAprovados}
-                                    onChange={e => selectFornecedor(e, fornecedoresAprovados, true)}
+                                    onChange={e => selectFornecedor(e, fornecedoresAprovados)}
                                     value={values?.fornecedor}
                                     disabled={disabled}
                                     register={register}
@@ -251,17 +246,39 @@ const HeaderFields = ({
                     {/* Produtos */}
                     <Grid container alignItems='stretch' spacing={6} sx={{ mt: 2 }}>
                         <Grid item xs={12}>
-                            <RecebimentoMpProdutos
-                                key={change}
-                                produtos={produtos}
-                                setProdutos={setProdutos}
-                                getValues={getValues}
-                                setValue={setValue}
-                                register={register}
-                                control={control}
-                                errors={errors}
-                                disabled={disabled}
-                            />
+                            <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700 }}>
+                                Produtos aprovados do fornecedor
+                            </Typography>
+                            {produtos && produtos.length == 0 && (
+                                <Typography color='warning' variant='subtitle1' className='italic'>
+                                    <Box display='flex' alignItems='center' sx={{ gap: 1 }}>
+                                        <Icon icon='typcn:warning' color='#FFC107' />
+                                        <p>Nenhum fornecedor selecionado!</p>
+                                    </Box>
+                                </Typography>
+                            )}
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            {produtos &&
+                                produtos.map((produto, index) => (
+                                    <>
+                                        <RecebimentoMpProdutos
+                                            key={index}
+                                            index={index}
+                                            produto={produto}
+                                            setProdutos={setProdutos}
+                                            handleCheck={handleCheck}
+                                            getValues={getValues}
+                                            setValue={setValue}
+                                            register={register}
+                                            control={control}
+                                            errors={errors}
+                                            disabled={disabled}
+                                        />
+                                        {index < produtos.length - 1 && <Divider />}
+                                    </>
+                                ))}
                         </Grid>
                     </Grid>
                 </CardContent>

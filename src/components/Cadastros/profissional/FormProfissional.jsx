@@ -227,10 +227,6 @@ const FormProfissional = ({ id }) => {
         }
 
         removeCargoFuncao(index)
-
-        // const newValue = getValues('cargosFuncoes').filter((_, i) => i !== index)
-        // setValue(`cargosFuncoes`, newValue) //* Remove item do formulário
-        // setChange(!change)
     }
 
     const handleFileSelect = async event => {

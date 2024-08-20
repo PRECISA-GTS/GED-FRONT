@@ -45,7 +45,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const [naoConformidade, setNaoConformidade] = useState(null)
     const [canApprove, setCanApprove] = useState(true) //? Se true, pode aprovar o formulário
     const [unidade, setUnidade] = useState(null)
-    const [produtos, setProdutos] = useState([])
+    const [produtosFornecedor, setProdutosFornecedor] = useState([])
     const [grupoAnexo, setGrupoAnexo] = useState([])
     const [status, setStatus] = useState(null)
     const { createNewNotification } = useContext(NotificationContext)
@@ -203,7 +203,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
-                    setProdutos(response.data.produtos)
+                    setProdutosFornecedor(response.data.produtos)
                     setBlocos(response.data.blocos)
                     setGrupoAnexo(response.data.grupoAnexo)
                     setInfo(response.data.info)
@@ -281,8 +281,8 @@ const FormRecebimentoMp = ({ id, model }) => {
         })
 
         //? Produtos
-        if (produtos && produtos.length > 0) {
-            produtos.forEach((produto, indexProduto) => {
+        if (produtosFornecedor && produtosFornecedor.length > 0) {
+            produtosFornecedor.forEach((produto, indexProduto) => {
                 produto.produtoAnexosDescricao &&
                     produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
@@ -475,7 +475,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ onSubmit data:', data)
+        console.log('🚀 ~ onSubmit data:', data.form.produtos)
+        // return
 
         startLoading()
         if (id == true) return
@@ -662,56 +663,6 @@ const FormRecebimentoMp = ({ id, model }) => {
         }
     }
 
-    // const changeAllOptions = colIndex => {
-    //     const tempBlocos = [...blocos]
-
-    //     //? Formulário
-    //     tempBlocos.map((bloco, index) => {
-    //         // bloco
-    //         bloco.itens.map((item, indexItem) => {
-    //             // item
-    //             setValue(`blocos[${index}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
-    //         })
-    //     })
-
-    //     //? Estado
-    //     setBlocos(prev =>
-    //         prev.map(bloco => ({
-    //             ...bloco,
-    //             itens: bloco.itens.map(item => ({
-    //                 ...item,
-    //                 resposta:
-    //                     item.alternativas[colIndex] && item.alternativas[colIndex].id > 0
-    //                         ? item.alternativas[colIndex]
-    //                         : null
-    //             }))
-    //         }))
-    //     )
-    //     setChange(!change)
-    // }
-
-    // const changeAllOptions = colIndex => {
-    //     const tempBlocos = [...blocos]
-
-    //     tempBlocos.forEach((bloco, blocoIndex) => {
-    //         bloco.itens.forEach((item, itemIndex) => {
-    //             const newResposta = item.alternativas[colIndex]
-
-    //             // Atualiza o valor no formulário
-    //             setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
-
-    //             // Atualiza o estado local (blocos)
-    //             item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
-    //         })
-    //     })
-
-    //     // Atualiza o estado com o novo array de blocos
-    //     setBlocos(tempBlocos)
-
-    //     // Troca o estado de change para forçar a renderização (se necessário)
-    //     setChange(prevChange => !prevChange)
-    // }
-
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
         e.preventDefault()
@@ -721,7 +672,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     useEffect(() => {
         getData()
-    }, [id, savingForm])
+    }, [id])
 
     useEffect(() => {
         checkErrors()
@@ -791,6 +742,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
                     {unidade && (
                         <HeaderFields
+                            key={unidade.unidadeID}
                             nameSelected={nameSelected}
                             setNameSelected={setNameSelected}
                             columnSelected={columnSelected}
@@ -802,7 +754,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                             recebimentoMpID={id}
                             modelo={unidade.modelo}
                             values={fieldsHeader}
-                            produtosRecebimento={produtos}
                             fields={field}
                             getValues={getValues}
                             disabled={!canEdit.status}
@@ -811,9 +762,10 @@ const FormRecebimentoMp = ({ id, model }) => {
                             setValue={setValue}
                             control={control}
                             getAddressByCep={getAddressByCep}
+                            setProdutos={setProdutosFornecedor}
+                            produtos={produtosFornecedor}
                         />
                     )}
-
                     {/* Blocos */}
                     {blocos &&
                         blocos.map((bloco, index) => (
@@ -834,7 +786,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 status={info.status}
                             />
                         ))}
-
                     {/* Grupo de anexos */}
                     {grupoAnexo &&
                         grupoAnexo.map((grupo, indexGrupo) => (
@@ -852,7 +803,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 }}
                             />
                         ))}
-
                     {/* Observação do formulário */}
                     {info && (
                         <>
@@ -880,27 +830,12 @@ const FormRecebimentoMp = ({ id, model }) => {
                             </Card>
                         </>
                     )}
-
-                    {/* Rodapé inserir assinatura, data e hora */}
-                    {/* {unidade && fieldsFooter && !fieldsFooter.concluded && (
-                        <RecebimentoMpFooterFields
-                            modeloID={unidade.modelo.id}
-                            values={fieldsFooter}
-                            register={register}
-                            disabled={false}
-                            errors={errors}
-                            setValue={setValue}
-                            control={control}
-                        />
-                    )} */}
-
                     {/* Rodapé com informações de conclusão */}
                     {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
                         <Typography variant='caption'>
                             {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
                         </Typography>
                     )}
-
                     {/* Não Conformidade */}
                     {info.naoConformidade && (
                         <RecebimentoMpNaoConformidade
@@ -914,13 +849,11 @@ const FormRecebimentoMp = ({ id, model }) => {
                             errors={errors}
                         />
                     )}
-
                     <HistoricForm
                         key={change}
                         id={id}
                         parFormularioID={2} // Recebimento MP
                     />
-
                     {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
                     {openModalStatus && (
                         <DialogFormStatus
@@ -938,7 +871,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                             handleSubmit={false}
                         />
                     )}
-
                     {/* Dialog de confirmação de envio */}
                     <DialogFormConclusion
                         openModal={openModal}
@@ -967,7 +899,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                         errors={errors}
                         modeloID={unidade?.modelo?.id}
                     />
-
                     {/* Modal que deleta formulario */}
                     <DialogDelete
                         title='Excluir Formulário'
