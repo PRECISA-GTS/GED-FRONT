@@ -21,12 +21,10 @@ const Block = ({
     handleRemoveAnexoItem,
     status
 }) => {
-    console.log('🚀 ~ status:', status)
     if (!bloco) return null
 
-    const { user } = useContext(AuthContext)
+    const { user, hasSectorPermission } = useContext(AuthContext)
     const { settings } = useContext(SettingsContext)
-    const modeTheme = settings.mode
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
     const [blockPermission, setBlockPermission] = useState(false)
 
@@ -84,8 +82,6 @@ const Block = ({
     }
 
     const validateBlockPermission = () => {
-        console.log('🚀 ~ blockPermission:', disabled, blockPermission)
-
         if (status >= 40 || user.papelID !== 1) {
             setBlockPermission(false)
             return
@@ -97,14 +93,11 @@ const Block = ({
             return
         }
 
-        //? Se bloco for do setor do profissional, ele tem acesso
-        bloco.profissionais &&
-            bloco.profissionais.map(prof => {
-                if (!disabled && prof.id === user.profissionalID) {
-                    setBlockPermission(true)
-                    return
-                }
-            })
+        //? Se bloco conter pelo menos 1 setor do profissional
+        if (hasSectorPermission(bloco?.setores ?? [])) {
+            setBlockPermission(true)
+            return
+        }
     }
 
     useEffect(() => {
