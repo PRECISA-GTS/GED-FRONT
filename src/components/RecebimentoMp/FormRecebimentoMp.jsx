@@ -45,7 +45,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const [naoConformidade, setNaoConformidade] = useState(null)
     const [canApprove, setCanApprove] = useState(true) //? Se true, pode aprovar o formulário
     const [unidade, setUnidade] = useState(null)
-    const [produtosFornecedor, setProdutosFornecedor] = useState([])
+    const [produtos, setProdutos] = useState([])
     const [grupoAnexo, setGrupoAnexo] = useState([])
     const [status, setStatus] = useState(null)
     const { createNewNotification } = useContext(NotificationContext)
@@ -203,7 +203,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
-                    setProdutosFornecedor(response.data.produtos)
+                    setProdutos(response.data.produtos)
                     setBlocos(response.data.blocos)
                     setGrupoAnexo(response.data.grupoAnexo)
                     setInfo(response.data.info)
@@ -281,8 +281,8 @@ const FormRecebimentoMp = ({ id, model }) => {
         })
 
         //? Produtos
-        if (produtosFornecedor && produtosFornecedor.length > 0) {
-            produtosFornecedor.forEach((produto, indexProduto) => {
+        if (produtos && produtos.length > 0) {
+            produtos.forEach((produto, indexProduto) => {
                 produto.produtoAnexosDescricao &&
                     produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
@@ -672,7 +672,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     useEffect(() => {
         getData()
-    }, [id])
+    }, [id, savingForm])
 
     useEffect(() => {
         checkErrors()
@@ -762,8 +762,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                             setValue={setValue}
                             control={control}
                             getAddressByCep={getAddressByCep}
-                            setProdutos={setProdutosFornecedor}
-                            produtos={produtosFornecedor}
+                            setProdutos={setProdutos}
+                            produtos={produtos}
                         />
                     )}
                     {/* Blocos */}
@@ -837,7 +837,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         </Typography>
                     )}
                     {/* Não Conformidade */}
-                    {info.naoConformidade && (
+                    {/* {info.naoConformidade && (
                         <RecebimentoMpNaoConformidade
                             recebimentoMpID={id}
                             values={naoConformidade}
@@ -848,7 +848,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                             setValue={setValue}
                             errors={errors}
                         />
-                    )}
+                    )} */}
                     <HistoricForm
                         key={change}
                         id={id}

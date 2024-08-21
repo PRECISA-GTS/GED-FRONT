@@ -35,7 +35,7 @@ const HeaderFields = ({
     setProdutos,
     produtos
 }) => {
-    console.log('🚀 ~ produtos:', produtos)
+    console.log('🚀 ~ HeaderFields produtos:', produtos)
     const { user, loggedUnity } = useContext(AuthContext)
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
