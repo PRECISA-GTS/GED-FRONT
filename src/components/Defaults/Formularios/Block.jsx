@@ -84,6 +84,8 @@ const Block = ({
     }
 
     const validateBlockPermission = () => {
+        console.log('🚀 ~ blockPermission:', disabled, blockPermission)
+
         if (status >= 40 || user.papelID !== 1) {
             setBlockPermission(false)
             return
@@ -107,7 +109,7 @@ const Block = ({
 
     useEffect(() => {
         validateBlockPermission()
-    }, [])
+    }, [user, disabled])
 
     return (
         <Card key={Math.random()}>

@@ -7,6 +7,7 @@ import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import HeaderInfo from './Info'
+import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const HeaderFields = ({
     limpezaID,
@@ -46,11 +47,15 @@ const HeaderFields = ({
         <>
             <Grid container alignItems='stretch' spacing={4}>
                 {/* Bloco esquerda (cabeçalho) */}
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={10}>
                     <Card style={{ height: '100%' }}>
                         {/* Header */}
                         <CardContent>
                             <Grid container spacing={4}>
+                                <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                                    <InfoSetores data={values?.setores ?? []} />
+                                </Grid>
+
                                 {/* Inputs fixos */}
                                 {/* Data de abertura */}
                                 <DateField
@@ -145,7 +150,7 @@ const HeaderFields = ({
                 </Grid>
 
                 {/* Bloco direita (informações) */}
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={2}>
                     <HeaderInfo value={null} />
                 </Grid>
             </Grid>

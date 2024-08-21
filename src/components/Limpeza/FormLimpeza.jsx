@@ -31,7 +31,7 @@ import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import HistoricForm from '../Defaults/HistoricForm'
 
 const FormLimpeza = ({ id }) => {
-    const { menu, user, loggedUnity } = useContext(AuthContext)
+    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
     const [savingForm, setSavingForm] = useState(false)
     const [loadingFileItem, setLoadingFileItem] = useState(false)
@@ -178,7 +178,7 @@ const FormLimpeza = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             })
                 .then(response => {
-                    console.log('Nova limpeza getData: ', response.data)
+                    console.log('getData: ', response.data)
 
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
@@ -199,7 +199,12 @@ const FormLimpeza = ({ id }) => {
                     setStatus(objStatus)
 
                     setCanEdit({
-                        status: user.papelID == 1 && response.data.info.status < 40 ? true : false,
+                        status:
+                            user.papelID == 1 &&
+                            response.data.info.status < 40 &&
+                            hasSectorPermission(response.data.fieldsHeader?.setores ?? [])
+                                ? true
+                                : false,
                         message:
                             response.data.info.status > 40
                                 ? 'Esse formulário já foi concluído, não é mais possível alterar as informações!'
@@ -611,12 +616,12 @@ const FormLimpeza = ({ id }) => {
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir Formulário'}
                     title='Limpeza'
-                    // componentSaveReport={<DadosRecebimentoMp />}
                     componentSaveReport={null}
                     btnStatus={type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
+                    setores={fieldsFooter?.setores ?? []}
                 />
 
                 {/* Div superior com tags e status */}
@@ -692,45 +697,10 @@ const FormLimpeza = ({ id }) => {
                                 errors={errors?.blocos}
                                 handleFileSelect={handleFileSelectItem}
                                 handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                status={info.status}
                             />
                         ))}
-                    {/* {blocos &&
-                        blocos.map((bloco, index) => (
-                            <Block
-                                key={change}
-                                index={index}
-                                blockKey={`parLimpezaModeloBlocoID`}
-                                handleFileSelect={handleFileSelectItem}
-                                setItemResposta={setItemResposta}
-                                handleRemoveAnexoItem={handleRemoveAnexoItem}
-                                setBlocos={setBlocos}
-                                changeAllOptions={changeAllOptions}
-                                values={bloco}
-                                control={control}
-                                getValues={getValues}
-                                register={register}
-                                setValue={setValue}
-                                errors={errors?.blocos}
-                                disabled={!canEdit.status}
-                            />
-                        ))} */}
-                    {/* Grupo de anexos */}
-                    {/* {grupoAnexo &&
-                        grupoAnexo.map((grupo, indexGrupo) => (
-                            <AnexoModeView
-                                key={indexGrupo}
-                                values={{
-                                    grupo: grupo,
-                                    loadingFile: loadingFileGroup,
-                                    indexGrupo: indexGrupo,
-                                    handleFileSelect: handleFileSelectGroup,
-                                    handleRemove: handleRemoveAnexoGroup,
-                                    folder: 'grupo-anexo',
-                                    disabled: !canEdit.status,
-                                    error: errors
-                                }}
-                            />
-                        ))} */}
+
                     {/* Observação do formulário */}
                     {info && (
                         <>
@@ -759,7 +729,7 @@ const FormLimpeza = ({ id }) => {
                         </>
                     )}
                     {/* Rodapé inserir assinatura, data e hora */}
-                    {unidade && fieldsFooter && !fieldsFooter.concluded && (
+                    {/* {unidade && fieldsFooter && !fieldsFooter.concluded && (
                         <FooterFields
                             modeloID={unidade.modelo.id}
                             values={fieldsFooter}
@@ -769,7 +739,7 @@ const FormLimpeza = ({ id }) => {
                             setValue={setValue}
                             control={control}
                         />
-                    )}
+                    )} */}
                     {/* Rodapé com informações de conclusão */}
                     {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
                         <Typography variant='caption'>
@@ -819,6 +789,11 @@ const FormLimpeza = ({ id }) => {
                         canApprove={true}
                         type='limpeza'
                         unity={unidade}
+                        values={fieldsFooter}
+                        control={control}
+                        formularioID={4} // Limpeza
+                        errors={errors}
+                        modeloID={unidade?.modelo?.id}
                     />
                     {/* Modal que deleta formulario */}
                     <DialogDelete

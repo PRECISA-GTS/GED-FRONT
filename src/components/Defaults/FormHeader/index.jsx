@@ -46,7 +46,6 @@ const FormHeader = ({
     outsideID,
     setores
 }) => {
-    console.log('🚀 ~ status:', setores)
     const router = Router
     const { routes } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)

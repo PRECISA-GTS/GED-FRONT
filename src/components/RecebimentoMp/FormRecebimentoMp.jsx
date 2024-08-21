@@ -298,7 +298,6 @@ const FormRecebimentoMp = ({ id, model }) => {
         }
 
         //? Blocos
-        console.log('🚀 ~ block:', blocos)
         blocos.forEach((block, indexBlock) => {
             block.itens.forEach((item, indexItem) => {
                 const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
@@ -501,7 +500,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 toast.error(toastMessage.error)
             }
         } catch (error) {
-            console.log('errro da função update/email', error)
+            console.log('erro da função update/email', error)
         } finally {
             stopLoading()
             setChange(!change)

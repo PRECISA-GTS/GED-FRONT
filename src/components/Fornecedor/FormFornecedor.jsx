@@ -37,7 +37,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
     const [hasModel, setHasModel] = useState(true)
     const [noModelInfo, setNoModelInfo] = useState(null)
-    const { menu, user, loggedUnity } = useContext(AuthContext)
+    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [savingForm, setSavingForm] = useState(false)
     const [validateForm, setValidateForm] = useState(false) //? Se true, valida campos obrigatórios
     const [hasFormPending, setHasFormPending] = useState(true) //? Tem pendencia no formulário (já vinculado em formulário de recebimento, não altera mais o status)
@@ -75,6 +75,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
+    console.log('🚀 ~ canEdit:', canEdit)
 
     const {
         reset,
@@ -301,7 +302,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const getData = () => {
         startLoading()
         try {
-            api.post(`${staticUrl}/getData/${id}`, { type: type, unidadeID: loggedUnity.unidadeID })
+            api.post(`${staticUrl}/getData/${id}`, {
+                type: type,
+                unidadeID: loggedUnity.unidadeID
+            })
                 .then(response => {
                     if (!response.data) return
 
@@ -360,7 +364,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     setStatus(objStatus)
                     setCanEdit({
                         status:
-                            user.papelID == response.data.unidade.quemPreenche && response.data.info.status < 40
+                            user.papelID == response.data.unidade.quemPreenche &&
+                            response.data.info.status < 40 &&
+                            (hasSectorPermission(response.data.fieldsHeader?.setores ?? []) ||
+                                response.data.unidade.quemPreenche === 2)
                                 ? true
                                 : false,
                         message:
@@ -533,10 +540,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const handleSendForm = async () => {
-        await handleSubmit(onSubmit)()
+        console.log('robertoooooooooooooooo')
+        // await handleSubmit(onSubmit)()
+        // checkErrors()
+        // setOpenModal(true)
+        // setValidateForm(true)
+
+        // setBlobSaveReport(blob)
         checkErrors()
         setOpenModal(true)
-        setValidateForm(true)
     }
 
     const verifyIfCanAproveForm = blocos => {
@@ -608,14 +620,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const onSubmit = async (values, param = false) => {
-        console.log('no onSubmit...')
         setOpenModal(false)
         startLoading()
         if (param.conclusion === true) {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
         } else {
-            console.log('no onSubmit...2')
             clearErrors()
         }
 
@@ -898,7 +908,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     useEffect(() => {
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
-    }, [savingForm])
+    }, [id, savingForm])
 
     useEffect(() => {
         checkErrors()
@@ -914,8 +924,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     btnSave={canEdit.status}
                     btnSend={
                         (user.papelID == 1 &&
-                            ((info.status >= 30 && info.status < 40 && unidade.quemPreenche == 1) ||
-                                (info.status == 40 && unidade.quemPreenche == 2))) ||
+                            ((info && info.status >= 30 && info.status < 40 && unidade.quemPreenche == 1) ||
+                                (info && info.status == 40 && unidade.quemPreenche == 2))) ||
                         (user.papelID == 2 && info.status < 40 && unidade.quemPreenche == 2)
                             ? true
                             : false
@@ -932,6 +942,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
+                    setores={fieldsFooter?.setores ?? []}
                 />
                 {hasModel && (
                     <>
@@ -986,6 +997,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 <CardContent>
                                     {unidade && (
                                         <HeaderFields
+                                            key={unidade.unidadeID}
                                             modeloID={unidade.parFornecedorModeloID}
                                             values={fieldsHeader}
                                             fields={field}
@@ -1035,6 +1047,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                         errors={errors?.blocos}
                                         handleFileSelect={handleFileSelectItem}
                                         handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                        status={info.status}
                                     />
                                 ))}
 
@@ -1112,7 +1125,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             <DialogFormConclusion
                                 openModal={openModal}
                                 handleClose={() => {
-                                    setOpenModal(false), setValidateForm(false)
+                                    setOpenModal(false), checkErrors()
                                 }}
                                 title='Concluir Formulário'
                                 text={`Deseja realmente concluir este formulário?`}
@@ -1121,6 +1134,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 register={register}
                                 setValue={setValue}
                                 getValues={getValues}
+                                control={control}
                                 btnCancel
                                 btnConfirm
                                 btnConfirmColor='primary'
@@ -1130,6 +1144,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 canApprove={true}
                                 type='fornecedor'
                                 unity={unidade}
+                                values={fieldsFooter}
+                                formularioID={1} // Fornecedor
+                                errors={errors}
+                                modeloID={unidade?.parFornecedorModeloID}
                             />
 
                             <HistoricForm key={change} parFormularioID={1} id={id} />

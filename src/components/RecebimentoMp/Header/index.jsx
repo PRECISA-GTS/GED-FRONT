@@ -35,7 +35,6 @@ const HeaderFields = ({
     setProdutos,
     produtos
 }) => {
-    console.log('🚀 ~ HeaderFields produtos:', produtos)
     const { user, loggedUnity } = useContext(AuthContext)
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
@@ -76,7 +75,7 @@ const HeaderFields = ({
         const checkedProducts = produtos.filter(row => row.checked_ === true).map(row => row.produtoID)
         const newProducts = fornecedoresAprovados
             .find(row => row.id === e.id)
-            ?.produtos.map(produto => {
+            ?.produtos?.map(produto => {
                 if (checkedProducts.includes(produto.produtoID)) {
                     return { ...produto, checked_: true }
                 }

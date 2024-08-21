@@ -5,6 +5,7 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
+import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const HeaderFields = ({
     modeloID,
@@ -40,6 +41,10 @@ const HeaderFields = ({
 
     return (
         <Grid container spacing={4}>
+            <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                <InfoSetores data={values?.setores ?? []} />
+            </Grid>
+
             <Input
                 xs={12}
                 md={2}

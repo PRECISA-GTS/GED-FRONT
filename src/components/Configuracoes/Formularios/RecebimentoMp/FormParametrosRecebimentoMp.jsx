@@ -92,7 +92,6 @@ const FormParametrosRecebimentoMp = ({ id }) => {
             orientacoes: values.orientations ?? null
         }
         console.log('🚀 ~ onSubmit: ', data)
-        // return
 
         setHeaders(null) //? Pra exibir loading
 
@@ -262,7 +261,6 @@ const FormParametrosRecebimentoMp = ({ id }) => {
     }
 
     const getData = () => {
-        console.log('buscar dados no backend....')
         try {
             if (type === 'new') {
                 setModel({
@@ -270,8 +268,6 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                     ciclo: '',
                     cabecalho: '',
                     status: 1
-
-                    // AA
                 })
             } else {
                 api.post(`/configuracoes/formularios/recebimento-mp/getData/${id}`, {
@@ -285,12 +281,9 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                     setAllOptions({
                         itens: response.data.options?.itens
                     })
-                    setSetores(response.data.options?.setores)
                     setOrientacoes(response.data.orientations)
-
                     //* Insere os dados no formulário
                     reset(response.data)
-
                     getSetoresModelo(response.data.model)
 
                     setTimeout(() => {
@@ -314,7 +307,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
         setTimeout(() => {
             trigger()
         }, 300)
-    }, [id, savingForm])
+    }, [id, user, savingForm])
 
     const handleSave = async data => {
         setNewChange(true)
@@ -388,7 +381,7 @@ const FormParametrosRecebimentoMp = ({ id }) => {
                                             register={register}
                                             setValue={setValue}
                                             control={control}
-                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                            helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                         <Select
                                             xs={12}
