@@ -18,22 +18,18 @@ import FormHeader from 'src/components/Defaults/FormHeader'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { NotificationContext } from 'src/context/NotificationContext'
-import Loading from 'src/components/Loading'
 import toast from 'react-hot-toast'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
 import HeaderFields from './Header'
-import RecebimentoMpFooterFields from './Footer'
 import useLoad from 'src/hooks/useLoad'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
-import RecebimentoMpNaoConformidade from './NaoConformidade'
 import FormTransportador from '../Cadastros/Transportador/FormTransportador'
 import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
-import DefaultSkeleton from '../Skeleton/DefaultSkeleton'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -142,8 +138,8 @@ const FormRecebimentoMp = ({ id, model }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            // setChange(!change)
-            getData()
+            setChange(!change)
+            // getData()
         }
     }
 
@@ -481,10 +477,8 @@ const FormRecebimentoMp = ({ id, model }) => {
         setOpenModal(false)
         try {
             if (type == 'edit') {
-                setSavingForm(true)
                 await api.post(`${staticUrl}/updateData/${id}`, data).then(response => {
                     toast.success(toastMessage.successUpdate)
-                    setSavingForm(false)
                     let idNãoConformidade = null
                     //? Trata notificações
                     manageNotifications(values.status, values.naoConformidade, idNãoConformidade)
@@ -501,9 +495,7 @@ const FormRecebimentoMp = ({ id, model }) => {
         } catch (error) {
             console.log('erro da função update/email', error)
         } finally {
-            if (param.conclusion === true) {
-                getData()
-            }
+            setChange(!change)
         }
     }
 
@@ -525,15 +517,16 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/produto/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
-                    setLoadingFileProduct(false)
-
                     //* Submete formulário pra atualizar configurações dos produtos
                     const values = getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
-                    setLoadingFileProduct(false)
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
+                })
+                .finally(() => {
+                    setLoadingFileProduct(false)
+                    setChange(!change)
                 })
         }
     }
@@ -554,21 +547,21 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/grupo-anexo/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
-                    setLoadingFileGroup(false)
-
                     //* Submete formulário pra atualizar configurações dos grupos
                     const values = getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
-                    setLoadingFileGroup(false)
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
+                })
+                .finally(() => {
+                    setLoadingFileGroup(false)
+                    setChange(!change)
                 })
         }
     }
 
     const handleFileSelectItem = async (event, item) => {
-        console.log('🚀 ~ handleFileSelectItem item:', item)
         setLoadingFileItem(true)
         const selectedFile = event.target.files
 
@@ -585,15 +578,16 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
-                    setLoadingFileItem(false)
-
                     //* Submete formulário pra atualizar configurações dos itens
                     const values = getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
-                    setLoadingFileItem(false)
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
+                })
+                .finally(() => {
+                    setLoadingFileItem(false)
+                    setChange(!change)
                 })
         }
     }
@@ -643,6 +637,9 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
                 })
+                .finally(() => {
+                    getData()
+                })
         }
     }
 
@@ -659,6 +656,9 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
                 })
+                .finally(() => {
+                    getData()
+                })
         }
     }
 
@@ -671,7 +671,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     useEffect(() => {
         getData()
-    }, [id])
+    }, [id, change])
 
     useEffect(() => {
         checkErrors()
@@ -705,140 +705,137 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setores={fieldsFooter?.setores ?? []}
                 />
 
-                <DefaultSkeleton show={isLoading} total={5} />
+                <>
+                    {/* Div superior com tags e status */}
+                    <div className='flex gap-2 mb-2'>
+                        {status && (
+                            <CustomChip
+                                size='small'
+                                skin='light'
+                                color={status.color}
+                                label={status.title}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                        )}
+                        {unidade && unidade.modelo && (
+                            <CustomChip
+                                size='small'
+                                HeaderFiel
+                                skin='light'
+                                label={unidade.modelo.nome}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                        )}
+                    </div>
 
-                {!isLoading && (
-                    <>
-                        {/* Div superior com tags e status */}
-                        <div className='flex gap-2 mb-2'>
-                            {status && (
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                            )}
-                            {unidade && unidade.modelo && (
-                                <CustomChip
-                                    size='small'
-                                    HeaderFiel
-                                    skin='light'
-                                    label={unidade.modelo.nome}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                            )}
-                        </div>
+                    <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
+                        {/* Cabeçalho do modelo */}
+                        {info && info.cabecalhoModelo != '' && (
+                            <Card>
+                                <CardContent>
+                                    <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
+                                </CardContent>
+                            </Card>
+                        )}
 
-                        <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
-                            {/* Cabeçalho do modelo */}
-                            {info && info.cabecalhoModelo != '' && (
+                        {unidade && (
+                            <HeaderFields
+                                key={unidade.unidadeID}
+                                nameSelected={nameSelected}
+                                setNameSelected={setNameSelected}
+                                columnSelected={columnSelected}
+                                setColumnSelected={setColumnSelected}
+                                openModalNew={openModalNew}
+                                setOpenModalNew={setOpenModalNew}
+                                newChange={newChange}
+                                setNewChange={setNewChange}
+                                recebimentoMpID={id}
+                                modelo={unidade.modelo}
+                                values={fieldsHeader}
+                                fields={field}
+                                getValues={getValues}
+                                disabled={!canEdit.status}
+                                register={register}
+                                errors={errors}
+                                setValue={setValue}
+                                control={control}
+                                getAddressByCep={getAddressByCep}
+                                setProdutos={setProdutos}
+                                produtos={produtos}
+                            />
+                        )}
+                        {/* Blocos */}
+                        {blocos &&
+                            blocos.map((bloco, index) => (
+                                <Block
+                                    bloco={bloco}
+                                    index={index}
+                                    blockKey={`parRecebimentoMpModeloBlocoID`}
+                                    setBlocos={setBlocos}
+                                    setValue={setValue}
+                                    blocos={blocos}
+                                    getValues={getValues}
+                                    register={register}
+                                    control={control}
+                                    disabled={hasFormPending}
+                                    errors={errors?.blocos}
+                                    handleFileSelect={handleFileSelectItem}
+                                    handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                    status={info.status}
+                                />
+                            ))}
+                        {/* Grupo de anexos */}
+                        {grupoAnexo &&
+                            grupoAnexo.map((grupo, indexGrupo) => (
+                                <AnexoModeView
+                                    key={indexGrupo}
+                                    values={{
+                                        grupo: grupo,
+                                        loadingFile: loadingFileGroup,
+                                        indexGrupo: indexGrupo,
+                                        handleFileSelect: handleFileSelectGroup,
+                                        handleRemove: handleRemoveAnexoGroup,
+                                        folder: 'grupo-anexo',
+                                        disabled: !canEdit.status,
+                                        error: errors
+                                    }}
+                                />
+                            ))}
+                        {/* Observação do formulário */}
+                        {info && (
+                            <>
                                 <Card>
                                     <CardContent>
-                                        <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
+                                        <Grid container spacing={4}>
+                                            <Grid item xs={12} md={12}>
+                                                <FormControl fullWidth>
+                                                    <Typography variant='subtitle1' sx={{ fontWeight: 600, mb: 2 }}>
+                                                        Observações (campo de uso exclusivo da validadora)
+                                                    </Typography>
+                                                    <Input
+                                                        title='Observação (opcional)'
+                                                        name='info.obs'
+                                                        multiline
+                                                        rows={4}
+                                                        value={info.obs}
+                                                        disabled={!canEdit.status}
+                                                        control={control}
+                                                    />
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
                                     </CardContent>
                                 </Card>
-                            )}
-
-                            {unidade && (
-                                <HeaderFields
-                                    key={unidade.unidadeID}
-                                    nameSelected={nameSelected}
-                                    setNameSelected={setNameSelected}
-                                    columnSelected={columnSelected}
-                                    setColumnSelected={setColumnSelected}
-                                    openModalNew={openModalNew}
-                                    setOpenModalNew={setOpenModalNew}
-                                    newChange={newChange}
-                                    setNewChange={setNewChange}
-                                    recebimentoMpID={id}
-                                    modelo={unidade.modelo}
-                                    values={fieldsHeader}
-                                    fields={field}
-                                    getValues={getValues}
-                                    disabled={!canEdit.status}
-                                    register={register}
-                                    errors={errors}
-                                    setValue={setValue}
-                                    control={control}
-                                    getAddressByCep={getAddressByCep}
-                                    setProdutos={setProdutos}
-                                    produtos={produtos}
-                                />
-                            )}
-                            {/* Blocos */}
-                            {blocos &&
-                                blocos.map((bloco, index) => (
-                                    <Block
-                                        bloco={bloco}
-                                        index={index}
-                                        blockKey={`parRecebimentoMpModeloBlocoID`}
-                                        setBlocos={setBlocos}
-                                        setValue={setValue}
-                                        blocos={blocos}
-                                        getValues={getValues}
-                                        register={register}
-                                        control={control}
-                                        disabled={hasFormPending}
-                                        errors={errors?.blocos}
-                                        handleFileSelect={handleFileSelectItem}
-                                        handleRemoveAnexoItem={handleRemoveAnexoItem}
-                                        status={info.status}
-                                    />
-                                ))}
-                            {/* Grupo de anexos */}
-                            {grupoAnexo &&
-                                grupoAnexo.map((grupo, indexGrupo) => (
-                                    <AnexoModeView
-                                        key={indexGrupo}
-                                        values={{
-                                            grupo: grupo,
-                                            loadingFile: loadingFileGroup,
-                                            indexGrupo: indexGrupo,
-                                            handleFileSelect: handleFileSelectGroup,
-                                            handleRemove: handleRemoveAnexoGroup,
-                                            folder: 'grupo-anexo',
-                                            disabled: !canEdit.status,
-                                            error: errors
-                                        }}
-                                    />
-                                ))}
-                            {/* Observação do formulário */}
-                            {info && (
-                                <>
-                                    <Card>
-                                        <CardContent>
-                                            <Grid container spacing={4}>
-                                                <Grid item xs={12} md={12}>
-                                                    <FormControl fullWidth>
-                                                        <Typography variant='subtitle1' sx={{ fontWeight: 600, mb: 2 }}>
-                                                            Observações (campo de uso exclusivo da validadora)
-                                                        </Typography>
-                                                        <Input
-                                                            title='Observação (opcional)'
-                                                            name='info.obs'
-                                                            multiline
-                                                            rows={4}
-                                                            value={info.obs}
-                                                            disabled={!canEdit.status}
-                                                            control={control}
-                                                        />
-                                                    </FormControl>
-                                                </Grid>
-                                            </Grid>
-                                        </CardContent>
-                                    </Card>
-                                </>
-                            )}
-                            {/* Rodapé com informações de conclusão */}
-                            {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
-                                <Typography variant='caption'>
-                                    {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
-                                </Typography>
-                            )}
-                            {/* Não Conformidade */}
-                            {/* {info.naoConformidade && (
+                            </>
+                        )}
+                        {/* Rodapé com informações de conclusão */}
+                        {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
+                            <Typography variant='caption'>
+                                {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
+                            </Typography>
+                        )}
+                        {/* Não Conformidade */}
+                        {/* {info.naoConformidade && (
                         <RecebimentoMpNaoConformidade
                             recebimentoMpID={id}
                             values={naoConformidade}
@@ -850,71 +847,70 @@ const FormRecebimentoMp = ({ id, model }) => {
                             errors={errors}
                         />
                     )} */}
-                            <HistoricForm
-                                key={change}
+                        <HistoricForm
+                            key={change}
+                            id={id}
+                            parFormularioID={2} // Recebimento MP
+                        />
+                        {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
+                        {openModalStatus && (
+                            <DialogFormStatus
+                                title='Histórico do Formulário'
+                                text={`Listagem do histórico das movimentações do formulário ${id} do Recebimento de MP.`}
                                 id={id}
                                 parFormularioID={2} // Recebimento MP
-                            />
-                            {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
-                            {openModalStatus && (
-                                <DialogFormStatus
-                                    title='Histórico do Formulário'
-                                    text={`Listagem do histórico das movimentações do formulário ${id} do Recebimento de MP.`}
-                                    id={id}
-                                    parFormularioID={2} // Recebimento MP
-                                    formStatus={info.status}
-                                    hasFormPending={hasFormPending}
-                                    canChangeStatus={false}
-                                    openModal={openModalStatus}
-                                    handleClose={() => setOpenModalStatus(false)}
-                                    btnCancel
-                                    btnConfirm
-                                    handleSubmit={false}
-                                />
-                            )}
-                            {/* Dialog de confirmação de envio */}
-                            <DialogFormConclusion
-                                openModal={openModal}
-                                handleClose={() => {
-                                    setOpenModal(false), checkErrors()
-                                }}
-                                title='Concluir Formulário'
-                                text={`Deseja realmente concluir este formulário?`}
-                                info={info}
-                                canChange={!hasFormPending}
-                                register={register}
-                                setValue={setValue}
-                                getValues={getValues}
-                                control={control}
+                                formStatus={info.status}
+                                hasFormPending={hasFormPending}
+                                canChangeStatus={false}
+                                openModal={openModalStatus}
+                                handleClose={() => setOpenModalStatus(false)}
                                 btnCancel
                                 btnConfirm
-                                btnConfirmColor='primary'
-                                conclusionForm={conclusionForm}
-                                listErrors={listErrors}
-                                canApprove={canApprove}
-                                hasNaoConformidade={true}
-                                type='recebimentoMp'
-                                unity={unidade}
-                                values={fieldsFooter}
-                                formularioID={2} // Recebimento MP
-                                errors={errors}
-                                modeloID={unidade?.modelo?.id}
+                                handleSubmit={false}
                             />
-                            {/* Modal que deleta formulario */}
-                            <DialogDelete
-                                title='Excluir Formulário'
-                                description='Tem certeza que deseja exluir o formulario?'
-                                params={{
-                                    route: `formularios/recebimento-mp/delete/${id}`,
-                                    messageSucceded: 'Formulário excluído com sucesso!',
-                                    MessageError: 'Dado possui pendência!'
-                                }}
-                                open={openModalDeleted}
-                                handleClose={() => setOpenModalDeleted(false)}
-                            />
-                        </Box>
-                    </>
-                )}
+                        )}
+                        {/* Dialog de confirmação de envio */}
+                        <DialogFormConclusion
+                            openModal={openModal}
+                            handleClose={() => {
+                                setOpenModal(false), checkErrors()
+                            }}
+                            title='Concluir Formulário'
+                            text={`Deseja realmente concluir este formulário?`}
+                            info={info}
+                            canChange={!hasFormPending}
+                            register={register}
+                            setValue={setValue}
+                            getValues={getValues}
+                            control={control}
+                            btnCancel
+                            btnConfirm
+                            btnConfirmColor='primary'
+                            conclusionForm={conclusionForm}
+                            listErrors={listErrors}
+                            canApprove={canApprove}
+                            hasNaoConformidade={true}
+                            type='recebimentoMp'
+                            unity={unidade}
+                            values={fieldsFooter}
+                            formularioID={2} // Recebimento MP
+                            errors={errors}
+                            modeloID={unidade?.modelo?.id}
+                        />
+                        {/* Modal que deleta formulario */}
+                        <DialogDelete
+                            title='Excluir Formulário'
+                            description='Tem certeza que deseja exluir o formulario?'
+                            params={{
+                                route: `formularios/recebimento-mp/delete/${id}`,
+                                messageSucceded: 'Formulário excluído com sucesso!',
+                                MessageError: 'Dado possui pendência!'
+                            }}
+                            open={openModalDeleted}
+                            handleClose={() => setOpenModalDeleted(false)}
+                        />
+                    </Box>
+                </>
             </form>
 
             <DialogNewCreate

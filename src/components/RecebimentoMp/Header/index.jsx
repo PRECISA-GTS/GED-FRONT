@@ -223,7 +223,7 @@ const HeaderFields = ({
                                     title='Fornecedor'
                                     name={`fieldsHeader.fornecedor`}
                                     type='string'
-                                    options={fornecedoresAprovados}
+                                    options={fornecedoresAprovados ?? []}
                                     onChange={e => selectFornecedor(e, fornecedoresAprovados)}
                                     value={values?.fornecedor}
                                     disabled={disabled}

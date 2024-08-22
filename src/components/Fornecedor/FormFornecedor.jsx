@@ -19,7 +19,6 @@ import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { NotificationContext } from 'src/context/NotificationContext'
 import toast from 'react-hot-toast'
-import { SettingsContext } from 'src/@core/context/settingsContext'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
 import FormNotification from './Dialogs/Notification/FormNotification'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
@@ -32,7 +31,6 @@ import HistoricForm from '../Defaults/HistoricForm'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
-import DefaultSkeleton from '../Skeleton/DefaultSkeleton'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
@@ -115,7 +113,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            getData()
+            setChange(!change)
         }
     }
 
@@ -668,15 +666,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            if (param.conclusion === true) {
-                getData()
-            }
+            setChange(!change)
         }
     }
 
     // Quando selecionar um arquivo, o arquivo é adicionado ao array de anexos
     const handleFileSelectProduct = async (event, item) => {
-        startLoading()
         const selectedFile = event.target.files
 
         if (selectedFile && selectedFile.length > 0) {
@@ -701,7 +696,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
             } finally {
-                stopLoading()
+                setChange(!change)
             }
         }
     }
@@ -719,7 +714,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append(`grupoAnexoItemID`, item.grupoAnexoItemID ?? null)
 
             try {
-                startLoading()
                 const response = await api.post(
                     `${staticUrl}/saveAnexo/${id}/grupo-anexo/${user.usuarioID}/${unidade.unidadeID}`,
                     formData
@@ -730,7 +724,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
             } finally {
-                stopLoading()
+                setChange(!change)
             }
         }
     }
@@ -749,7 +743,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
             try {
-                startLoading()
                 const response = await api.post(
                     `${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`,
                     formData
@@ -760,7 +753,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
             } finally {
-                stopLoading()
+                setChange(!change)
             }
         }
     }
@@ -810,6 +803,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
                 })
+                .finally(() => {
+                    setChange(!change)
+                })
         }
     }
 
@@ -827,6 +823,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
                 })
+                .finally(() => {
+                    setChange(!change)
+                })
         }
     }
 
@@ -842,6 +841,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
+                })
+                .finally(() => {
+                    setChange(!change)
                 })
         }
     }
@@ -908,7 +910,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     useEffect(() => {
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
-    }, [id])
+    }, [id, change])
 
     useEffect(() => {
         checkErrors()
@@ -945,9 +947,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     setores={fieldsFooter?.setores ?? []}
                 />
 
-                <DefaultSkeleton show={isLoading} total={5} />
-
-                {!isLoading && hasModel && (
+                {hasModel && (
                     <>
                         {/* Div superior com tags e status */}
                         <div className='flex gap-2 mb-2'>

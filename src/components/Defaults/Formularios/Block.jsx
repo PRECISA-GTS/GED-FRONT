@@ -22,7 +22,7 @@ const Block = ({
     status,
     isFornecedorLogged
 }) => {
-    console.log('🚀 ~ isFornecedorLogged:', isFornecedorLogged)
+    console.log('🚀 ~ renderiza bloco:')
     if (!bloco) return null
 
     const { user, hasSectorPermission } = useContext(AuthContext)
