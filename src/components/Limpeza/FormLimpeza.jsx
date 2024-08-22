@@ -29,6 +29,7 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import { useFormContext } from 'src/context/FormContext'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import HistoricForm from '../Defaults/HistoricForm'
+import DefaultSkeleton from '../Skeleton/DefaultSkeleton'
 
 const FormLimpeza = ({ id }) => {
     const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -123,7 +124,7 @@ const FormLimpeza = ({ id }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            setChange(!change)
+            getData()
         }
     }
 
@@ -382,13 +383,11 @@ const FormLimpeza = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        startLoading()
+
         try {
             if (type == 'edit') {
-                setSavingForm(true)
                 await api.post(`${staticUrl}/updateData/${id}`, data).then(response => {
                     toast.success(toastMessage.successUpdate)
-                    setSavingForm(false)
                     let idNãoConformidade = null
                     //? Trata notificações
                     // manageNotifications(values.status, values.naoConformidade, idNãoConformidade)
@@ -405,8 +404,9 @@ const FormLimpeza = ({ id }) => {
         } catch (error) {
             console.log('errro da função update/email', error)
         } finally {
-            stopLoading()
-            setChange(!change)
+            if (param.conclusion === true) {
+                getData()
+            }
         }
     }
 
@@ -580,7 +580,7 @@ const FormLimpeza = ({ id }) => {
 
     useEffect(() => {
         type == 'edit' ? getData() : null
-    }, [id, savingForm])
+    }, [id])
 
     useEffect(() => {
         checkErrors()
@@ -600,7 +600,6 @@ const FormLimpeza = ({ id }) => {
 
     return (
         <>
-            <Loading show={isLoading} />
             <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
                     btnCancel
@@ -624,112 +623,116 @@ const FormLimpeza = ({ id }) => {
                     setores={fieldsFooter?.setores ?? []}
                 />
 
-                {/* Div superior com tags e status */}
-                <div className='flex gap-2 mb-2'>
-                    {status && (
-                        <CustomChip
-                            size='small'
-                            skin='light'
-                            color={status.color}
-                            label={status.title}
-                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                        />
-                    )}
-                    {unidade && unidade.modelo && (
-                        <CustomChip
-                            size='small'
-                            skin='light'
-                            label={unidade.modelo.nome}
-                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                        />
-                    )}
-                </div>
+                <DefaultSkeleton show={isLoading} total={5} />
 
-                <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
-                    {/* Última movimentação do formulário */}
-                    {movimentacao && (
-                        <Alert severity='info'>
-                            {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
-                            {movimentacao.observacao && (
-                                <p>
-                                    <br />
-                                    Mensagem: "{movimentacao.observacao}"
-                                </p>
+                {!isLoading && (
+                    <>
+                        {/* Div superior com tags e status */}
+                        <div className='flex gap-2 mb-2'>
+                            {status && (
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    color={status.color}
+                                    label={status.title}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
                             )}
-                        </Alert>
-                    )}
-                    {/* Cabeçalho do modelo */}
-                    {info && info.cabecalhoModelo != '' && (
-                        <Card>
-                            <CardContent>
-                                <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
-                            </CardContent>
-                        </Card>
-                    )}
-                    {unidade && (
-                        <HeaderFields
-                            recebimentoMpID={id}
-                            modelo={unidade.modelo}
-                            values={fieldsHeader}
-                            fields={field}
-                            getValues={getValues}
-                            disabled={!canEdit.status}
-                            register={register}
-                            errors={errors}
-                            setValue={setValue}
-                            control={control}
-                        />
-                    )}
-                    {/* Blocos */}
-                    {blocos &&
-                        blocos.map((bloco, index) => (
-                            <Block
-                                bloco={bloco}
-                                index={index}
-                                blockKey={`parLimpezaModeloBlocoID`}
-                                setBlocos={setBlocos}
-                                setValue={setValue}
-                                blocos={blocos}
-                                getValues={getValues}
-                                register={register}
-                                control={control}
-                                disabled={!canEdit.status}
-                                errors={errors?.blocos}
-                                handleFileSelect={handleFileSelectItem}
-                                handleRemoveAnexoItem={handleRemoveAnexoItem}
-                                status={info.status}
-                            />
-                        ))}
+                            {unidade && unidade.modelo && (
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    label={unidade.modelo.nome}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
+                            )}
+                        </div>
 
-                    {/* Observação do formulário */}
-                    {info && (
-                        <>
-                            <Card>
-                                <CardContent>
-                                    <Grid container spacing={4}>
-                                        <Grid item xs={12} md={12}>
-                                            <FormControl fullWidth>
-                                                <Typography variant='subtitle1' sx={{ fontWeight: 600, mb: 2 }}>
-                                                    Observações
-                                                </Typography>
-                                                <Input
-                                                    title='Observação (opcional)'
-                                                    name='info.obs'
-                                                    multiline
-                                                    rows={4}
-                                                    value={info.obs}
-                                                    disabled={!canEdit.status}
-                                                    control={control}
-                                                />
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </>
-                    )}
-                    {/* Rodapé inserir assinatura, data e hora */}
-                    {/* {unidade && fieldsFooter && !fieldsFooter.concluded && (
+                        <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
+                            {/* Última movimentação do formulário */}
+                            {movimentacao && (
+                                <Alert severity='info'>
+                                    {`Última movimentação: Profissional ${movimentacao.nome} do(a) ${movimentacao.nomeFantasia} movimentou o formulário de ${movimentacao.statusAnterior} para ${movimentacao.statusAtual} em ${movimentacao.dataHora}.`}
+                                    {movimentacao.observacao && (
+                                        <p>
+                                            <br />
+                                            Mensagem: "{movimentacao.observacao}"
+                                        </p>
+                                    )}
+                                </Alert>
+                            )}
+                            {/* Cabeçalho do modelo */}
+                            {info && info.cabecalhoModelo != '' && (
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
+                                    </CardContent>
+                                </Card>
+                            )}
+                            {unidade && (
+                                <HeaderFields
+                                    recebimentoMpID={id}
+                                    modelo={unidade.modelo}
+                                    values={fieldsHeader}
+                                    fields={field}
+                                    getValues={getValues}
+                                    disabled={!canEdit.status}
+                                    register={register}
+                                    errors={errors}
+                                    setValue={setValue}
+                                    control={control}
+                                />
+                            )}
+                            {/* Blocos */}
+                            {blocos &&
+                                blocos.map((bloco, index) => (
+                                    <Block
+                                        bloco={bloco}
+                                        index={index}
+                                        blockKey={`parLimpezaModeloBlocoID`}
+                                        setBlocos={setBlocos}
+                                        setValue={setValue}
+                                        blocos={blocos}
+                                        getValues={getValues}
+                                        register={register}
+                                        control={control}
+                                        disabled={!canEdit.status}
+                                        errors={errors?.blocos}
+                                        handleFileSelect={handleFileSelectItem}
+                                        handleRemoveAnexoItem={handleRemoveAnexoItem}
+                                        status={info.status}
+                                    />
+                                ))}
+
+                            {/* Observação do formulário */}
+                            {info && (
+                                <>
+                                    <Card>
+                                        <CardContent>
+                                            <Grid container spacing={4}>
+                                                <Grid item xs={12} md={12}>
+                                                    <FormControl fullWidth>
+                                                        <Typography variant='subtitle1' sx={{ fontWeight: 600, mb: 2 }}>
+                                                            Observações
+                                                        </Typography>
+                                                        <Input
+                                                            title='Observação (opcional)'
+                                                            name='info.obs'
+                                                            multiline
+                                                            rows={4}
+                                                            value={info.obs}
+                                                            disabled={!canEdit.status}
+                                                            control={control}
+                                                        />
+                                                    </FormControl>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </>
+                            )}
+                            {/* Rodapé inserir assinatura, data e hora */}
+                            {/* {unidade && fieldsFooter && !fieldsFooter.concluded && (
                         <FooterFields
                             modeloID={unidade.modelo.id}
                             values={fieldsFooter}
@@ -740,74 +743,76 @@ const FormLimpeza = ({ id }) => {
                             control={control}
                         />
                     )} */}
-                    {/* Rodapé com informações de conclusão */}
-                    {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
-                        <Typography variant='caption'>
-                            {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
-                        </Typography>
-                    )}
-                    <HistoricForm
-                        key={change}
-                        id={id}
-                        parFormularioID={4} // Limpeza
-                    />
-                    {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
-                    {openModalStatus && (
-                        <DialogFormStatus
-                            title='Histórico do Formulário'
-                            text={`Listagem do histórico das movimentações do formulário ${id} de Limpeza.`}
-                            id={id}
-                            parFormularioID={4} // Limpeza
-                            formStatus={info.status}
-                            hasFormPending={hasFormPending}
-                            canChangeStatus={false}
-                            openModal={openModalStatus}
-                            handleClose={() => setOpenModalStatus(false)}
-                            btnCancel
-                            btnConfirm
-                            handleSubmit={false}
-                        />
-                    )}
-                    {/* Dialog de confirmação de envio */}
-                    <DialogFormConclusion
-                        openModal={openModal}
-                        handleClose={() => {
-                            setOpenModal(false), checkErrors()
-                        }}
-                        title='Concluir Formulário'
-                        text={`Deseja realmente concluir este formulário?`}
-                        info={info}
-                        canChange={!hasFormPending}
-                        register={register}
-                        setValue={setValue}
-                        getValues={getValues}
-                        btnCancel
-                        btnConfirm
-                        btnConfirmColor='primary'
-                        conclusionForm={conclusionForm}
-                        listErrors={listErrors}
-                        canApprove={true}
-                        type='limpeza'
-                        unity={unidade}
-                        values={fieldsFooter}
-                        control={control}
-                        formularioID={4} // Limpeza
-                        errors={errors}
-                        modeloID={unidade?.modelo?.id}
-                    />
-                    {/* Modal que deleta formulario */}
-                    <DialogDelete
-                        title='Excluir Formulário'
-                        description='Tem certeza que deseja exluir o formulario?'
-                        params={{
-                            route: `formularios/limpeza/delete/${id}`,
-                            messageSucceded: 'Formulário excluído com sucesso!',
-                            MessageError: 'Dado possui pendência!'
-                        }}
-                        open={openModalDeleted}
-                        handleClose={() => setOpenModalDeleted(false)}
-                    />
-                </Box>
+                            {/* Rodapé com informações de conclusão */}
+                            {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
+                                <Typography variant='caption'>
+                                    {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
+                                </Typography>
+                            )}
+                            <HistoricForm
+                                key={change}
+                                id={id}
+                                parFormularioID={4} // Limpeza
+                            />
+                            {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
+                            {openModalStatus && (
+                                <DialogFormStatus
+                                    title='Histórico do Formulário'
+                                    text={`Listagem do histórico das movimentações do formulário ${id} de Limpeza.`}
+                                    id={id}
+                                    parFormularioID={4} // Limpeza
+                                    formStatus={info.status}
+                                    hasFormPending={hasFormPending}
+                                    canChangeStatus={false}
+                                    openModal={openModalStatus}
+                                    handleClose={() => setOpenModalStatus(false)}
+                                    btnCancel
+                                    btnConfirm
+                                    handleSubmit={false}
+                                />
+                            )}
+                            {/* Dialog de confirmação de envio */}
+                            <DialogFormConclusion
+                                openModal={openModal}
+                                handleClose={() => {
+                                    setOpenModal(false), checkErrors()
+                                }}
+                                title='Concluir Formulário'
+                                text={`Deseja realmente concluir este formulário?`}
+                                info={info}
+                                canChange={!hasFormPending}
+                                register={register}
+                                setValue={setValue}
+                                getValues={getValues}
+                                btnCancel
+                                btnConfirm
+                                btnConfirmColor='primary'
+                                conclusionForm={conclusionForm}
+                                listErrors={listErrors}
+                                canApprove={true}
+                                type='limpeza'
+                                unity={unidade}
+                                values={fieldsFooter}
+                                control={control}
+                                formularioID={4} // Limpeza
+                                errors={errors}
+                                modeloID={unidade?.modelo?.id}
+                            />
+                            {/* Modal que deleta formulario */}
+                            <DialogDelete
+                                title='Excluir Formulário'
+                                description='Tem certeza que deseja exluir o formulario?'
+                                params={{
+                                    route: `formularios/limpeza/delete/${id}`,
+                                    messageSucceded: 'Formulário excluído com sucesso!',
+                                    MessageError: 'Dado possui pendência!'
+                                }}
+                                open={openModalDeleted}
+                                handleClose={() => setOpenModalDeleted(false)}
+                            />
+                        </Box>
+                    </>
+                )}
             </form>
         </>
     )

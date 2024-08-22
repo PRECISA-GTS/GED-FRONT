@@ -21,21 +21,26 @@ import AnalyticsOverview from 'src/views/dashboards/analytics/AnalyticsOverview'
 import GraphLimpeza from 'src/components/Graphics/home/factory/GraphLimpeza'
 import LastForms from './LastForms'
 import CardMyData from './CardMyData'
+import DefaultSkeleton from 'src/components/Skeleton/DefaultSkeleton'
+import useLoad from 'src/hooks/useLoad'
 
 const Supplier = () => {
     const { loggedUnity } = useContext(AuthContext)
+    const { isLoading, startLoading, stopLoading } = useLoad()
     const [lastForms, seLastForms] = useState(null)
 
     const getData = async () => {
         const data = {
             cnpj: loggedUnity.cnpj
         }
-
+        startLoading()
         try {
             const response = await api.post(`dashboard/fornecedor/getData`, data)
             seLastForms(response.data.lastForms)
         } catch (err) {
             console.log(err)
+        } finally {
+            stopLoading()
         }
     }
 
@@ -44,38 +49,41 @@ const Supplier = () => {
     }, [])
 
     return (
-        <ApexChartWrapper>
-            <Grid container spacing={6} className='match-height'>
-                <Grid item xs={12} md={3}>
-                    <CardMyData />
-                </Grid>
-                {/* Blocos com os principais formularios, ordenado por status */}
-                {lastForms &&
-                    lastForms.map((row, index) => {
-                        console.log('🚀 ~ row:', row)
-                        return (
-                            <Grid item xs={12} md={3} key={index}>
-                                <LastForms row={row} icon={<Icon icon='mdi:truck-fast-outline' />} />
-                            </Grid>
-                        )
-                    })}
+        <>
+            <DefaultSkeleton type='dashboard' show={isLoading} />
+            {!isLoading && lastForms && (
+                <ApexChartWrapper>
+                    <Grid container spacing={6} className='match-height'>
+                        <Grid item xs={12} md={3}>
+                            <CardMyData />
+                        </Grid>
+                        {/* Blocos com os principais formularios, ordenado por status */}
+                        {lastForms &&
+                            lastForms.map((row, index) => {
+                                console.log('🚀 ~ row:', row)
+                                return (
+                                    <Grid item xs={12} md={3} key={index}>
+                                        <LastForms row={row} icon={<Icon icon='mdi:truck-fast-outline' />} />
+                                    </Grid>
+                                )
+                            })}
 
-                {/* Tudo em uma bloco */}
-                {/* <Grid item xs={12} md={12}>
+                        {/* Tudo em uma bloco */}
+                        {/* <Grid item xs={12} md={12}>
                         <EcommerceSalesOverview title='Fornecedor' data={dataFornecedor} />
                     </Grid> */}
 
-                {/* Recebimento MP e Não Conformidade */}
-                {/* <Grid item xs={12} md={9}>
+                        {/* Recebimento MP e Não Conformidade */}
+                        {/* <Grid item xs={12} md={9}>
                         <CrmWeeklyOverview data={dataRecebimentoNC} />
                     </Grid> */}
 
-                {/* Limpeza e Higienização */}
-                {/* <Grid item xs={12} md={3}>
+                        {/* Limpeza e Higienização */}
+                        {/* <Grid item xs={12} md={3}>
                         <GraphLimpeza data={limpeza} />
                     </Grid> */}
 
-                {/* <Grid item xs={12} md={12}>
+                        {/* <Grid item xs={12} md={12}>
                         <CrmProjectTimeline />
                     </Grid>
 
@@ -91,8 +99,10 @@ const Supplier = () => {
                     <Grid item xs={12} md={6}>
                         <CrmWeeklyOverview />
                     </Grid> */}
-            </Grid>
-        </ApexChartWrapper>
+                    </Grid>
+                </ApexChartWrapper>
+            )}
+        </>
     )
 }
 

@@ -11,11 +11,14 @@ import SupplierNonCompliance from './SupplierNonCompliance'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import EventsPerDay from './EventsPerDay'
 import PendingSuppliers from './PendingSuppliers'
+import useLoad from 'src/hooks/useLoad'
+import DefaultSkeleton from 'src/components/Skeleton/DefaultSkeleton'
 
 const Factory = () => {
     const { loggedUnity } = useContext(AuthContext)
     const [dataFornecedor, setDataFornecedor] = useState(null)
     const [pendingSuppliersNumbers, setPendingSuppliersNumbers] = useState(null)
+    const { isLoading, startLoading, stopLoading } = useLoad()
     const [dataRecebimentoNC, setDataRecebimentoNC] = useState(null)
     const [dataSupplierNonCompliance, setDataSupplierNonCompliance] = useState(null)
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
@@ -23,6 +26,7 @@ const Factory = () => {
     const weekDay = new Date().toLocaleDateString('pt-BR', { weekday: 'long' })
 
     const getData = async () => {
+        startLoading()
         try {
             const response = await api.get(`dashboard/fabrica/getData/${loggedUnity.unidadeID}`)
             setDataFornecedor(response.data.fornecedorPorStatus)
@@ -31,6 +35,8 @@ const Factory = () => {
             setPendingSuppliersNumbers(response.data.pendingSuppliers)
         } catch (err) {
             console.log(err)
+        } finally {
+            stopLoading()
         }
     }
 
@@ -41,57 +47,47 @@ const Factory = () => {
     console.log('🚀 ~ pendingSuppliersNumbers:', pendingSuppliersNumbers)
 
     return (
-        dataFornecedor && (
-            <ApexChartWrapper>
-                <Grid container spacing={6}>
-                    {/* Calendário */}
-                    <Grid item xs={12} md={6}>
-                        <AppCalendar />
-                    </Grid>
+        <>
+            <DefaultSkeleton type='dashboard' show={isLoading} />
 
-                    <Grid item xs={12} md={6}>
-                        <Grid container spacing={6} className='match-height'>
-                            <Grid item xs={12} md={12}>
-                                <Card>
-                                    <CardContent className='space-y-4'>
-                                        <div className='flex items-center gap-4'>
-                                            <CustomAvatar skin='light' variant='rounded' color='warning'>
-                                                <Icon icon='mage:calendar-check-fill' className='text-base' />
-                                            </CustomAvatar>
-                                            <Typography variant='body1'>{`Hoje, ${today_} (${weekDay})`}</Typography>
-                                        </div>
-                                        <EventsPerDay eventDate={today} />
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md={12}>
-                                <SupplierNonCompliance data={dataSupplierNonCompliance} />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <CrmWeeklyOverview data={dataRecebimentoNC} />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <PendingSuppliers data={pendingSuppliersNumbers} />
+            {!isLoading && dataFornecedor && (
+                <ApexChartWrapper>
+                    <Grid container spacing={6}>
+                        {/* Calendário */}
+                        <Grid item xs={12} md={6}>
+                            <AppCalendar />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Grid container spacing={6} className='match-height'>
+                                <Grid item xs={12} md={12}>
+                                    <Card>
+                                        <CardContent className='space-y-4'>
+                                            <div className='flex items-center gap-4'>
+                                                <CustomAvatar skin='light' variant='rounded' color='warning'>
+                                                    <Icon icon='mage:calendar-check-fill' className='text-base' />
+                                                </CustomAvatar>
+                                                <Typography variant='body1'>{`Hoje, ${today_} (${weekDay})`}</Typography>
+                                            </div>
+                                            <EventsPerDay eventDate={today} />
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <SupplierNonCompliance data={dataSupplierNonCompliance} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <CrmWeeklyOverview data={dataRecebimentoNC} />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <PendingSuppliers data={pendingSuppliersNumbers} />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-
-                    {/* <Grid container spacing={6} >
-                        {dataFornecedor.map((row, index) => (
-                            <Grid item xs={12} md={3}>
-                                <CardStatisticsVertical
-                                    stats={row.stats}
-                                    color={row.color}
-                                    title={row.title ?? '0'}
-                                    chipText='Last 4 Month'
-                                    icon={<Icon icon='mdi:truck-fast-outline' />}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid> */}
-                </Grid>
-            </ApexChartWrapper>
-        )
+                </ApexChartWrapper>
+            )}
+        </>
     )
 }
 

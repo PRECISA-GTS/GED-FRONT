@@ -19,8 +19,10 @@ const Block = ({
     errors,
     handleFileSelect,
     handleRemoveAnexoItem,
-    status
+    status,
+    isFornecedorLogged
 }) => {
+    console.log('🚀 ~ isFornecedorLogged:', isFornecedorLogged)
     if (!bloco) return null
 
     const { user, hasSectorPermission } = useContext(AuthContext)
@@ -82,6 +84,12 @@ const Block = ({
     }
 
     const validateBlockPermission = () => {
+        //? É formulário de fornecedor e é um fornecedor logado acessando (não possui controle por setor)
+        if (isFornecedorLogged) {
+            setBlockPermission(true)
+            return
+        }
+
         if (status >= 40 || user.papelID !== 1) {
             setBlockPermission(false)
             return

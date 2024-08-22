@@ -32,6 +32,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
+import DefaultSkeleton from '../Skeleton/DefaultSkeleton'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
@@ -75,7 +76,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
-    console.log('🚀 ~ canEdit:', canEdit)
+    console.log('🚀 ~ canEdit:', canEdit.status)
 
     const {
         reset,
@@ -114,7 +115,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            setChange(!change)
+            getData()
         }
     }
 
@@ -540,7 +541,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const handleSendForm = async () => {
-        console.log('robertoooooooooooooooo')
         // await handleSubmit(onSubmit)()
         // checkErrors()
         // setOpenModal(true)
@@ -621,7 +621,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
     const onSubmit = async (values, param = false) => {
         setOpenModal(false)
-        startLoading()
         if (param.conclusion === true) {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
@@ -669,8 +668,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         } catch (error) {
             console.log(error)
         } finally {
-            stopLoading()
-            setChange(!change)
+            if (param.conclusion === true) {
+                getData()
+            }
         }
     }
 
@@ -908,7 +908,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     useEffect(() => {
         type == 'edit' ? getData() : null
         setData({ user, report: { id } }) //* Seta ID do formulário pra poder salvar o arquivo PDF no backend
-    }, [id, savingForm])
+    }, [id])
 
     useEffect(() => {
         checkErrors()
@@ -921,7 +921,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     btnCancel
                     btnDelete={info?.status < 40 ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
-                    btnSave={canEdit.status}
+                    btnSave={info?.status < 40}
                     btnSend={
                         (user.papelID == 1 &&
                             ((info && info.status >= 30 && info.status < 40 && unidade.quemPreenche == 1) ||
@@ -944,7 +944,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     status={status}
                     setores={fieldsFooter?.setores ?? []}
                 />
-                {hasModel && (
+
+                <DefaultSkeleton show={isLoading} total={5} />
+
+                {!isLoading && hasModel && (
                     <>
                         {/* Div superior com tags e status */}
                         <div className='flex gap-2 mb-2'>
@@ -1048,6 +1051,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                         handleFileSelect={handleFileSelectItem}
                                         handleRemoveAnexoItem={handleRemoveAnexoItem}
                                         status={info.status}
+                                        isFornecedorLogged={
+                                            unidade?.quemPreenche === 2 && user.papelID === 2 ? true : false
+                                        }
                                     />
                                 ))}
 

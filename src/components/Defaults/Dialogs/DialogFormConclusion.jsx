@@ -121,9 +121,11 @@ const DialogFormConclusion = ({
                         <Grid item xs={12} md={6}>
                             {title}
                         </Grid>
-                        <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                            <InfoSetores data={values?.setores ?? []} />
-                        </Grid>
+                        {user.papelID === 1 && (
+                            <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
+                                <InfoSetores data={values?.setores ?? []} />
+                            </Grid>
+                        )}
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
@@ -166,56 +168,55 @@ const DialogFormConclusion = ({
                                         conformidade
                                     </Alert>
                                 )}
+                                {user.papelID == 1 && (
+                                    <Grid container spacing={4} sx={{ mt: 4 }}>
+                                        {/* Data da conclusão */}
+                                        <DateField
+                                            xs={12}
+                                            md={3}
+                                            title='Data da conclusão'
+                                            name={`fieldsFooter.dataConclusao`}
+                                            type='date'
+                                            value={values?.dataConclusao ?? new Date()}
+                                            register={register}
+                                            control={control}
+                                            typeValidation='dataPassado'
+                                            daysValidation={365}
+                                            required
+                                            errors={errors?.fieldsFooter?.dataConclusao}
+                                        />
 
-                                <Grid container spacing={4} sx={{ mt: 4 }}>
-                                    {/* Data da conclusão */}
-                                    <DateField
-                                        xs={12}
-                                        md={3}
-                                        title='Data da conclusão'
-                                        name={`fieldsFooter.dataConclusao`}
-                                        type='date'
-                                        value={values?.dataConclusao ?? new Date()}
-                                        register={register}
-                                        control={control}
-                                        typeValidation='dataPassado'
-                                        daysValidation={365}
-                                        required
-                                        errors={errors?.fieldsFooter?.dataConclusao}
-                                    />
+                                        {/* Hora de Abertura */}
+                                        <Input
+                                            xs={12}
+                                            md={3}
+                                            title='Hora da conclusão'
+                                            name={`fieldsFooter.horaConclusao`}
+                                            type='time'
+                                            value={values?.horaConclusao ?? getTimeNow()}
+                                            required
+                                            register={register}
+                                            control={control}
+                                            errors={errors?.fieldsFooter?.horaConclusao}
+                                        />
 
-                                    {/* Hora de Abertura */}
-                                    <Input
-                                        xs={12}
-                                        md={3}
-                                        title='Hora da conclusão'
-                                        name={`fieldsFooter.horaConclusao`}
-                                        type='time'
-                                        value={values?.horaConclusao ?? getTimeNow()}
-                                        required
-                                        register={register}
-                                        control={control}
-                                        errors={errors?.fieldsFooter?.horaConclusao}
-                                    />
+                                        {/* Profissional responsável */}
+                                        <Select
+                                            xs={12}
+                                            md={6}
+                                            title='Profissional que aprova'
+                                            name={`fieldsFooter.profissional`}
+                                            type='string'
+                                            required
+                                            options={profissionaisAprova ?? []}
+                                            register={register}
+                                            setValue={setValue}
+                                            control={control}
+                                            errors={errors?.fieldsFooter?.profissional}
+                                        />
 
-                                    {/* Profissional responsável */}
-                                    <Select
-                                        xs={12}
-                                        md={6}
-                                        title='Profissional que aprova'
-                                        name={`fieldsFooter.profissional`}
-                                        type='string'
-                                        required
-                                        options={profissionaisAprova ?? []}
-                                        register={register}
-                                        setValue={setValue}
-                                        control={control}
-                                        errors={errors?.fieldsFooter?.profissional}
-                                    />
-
-                                    {/* Resultado */}
-                                    <Grid item xs={12}>
-                                        {user.papelID == 1 && (
+                                        {/* Resultado */}
+                                        <Grid item xs={12}>
                                             <Result
                                                 title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
                                                 name={'status'}
@@ -244,9 +245,9 @@ const DialogFormConclusion = ({
                                                     }
                                                 ]}
                                             />
-                                        )}
+                                        </Grid>
                                     </Grid>
-                                </Grid>
+                                )}
                             </>
                         )}
 
