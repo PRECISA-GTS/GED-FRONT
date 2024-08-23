@@ -184,7 +184,6 @@ const NewFornecedor = ({
 
     useEffect(() => {
         getParams()
-        setIsNotFactory(false)
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
