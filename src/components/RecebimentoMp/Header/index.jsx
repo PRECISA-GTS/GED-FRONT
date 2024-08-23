@@ -156,7 +156,7 @@ const HeaderFields = ({
                                 <DateField
                                     xs={12}
                                     md={2}
-                                    title='Data da avaliação'
+                                    title='Data do recebimento'
                                     name={`fieldsHeader.data`}
                                     type='date'
                                     value={values?.data ?? new Date()}
@@ -172,7 +172,7 @@ const HeaderFields = ({
                                 <Input
                                     xs={12}
                                     md={2}
-                                    title='Hora da avaliação'
+                                    title='Hora do recebimento'
                                     name={`fieldsHeader.hora`}
                                     type='time'
                                     disabled={disabled}
