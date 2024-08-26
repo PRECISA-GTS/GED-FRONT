@@ -142,6 +142,7 @@ const FornecedorPage = ({ units }) => {
         control,
         setError,
         handleSubmit,
+        getValues,
         formState: { errors }
     } = useForm({
         defaultValues,
@@ -180,16 +181,18 @@ const FornecedorPage = ({ units }) => {
         await api.post(`/login-fornecedor/setAcessLink`, { data })
     }
 
+    const validateExist = isCpf => {
+        const formatedValue = isCpf ? cpfMask(getValues('cnpj')) : cnpjMask(getValues('cnpj'))
+        validationExistCNPJCPF(formatedValue, isCpf)
+    }
+
     // Validar se o CNPJ esta na tabela fabrica_fornecedor
-    const validationExistCNPJCPF = e => {
+    const validationExistCNPJCPF = (value, isCpf) => {
         setCodeCNPJ(null)
-        if (
-            (e.target.value.length === 14 || e.target.value.length === 18) &&
-            (isCpf ? validationCPF(e.target.value) : validationCNPJ(e.target.value))
-        ) {
+        if ((value.length === 14 || value.length === 18) && (isCpf ? validationCPF(value) : validationCNPJ(value))) {
             api.post(`/login-fornecedor/validationCNPJ`, {
                 type: isCpf ? 'cpf' : 'cnpj',
-                cnpjCpf: e.target.value
+                cnpjCpf: value
             }).then(response => {
                 setCodeCNPJ(response.status)
             })
@@ -262,7 +265,7 @@ const FornecedorPage = ({ units }) => {
                                     variant='h6'
                                     sx={{ fontWeight: 600 }}
                                 >{`Bem-vindo Fornecedor`}</TypographyStyled>
-                                <Typography variant='body2'>Digite seu CNPJ e senha para começar</Typography>
+                                <Typography variant='body2'>Digite seu CNPJ ou CPF e senha para começar</Typography>
                             </Box>
 
                             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
@@ -281,7 +284,7 @@ const FornecedorPage = ({ units }) => {
                                                     onBlur={onBlur}
                                                     onChange={e => {
                                                         onChange(e)
-                                                        validationExistCNPJCPF(e)
+                                                        validationExistCNPJCPF(e.target.value, isCpf)
                                                     }}
                                                     error={Boolean(errors.cnpj)}
                                                     placeholder={isCpf ? '000.000.000-00' : '00.000.000/0000-00'}
@@ -304,7 +307,13 @@ const FornecedorPage = ({ units }) => {
                                         label='CPF'
                                         labelPlacement='top'
                                         control={
-                                            <Checkbox checked={isCpf} onChange={e => setIsCpf(e.target.checked)} />
+                                            <Checkbox
+                                                checked={isCpf}
+                                                onChange={e => {
+                                                    setIsCpf(e.target.checked)
+                                                    validateExist(e.target.checked)
+                                                }}
+                                            />
                                         }
                                         sx={{ position: 'relative', top: -15 }}
                                     />

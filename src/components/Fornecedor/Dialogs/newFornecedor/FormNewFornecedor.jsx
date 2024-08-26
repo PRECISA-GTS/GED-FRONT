@@ -68,6 +68,16 @@ const FormNewFornecedor = ({
         setRisks(arrRisks)
     }
 
+    const copyNameToNickname = () => {
+        if (isCpf && (!getValues('fields.nomeFantasia') || getValues('fields.nomeFantasia') == '')) {
+            setValue('fields.nomeFantasia', getValues('fields.razaoSocial'))
+            setFields({
+                ...fields,
+                nomeFantasia: getValues('fields.razaoSocial')
+            })
+        }
+    }
+
     const clearCnpj = () => {
         setFields(null)
         setValue('fields.cnpj', '')
@@ -202,6 +212,7 @@ const FormNewFornecedor = ({
                     title={isCpf ? 'Nome' : 'Razão Social'}
                     name='fields.razaoSocial'
                     value={fields?.razaoSocial}
+                    onBlur={copyNameToNickname}
                     disabled={!validCnpj}
                     required
                     control={control}
