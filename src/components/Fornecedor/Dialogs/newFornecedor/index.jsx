@@ -2,7 +2,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
-import { validationCNPJ } from '../../../../configs/validations'
+import { validationCNPJ, validationCPF } from '../../../../configs/validations'
 import { api } from 'src/configs/api'
 import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
@@ -20,7 +20,10 @@ const NewFornecedor = ({
     watch,
     trigger,
     setIsNotFactory,
-    isNotFactory
+    isNotFactory,
+
+    setIsCpf,
+    isCpf
 }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
@@ -29,12 +32,13 @@ const NewFornecedor = ({
     const [sipeAgro, setSipeAgro] = useState(null)
     const [validationCnpj, setValidationCnpj] = useState(null)
 
-    const handleCnpj = cnpj => {
-        if (cnpj.length == 18) {
-            if (validationCNPJ(cnpj)) {
+    const handleCnpjCpf = (cnpj, isCpf) => {
+        //? CPF ou CNPJ
+        if ((isCpf && cnpj.length == 14) || (!isCpf && cnpj.length == 18)) {
+            if (isCpf ? validationCPF(cnpj) : validationCNPJ(cnpj)) {
                 setValidationCnpj(true)
-                getFornecedorByCnpj(cnpj)
-                getMapaSipeAgro(cnpj)
+                getFornecedorByCnpj(cnpj, isCpf)
+                if (!isCpf) getMapaSipeAgro(cnpj)
             } else {
                 setValidationCnpj(false)
             }
@@ -58,9 +62,10 @@ const NewFornecedor = ({
     }
 
     //? Copia dados da unidade
-    const getFornecedorByCnpj = async cnpj => {
+    const getFornecedorByCnpj = async (cnpj, isCpf) => {
         try {
             const responseLastForm = await api.post(`/formularios/fornecedor/cnpj`, {
+                type: isCpf ? 'cpf' : 'cnpj',
                 unidadeID: loggedUnity.unidadeID,
                 cnpj: cnpj
             })
@@ -179,7 +184,7 @@ const NewFornecedor = ({
 
     useEffect(() => {
         setChange(!change)
-        if (cnpj && cnpj.length > 0) handleCnpj(cnpj)
+        if (cnpj && cnpj.length > 0) handleCnpjCpf(cnpj)
     }, [])
 
     useEffect(() => {
@@ -210,10 +215,12 @@ const NewFornecedor = ({
                                 getValues={getValues}
                                 watch={watch}
                                 register={register}
-                                handleCnpj={handleCnpj}
+                                handleCnpjCpf={handleCnpjCpf}
                                 validCnpj={validationCnpj}
                                 setIsNotFactory={setIsNotFactory}
                                 isNotFactory={isNotFactory}
+                                setIsCpf={setIsCpf}
+                                isCpf={isCpf}
                             />
                         </Box>
 
