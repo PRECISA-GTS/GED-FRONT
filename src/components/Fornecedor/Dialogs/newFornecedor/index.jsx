@@ -184,6 +184,7 @@ const NewFornecedor = ({
 
     useEffect(() => {
         setChange(!change)
+        setIsCpf(false)
         if (cnpj && cnpj.length > 0) handleCnpjCpf(cnpj)
     }, [])
 
@@ -276,43 +277,51 @@ const NewFornecedor = ({
 
                     {/* Direita */}
                     <Grid item xs={12} md={6}>
-                        {/* Dados MAPA (importação tabela) */}
-                        <MapaSipeAgro key={sipeAgro} sipeAgro={sipeAgro} />
+                        {!isCpf ? (
+                            <>
+                                {/* Dados MAPA (importação tabela) */}
+                                <MapaSipeAgro key={sipeAgro} sipeAgro={sipeAgro} />
 
-                        {/* Dados receita federal */}
-                        <Card sx={{ mt: 4 }}>
-                            <CardContent>
-                                <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
-                                    <Typography variant='body2'>
-                                        <strong>Dados consultados da Receita Federal</strong>
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Razão Social:</strong> {fields?.razaoSocial}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Nome Fantasia:</strong> {fields?.nomeFantasia}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>CNPJ:</strong> {fields?.cnpj}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Status:</strong> {fields?.status}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Data Abertura:</strong> {fields?.dataAbertura}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Telefone:</strong> {fields?.telefone}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>E-mail:</strong> {fields?.email}
-                                    </Typography>
-                                    <Typography variant='caption'>
-                                        <strong>Cidade:</strong> {fields?.cidade}
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </Card>
+                                {/* Dados receita federal */}
+                                <Card sx={{ mt: 4 }}>
+                                    <CardContent>
+                                        <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
+                                            <Typography variant='body2'>
+                                                <strong>Dados consultados da Receita Federal</strong>
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Razão Social:</strong> {fields?.razaoSocial}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Nome Fantasia:</strong> {fields?.nomeFantasia}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>CNPJ:</strong> {fields?.cnpj}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Status:</strong> {fields?.status}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Data Abertura:</strong> {fields?.dataAbertura}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Telefone:</strong> {fields?.telefone}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>E-mail:</strong> {fields?.email}
+                                            </Typography>
+                                            <Typography variant='caption'>
+                                                <strong>Cidade:</strong> {fields?.cidade}
+                                            </Typography>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        ) : (
+                            <div className='flex items-start justify-center mt-24'>
+                                <Typography variant='body1'>Sem dados a serem consultados</Typography>
+                            </div>
+                        )}
                     </Grid>
                 </Grid>
             </DialogContentText>
