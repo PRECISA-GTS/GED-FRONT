@@ -1,6 +1,6 @@
 // ** React Imports
 import { useRouter } from 'next/router';
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { AuthContext } from './AuthContext';
 import { api } from 'src/configs/api';
 
@@ -12,6 +12,7 @@ const FornecedorContext = createContext(defaultProvider)
 const FornecedorProvider = ({ children }) => {
   const router = useRouter();
   const { loggedUnity, user } = useContext(AuthContext)
+  const [isCpf, setIsCpf] = useState(false)
 
   const verifySupplierRisk = async () => {
     if (loggedUnity && user && loggedUnity.unidadeID && user.usuarioID) {
@@ -32,7 +33,10 @@ const FornecedorProvider = ({ children }) => {
     verifySupplierRisk()
   }, [user, loggedUnity, router.pathname])
 
-  const values = null
+  const values = {
+    isCpf,
+    setIsCpf
+  }
 
   return <FornecedorContext.Provider value={values}>{children}</FornecedorContext.Provider>
 }

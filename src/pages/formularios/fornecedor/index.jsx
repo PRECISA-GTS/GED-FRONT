@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorConclusion from 'src/components/Fornecedor/Dialogs/NewFornecedor/FormFornecedorConclusion'
-import { useFornecedor } from 'src/context/FornecedorContext'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
 
@@ -32,7 +32,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const [isNotFactory, setIsNotFactory] = useState(false)
-    const [isCpf, setIsCpf] = useState(false)
+    const { isCpf, setIsCpf } = useContext(FornecedorContext)
 
     const {
         form,
@@ -248,12 +248,7 @@ const Fornecedor = () => {
                 size='lg'
                 fullHeight
             >
-                <NewFornecedor
-                    setIsNotFactory={setIsNotFactory}
-                    isNotFactory={isNotFactory}
-                    setIsCpf={setIsCpf}
-                    isCpf={isCpf}
-                />
+                <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>
 
             {/* Modal que exibe mensagem de novo fornecedor habilitado */}
