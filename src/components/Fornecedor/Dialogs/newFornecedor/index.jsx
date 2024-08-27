@@ -182,7 +182,7 @@ const NewFornecedor = ({
 
     useEffect(() => {
         setChange(!change)
-        setIsCpf(false)
+        // setIsCpf(false)
         if (cnpj && cnpj.length > 0) handleCnpjCpf(cnpj)
     }, [])
 
