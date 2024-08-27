@@ -195,7 +195,7 @@ const FormParametrosLimpeza = ({ id }) => {
 
         // Inserir no array de blocos removidos
         let newRemovedBlocks = [...arrRemovedBlocks]
-        newRemovedBlocks.push(block.dados.parRecebimentoMpModeloBlocoID)
+        newRemovedBlocks.push(block.dados.parLimpezaModeloBlocoID)
         setArrRemovedBlocks(newRemovedBlocks)
 
         // Remove bloco

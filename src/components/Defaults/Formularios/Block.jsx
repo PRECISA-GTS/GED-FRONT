@@ -109,8 +109,9 @@ const Block = ({
     }
 
     useEffect(() => {
+        console.log('🚀 ~ renderiza bloco useeffect:')
         validateBlockPermission()
-    }, [user, disabled])
+    }, [user, bloco, disabled])
 
     return (
         <Card key={Math.random()}>

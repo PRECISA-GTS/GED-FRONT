@@ -31,7 +31,7 @@ const Limpeza = () => {
                 setFilteredData(response.data)
                 setData(response.data)
                 setTitle({
-                    title: 'Limpeza',
+                    title: 'Limpeza e Higienização',
                     subtitle: {
                         id: id,
                         count: response.data.length,

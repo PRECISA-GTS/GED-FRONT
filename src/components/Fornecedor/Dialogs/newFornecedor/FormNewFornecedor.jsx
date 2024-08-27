@@ -3,18 +3,19 @@ import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
-import { Box, Typography } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import FormGrupoAnexos from 'src/components/Cadastros/grupoAnexos/FormGrupoAnexos'
 import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import ToggleButtonLabel from 'src/components/Form/ToggleButtonLabel'
+import { validationCNPJ, validationCPF } from 'src/configs/validations'
 
 const FormNewFornecedor = ({
     fields,
     params,
     habilitaQuemPreencheFormFornecedor,
     setFields,
-    handleCnpj,
+    handleCnpjCpf,
     validCnpj,
     getValues,
     control,
@@ -22,9 +23,13 @@ const FormNewFornecedor = ({
     setValue,
     register,
     watch,
+    trigger,
     reset,
     setIsNotFactory,
-    isNotFactory
+    isNotFactory,
+
+    setIsCpf,
+    isCpf
 }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState([])
@@ -36,6 +41,7 @@ const FormNewFornecedor = ({
     const [componetSelect, setComponetSelect] = useState(null)
     const [categories, setCategories] = useState([])
     const [risks, setRisks] = useState([])
+    const [isValidCnpjCpf, setIsValidCnpjCpf] = useState(false)
 
     const getModels = async () => {
         const result = await api.post(`/formularios/fornecedor/getModels`, { unidadeID: loggedUnity.unidadeID })
@@ -65,18 +71,31 @@ const FormNewFornecedor = ({
         setRisks(arrRisks)
     }
 
+    const copyNameToNickname = () => {
+        if (isCpf && (!getValues('fields.nomeFantasia') || getValues('fields.nomeFantasia') == '')) {
+            setValue('fields.nomeFantasia', getValues('fields.razaoSocial'))
+            setFields({
+                ...fields,
+                nomeFantasia: getValues('fields.razaoSocial')
+            })
+        }
+    }
+
     const clearCnpj = () => {
         setFields(null)
         setValue('fields.cnpj', '')
         setValue('fields.razaoSocial', '')
+        setValue('fields.nomeFantasia', '')
         setValue('fields.email', '')
+        setValue('fields.categoria', null)
+        setValue('fields.risco', null)
         setValue('fields.modelo', null)
         setValue('fields.gruposAnexo', [])
         setValue('fields.produtos', [])
     }
 
     const handleCnpjChange = async e => {
-        handleCnpj(e)
+        handleCnpjCpf(e, isCpf)
         await getCategories()
     }
 
@@ -94,6 +113,12 @@ const FormNewFornecedor = ({
             updateRisks(categories, getValues('fields.categoria').id)
         }
     }, [categories, getValues('fields.categoria')])
+
+    useEffect(() => {
+        // Revalida o campo 'fields.cnpj' quando 'isCpf' muda
+        setValue('fields.cnpj', '')
+        trigger('fields.cnpj')
+    }, [isCpf, trigger])
 
     const handleConfirmNew = async (data, name) => {
         setOpenModalNew(false)
@@ -145,6 +170,12 @@ const FormNewFornecedor = ({
         setOpenModalNew(false)
     }
 
+    useEffect(() => {
+        const cnpjCpf = watch('fields.cnpj')
+        const tempValid = isCpf ? validationCPF(cnpjCpf) : validationCNPJ(cnpjCpf)
+        setIsValidCnpjCpf(tempValid)
+    }, [isCpf, getValues('fields.cnpj')])
+
     return (
         models &&
         products && (
@@ -162,35 +193,52 @@ const FormNewFornecedor = ({
                             />
                         </div>
                     )}
-                    <Input
-                        xs={12}
-                        md={12}
-                        title='CNPJ'
-                        name='fields.cnpj'
-                        value={fields?.cnpj}
-                        onChange={e => {
-                            handleCnpjChange(e)
-                            // handleCnpj(e)
-                            // getCategories()
-                        }}
-                        clearField={getValues('fields.cnpj') ? clearCnpj : null}
-                        mask='cnpj'
-                        required
-                        control={control}
-                        errors={errors?.fields?.cnpj}
-                    />
-                    {validCnpj == false && (
-                        <Typography variant='body2' color='error'>
-                            CNPJ inválido!
-                        </Typography>
-                    )}
+                    <div className='flex items-center'>
+                        <div className='w-full'>
+                            <Input
+                                xs={12}
+                                md={12}
+                                title={isCpf ? 'CPF' : 'CNPJ'}
+                                name='fields.cnpj'
+                                value={fields?.cnpj}
+                                onChange={e => {
+                                    handleCnpjChange(e)
+                                }}
+                                clearField={getValues('fields.cnpj') ? clearCnpj : null}
+                                mask={isCpf ? 'cpf' : 'cnpj'}
+                                required
+                                control={control}
+                                errors={errors?.fields?.cnpj}
+                            />
+                            {!isValidCnpjCpf && (
+                                <Typography variant='body2' color='error'>
+                                    {isCpf ? 'CPF Inválido' : 'CNPJ Inválido'}
+                                </Typography>
+                            )}
+                        </div>
+                        <FormControlLabel
+                            label='CPF'
+                            labelPlacement='top'
+                            control={
+                                <Checkbox
+                                    checked={isCpf}
+                                    onChange={e => {
+                                        setIsCpf(e.target.checked)
+                                        handleCnpjCpf(getValues('fields.cnpj'), e.target.checked)
+                                    }}
+                                />
+                            }
+                            sx={{ position: 'relative', top: -10 }}
+                        />
+                    </div>
                 </Box>
                 <Input
                     xs={12}
                     md={12}
-                    title='Razão Social'
+                    title={isCpf ? 'Nome' : 'Razão Social'}
                     name='fields.razaoSocial'
                     value={fields?.razaoSocial}
+                    onBlur={copyNameToNickname}
                     disabled={!validCnpj}
                     required
                     control={control}
@@ -199,7 +247,7 @@ const FormNewFornecedor = ({
                 <Input
                     xs={12}
                     md={12}
-                    title='Nome Fantasia'
+                    title={isCpf ? 'Apelido' : 'Nome Fantasia'}
                     name='fields.nomeFantasia'
                     value={fields?.nomeFantasia}
                     disabled={!validCnpj}

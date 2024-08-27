@@ -32,6 +32,7 @@ const Fornecedor = () => {
     const [openModalConclusion, setOpenModalConclusion] = useState(false)
     const [responseConclusion, setResponseConclusion] = useState(null)
     const [isNotFactory, setIsNotFactory] = useState(false)
+    const [isCpf, setIsCpf] = useState(false)
 
     const {
         form,
@@ -79,7 +80,7 @@ const Fornecedor = () => {
     //? handleSubmit do modal de gerar um novo fornecedor
     const makeFornecedor = async values => {
         try {
-            const response = await api.post(`/formularios/fornecedor/makeFornecedor`, {
+            const data = {
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
                 profissionalID: user.profissionalID,
@@ -87,8 +88,13 @@ const Fornecedor = () => {
                 values: values.fields,
                 habilitaQuemPreencheFormFornecedor: values.habilitaQuemPreencheFormFornecedor,
                 fornecedorCategoriaID: values.fields?.categoria?.fornecedorCategoriaID,
-                fornecedorCategoriaRiscoID: values.fields?.risco?.fornecedorCategoriaRiscoID
-            })
+                fornecedorCategoriaRiscoID: values.fields?.risco?.fornecedorCategoriaRiscoID,
+                isCpf
+            }
+            console.log('🚀 ~ onSubmit:', data)
+
+            setOpen(false)
+            const response = await api.post(`/formularios/fornecedor/makeFornecedor`, data)
 
             if (response.status == 200) {
                 toast.success(response.data.message)
@@ -132,14 +138,6 @@ const Fornecedor = () => {
         getList()
         startFilter(<Filters />)
     }, [id, router.query])
-
-    // verifica se tem f na rota, se estiver ja direciona para o formulario do id correspondente
-    useEffect(() => {
-        if (router.query.f) setId(router.query.f)
-        // if (router.query.s) {
-        //     filterRouteByStatus(router.query.s)
-        // }
-    }, [router.query])
 
     const arrColumns =
         user.papelID == 1
@@ -250,7 +248,12 @@ const Fornecedor = () => {
                 size='lg'
                 fullHeight
             >
-                <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
+                <NewFornecedor
+                    setIsNotFactory={setIsNotFactory}
+                    isNotFactory={isNotFactory}
+                    setIsCpf={setIsCpf}
+                    isCpf={isCpf}
+                />
             </DialogActs>
 
             {/* Modal que exibe mensagem de novo fornecedor habilitado */}

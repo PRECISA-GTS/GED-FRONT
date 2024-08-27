@@ -144,7 +144,7 @@ const FormTipoVeiculo = ({
                         handleModalClose={handleModalClose}
                         handleSubmit={() => handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
-                        onclickDelete={() => setOpenDelete(true)}
+                        onclickDelete={() => setOpen(true)}
                         type={type}
                         outsideID={outsideID}
                     />

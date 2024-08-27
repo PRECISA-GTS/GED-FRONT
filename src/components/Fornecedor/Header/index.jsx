@@ -133,10 +133,10 @@ const HeaderFields = ({
             <Input
                 xs={12}
                 md={4}
-                title='CNPJ'
+                title={values.cpf ? 'CPF' : 'CNPJ'}
                 name={`fieldsHeader.cnpj`}
                 type='string'
-                mask='cnpj'
+                mask={values.cpf ? 'cpf' : 'cnpj'}
                 disabled={true}
                 register={register}
                 control={control}
@@ -148,7 +148,7 @@ const HeaderFields = ({
             <Input
                 xs={12}
                 md={4}
-                title='Razão Social'
+                title={values.cpf ? 'Nome' : 'Razão Social'}
                 name={`fieldsHeader.razaoSocial`}
                 type='string'
                 disabled={disabled}
@@ -162,7 +162,7 @@ const HeaderFields = ({
             <Input
                 xs={12}
                 md={4}
-                title='Nome Fantasia'
+                title={values.cpf ? 'Apelido' : 'Nome fantasia'}
                 name={`fieldsHeader.nomeFantasia`}
                 type='string'
                 disabled={disabled}

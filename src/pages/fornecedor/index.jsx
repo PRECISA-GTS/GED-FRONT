@@ -25,8 +25,8 @@ import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import { RouteContext } from 'src/context/RouteContext'
 
 //* CNPJ Mask
-import { cnpjMask } from '../../configs/masks'
-import { validationCNPJ } from '../../configs/validations'
+import { cnpjMask, cpfMask } from '../../configs/masks'
+import { validationCNPJ, validationCPF } from '../../configs/validations'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -106,12 +106,9 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-    cnpj: yup
-        .string()
-        .required('O CNPJ é obrigatório')
-        .min(18, 'O CNPJ deve ser preenchido completamente')
-        .max(18)
-        .test('O CNPJ é válido', 'O CNPJ é inválido', value => validationCNPJ(value)),
+    cnpj: yup.string().required('Campo obrigatório').min(14, 'O campo deve ser preenchido completamente').max(18),
+    // .test('Campo válido', 'Campo inválido', value => validationCNPJ(value)),
+
     password: yup.string().min(4, 'A senha deve conter pelo menos 4 caracteres').required('A senha é obrigatória')
 })
 
@@ -121,6 +118,7 @@ const defaultValues = {
 }
 
 const FornecedorPage = ({ units }) => {
+    const [isCpf, setIsCpf] = useState(false)
     const [rememberMe, setRememberMe] = useState(true)
     const [showPassword, setShowPassword] = useState(false)
     const [codeCNPJ, setCodeCNPJ] = useState(null)
@@ -144,6 +142,7 @@ const FornecedorPage = ({ units }) => {
         control,
         setError,
         handleSubmit,
+        getValues,
         formState: { errors }
     } = useForm({
         defaultValues,
@@ -157,13 +156,13 @@ const FornecedorPage = ({ units }) => {
     const onSubmit = data => {
         const { cnpj, password } = data
         setId(null)
-        auth.loginFornecedor({ cnpj, password, rememberMe }, error => {
+        auth.loginFornecedor({ type: isCpf ? 'cpf' : 'cnpj', cnpjCpf: cnpj, password, rememberMe }, error => {
             setError('cnpj', {
                 type: 'manual',
-                message: 'CNPJ e/ou senha inválidos!'
+                message: isCpf ? 'CPF e/ou senha inválidos!' : 'CNPJ e/ou senha inválidos!'
             })
             if (error && error.response && error.response.status === 401) {
-                toast.error('CNPJ e/ou senha inválidos!')
+                toast.error(isCpf ? 'CPF e/ou senha inválidos!' : 'CNPJ e/ou senha inválidos!')
             }
         })
     }
@@ -182,11 +181,19 @@ const FornecedorPage = ({ units }) => {
         await api.post(`/login-fornecedor/setAcessLink`, { data })
     }
 
+    const validateExist = isCpf => {
+        const formatedValue = isCpf ? cpfMask(getValues('cnpj')) : cnpjMask(getValues('cnpj'))
+        validationExistCNPJCPF(formatedValue, isCpf)
+    }
+
     // Validar se o CNPJ esta na tabela fabrica_fornecedor
-    const validationExistCNPJ = e => {
+    const validationExistCNPJCPF = (value, isCpf) => {
         setCodeCNPJ(null)
-        if (e.target.value.length === 18 && validationCNPJ(e.target.value)) {
-            api.post(`/login-fornecedor/validationCNPJ`, { cnpj: e.target.value }).then(response => {
+        if ((value.length === 14 || value.length === 18) && (isCpf ? validationCPF(value) : validationCNPJ(value))) {
+            api.post(`/login-fornecedor/validationCNPJ`, {
+                type: isCpf ? 'cpf' : 'cnpj',
+                cnpjCpf: value
+            }).then(response => {
                 setCodeCNPJ(response.status)
             })
         }
@@ -258,42 +265,59 @@ const FornecedorPage = ({ units }) => {
                                     variant='h6'
                                     sx={{ fontWeight: 600 }}
                                 >{`Bem-vindo Fornecedor`}</TypographyStyled>
-                                <Typography variant='body2'>Digite seu CNPJ e senha para começar</Typography>
+                                <Typography variant='body2'>Digite seu CNPJ ou CPF e senha para começar</Typography>
                             </Box>
 
                             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-                                <FormControl fullWidth sx={{ mb: 4 }}>
-                                    <Controller
-                                        name='cnpj'
-                                        control={control}
-                                        rules={{ required: true }}
-                                        render={({ field: { value, onChange, onBlur } }) => (
-                                            <TextField
-                                                autoFocus
-                                                label='CNPJ'
-                                                size='small'
-                                                value={cnpjMask(value ?? '')}
-                                                onBlur={onBlur}
+                                <div className='flex items-start justify-center gap-0 '>
+                                    <FormControl fullWidth sx={{ mb: 4 }}>
+                                        <Controller
+                                            name='cnpj'
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field: { value, onChange, onBlur } }) => (
+                                                <TextField
+                                                    autoFocus
+                                                    label={isCpf ? 'CPF' : 'CNPJ'}
+                                                    size='small'
+                                                    value={isCpf ? cpfMask(value ?? '') : cnpjMask(value ?? '')}
+                                                    onBlur={onBlur}
+                                                    onChange={e => {
+                                                        onChange(e)
+                                                        validationExistCNPJCPF(e.target.value, isCpf)
+                                                    }}
+                                                    error={Boolean(errors.cnpj)}
+                                                    placeholder={isCpf ? '000.000.000-00' : '00.000.000/0000-00'}
+                                                    inputProps={{
+                                                        maxLength: isCpf ? 14 : 18,
+                                                        type: 'tel', // define o tipo de entrada como 'tel'
+                                                        inputMode: 'numeric' // define o inputMode como 'numeric'
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                        {errors.cnpj && (
+                                            <FormHelperText sx={{ color: 'error.main' }}>
+                                                {errors.cnpj.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+
+                                    <FormControlLabel
+                                        label='CPF'
+                                        labelPlacement='top'
+                                        control={
+                                            <Checkbox
+                                                checked={isCpf}
                                                 onChange={e => {
-                                                    onChange(e)
-                                                    validationExistCNPJ(e)
-                                                }}
-                                                error={Boolean(errors.cnpj)}
-                                                placeholder='00.000.000/0000-00'
-                                                inputProps={{
-                                                    maxLength: 18,
-                                                    type: 'tel', // define o tipo de entrada como 'tel'
-                                                    inputMode: 'numeric' // define o inputMode como 'numeric'
+                                                    setIsCpf(e.target.checked)
+                                                    validateExist(e.target.checked)
                                                 }}
                                             />
-                                        )}
+                                        }
+                                        sx={{ position: 'relative', top: -15 }}
                                     />
-                                    {errors.cnpj && (
-                                        <FormHelperText sx={{ color: 'error.main' }}>
-                                            {errors.cnpj.message}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
+                                </div>
                                 <FormControl fullWidth>
                                     <Controller
                                         name='password'
@@ -377,8 +401,8 @@ const FornecedorPage = ({ units }) => {
                                 {/* Verifica se o CNPJ existe na tabela fornecedor_fabrica e mostra mensagem de acordo*/}
                                 {codeCNPJ && codeCNPJ == 202 ? (
                                     <Alert severity='warning'>
-                                        Antes de realizar o cadastro, é necessário que uma fábrica habilite o seu CNPJ
-                                        como um fornecedor.
+                                        Antes de realizar o cadastro, é necessário que uma fábrica habilite o seu
+                                        CNPJ/CPF como um fornecedor.
                                     </Alert>
                                 ) : codeCNPJ == 201 ? (
                                     <Alert severity='warning'>

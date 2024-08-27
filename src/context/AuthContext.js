@@ -304,7 +304,6 @@ const AuthProvider = ({ children }) => {
     const route = router.query.f ? 'fornecedor?f=' : 'fornecedor?r='
 
     if (paramns && !storedToken) {
-      console.log('useEffect en authcontext')
       const rota = `/${route}${paramns}`
       router.replace(rota)
     }

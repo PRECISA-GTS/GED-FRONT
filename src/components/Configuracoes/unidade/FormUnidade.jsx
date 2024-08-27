@@ -26,7 +26,7 @@ import { AuthContext } from 'src/context/AuthContext'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import CheckLabel from 'src/components/Form/CheckLabel'
-import { validationCNPJ } from 'src/configs/validations'
+import { validationCNPJ, validationCPF } from 'src/configs/validations'
 import NewPassword from './NewPassword'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 
@@ -49,7 +49,6 @@ const FormUnidade = ({ id }) => {
     const { settings } = useContext(SettingsContext)
     const mode = settings.mode
     const [categories, setCategories] = useState([])
-    console.log('🚀  categories', categories)
 
     const {
         trigger,
@@ -83,20 +82,18 @@ const FormUnidade = ({ id }) => {
         }
     }
 
-    console.log('get valuesssss', getValues('fields.fornecedorCategoriaID'))
-
     // Função que atualiza os dados ou cria novo dependendo do tipo da rota
     const onSubmit = async datas => {
         // Verifica se o CNPJ é válido se ele for envalido retorna erro e retorna
-        const cnpjValidation = validationCNPJ(datas.fields.cnpj)
-        if (!cnpjValidation) {
+        const cnpjCpfValidation =
+            datas.fields.cpf === 1 ? validationCPF(datas.fields.cnpj) : validationCNPJ(datas.fields.cnpj)
+        if (!cnpjCpfValidation) {
             setError('fields.cnpj', {
                 type: 'required',
-                message: 'CNPJ inválido'
+                message: datas.fields.cpf === 1 ? 'CPF inválido' : 'CNPJ inválido'
             })
             return
         }
-        console.log('🚀  datas fildsssss', datas.fields)
 
         const data = {
             ...datas,
@@ -120,7 +117,6 @@ const FormUnidade = ({ id }) => {
         delete data.fields.categoriaNome
         delete data.fields.riscoNome
 
-        console.log('🚀  dataaaaaaaaa', data.fields)
         try {
             if (type === 'new') {
                 await api.post(`${backRoute(staticUrl)}/new/insertData`, data).then(response => {
@@ -188,7 +184,6 @@ const FormUnidade = ({ id }) => {
             try {
                 const response = await api.get(`${staticUrl}/${id}`)
                 reset(response.data)
-                console.log('🚀  response', response)
                 setData(response.data)
                 setFileCurrent(response.data.fields.cabecalhoRelatorioTitle)
                 setPhotoProfile(response.data?.fields?.cabecalhoRelatorio)
@@ -383,17 +378,7 @@ const FormUnidade = ({ id }) => {
                                             <Input
                                                 xs={12}
                                                 md={4}
-                                                title='Nome Fantasia'
-                                                name='fields.nomeFantasia'
-                                                required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.nomeFantasia}
-                                            />
-                                            <Input
-                                                xs={12}
-                                                md={4}
-                                                title='Razão Social'
+                                                title={data.fields.cpf === 1 ? 'Nome' : 'Razão Social'}
                                                 name='fields.razaoSocial'
                                                 required={true}
                                                 register={register}
@@ -403,9 +388,19 @@ const FormUnidade = ({ id }) => {
                                             <Input
                                                 xs={12}
                                                 md={4}
-                                                title='CNPJ'
+                                                title={data.fields.cpf === 1 ? 'Apelido' : 'Nome Fantasia'}
+                                                name='fields.nomeFantasia'
+                                                required={true}
+                                                register={register}
+                                                control={control}
+                                                errors={errors?.fields?.nomeFantasia}
+                                            />
+                                            <Input
+                                                xs={12}
+                                                md={4}
+                                                title={data.fields.cpf === 1 ? 'CPF' : 'CNPJ'}
                                                 name='fields.cnpj'
-                                                mask='cnpj'
+                                                mask={data.fields.cpf === 1 ? 'cpf' : 'cnpj'}
                                                 required
                                                 disabled={user.papelID !== 1}
                                                 register={register}
