@@ -97,7 +97,7 @@ const AuthProvider = ({ children }) => {
         setUnitsUser(JSON.parse(window.localStorage.getItem('userUnits')))
         setLoggedUnity(JSON.parse(window.localStorage.getItem('loggedUnity')))
         setRoutes(JSON.parse(window.localStorage.getItem('routes')))
-        setMenu(JSON.parse(window.localStorage.getItem('menu')))
+        setMenu(JSON.parse(window.localStorage.getItem('menu')) || [])
         if (data) {
           setUser({ ...data })
           setLoading(false)
@@ -258,7 +258,7 @@ const AuthProvider = ({ children }) => {
     const route = papelID === 2 ? '/login-fornecedor' : '/login'
 
     api.get(`${route}?papelID=${papelID}`, { headers: { 'function-name': 'getMenu' } }).then(response => {
-      setMenu(response.data)
+      setMenu(response.data || [])
       localStorage.setItem('menu', JSON.stringify(response.data))
     }).catch(err => {
       console.log(err)
@@ -315,6 +315,20 @@ const AuthProvider = ({ children }) => {
     return hasPermission
   }
 
+  // Valida se possui a permissão (baseado nas configurações de rota do profissional)
+  const hasPermission = (path, permission) => {
+    if (!routes) return false
+    if (user.admin === 1) return true
+
+    //? /configuracoes/formularios/fornecedor, /configuracoes/formularios/recebimento-mp, ...
+    if (path.split('/').length > 3) {
+      path = path.split('/').slice(0, 3).join('/')
+    }
+
+    const result = routes.find(row => row.rota === path && row[permission])
+    return result
+  }
+
   const values = {
     user,
     getMenu,
@@ -335,7 +349,8 @@ const AuthProvider = ({ children }) => {
     logout: handleLogout,
     register: handleRegister,
     paramsReport, setParamsReport,
-    hasSectorPermission
+    hasSectorPermission,
+    hasPermission
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

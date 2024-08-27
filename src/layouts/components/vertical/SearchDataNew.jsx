@@ -92,7 +92,14 @@ const SearchDataNew = () => {
                                     category: item.nome
                                 })
                                 // Mostra apenas se usuário tiver permissão de inserir
-                                if (routes.find(row => row.rota === subitem.rota && row.inserir)) {
+                                if (
+                                    routes.find(
+                                        row =>
+                                            row.rota === subitem.rota &&
+                                            row.inserir &&
+                                            row.rota !== '/configuracoes/formularios'
+                                    )
+                                ) {
                                     data.push({
                                         id: subitem.id,
                                         url: `${subitem.rota}/novo`,

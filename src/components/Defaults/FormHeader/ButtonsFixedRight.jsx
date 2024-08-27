@@ -1,9 +1,11 @@
-import { Button, Tooltip } from '@mui/material'
+import { Button } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import Router from 'next/router'
 import Link from 'next/link'
 import useLoad from 'src/hooks/useLoad'
 import { useGlobal } from 'src/hooks/useGlobal'
+import { AuthContext } from 'src/context/AuthContext'
+import { useContext } from 'react'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -22,11 +24,12 @@ const ButtonsFixedRight = ({
     const router = Router
     const { isLoading } = useLoad()
     const { data } = useGlobal()
+    const { hasPermission } = useContext(AuthContext)
 
     return (
         <div className='flex items-center gap-2'>
             {/* Novo */}
-            {btnNew && routes.find(route => route.rota === router.pathname && route.inserir) && (
+            {btnNew && hasPermission(router.pathname, 'inserir') && (
                 <Link href={`${router.pathname}/novo`}>
                     <Button
                         type='button'
@@ -42,7 +45,7 @@ const ButtonsFixedRight = ({
             )}
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}
-            {btnSend && data && (
+            {btnSend && data && hasPermission(router.pathname, 'editar') && (
                 <Button
                     onClick={handleSend}
                     type='button'
@@ -60,7 +63,7 @@ const ButtonsFixedRight = ({
                     <span className='hidden sm:block'>{titleConclusion}</span>
                 </Button>
             )}
-            {btnSave && (
+            {btnSave && hasPermission(router.pathname, 'editar') && (
                 <Button
                     onClick={handleSubmit}
                     type='submit'

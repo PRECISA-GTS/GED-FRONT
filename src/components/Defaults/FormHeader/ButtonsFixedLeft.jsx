@@ -1,7 +1,9 @@
 import { Box, Button } from '@mui/material'
+import { useContext } from 'react'
 import Icon from 'src/@core/components/icon'
 import CustomChip from 'src/@core/components/mui/chip'
 import { backRoute } from 'src/configs/defaultConfigs'
+import { AuthContext } from 'src/context/AuthContext'
 
 const ButtonsFixedLeft = ({
     routes,
@@ -18,9 +20,11 @@ const ButtonsFixedLeft = ({
     type,
     onclickDelete
 }) => {
+    const { hasPermission } = useContext(AuthContext)
+
     return (
         <div className='flex gap-2'>
-            {btnCancel && !btnClose && routes.find(route => route.rota === currentUrl && route.ler) && (
+            {btnCancel && !btnClose && hasPermission(currentUrl, 'ler') && (
                 <Button
                     onClick={() => {
                         setId(null)
@@ -37,7 +41,7 @@ const ButtonsFixedLeft = ({
                 </Button>
             )}
 
-            {btnDelete && routes.find(route => route.rota === currentUrl && route.excluir) && (
+            {btnDelete && hasPermission(currentUrl, 'excluir') && (
                 <Button
                     type='button'
                     onClick={onclickDelete}

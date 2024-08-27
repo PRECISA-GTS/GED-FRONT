@@ -28,7 +28,7 @@ import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import HistoricForm from '../Defaults/HistoricForm'
 
 const FormLimpeza = ({ id }) => {
-    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
+    const { menu, user, loggedUnity, hasPermission, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
     const [savingForm, setSavingForm] = useState(false)
     const [loadingFileItem, setLoadingFileItem] = useState(false)
@@ -129,7 +129,7 @@ const FormLimpeza = ({ id }) => {
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
         component: <DialogReOpenForm />,
-        disabled: hasFormPending ? true : false,
+        disabled: hasFormPending || !hasPermission(router.pathname, 'editar') ? true : false,
         route: null,
         type: null,
         action: changeFormStatus,
