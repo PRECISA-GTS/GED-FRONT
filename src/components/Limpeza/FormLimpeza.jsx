@@ -400,9 +400,7 @@ const FormLimpeza = ({ id }) => {
         } catch (error) {
             console.log('errro da função update/email', error)
         } finally {
-            if (param.conclusion === true) {
-                setChange(!change)
-            }
+            setChange(!change)
         }
     }
 

@@ -116,7 +116,7 @@ const HeaderFields = ({
                             <Grid container spacing={4}>
                                 {/* Inputs fixos */}
                                 {/* Data de abertura */}
-                                <DateField
+                                {/* <DateField
                                     xs={12}
                                     md={2}
                                     title='Data da abertura'
@@ -125,9 +125,8 @@ const HeaderFields = ({
                                     value={values?.abertoPor?.dataInicio}
                                     disabled
                                     control={control}
-                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
+                                    alertRequired
                                 />
-                                {/* Hora de Abertura */}
                                 <Input
                                     xs={12}
                                     md={2}
@@ -137,9 +136,8 @@ const HeaderFields = ({
                                     disabled
                                     register={register}
                                     control={control}
-                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
+                                    alertRequired
                                 />
-                                {/* Profissional que abriu */}
                                 <Input
                                     xs={12}
                                     md={8}
@@ -149,8 +147,8 @@ const HeaderFields = ({
                                     disabled
                                     register={register}
                                     control={control}
-                                    alertRequired //! Apenas pinta o campo de vermelho, não valida
-                                />
+                                    alertRequired
+                                /> */}
                                 {/* Inputs com preenchimento */}
                                 {/* Data de avaliação */}
                                 <DateField
