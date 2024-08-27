@@ -7,6 +7,7 @@ import { api } from 'src/configs/api'
 import FormNewFornecedor from './FormNewFornecedor'
 import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const NewFornecedor = ({
     cnpj,
@@ -20,10 +21,7 @@ const NewFornecedor = ({
     watch,
     trigger,
     setIsNotFactory,
-    isNotFactory,
-
-    setIsCpf,
-    isCpf
+    isNotFactory
 }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
@@ -31,6 +29,7 @@ const NewFornecedor = ({
     const [params, setParams] = useState(null)
     const [sipeAgro, setSipeAgro] = useState(null)
     const [validationCnpj, setValidationCnpj] = useState(null)
+    const { isCpf, setIsCpf } = useContext(FornecedorContext)
 
     const handleCnpjCpf = (cnpj, isCpf) => {
         //? CPF ou CNPJ
@@ -219,8 +218,6 @@ const NewFornecedor = ({
                                 validCnpj={validationCnpj}
                                 setIsNotFactory={setIsNotFactory}
                                 isNotFactory={isNotFactory}
-                                setIsCpf={setIsCpf}
-                                isCpf={isCpf}
                             />
                         </Box>
 

@@ -54,6 +54,7 @@ import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { toast } from 'react-hot-toast'
 import Logo from 'src/components/Defaults/Logo'
 import Router from 'next/router'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -118,12 +119,12 @@ const defaultValues = {
 }
 
 const FornecedorPage = ({ units }) => {
-    const [isCpf, setIsCpf] = useState(false)
     const [rememberMe, setRememberMe] = useState(true)
     const [showPassword, setShowPassword] = useState(false)
     const [codeCNPJ, setCodeCNPJ] = useState(null)
     const router = Router
     const currentLink = router.pathname
+    const { isCpf, setIsCpf } = useContext(FornecedorContext)
 
     // ** Hooks
     const auth = useAuth()

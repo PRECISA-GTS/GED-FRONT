@@ -9,6 +9,7 @@ import FormGrupoAnexos from 'src/components/Cadastros/grupoAnexos/FormGrupoAnexo
 import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import ToggleButtonLabel from 'src/components/Form/ToggleButtonLabel'
 import { validationCNPJ, validationCPF } from 'src/configs/validations'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const FormNewFornecedor = ({
     fields,
@@ -26,10 +27,7 @@ const FormNewFornecedor = ({
     trigger,
     reset,
     setIsNotFactory,
-    isNotFactory,
-
-    setIsCpf,
-    isCpf
+    isNotFactory
 }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState([])
@@ -42,6 +40,7 @@ const FormNewFornecedor = ({
     const [categories, setCategories] = useState([])
     const [risks, setRisks] = useState([])
     const [isValidCnpjCpf, setIsValidCnpjCpf] = useState(false)
+    const { isCpf, setIsCpf } = useContext(FornecedorContext)
 
     const getModels = async () => {
         const result = await api.post(`/formularios/fornecedor/getModels`, { unidadeID: loggedUnity.unidadeID })
