@@ -921,7 +921,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
                     btnCancel
-                    btnDelete={info?.status < 40 && user.papel === 1 ? true : false}
+                    btnDelete={info?.status < 40 && user.papelID === 1 ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
                     btnSave={info?.status < 40}
                     btnSend={
