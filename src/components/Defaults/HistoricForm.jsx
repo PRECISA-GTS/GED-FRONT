@@ -55,7 +55,7 @@ const HistoricForm = ({ parFormularioID, id }) => {
                         {historic &&
                             historic.length > 0 &&
                             historic.map((row, index) => (
-                                <div className='grid grid-cols-4'>
+                                <div className='grid grid-cols-4 items-center'>
                                     <div>{row.data + ' ' + row.hora}</div>
                                     <div className='flex items-center justify-start gap-2'>
                                         <TimelineDot color={statusDefault[row.statusAtual].color} />
@@ -75,7 +75,7 @@ const HistoricForm = ({ parFormularioID, id }) => {
                                         )}
                                     </div>
                                     <Typography variant='caption' className='flex items-center gap-2'>
-                                        <Icon icon='iconoir:user' />
+                                        <Icon icon='material-symbols:engineering-outline' />
                                         {row.usuario}
                                     </Typography>
                                     <Typography variant='caption' className='flex items-center gap-2'>
