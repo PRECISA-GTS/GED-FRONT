@@ -93,6 +93,7 @@ const Fornecedor = () => {
             }
             console.log('🚀 ~ onSubmit:', data)
 
+            setOpen(false)
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, data)
 
             if (response.status == 200) {

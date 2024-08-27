@@ -53,8 +53,6 @@ const NewFornecedor = ({
             const response = await api.post('/formularios/fornecedor/mapaSipeAgro', {
                 cnpj: cnpj
             })
-            console.log('🚀  response sipeagro', response)
-
             setSipeAgro(response.data)
         } catch (e) {
             console.error(e)
@@ -215,6 +213,7 @@ const NewFornecedor = ({
                                 setValue={setValue}
                                 getValues={getValues}
                                 watch={watch}
+                                trigger={trigger}
                                 register={register}
                                 handleCnpjCpf={handleCnpjCpf}
                                 validCnpj={validationCnpj}
