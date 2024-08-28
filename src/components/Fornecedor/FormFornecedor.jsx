@@ -1103,13 +1103,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 </>
                             )}
 
-                            {/* Rodapé com informações de conclusão */}
-                            {fieldsFooter && fieldsFooter.concluded && (
-                                <Typography variant='caption'>
-                                    {`Concluído por ${fieldsFooter?.profissionalAprova?.nome} em ${fieldsFooter.dataFim} ${fieldsFooter.horaFim}.`}
-                                </Typography>
-                            )}
-
                             {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}
                             {openModalStatus && (
                                 <DialogFormStatus

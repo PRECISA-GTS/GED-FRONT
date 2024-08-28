@@ -44,6 +44,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
     const [indexNewBloco, setIndexNewBloco] = useState(null)
     const [indexNewItem, setIndexNewItem] = useState(null)
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
+    const [setores, setSetores] = useState([])
 
     const createNew = (indexBloco, indexItem) => {
         setOpenModalNew(true)
@@ -154,30 +155,34 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
 
-    const removeItem = (item, indexBlock, indexItem) => {
-        if (blocks[indexBlock].itens.length === 1) {
+    const removeItem = (indexBlock, indexItem, arrItens) => {
+        if (blocks[indexBlock].itens.length == 1) {
             toast.error('Você deve ter ao menos um item!')
             return
         }
+
+        const newBlocks = getValues('blocks')
+        const newItens = arrItens.filter((_, i) => i !== indexItem)
+        newBlocks[indexBlock].itens = newItens
+
+        setBlocks(newBlocks)
+        setValue(`blocks.[${indexBlock}].itens`, newItens)
+
         // Inserir no array de itens removidos
         let newRemovedItems = [...arrRemovedItems]
-        newRemovedItems.push(item)
+        newRemovedItems.push(arrItens[indexItem].parRecebimentoMpNaoConformidadeModeloBlocoItemID)
         setArrRemovedItems(newRemovedItems)
 
-        const updatedBlocks = [...getValues('blocks')]
-        updatedBlocks[indexBlock].itens.splice(indexItem, 1)
-
-        setValue('blocks', updatedBlocks)
-
-        setBlocks(updatedBlocks)
-
-        refreshOptions(blocks[indexBlock], indexBlock, blocks, allOptions)
+        refreshOptions(newBlocks[indexBlock], indexBlock, newBlocks, allOptions)
         setChange(!change)
     }
 
-    console.log('allOptions:', allOptions)
-
     const removeBlock = (block, index) => {
+        if (blocks.length == 1) {
+            toast.error('Você deve ter ao menos um bloco!')
+            return
+        }
+
         // Verifica se o bloco possui itens com pendência
         let canDelete = true
         block &&
@@ -235,15 +240,25 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         setBlocks(newBlock)
     }
 
-    const getProfissionaisModelo = async model => {
-        const response = await api.post(`/cadastros/profissional/getProfissionaisAssinatura`, {
-            formularioID: 3, // nao conformidade do recebimento MP
+    const getSetores = async () => {
+        if (!loggedUnity) return
+
+        try {
+            const res = await api.post('/cadastros/setor', { unidadeID: loggedUnity.unidadeID })
+            setSetores(res.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const getSetoresModelo = async model => {
+        const response = await api.post(`/cadastros/setor/getSetoresAssinatura`, {
+            formularioID: 3, // Não conformidade do recebimento MP
             modeloID: id
         })
         const updatedModel = { ...model }
-        updatedModel.profissionaisPreenchem = response.data.preenche
-        updatedModel.profissionaisAprovam = response.data.aprova
-        console.log('🚀 ~ updatedModel:', updatedModel)
+        updatedModel.setoresPreenchem = response.data.preenche
+        updatedModel.setoresConcluem = response.data.conclui
         reset({
             ...getValues(),
             model: updatedModel
@@ -274,13 +289,11 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                     setAllOptions({
                         itens: response.data.options?.itens
                     })
-                    setProfissionais(response.data.options?.profissionais)
                     setOrientacoes(response.data.orientations)
 
                     //* Insere os dados no formulário
                     reset(response.data)
-
-                    getProfissionaisModelo(response.data.model)
+                    getSetoresModelo(response.data.model)
 
                     setTimeout(() => {
                         response.data.blocks &&
@@ -297,6 +310,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
 
     useEffect(() => {
         getData()
+        getSetores()
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
@@ -335,10 +349,10 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                     open={openModalDeleted}
                     handleClose={() => setOpenModalDeleted(false)}
                 />
-                {/* Modelo */}
-                {model && (
-                    <Card>
-                        <CardContent>
+                <Card>
+                    <CardContent>
+                        {/* Modelo */}
+                        {model && (
                             <Grid container spacing={4}>
                                 <Input
                                     className='order-1'
@@ -361,10 +375,44 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     register={register}
                                 />
 
+                                {/* Setores que preenchem */}
+                                {setores && (
+                                    <>
+                                        <Select
+                                            xs={12}
+                                            md={6}
+                                            className='order-5'
+                                            multiple
+                                            title='Setores que preenchem cabeçalho'
+                                            name={`model.setoresPreenchem`}
+                                            options={setores ?? []}
+                                            value={model?.setoresPreenchem ?? []}
+                                            register={register}
+                                            setValue={setValue}
+                                            control={control}
+                                            helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                        />
+                                        <Select
+                                            xs={12}
+                                            md={6}
+                                            className='order-5'
+                                            multiple
+                                            title='Setores que concluem o formulário'
+                                            name={`model.setoresConcluem`}
+                                            options={setores ?? []}
+                                            value={model?.setoresConcluem ?? []}
+                                            register={register}
+                                            setValue={setValue}
+                                            control={control}
+                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                        />
+                                    </>
+                                )}
+
                                 <Input
                                     xs={12}
                                     md={12}
-                                    className='order-4'
+                                    className='order-6'
                                     title='Cabeçalho'
                                     name={`model.cabecalho`}
                                     required={false}
@@ -374,49 +422,11 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     control={control}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
-
-                                {/* Profissionais que preenchem */}
-                                {profissionais && (
-                                    <>
-                                        <Select
-                                            xs={12}
-                                            md={6}
-                                            className='order-5'
-                                            multiple
-                                            title='Profissionais que preenchem'
-                                            name={`model.profissionaisPreenchem`}
-                                            options={profissionais ?? []}
-                                            value={model.profissionaisPreenchem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                        />
-
-                                        <Select
-                                            xs={12}
-                                            md={6}
-                                            className='order-5'
-                                            multiple
-                                            title='Profissionais que aprovam'
-                                            name={`model.profissionaisAprovam`}
-                                            options={profissionais ?? []}
-                                            value={model.profissionaisAprovam ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                        />
-                                    </>
-                                )}
                             </Grid>
-                        </CardContent>
-                    </Card>
-                )}
+                        )}
 
-                {/* Cabeçalho */}
-                {headers && (
-                    <Card sx={{ mt: 4 }}>
-                        <CardContent>
-                            {/* Lista campos */}
+                        {/* Cabeçalho */}
+                        {headers && (
                             <List component='nav' aria-label='main mailbox'>
                                 <Grid container spacing={2}>
                                     {/* Cabeçalho */}
@@ -515,9 +525,9 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     ))}
                                 </Grid>
                             </List>
-                        </CardContent>
-                    </Card>
-                )}
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* Blocos */}
                 {!blocks && <Loading />}
@@ -541,6 +551,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                         createNew={createNew}
                         viewItem={viewItem}
                         key={change}
+                        setores={setores}
                     />
                 )}
                 {/* Botão inserir bloco */}
