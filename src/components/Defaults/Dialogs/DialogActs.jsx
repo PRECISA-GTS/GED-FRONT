@@ -38,7 +38,7 @@ const DialogActs = ({
 
     const onSubmit = values => {
         reset()
-        // setOpenModal(false)
+        setOpenModal(false)
         handleConclusion(values)
     }
 
