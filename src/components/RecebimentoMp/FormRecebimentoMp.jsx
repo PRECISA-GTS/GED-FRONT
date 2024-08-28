@@ -828,10 +828,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 </Card>
                             </>
                         )}
-<<<<<<< HEAD
-
-=======
->>>>>>> 2ffee5888845a1116e28d2eb6d4dd6a09d33a4e1
                         {/* Não Conformidade */}
                         {/* {info.naoConformidade && (
                         <RecebimentoMpNaoConformidade
