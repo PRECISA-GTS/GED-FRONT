@@ -55,34 +55,43 @@ const HistoricForm = ({ parFormularioID, id }) => {
                         {historic &&
                             historic.length > 0 &&
                             historic.map((row, index) => (
-                                <div className='grid grid-cols-4 items-center'>
-                                    <div>{row.data + ' ' + row.hora}</div>
-                                    <div className='flex items-center justify-start gap-2'>
-                                        <TimelineDot color={statusDefault[row.statusAtual].color} />
-                                        <span>{statusDefault[row.statusAtual].title}</span>
-                                        {index == 0 && (
-                                            <CustomChip
-                                                size='small'
-                                                skin='light'
-                                                color={statusDefault[row.statusAtual].color}
-                                                label='Atual'
-                                                sx={{
-                                                    '& .MuiChip-label': {
-                                                        textTransform: 'capitalize'
-                                                    }
-                                                }}
-                                            />
-                                        )}
+                                <>
+                                    <div className='grid grid-cols-4 items-center'>
+                                        <div>{row.data + ' ' + row.hora}</div>
+                                        <div className='flex items-center justify-start gap-2'>
+                                            <TimelineDot color={statusDefault[row.statusAtual].color} />
+                                            <span>{statusDefault[row.statusAtual].title}</span>
+                                            {index == 0 && (
+                                                <CustomChip
+                                                    size='small'
+                                                    skin='light'
+                                                    color={statusDefault[row.statusAtual].color}
+                                                    label='Atual'
+                                                    sx={{
+                                                        '& .MuiChip-label': {
+                                                            textTransform: 'capitalize'
+                                                        }
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                        <Typography variant='caption' className='flex items-center gap-2'>
+                                            <Icon icon='material-symbols:engineering-outline' />
+                                            {row.usuario}
+                                        </Typography>
+                                        <Typography variant='caption' className='flex items-center gap-2'>
+                                            <Icon icon='mdi:company' />
+                                            {row.unidade}
+                                        </Typography>
                                     </div>
-                                    <Typography variant='caption' className='flex items-center gap-2'>
-                                        <Icon icon='material-symbols:engineering-outline' />
-                                        {row.usuario}
-                                    </Typography>
-                                    <Typography variant='caption' className='flex items-center gap-2'>
-                                        <Icon icon='mdi:company' />
-                                        {row.unidade}
-                                    </Typography>
-                                </div>
+
+                                    {row.observacao && (
+                                        <Typography
+                                            variant='caption'
+                                            className='opacity-70'
+                                        >{`${row.observacao}`}</Typography>
+                                    )}
+                                </>
                             ))}
                     </AccordionDetails>
                 </Accordion>
