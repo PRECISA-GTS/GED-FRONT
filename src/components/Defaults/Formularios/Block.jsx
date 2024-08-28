@@ -45,7 +45,7 @@ const Block = ({
 
         setBlocos(prevBlocos => {
             const newBlocos = [...prevBlocos]
-            newBlocos[blockIndex].itens.forEach((item, indexItem) => {
+            newBlocos[blockIndex]?.itens.forEach((item, indexItem) => {
                 if (item.alternativas.length > 0) {
                     //? ignora data e dissertativa
                     item.resposta = item.alternativas[colIndex]
@@ -165,7 +165,6 @@ const Block = ({
 
                     {bloco.itens.map((item, indexItem) => (
                         <Item
-                            key={indexItem}
                             blockKey={blockKey}
                             index={index}
                             indexItem={indexItem}

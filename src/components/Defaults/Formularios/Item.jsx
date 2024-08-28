@@ -20,7 +20,7 @@ const Item = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
-    if (!item) return null
+    // if (!item) return null
 
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
