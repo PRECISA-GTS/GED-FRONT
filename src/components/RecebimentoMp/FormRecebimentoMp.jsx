@@ -828,12 +828,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 </Card>
                             </>
                         )}
-                        {/* Rodapé com informações de conclusão */}
-                        {fieldsFooter && fieldsFooter.concluded && fieldsFooter.conclusion?.profissional && (
-                            <Typography variant='caption'>
-                                {`Concluído por ${fieldsFooter.conclusion.profissional.nome} em ${fieldsFooter.conclusion.dataFim} ${fieldsFooter.conclusion.horaFim}.`}
-                            </Typography>
-                        )}
                         {/* Não Conformidade */}
                         {/* {info.naoConformidade && (
                         <RecebimentoMpNaoConformidade
