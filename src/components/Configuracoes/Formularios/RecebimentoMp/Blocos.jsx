@@ -18,7 +18,6 @@ const Blocos = ({
     removeBlock,
     setValue,
     watch,
-    allOptions,
     openModalConfirmScore,
     setOpenModalConfirmScore,
     itemScore,

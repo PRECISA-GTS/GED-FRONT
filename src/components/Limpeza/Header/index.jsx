@@ -58,7 +58,7 @@ const HeaderFields = ({
 
                                 {/* Inputs fixos */}
                                 {/* Data de abertura */}
-                                <DateField
+                                {/* <DateField
                                     xs={12}
                                     md={2}
                                     title='Data da abertura'
@@ -68,7 +68,6 @@ const HeaderFields = ({
                                     disabled
                                     control={control}
                                 />
-                                {/* Hora de Abertura */}
                                 <Input
                                     xs={12}
                                     md={2}
@@ -79,7 +78,6 @@ const HeaderFields = ({
                                     register={register}
                                     control={control}
                                 />
-                                {/* Profissional que abriu */}
                                 <Input
                                     xs={12}
                                     md={8}
@@ -89,7 +87,7 @@ const HeaderFields = ({
                                     disabled
                                     register={register}
                                     control={control}
-                                />
+                                /> */}
                                 {/* Inputs com preenchimento */}
                                 {/* Data de avaliação */}
                                 <DateField

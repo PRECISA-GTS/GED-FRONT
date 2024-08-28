@@ -1,6 +1,5 @@
 import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
-import { SettingsContext } from 'src/@core/context/settingsContext'
 import Item from './Item'
 import InfoSetores from './InfoSetores'
 import { AuthContext } from 'src/context/AuthContext'
@@ -22,11 +21,9 @@ const Block = ({
     status,
     isFornecedorLogged
 }) => {
-    console.log('🚀 ~ renderiza bloco:')
     if (!bloco) return null
 
     const { user, hasSectorPermission } = useContext(AuthContext)
-    const { settings } = useContext(SettingsContext)
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
     const [blockPermission, setBlockPermission] = useState(false)
 
@@ -48,7 +45,7 @@ const Block = ({
 
         setBlocos(prevBlocos => {
             const newBlocos = [...prevBlocos]
-            newBlocos[blockIndex].itens.forEach((item, indexItem) => {
+            newBlocos[blockIndex]?.itens.forEach((item, indexItem) => {
                 if (item.alternativas.length > 0) {
                     //? ignora data e dissertativa
                     item.resposta = item.alternativas[colIndex]

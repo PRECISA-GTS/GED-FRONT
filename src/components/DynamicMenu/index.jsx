@@ -6,6 +6,7 @@ import { AuthContext } from 'src/context/AuthContext'
 
 const DynamicMenu = () => {
     const { menu, routes } = useContext(AuthContext)
+    if (!menu) return
 
     const hasPermission = (currentRoute, arrSubmenu = []) => {
         let response = false
@@ -54,6 +55,7 @@ const DynamicMenu = () => {
     }
 
     const arrMenu = []
+
     for (const divisor of menu) {
         // Divider
         if (hasMenu(divisor)) {

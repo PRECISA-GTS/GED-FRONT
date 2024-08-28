@@ -6,7 +6,6 @@ import Input from 'src/components/Form/Input'
 import Remove from 'src/components/Form/Remove'
 import Select from 'src/components/Form/Select'
 import DialogConfirmScore from 'src/components/Defaults/Dialogs/DialogConfirmScore'
-import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 
 const Blocos = ({
     blocks,
@@ -19,13 +18,13 @@ const Blocos = ({
     removeBlock,
     setValue,
     watch,
-    allOptions,
     openModalConfirmScore,
     setOpenModalConfirmScore,
     itemScore,
     setItemScore,
     createNew,
-    viewItem
+    viewItem,
+    setores
 }) => {
     return (
         <>
@@ -50,13 +49,28 @@ const Blocos = ({
                                 <Input
                                     className='order-3 md:order-2'
                                     xs={10}
-                                    md={9}
+                                    md={5}
                                     title='Nome do Bloco'
                                     name={`blocks.[${index}].dados.nome`}
                                     value={block.dados.nome}
                                     required={true}
                                     control={control}
                                     errors={errors?.blocks?.[index]?.dados?.nome}
+                                />
+
+                                <Select
+                                    xs={12}
+                                    md={4}
+                                    className='order-5 md:order-3'
+                                    multiple
+                                    title='Setores que preenchem'
+                                    name={`blocks.[${index}].dados.setores`}
+                                    options={setores ?? []}
+                                    value={block.dados.setores ?? []}
+                                    register={register}
+                                    setValue={setValue}
+                                    control={control}
+                                    helpText='Nenhum setor selecionado significa que o sistema não fará o controle de permissão por setores'
                                 />
 
                                 <Check
@@ -200,7 +214,7 @@ const Blocos = ({
                                             md={1}
                                             title={indexItem == 0 ? 'Remover' : ''}
                                             index={index}
-                                            removeItem={() => removeItem(item, index, indexItem)}
+                                            removeItem={() => removeItem(index, indexItem, block.itens)}
                                             item={item}
                                             pending={item.hasPending}
                                             textSuccess='Remover este item'

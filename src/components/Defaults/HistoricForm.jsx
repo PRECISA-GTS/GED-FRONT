@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardHeader } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
 import { statusDefault } from 'src/configs/defaultConfigs'
@@ -10,12 +10,9 @@ import CustomChip from 'src/@core/components/mui/chip'
 //? Timeline
 import { styled } from '@mui/material/styles'
 import TimelineDot from '@mui/lab/TimelineDot'
-import TimelineItem from '@mui/lab/TimelineItem'
 import Typography from '@mui/material/Typography'
-import TimelineContent from '@mui/lab/TimelineContent'
-import TimelineSeparator from '@mui/lab/TimelineSeparator'
-import TimelineConnector from '@mui/lab/TimelineConnector'
 import MuiTimeline from '@mui/lab/Timeline'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 //? Styled Timeline component
 const Timeline = styled(MuiTimeline)({
@@ -47,87 +44,50 @@ const HistoricForm = ({ parFormularioID, id }) => {
     }, []) // Estado do modal de confirmação como dependência
 
     return (
-        <Card>
-            <CardContent>
-                <h2 className='font-semibold mb-2'>Histórico de movimentações</h2>
-                <Box>
-                    <Timeline>
+        historic &&
+        historic.length > 0 && (
+            <div>
+                <Accordion sx={{ borderRadius: '10px', overflow: 'hidden', p: 2 }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls='panel1-content' id='panel1-header'>
+                        <h2 className='font-semibold mb-2'>Histórico de movimentações ({historic.length})</h2>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         {historic &&
                             historic.length > 0 &&
-                            historic.map((mov, index) => (
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <TimelineDot color={statusDefault[mov.statusAtual].color} />
-                                        {index < historic.length - 1 && <TimelineConnector />}
-                                    </TimelineSeparator>
-                                    <TimelineContent sx={{ '& svg': { verticalAlign: 'bottom', mx: 4 } }}>
-                                        <Box
-                                            sx={{
-                                                mb: 2,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between'
-                                            }}
-                                        >
-                                            <div className='flex items-center gap-2'>
-                                                <Typography
-                                                    variant='body2'
-                                                    className='flex items-center'
-                                                    sx={{ color: 'text.primary' }}
-                                                >
-                                                    <span>
-                                                        {statusDefault[mov.statusAnterior].title == 'Inativo'
-                                                            ? 'Início'
-                                                            : statusDefault[mov.statusAnterior].title}
-                                                    </span>
-                                                    <Icon icon='mdi:arrow-right' />
-                                                    <span>{statusDefault[mov.statusAtual].title}</span>
-                                                </Typography>
-                                                <Typography
-                                                    variant='body2'
-                                                    sx={{ mr: 2, fontWeight: 600, color: 'text.primary' }}
-                                                >
-                                                    {mov.data + ' - ' + mov.hora + ' '}
-                                                </Typography>
-                                                {index == 0 && (
-                                                    <CustomChip
-                                                        size='small'
-                                                        skin='light'
-                                                        color={statusDefault[mov.statusAtual].color}
-                                                        label='Atual'
-                                                        sx={{
-                                                            '& .MuiChip-label': {
-                                                                textTransform: 'capitalize'
-                                                            }
-                                                        }}
-                                                    />
-                                                )}
-                                            </div>
-                                            <div className='flex items-center gap-4'>
-                                                <Typography variant='caption' className='flex items-center'>
-                                                    <Icon icon='iconoir:user' />
-                                                    {mov.usuario}
-                                                </Typography>
-
-                                                <Typography variant='caption' className='flex items-center gap-0'>
-                                                    <Icon icon='mdi:company' />
-                                                    {mov.unidade}
-                                                </Typography>
-                                            </div>
-                                        </Box>
-
-                                        {mov.observacao != null && (
-                                            <Box>
-                                                <Typography variant='caption'>{mov.observacao}</Typography>
-                                            </Box>
+                            historic.map((row, index) => (
+                                <div className='grid grid-cols-4 items-center'>
+                                    <div>{row.data + ' ' + row.hora}</div>
+                                    <div className='flex items-center justify-start gap-2'>
+                                        <TimelineDot color={statusDefault[row.statusAtual].color} />
+                                        <span>{statusDefault[row.statusAtual].title}</span>
+                                        {index == 0 && (
+                                            <CustomChip
+                                                size='small'
+                                                skin='light'
+                                                color={statusDefault[row.statusAtual].color}
+                                                label='Atual'
+                                                sx={{
+                                                    '& .MuiChip-label': {
+                                                        textTransform: 'capitalize'
+                                                    }
+                                                }}
+                                            />
                                         )}
-                                    </TimelineContent>
-                                </TimelineItem>
+                                    </div>
+                                    <Typography variant='caption' className='flex items-center gap-2'>
+                                        <Icon icon='material-symbols:engineering-outline' />
+                                        {row.usuario}
+                                    </Typography>
+                                    <Typography variant='caption' className='flex items-center gap-2'>
+                                        <Icon icon='mdi:company' />
+                                        {row.unidade}
+                                    </Typography>
+                                </div>
                             ))}
-                    </Timeline>
-                </Box>
-            </CardContent>
-        </Card>
+                    </AccordionDetails>
+                </Accordion>
+            </div>
+        )
     )
 }
 

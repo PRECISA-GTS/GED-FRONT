@@ -32,7 +32,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 
 const FormRecebimentoMp = ({ id, model }) => {
-    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
+    const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
@@ -148,7 +148,7 @@ const FormRecebimentoMp = ({ id, model }) => {
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
         component: <DialogReOpenForm />,
-        disabled: hasFormPending ? true : false,
+        disabled: hasFormPending || !hasPermission(router.pathname, 'editar') ? true : false,
         route: null,
         type: null,
         action: changeFormStatus,
@@ -768,7 +768,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         {blocos &&
                             blocos.map((bloco, index) => (
                                 <Block
-                                    index={index + change}
+                                    index={index}
                                     bloco={bloco}
                                     blockKey={`parRecebimentoMpModeloBlocoID`}
                                     setBlocos={setBlocos}

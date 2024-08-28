@@ -45,7 +45,7 @@ const HeaderFields = ({
                 <InfoSetores data={values?.setores ?? []} />
             </Grid>
 
-            <Input
+            {/* <Input
                 xs={12}
                 md={2}
                 title='Data da abertura'
@@ -54,7 +54,7 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
-                alertRequired //! Apenas pinta o campo de vermelho, não valida
+                alertRequired
             />
             <Input
                 xs={12}
@@ -66,7 +66,7 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
-                alertRequired //! Apenas pinta o campo de vermelho, não valida
+                alertRequired
             />
             <Input
                 xs={12}
@@ -77,8 +77,8 @@ const HeaderFields = ({
                 disabled={true}
                 register={register}
                 control={control}
-                alertRequired //! Apenas pinta o campo de vermelho, não valida
-            />
+                alertRequired
+            /> */}
 
             {/* Data da avaliação */}
             <DateField

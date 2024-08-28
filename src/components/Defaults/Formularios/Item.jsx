@@ -20,6 +20,8 @@ const Item = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
+    // if (!item) return null
+
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)
@@ -55,7 +57,9 @@ const Item = ({
                     sx={{
                         fontWeight: 400,
                         color:
-                            item.obrigatorio && getValues(`blocos[${index}].itens[${indexItem}].resposta`) == null
+                            item.obrigatorio &&
+                            !item.resposta &&
+                            !getValues(`blocos[${index}].itens[${indexItem}].resposta`)
                                 ? 'error.main'
                                 : 'text.primary'
                     }}

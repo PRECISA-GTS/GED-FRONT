@@ -36,7 +36,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
     const [hasModel, setHasModel] = useState(true)
     const [noModelInfo, setNoModelInfo] = useState(null)
-    const { menu, user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
+    const { menu, user, loggedUnity, hasPermission, hasSectorPermission } = useContext(AuthContext)
     const [savingForm, setSavingForm] = useState(false)
     const [validateForm, setValidateForm] = useState(false) //? Se true, valida campos obrigatórios
     const [hasFormPending, setHasFormPending] = useState(true) //? Tem pendencia no formulário (já vinculado em formulário de recebimento, não altera mais o status)
@@ -199,6 +199,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         name: 'Gerar novo formulário',
         description: 'Gerar um novo formulário de preenchimento para este fornecedor.',
         component: <NewFornecedor cnpj={fieldsHeader?.cnpj} />,
+        disabled: !hasPermission(router.pathname, 'inserir'),
         route: null,
         type: null,
         modal: true,
@@ -267,7 +268,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
         component: <DialogReOpenForm />,
-        disabled: hasFormPending ? true : false,
+        disabled: hasFormPending || !hasPermission(router.pathname, 'editar') ? true : false,
         route: null,
         type: null,
         action: changeFormStatus,
@@ -1100,13 +1101,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                         </CardContent>
                                     </Card>
                                 </>
-                            )}
-
-                            {/* Rodapé com informações de conclusão */}
-                            {fieldsFooter && fieldsFooter.concluded && (
-                                <Typography variant='caption'>
-                                    {`Concluído por ${fieldsFooter?.profissionalAprova?.nome} em ${fieldsFooter.dataFim} ${fieldsFooter.horaFim}.`}
-                                </Typography>
                             )}
 
                             {/* Dialog pra alterar status do formulário (se formulário estiver concluído e fábrica queira reabrir pro preenchimento do fornecedor) */}

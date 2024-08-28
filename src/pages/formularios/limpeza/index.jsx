@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
 import FormLimpeza from 'src/components/Limpeza/FormLimpeza'
@@ -15,6 +15,8 @@ import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Tab } from '@mui/material'
 
 const Limpeza = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -76,6 +78,12 @@ const Limpeza = () => {
 
     const columns = configColumns(currentLink, arrColumns)
 
+    const [value, setValue] = useState('1')
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue)
+    }
+
     return (
         <>
             {/* Exibe loading enquanto não existe result */}
@@ -85,8 +93,18 @@ const Limpeza = () => {
             id && id > 0 ? (
                 <FormLimpeza id={id} />
             ) : (
-                //? Lista tabela de resultados da listagem
-                <Table result={filteredData} columns={columns} />
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label='lab API tabs example'>
+                            <Tab label='Limpeza e Higienização' value='1' />
+                            <Tab label='Não Conformidade' value='2' />
+                        </TabList>
+                    </Box>
+                    <TabPanel value='1'>
+                        <Table result={filteredData} columns={columns} />
+                    </TabPanel>
+                    <TabPanel value='2'>Não conformidade...</TabPanel>
+                </TabContext>
             )}
         </>
     )
