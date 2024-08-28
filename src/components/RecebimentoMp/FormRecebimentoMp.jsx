@@ -768,6 +768,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         {blocos &&
                             blocos.map((bloco, index) => (
                                 <Block
+                                    key={bloco.parRecebimentoMpModeloBlocoID}
                                     index={index + change}
                                     bloco={bloco}
                                     blockKey={`parRecebimentoMpModeloBlocoID`}
