@@ -30,10 +30,12 @@ import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
+import { ParametersContext } from 'src/context/ParametersContext'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
+    const { setTitle } = useContext(ParametersContext)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileItem, setLoadingFileItem] = useState(false) //? loading de carregamento do arquivo
@@ -88,7 +90,7 @@ const FormRecebimentoMp = ({ id, model }) => {
         clearErrors,
         setError,
         formState: { errors }
-    } = useForm()
+    } = useForm({ mode: 'onChange' })
 
     const copyLinkForm = () => {
         navigator.clipboard.writeText(link)
@@ -670,6 +672,14 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     useEffect(() => {
+        setTitle({
+            title: 'Recebimento de MP',
+            subtitle: {
+                id: id,
+                count: 1,
+                new: false
+            }
+        })
         getData()
     }, [id, change])
 

@@ -1,224 +1,96 @@
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material'
-import { api } from 'src/configs/api'
-import Icon from 'src/@core/components/icon'
-import { AuthContext } from 'src/context/AuthContext'
-import FieldsFabrica from './FieldsFabrica'
-import FieldsFornecedor from './FieldsFornecedor'
-import FieldsFabricaConclusion from './FieldsFabricaConclusion'
 import { useContext, useEffect, useState } from 'react'
-import { add } from 'date-fns'
-import { SettingsContext } from 'src/@core/context/settingsContext'
-import { getCurrentTime } from 'src/configs/defaultConfigs'
-import toast from 'react-hot-toast'
-import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
-import CardList from 'src/components/Defaults/Cards/CardList'
-import CustomChip from 'src/@core/components/mui/chip'
+import FormHeader from 'src/components/Defaults/FormHeader'
+import HistoricForm from 'src/components/Defaults/HistoricForm'
+import { AuthContext } from 'src/context/AuthContext'
+import { ParametersContext } from 'src/context/ParametersContext'
+import Header from './Header'
+import Model from './Model'
+import { useForm } from 'react-hook-form'
+import { api } from 'src/configs/api'
 
-const RecebimentoMpNaoConformidade = ({
-    recebimentoMpID,
-    values,
-    info,
-    getValues,
-    register,
-    control,
-    setValue,
-    errors
-}) => {
+const RecebimentoMpNaoConformidade = ({ id }) => {
+    const type = id && id > 0 ? 'edit' : 'new'
     const { user, loggedUnity } = useContext(AuthContext)
-    const { settings } = useContext(SettingsContext)
+    const { setTitle } = useContext(ParametersContext)
+    const [header, setHeader] = useState(null)
     const [change, setChange] = useState(false)
-    const [models, setModels] = useState([])
-    const [openSelectionModel, setOpenSelectionModel] = useState(false)
 
-    const handlePreenchimentoFornecedor = () => {
-        setChange(!change)
-    }
+    const form = useForm({ mode: 'onChange' })
 
-    const handleNewNc = () => {
-        if (models.length == 0) {
-            toast.error(
-                'Não há nenhum modelo de não conformidade cadastrado para esta unidade! Por favor cadastre em Configurações > Formulários.'
-            )
-            return
-        }
-
-        //? 1 modelo, seleciona automaticamente
-        if (models.length == 1) {
-            addNaoConformidade(models[0])
-            return
-        }
-
-        //? Abre modal seleção do modelo de NC
-        if (models.length > 1) {
-            setOpenSelectionModel(true)
-        }
-    }
-
-    const addNaoConformidade = model => {
-        console.log('🚀 ~ model:', model)
-        const naoConformidades = getValues('naoConformidade.itens')
-        naoConformidades.push({
-            parRecebimentoMpNaoConformidadeModeloID: model.parRecebimentoMpNaoConformidadeModeloID, //? id do modelo de NC
-            modelo: {
-                id: model.parRecebimentoMpNaoConformidadeModeloID,
-                nome: model.nome
-            },
-            profissionalPreenchimento: null,
-            produto: null,
-            profissionalConclusao: null,
-            data: new Date(),
-            hora: getCurrentTime(),
-            dataFornecedor: new Date(),
-            horaFornecedor: getCurrentTime(),
-            dataConclusao: new Date(),
-            horaConclusao: getCurrentTime(),
-            profissionaisOptions: {
-                preenchimento: model.profissionaisOptions.preenchimento ?? [],
-                conclusao: model.profissionaisOptions.conclusao ?? []
-            },
-            dynamicFields: model.dynamicFields
-        })
-        setValue('naoConformidade.itens', naoConformidades)
-        setChange(!change)
-        toast.success('Não conformidade inserida. Preencha os campos...')
-    }
-
-    const handleChangeStatus = (index, event) => {
-        const naoConformidades = getValues('naoConformidade.itens')
-        naoConformidades[index].status = event
-        setValue('naoConformidade.itens', naoConformidades)
-    }
-
-    const getNcModels = async () => {
+    const getData = async () => {
         try {
-            const response = await api.get(
-                `/formularios/recebimento-mp/getNaoConformidadeModels/${loggedUnity.unidadeID}`
-            )
-            setModels(response.data)
-        } catch (error) {
-            console.log('🚀 ~ getNcModels ~ error', error)
+            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getData`, {
+                id,
+                unidadeID: loggedUnity.unidadeID,
+                papelID: user.papelID
+            })
+            form.reset(response.data)
+            setHeader(response.data.header)
+        } catch (e) {
+            console.log(e)
+            return
         }
     }
 
-    const SelectModels = () => {
-        return (
-            <Grid container spacing={4}>
-                {models &&
-                    models.length > 0 &&
-                    models.map((item, index) => (
-                        <CardList
-                            key={index}
-                            xs={12}
-                            md={6}
-                            icon='fluent:form-multiple-48-regular'
-                            title={item.nome}
-                            action='select'
-                            subtitle={`Ciclo de ${item.ciclo} dias`}
-                            handleClick={() => {
-                                addNaoConformidade(item), setOpenSelectionModel(false)
-                            }}
-                        />
-                    ))}
-            </Grid>
-        )
+    //* Envia o formulário mesmo havendo erros (salva rascunho)
+    const customSubmit = e => {
+        e.preventDefault()
+        const values = form.getValues()
+        onSubmit(values)
+    }
+
+    const onSubmit = values => {
+        console.log('🚀 ~ onSubmit:', values)
     }
 
     useEffect(() => {
-        getNcModels()
+        setTitle({
+            title: 'Não conformidade do Recebimento de MP',
+            subtitle: {
+                id: id,
+                count: 1,
+                new: false
+            }
+        })
+        getData()
     }, [])
 
     return (
-        <>
-            <div className='flex flex-col gap-2'>
-                <div
-                    className={`${
-                        settings.mode == 'dark' ? 'bg-[#3C2F38]' : 'bg-[#F8E2E2]'
-                    } p-3 rounded-xl  text-center`}
-                >
-                    <Typography color='error' variant='subtitle1' sx={{ fontWeight: 700 }}>
-                        Plano de Ação
-                    </Typography>
-                </div>
+        <form onSubmit={e => customSubmit(e)} className='space-y-4'>
+            <FormHeader
+                btnCancel
+                btnSave
+                btnSend={user.papelID == 1 /*&& info.status >= 30 && !info.concluido*/}
+                btnPrint={type == 'edit' ? true : false}
+                // btnDelete
+                // onclickDelete={() => setOpenModalDeleted(true)}
+                // actionsData={actionsData}
+                // actions
+                handleSubmit={() => form.handleSubmit(onSubmit)}
+                // handleSend={handleSendForm}
+                iconConclusion={'mdi:check-bold'}
+                titleConclusion={'Concluir Formulário'}
+                title='Não conformidade do Recebimento de MP'
+                // btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
+                // handleBtnStatus={() => setOpenModalStatus(true)}
+                type={type}
+                status={30}
+                // setores={fieldsFooter?.setores ?? []}
+            />
 
-                {getValues('naoConformidade.itens') &&
-                    getValues('naoConformidade.itens').map((value, index) => (
-                        <Card key={index}>
-                            <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                <Typography variant='body1'>{value.modelo.nome}</Typography>
+            {/* Header */}
+            <Header form={form} data={header} />
 
-                                <FieldsFabrica
-                                    key={index}
-                                    index={index}
-                                    value={value}
-                                    handlePreenchimentoFornecedor={handlePreenchimentoFornecedor}
-                                    getValues={getValues}
-                                    info={info}
-                                    papelID={user.papelID}
-                                    produtos={values.produtos}
-                                    register={register}
-                                    control={control}
-                                    setValue={setValue}
-                                    errors={errors}
-                                />
+            {/* Modelo com seus blocos */}
+            <Model form={form} />
 
-                                {/* Bloco preenchimento fornecedor */}
-                                <FieldsFornecedor
-                                    key={index}
-                                    index={index}
-                                    value={value}
-                                    info={info}
-                                    papelID={user.papelID}
-                                    register={register}
-                                    control={control}
-                                    setValue={setValue}
-                                    errors={errors}
-                                />
-
-                                {/* Bloco conclusão da fábrica */}
-                                <FieldsFabricaConclusion
-                                    key={index}
-                                    index={index}
-                                    value={value}
-                                    info={info}
-                                    papelID={user.papelID}
-                                    register={register}
-                                    control={control}
-                                    setValue={setValue}
-                                    handleChangeStatus={handleChangeStatus}
-                                    errors={errors}
-                                />
-                            </CardContent>
-                        </Card>
-                    ))}
-
-                {/* Botão inserir nova não conformidade */}
-                {!info.concluido && user.papelID == 1 && (
-                    <Grid container spacing={4}>
-                        <Grid item xs={12}>
-                            <Button
-                                variant='outlined'
-                                color='primary'
-                                onClick={handleNewNc}
-                                startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
-                                sx={{ mt: 2 }}
-                            >
-                                Inserir nova não conformidade
-                            </Button>
-                        </Grid>
-                    </Grid>
-                )}
-            </div>
-
-            {/* Modal pra selecionar o modelo de NC */}
-            <DialogActs
-                title='Modelo de Não Conformidade'
-                description='Selecione o modelo de não conformidade que deseja inserir. O mesmo pode ser gerenciado em Configurações > Formulários.'
-                setOpenModal={setOpenSelectionModel}
-                openModal={openSelectionModel}
-            >
-                <SelectModels />
-            </DialogActs>
-        </>
+            {/* Histórico de movimentações */}
+            <HistoricForm
+                key={change}
+                id={id}
+                parFormularioID={3} // Não conformidade do Recebimento de MP
+            />
+        </form>
     )
 }
 
