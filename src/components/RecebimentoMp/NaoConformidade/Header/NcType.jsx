@@ -29,38 +29,35 @@ const NcType = ({ form, data }) => {
     }, [data])
 
     return (
-        <div>
-            <p>Não Conformidade de:</p>
-            <Grid container spacing={4}>
-                <Grid item xs={12} md={2}>
-                    <CheckLabel
-                        title='Transporte'
-                        name={`header.transporte`}
-                        value={data.transporte}
-                        register={form.register}
-                    />
-                </Grid>
-                <Grid item xs={12} md={2}>
-                    <CheckLabel title='Produto' name={`header.produto`} value={data.produto} register={form.register} />
-                </Grid>
-                {/* Se marcado produto */}
-                {form.watch('header.produto') && (
-                    <Select
-                        xs={12}
-                        md={8}
-                        multiple
-                        title='Produtos'
-                        name={`header.produtos`}
-                        options={produtos ?? []}
-                        value={data.produtos ?? []}
-                        register={form.register}
-                        setValue={form.setValue}
-                        control={form.control}
-                        helpText='Selecione um ou mais produtos referentes a esta não conformidade'
-                    />
-                )}
+        <>
+            <Grid item xs={12} md={2}>
+                <CheckLabel
+                    title='Transporte'
+                    name={`header.transporte`}
+                    value={data.transporte}
+                    register={form.register}
+                />
             </Grid>
-        </div>
+            <Grid item xs={12} md={2}>
+                <CheckLabel title='Produto' name={`header.produto`} value={data.produto} register={form.register} />
+            </Grid>
+            {/* Se marcado produto */}
+            {form.watch('header.produto') && (
+                <Select
+                    xs={12}
+                    md={8}
+                    multiple
+                    title='Produtos'
+                    name={`header.produtos`}
+                    options={produtos ?? []}
+                    value={data.produtos ?? []}
+                    register={form.register}
+                    setValue={form.setValue}
+                    control={form.control}
+                    helpText='Selecione um ou mais produtos referentes a esta não conformidade'
+                />
+            )}
+        </>
     )
 }
 

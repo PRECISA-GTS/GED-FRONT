@@ -28,7 +28,7 @@ const Model = ({ form, data }) => {
     return (
         <Select
             xs={12}
-            md={8}
+            md={4}
             title='Modelo de formulário'
             name={`header.modelo`}
             options={modelos ?? []}

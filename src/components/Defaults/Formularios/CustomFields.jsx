@@ -3,20 +3,7 @@ import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
 
-const Fields = ({
-    register,
-    errors,
-    setValue,
-    fields,
-    disabled,
-    disabledFields,
-    getAddressByCep,
-    control,
-    setNameSelected,
-    setColumnSelected,
-    getValues,
-    setOpenModalNew
-}) => {
+const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
     const getMaskForField = fieldName => {
         switch (fieldName) {
             case 'telefone':
@@ -34,17 +21,10 @@ const Fields = ({
 
     const disabledField = field => {
         // verifica se o campo está na lista de campos desabilitados, retorna true ou false para desabilitar o campo
-        if (disabledFields && disabledFields.length > 0) {
-            return disabledFields.includes(field)
+        if (disabled && disabled.length > 0) {
+            return disabled.includes(field)
         }
         return false
-    }
-
-    // Abre modal para criar novo item
-    const createNew = async (coluna, name) => {
-        setColumnSelected(coluna)
-        setOpenModalNew(true)
-        setNameSelected(name)
     }
 
     return (
@@ -59,22 +39,17 @@ const Fields = ({
                             xs={12}
                             md={4}
                             title={field.nomeCampo}
-                            name={`fields[${index}].${field.tabela}`}
-                            createNew={
-                                field.nomeColuna === 'transportadorID' || field.nomeColuna === 'tipoVeiculoID'
-                                    ? () => createNew(field.nomeColuna, `fields[${index}].${field.tabela}`)
-                                    : null
-                            }
+                            name={`header.fields[${index}].${field.tabela}`}
                             type={field.tabela}
                             options={field.options}
                             value={field?.[field.tabela]}
                             mask={field.tabela}
                             disabled={disabled || disabledField(field.nomeColuna)}
-                            register={register}
-                            setValue={setValue}
-                            control={control}
-                            errors={errors?.fields?.[index]?.[field.tabela]}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                            register={form.register}
+                            setValue={form.setValue}
+                            control={form.control}
+                            errors={form.errors?.fields?.[index]?.[field.tabela]}
                         />
                     )}
 
@@ -88,13 +63,13 @@ const Fields = ({
                             disabled={disabled || disabledField(field.nomeColuna)}
                             value={field?.[field.nomeColuna] ?? new Date()}
                             type={field.nomeColuna}
-                            name={`fields[${index}].${field.nomeColuna}`}
-                            errors={errors?.fields?.[index]?.[field.nomeColuna]}
-                            control={control}
+                            name={`header.fields[${index}].${field.nomeColuna}`}
                             typeValidation='dataPassado'
                             daysValidation={365}
-                            register={register}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                            errors={form.errors?.fields?.[index]?.[field.nomeColuna]}
+                            control={form.control}
+                            register={form.register}
                         />
                     )}
 
@@ -105,11 +80,8 @@ const Fields = ({
                             xs={12}
                             md={4}
                             title={field.nomeCampo}
-                            name={`fields[${index}].${field.nomeColuna}`}
-                            register={register}
-                            control={control}
+                            name={`header.fields[${index}].${field.nomeColuna}`}
                             value={field?.[field.nomeColuna] ?? ''}
-                            errors={errors?.fields?.[index]?.nomeColuna}
                             type={field.nomeColuna}
                             getAddressByCep={getAddressByCep}
                             mask={getMaskForField(field.nomeColuna)}
@@ -117,6 +89,9 @@ const Fields = ({
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                            errors={form.errors?.fields?.[index]?.nomeColuna}
+                            register={form.register}
+                            control={form.control}
                         />
                     )}
 
@@ -129,11 +104,8 @@ const Fields = ({
                             multiline
                             rows={6}
                             title={field.nomeCampo}
-                            name={`fields[${index}].${field.nomeColuna}`}
-                            register={register}
-                            control={control}
+                            name={`header.fields[${index}].${field.nomeColuna}`}
                             value={field?.[field.nomeColuna] ?? ''}
-                            errors={errors?.fields?.[index]?.nomeColuna}
                             type={field.nomeColuna}
                             getAddressByCep={getAddressByCep}
                             mask={getMaskForField(field.nomeColuna)}
@@ -141,6 +113,9 @@ const Fields = ({
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                            register={form.register}
+                            control={form.control}
+                            errors={form.errors?.fields?.[index]?.nomeColuna}
                         />
                     )}
                 </>
@@ -149,4 +124,4 @@ const Fields = ({
     )
 }
 
-export default Fields
+export default CustomFields

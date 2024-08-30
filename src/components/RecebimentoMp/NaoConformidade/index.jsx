@@ -4,7 +4,7 @@ import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { ParametersContext } from 'src/context/ParametersContext'
 import Header from './Header'
-import Model from './Model'
+import ModelBlocks from './ModelBlocks'
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 
@@ -13,6 +13,7 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
     const { user, loggedUnity } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const [header, setHeader] = useState(null)
+    const [block, setBlock] = useState(null)
     const [change, setChange] = useState(false)
 
     const form = useForm({ mode: 'onChange' })
@@ -24,8 +25,10 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID
             })
+            console.log('🚀 ~ getData: ', response.data)
             form.reset(response.data)
             setHeader(response.data.header)
+            setBlock(response.data.blocos)
         } catch (e) {
             console.log(e)
             return
@@ -79,10 +82,10 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
             />
 
             {/* Header */}
-            <Header form={form} data={header} />
+            {header && <Header form={form} data={header} />}
 
             {/* Modelo com seus blocos */}
-            <Model form={form} />
+            {block && <ModelBlocks form={form} data={block} setBlock={setBlock} status={header.status} />}
 
             {/* Histórico de movimentações */}
             <HistoricForm
