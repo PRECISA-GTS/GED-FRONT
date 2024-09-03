@@ -706,13 +706,12 @@ const FormRecebimentoMp = ({ id, model }) => {
                     handleSubmit={() => handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
+                    titleConclusion={'Concluir'}
                     title='Recebimento de MP'
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    setores={fieldsFooter?.setores ?? []}
                 />
 
                 <>

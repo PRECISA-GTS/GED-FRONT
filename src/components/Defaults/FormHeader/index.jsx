@@ -43,8 +43,7 @@ const FormHeader = ({
     type,
     status,
     partialRoute,
-    outsideID,
-    setores
+    outsideID
 }) => {
     const router = Router
     const { routes } = useContext(AuthContext)
@@ -194,7 +193,6 @@ const FormHeader = ({
                             // componentSaveReport={componentSaveReport}
                             iconConclusion={iconConclusion}
                             titleConclusion={titleConclusion}
-                            setores={setores}
                         />
                     </div>
 

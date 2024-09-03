@@ -1,32 +1,21 @@
-import { Grid } from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
+import { Divider, Grid, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import CheckLabel from 'src/components/Form/CheckLabel'
-import Select from 'src/components/Form/Select'
-import { api } from 'src/configs/api'
-import { AuthContext } from 'src/context/AuthContext'
+import RecebimentoMpProdutos from './Produtos'
 
-const NcType = ({ form, data }) => {
+const NcType = ({ form, data, disabled }) => {
     if (!data) return
 
-    const { loggedUnity } = useContext(AuthContext)
-    const [produtos, setProdutos] = useState([])
+    const [produtos, setProdutos] = useState(data.produtos)
 
-    const getProdutos = async () => {
-        try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getProdutosRecebimento`, {
-                recebimentoMpID: data.recebimentoMpID,
-                unidadeID: loggedUnity.unidadeID
-            })
-
-            setProdutos(response.data)
-        } catch (e) {
-            console.log(e)
-        }
+    const handleCheck = (e, index) => {
+        const { checked } = e.target
+        form.setValue(`header.produtos[${index}].checked_`, checked)
+        const updatedProducts = produtos.map((produto, i) =>
+            i === index ? { ...produto, checked_: checked } : produto
+        )
+        setProdutos(updatedProducts)
     }
-
-    useEffect(() => {
-        getProdutos()
-    }, [data])
 
     return (
         <>
@@ -36,26 +25,50 @@ const NcType = ({ form, data }) => {
                     name={`header.transporte`}
                     value={data.transporte}
                     register={form.register}
+                    disabled={disabled}
                 />
             </Grid>
             <Grid item xs={12} md={2}>
-                <CheckLabel title='Produto' name={`header.produto`} value={data.produto} register={form.register} />
+                <CheckLabel
+                    title='Produto'
+                    name={`header.produto`}
+                    value={data.produto}
+                    register={form.register}
+                    disabled={disabled}
+                />
             </Grid>
+
             {/* Se marcado produto */}
             {form.watch('header.produto') && (
-                <Select
-                    xs={12}
-                    md={8}
-                    multiple
-                    title='Produtos'
-                    name={`header.produtos`}
-                    options={produtos ?? []}
-                    value={data.produtos ?? []}
-                    register={form.register}
-                    setValue={form.setValue}
-                    control={form.control}
-                    helpText='Selecione um ou mais produtos referentes a esta não conformidade'
-                />
+                <Grid container sx={{ mt: 4 }}>
+                    <Grid item xs={12}>
+                        <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700 }}>
+                            Selecione os produtos com Não Conformidade
+                        </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        {produtos &&
+                            produtos.map((produto, index) => (
+                                <>
+                                    <RecebimentoMpProdutos
+                                        key={index}
+                                        index={index}
+                                        produto={produto}
+                                        setProdutos={setProdutos}
+                                        handleCheck={handleCheck}
+                                        disabled={disabled}
+                                        getValues={form.getValues}
+                                        setValue={form.setValue}
+                                        register={form.register}
+                                        control={form.control}
+                                        errors={form.errors}
+                                    />
+                                    {index < produtos.length - 1 && <Divider />}
+                                </>
+                            ))}
+                    </Grid>
+                </Grid>
             )}
         </>
     )

@@ -1,0 +1,110 @@
+import { Divider, Grid, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import Icon from 'src/@core/components/icon'
+import Input from 'src/components/Form/Input'
+
+const TableProductsConclusionNC = ({ data, form }) => {
+    const [sortedData, setSortedData] = useState(null)
+
+    //? Ordena os dados, trazendo primeiro os itens marcados na nao conformidade (checked_ == true)
+    const sortData = () => {
+        if (!data) return
+        const sorted = data.sort((a, b) => {
+            if (a.checked_ && !b.checked_) return -1
+            if (!a.checked_ && b.checked_) return 1
+            return 0
+        })
+        setSortedData(sorted)
+    }
+
+    useEffect(() => {
+        sortData()
+    }, [data])
+
+    return (
+        <>
+            <Typography
+                variant='body1'
+                color='primary'
+                sx={{ fontWeight: 600, mt: 6 }}
+                className='flex items-center gap-1'
+            >
+                <Icon icon='ph:plant' className='text-primary' />
+                Conferência dos produtos do Recebimento de MP
+            </Typography>
+
+            {sortedData &&
+                sortedData.length > 0 &&
+                sortedData.map((row, index) => (
+                    <>
+                        <Grid container spacing={2} sx={{ mt: 4 }} className='items-center'>
+                            <Grid item md={12}>
+                                <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                                    {row.nome}
+                                </Typography>
+                            </Grid>
+
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Quantidade do recebimento</p>
+                                <p>{row.quantidade}</p>
+                            </Grid>
+
+                            {row.checked_ ? (
+                                <>
+                                    <input
+                                        type='hidden'
+                                        name={`productsConclude.${index}.recebimentoMpProdutoID`}
+                                        value={row.recebimentoMpProdutoID}
+                                        {...form.register(`productsConclude.${index}.recebimentoMpProdutoID`)}
+                                    />
+                                    <input
+                                        type='hidden'
+                                        name={`productsConclude.${index}.quantidade`}
+                                        value={row.quantidade}
+                                        {...form.register(`productsConclude.${index}.quantidade`)}
+                                    />
+                                    <Input
+                                        md={2}
+                                        title='Nova quantidade'
+                                        name={`productsConclude.${index}.novaQuantidade`}
+                                        defaultValue={row.quantidadeEntrada}
+                                        helpText='Quantidade recebida'
+                                        required
+                                        register={form.register}
+                                        control={form.control}
+                                        errors={form.errors?.productsConclude?.[index]?.novaQuantidade}
+                                        mask='fractioned3'
+                                    />
+                                </>
+                            ) : (
+                                <Grid item md={2}>
+                                    <p className='text-xs opacity-50'>Nova quantidade</p>
+                                    <p>{row.quantidade}</p>
+                                </Grid>
+                            )}
+
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Data Fabricação</p>
+                                <p>{row.dataFabricacao}</p>
+                            </Grid>
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Lote</p>
+                                <p>{row.lote}</p>
+                            </Grid>
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Apresentação</p>
+                                <p>{row.apresentacao.nome}</p>
+                            </Grid>
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Data Validade</p>
+                                <p>{row.dataValidade}</p>
+                            </Grid>
+                        </Grid>
+                        {index < sortedData.length - 1 && <Divider sx={{ pb: 2 }} />}
+                    </>
+                ))}
+        </>
+    )
+}
+
+export default TableProductsConclusionNC

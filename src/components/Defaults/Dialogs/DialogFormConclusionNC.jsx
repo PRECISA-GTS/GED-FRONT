@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import { AuthContext } from 'src/context/AuthContext'
-import { Alert, Grid, Typography } from '@mui/material'
+import { Alert, Divider, Grid, Typography } from '@mui/material'
 import { useState, useContext, useEffect } from 'react'
 import Result from 'src/components/Defaults/Formularios/Result'
 import { BlobProvider, Document, Page } from '@react-pdf/renderer'
@@ -19,30 +19,29 @@ import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
-
-const DialogFormConclusion = ({
+import TableProductsConclusionNC from 'src/components/RecebimentoMp/NaoConformidade/Header/Produtos/TableProductsConclusionNC'
+const DialogFormConclusionNC = ({
     title,
     text,
     handleClose,
     openModal,
     conclusionForm,
-    info,
+    status,
     canChange,
     btnCancel,
     btnConfirm,
-    register,
-    setValue,
     listErrors,
     canApprove,
     hasNaoConformidade,
-    control,
     handleSend,
     type,
     unity,
     values,
-    errors,
     formularioID,
-    modeloID
+    modeloID,
+    form,
+    produtos,
+    setores
 }) => {
     if (!modeloID) return null
 
@@ -53,15 +52,6 @@ const DialogFormConclusion = ({
     const { data } = useGlobal()
     const router = Router
     const module = router.pathname.split('/')[2]
-
-    // Hora atual: HH:mm
-    const getTimeNow = () => {
-        const date = new Date()
-        const hour = date.getHours()
-        const minute = date.getMinutes()
-        return `${hour}:${minute}`
-    }
-    const [profissionaisAprova, setProfissionaisAprova] = useState([])
 
     const DocumentPdf = () => {
         return (
@@ -82,31 +72,11 @@ const DialogFormConclusion = ({
         )
     }
 
-    const getProfissionaisSetores = async () => {
-        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
-            formularioID: formularioID, // fornecedor, recebimento de mp, limpeza...
-            modeloID: modeloID,
-            unidadeID: loggedUnity.unidadeID
-        })
-        setProfissionaisAprova(response.data.conclui)
-        setDefaultProfissional(response.data.conclui)
-    }
-
-    const setDefaultProfissional = arrProfissionais => {
-        const profissionalID = user.profissionalID //? Profissional logado
-        const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-        if (profissional && profissional.id > 0) setValue('fieldsFooter.profissional', profissional)
-    }
-
-    useEffect(() => {
-        getProfissionaisSetores()
-    }, [values])
-
     return (
         <>
             <Dialog
                 fullWidth
-                maxWidth='md'
+                maxWidth='lg'
                 open={openModal}
                 aria-labelledby='form-dialog-title'
                 disableEscapeKeyDown
@@ -123,7 +93,7 @@ const DialogFormConclusion = ({
                         </Grid>
                         {user.papelID === 1 && (
                             <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                                <InfoSetores data={values?.setores ?? []} />
+                                <InfoSetores data={setores ?? []} />
                             </Grid>
                         )}
                     </Grid>
@@ -138,9 +108,8 @@ const DialogFormConclusion = ({
                             </Alert>
                         )}
                         {/* Formulário Pendente */}
-                        {info.status <= 40 && (
+                        {status <= 40 && (
                             <>
-                                {text}
                                 {listErrors && listErrors.status && (
                                     <Alert variant='outlined' severity='error' sx={{ mt: 2 }}>
                                         Por favor, verifique os campos abaixo:
@@ -170,89 +139,48 @@ const DialogFormConclusion = ({
                                 )}
                                 {user.papelID == 1 && (
                                     <Grid container spacing={4} sx={{ mt: 4 }}>
-                                        {/* Data da conclusão */}
-                                        <DateField
-                                            xs={12}
-                                            md={3}
-                                            title='Data da conclusão'
-                                            name={`fieldsFooter.dataConclusao`}
-                                            type='date'
-                                            value={values?.dataConclusao ?? new Date()}
-                                            register={register}
-                                            control={control}
-                                            typeValidation='dataPassado'
-                                            daysValidation={365}
-                                            required
-                                            errors={errors?.fieldsFooter?.dataConclusao}
-                                        />
-
-                                        {/* Hora de Abertura */}
-                                        <Input
-                                            xs={12}
-                                            md={3}
-                                            title='Hora da conclusão'
-                                            name={`fieldsFooter.horaConclusao`}
-                                            type='time'
-                                            value={values?.horaConclusao ?? getTimeNow()}
-                                            required
-                                            register={register}
-                                            control={control}
-                                            errors={errors?.fieldsFooter?.horaConclusao}
-                                        />
-
-                                        {/* Profissional responsável */}
-                                        <Select
-                                            xs={12}
-                                            md={6}
-                                            title='Profissional que aprova'
-                                            name={`fieldsFooter.profissional`}
-                                            type='string'
-                                            required
-                                            options={profissionaisAprova ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                            errors={errors?.fieldsFooter?.profissional}
-                                        />
-
                                         {/* Resultado */}
                                         <Grid item xs={12}>
                                             <Result
-                                                title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
+                                                title={
+                                                    user.papelID == 1
+                                                        ? 'Avaliação final da não conformidade:'
+                                                        : 'Observação'
+                                                }
                                                 name={'status'}
                                                 value={result}
-                                                register={register}
-                                                setValue={setValue}
+                                                register={form.register}
+                                                setValue={form.setValue}
                                                 setResult={setResult}
                                                 papelID={user.papelID}
                                                 hasNaoConformidade={hasNaoConformidade}
                                                 options={[
                                                     {
-                                                        value: 70,
+                                                        value: 80,
                                                         color: 'success',
-                                                        label: 'Aprovado',
+                                                        label: 'Aceite',
                                                         disabled: canApprove ? false : true
                                                     },
                                                     {
-                                                        value: 60,
-                                                        color: 'warning',
-                                                        label: 'Aprovado Parcial'
-                                                    },
-                                                    {
-                                                        value: 50,
+                                                        value: 90,
                                                         color: 'error',
-                                                        label: 'Reprovado'
+                                                        label: 'Não Aceite'
                                                     }
                                                 ]}
                                             />
                                         </Grid>
                                     </Grid>
                                 )}
+
+                                {/* Produtos do recebimento */}
+                                {type == 'recebimentoMpNaoConformidade' && (
+                                    <TableProductsConclusionNC data={produtos} form={form} />
+                                )}
                             </>
                         )}
 
                         {/* Formulário Concluído e com não conformidade */}
-                        {info.status >= 40 && info.naoConformidade && (
+                        {status >= 40 && (
                             <Typography variant='body1' sx={{ mt: 2 }}>
                                 Concluir não conformidades do formulário? Após concluir, o mesmo não poderá mais ser
                                 alterado!
@@ -274,7 +202,7 @@ const DialogFormConclusion = ({
                                         variant='contained'
                                         disabled={
                                             !hasSectorPermission(values?.setores ?? []) ||
-                                            (info.status < 40 &&
+                                            (status < 40 &&
                                                 ((listErrors && listErrors.status) ||
                                                     (user.papelID == 1 && !result.status)))
                                         }
@@ -295,4 +223,4 @@ const DialogFormConclusion = ({
     )
 }
 
-export default DialogFormConclusion
+export default DialogFormConclusionNC

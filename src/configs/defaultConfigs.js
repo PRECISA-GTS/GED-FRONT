@@ -33,6 +33,10 @@ const statusDefault = {
   50: { title: 'Reprovado', color: 'error' },
   60: { title: 'Aprovado Parcial', color: 'warning' },
   70: { title: 'Aprovado', color: 'success' },
+
+  //! Status das não conformidades
+  80: { title: 'Aceite', color: 'success' },
+  90: { title: 'Não Aceite', color: 'error' },
 }
 
 const configColumns = (currentLink, arrColumns) => {

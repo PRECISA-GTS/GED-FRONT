@@ -939,13 +939,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     handleSubmit={() => handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
+                    titleConclusion={'Concluir'}
                     title='Fornecedor'
                     btnStatus={type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    setores={fieldsFooter?.setores ?? []}
                 />
 
                 {hasModel && (

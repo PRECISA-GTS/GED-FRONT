@@ -5,6 +5,7 @@ import StatusLimpeza from './StatusLimpeza'
 
 const StatusSteps = ({ statusID }) => {
     const router = useRouter()
+    console.log('🚀 ~ router:', router.pathname)
 
     return router.pathname === '/formularios/fornecedor' ? (
         <StatusFornecedor statusID={statusID} />

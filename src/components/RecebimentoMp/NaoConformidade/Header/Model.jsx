@@ -3,7 +3,7 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 
-const Model = ({ form, data }) => {
+const Model = ({ form, data, disabled }) => {
     if (!data) return null
 
     const { loggedUnity } = useContext(AuthContext)
@@ -33,6 +33,7 @@ const Model = ({ form, data }) => {
             name={`header.modelo`}
             options={modelos ?? []}
             value={data.modelo || { nome: '' }}
+            disabled={disabled}
             register={form.register}
             setValue={form.setValue}
             control={form.control}

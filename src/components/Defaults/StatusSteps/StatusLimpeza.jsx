@@ -39,6 +39,10 @@ const StatusLimpeza = ({ statusID }) => {
                             ? 'Aprovado Parcial'
                             : statusID === 70
                             ? 'Aprovado'
+                            : statusID === 80
+                            ? 'Aceite'
+                            : statusID === 90
+                            ? 'Não Aceite'
                             : 'Agurdando aprovação...'
                     }
                 />
@@ -61,6 +65,10 @@ const StatusLimpeza = ({ statusID }) => {
                     <Steps total={4} color={hexToRGBA(theme.palette.warning.main, 1)} />
                 ) : statusID === 70 ? (
                     <Steps total={4} color={hexToRGBA(theme.palette.primary.main, 1)} />
+                ) : statusID === 80 ? (
+                    <Steps total={4} color={hexToRGBA(theme.palette.primary.main, 1)} />
+                ) : statusID === 90 ? (
+                    <Steps total={4} color={hexToRGBA(theme.palette.error.main, 1)} />
                 ) : (
                     <p>--</p>
                 )}

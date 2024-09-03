@@ -613,14 +613,13 @@ const FormLimpeza = ({ id }) => {
                     handleSubmit={() => handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
+                    titleConclusion={'Concluir'}
                     title='Limpeza'
                     componentSaveReport={null}
                     btnStatus={type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    setores={fieldsFooter?.setores ?? []}
                 />
 
                 <>

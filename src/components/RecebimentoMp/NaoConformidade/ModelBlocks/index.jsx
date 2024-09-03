@@ -1,6 +1,6 @@
 import Block from 'src/components/Defaults/Formularios/Block'
 
-const ModelBlocks = ({ form, data, setBlock, status }) => {
+const ModelBlocks = ({ form, data, setBlock, status, disabled }) => {
     console.log('🚀 ~ Block:', data)
 
     return (
@@ -15,7 +15,7 @@ const ModelBlocks = ({ form, data, setBlock, status }) => {
                         setBlocos={setBlock}
                         status={status}
                         blocos={data}
-                        disabled={false}
+                        disabled={disabled}
                         setValue={form.setValue}
                         getValues={form.getValues}
                         register={form.register}
