@@ -83,7 +83,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 profissionalID: user.profissionalID
             }
         }
-        console.log('🚀 ~ onSubmit:', values)
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
@@ -178,6 +177,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 unidadeID: user.unidadeID
             }
         }
+        console.log('🚀 ~ onSubmit:', data)
 
         try {
             if (type === 'new') {
