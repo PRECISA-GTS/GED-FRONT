@@ -186,7 +186,9 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
                 setId(response.data.id)
-                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+                setTimeout(() => {
+                    router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+                }, 200)
             } else if (type === 'edit') {
                 const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
                 console.log('🚀 ~ response:', response)
