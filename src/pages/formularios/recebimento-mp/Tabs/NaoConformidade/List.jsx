@@ -25,11 +25,15 @@ const ListNaoConformidade = () => {
     const form = useForm({ mode: 'onChange' })
 
     const getList = async () => {
+        console.log('getList....', loggedUnity.unidadeID, user.papelID, user.usuarioID)
         await api
-            .get(
-                `/formularios/recebimento-mp/nao-conformidade/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`
-            )
+            .post(`/formularios/recebimento-mp/nao-conformidade/getList`, {
+                unidadeID: loggedUnity.unidadeID,
+                papelID: user.papelID,
+                usuarioID: user.usuarioID
+            })
             .then(response => {
+                console.log('🚀 ~ response.data:', response.data)
                 setFilteredDataRecebimentoMP(response.data)
                 setDataRecebimentoMP(response.data)
                 setTitle({
@@ -54,7 +58,7 @@ const ListNaoConformidade = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />, false)
-    }, [router.query])
+    }, [router.query, user, loggedUnity])
 
     const arrColumns = [
         {
