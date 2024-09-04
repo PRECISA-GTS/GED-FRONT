@@ -2,7 +2,6 @@ import { Card, CardContent, Grid } from '@mui/material'
 import WhoFills from './WhoFills'
 import NcType from './NcType'
 import Input from 'src/components/Form/Input'
-import Model from './Model'
 import DateField from 'src/components/Form/DateField'
 import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
@@ -22,7 +21,7 @@ const Header = ({ form, data, disabled }) => {
 
                     <DateField
                         xs={12}
-                        md={2}
+                        md={3}
                         title='Data'
                         type='date'
                         required
@@ -37,7 +36,7 @@ const Header = ({ form, data, disabled }) => {
                     />
                     <Input
                         xs={12}
-                        md={2}
+                        md={3}
                         title='Hora'
                         name={`header.hora`}
                         type='time'
@@ -46,10 +45,9 @@ const Header = ({ form, data, disabled }) => {
                         control={form.control}
                         errors={form.errors?.header?.hora}
                     />
-                    <Model form={form} data={data} disabled={disabled} />
                     <Input
                         xs={12}
-                        md={4}
+                        md={6}
                         title='Prazo para a solução (em dias)'
                         name={`header.prazoSolucao`}
                         disabled={disabled}

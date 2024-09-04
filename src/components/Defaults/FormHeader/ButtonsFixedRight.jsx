@@ -12,14 +12,15 @@ const ButtonsFixedRight = ({
     btnSave,
     btnNew,
     btnNext,
-    routes,
     disabled,
     disabledSend,
     disabledSubmit,
     handleSubmit,
     handleSend,
     iconConclusion,
-    titleConclusion
+    titleConclusion,
+    btnNewModal,
+    handleNewModal
 }) => {
     const router = Router
     const { isLoading } = useLoad()
@@ -42,6 +43,20 @@ const ButtonsFixedRight = ({
                         <span className='hidden sm:block'>Novo</span>
                     </Button>
                 </Link>
+            )}
+            {/* Novo em modal */}
+            {btnNewModal && hasPermission(router.pathname, 'inserir') && (
+                <Button
+                    type='button'
+                    variant='outlined'
+                    color='primary'
+                    size='medium'
+                    sx={{ display: 'flex', gap: 2 }}
+                    onClick={handleNewModal}
+                >
+                    <Icon icon='ic:outline-plus' />
+                    <span className='hidden sm:block'>Novo</span>
+                </Button>
             )}
 
             {/* Conclusão de formulário (salva arquivo .pdf do formulário) */}

@@ -43,7 +43,9 @@ const FormHeader = ({
     type,
     status,
     partialRoute,
-    outsideID
+    outsideID,
+    btnNewModal,
+    handleNewModal
 }) => {
     const router = Router
     const { routes } = useContext(AuthContext)
@@ -77,12 +79,17 @@ const FormHeader = ({
         setId(null)
     }
 
-    const currentUrl =
+    let currentUrl =
         type === 'new' && partialRoute
             ? backRoute(backRoute(router.pathname))
             : type === 'new' || partialRoute
             ? backRoute(router.pathname)
             : router.pathname
+
+    //? Ex.: ?aba=nao-conformidade
+    if (Object.keys(router.query).length > 0) {
+        currentUrl += `?${new URLSearchParams(router.query).toString()}`
+    }
 
     const dataButtons = [
         {
@@ -193,32 +200,10 @@ const FormHeader = ({
                             // componentSaveReport={componentSaveReport}
                             iconConclusion={iconConclusion}
                             titleConclusion={titleConclusion}
+                            btnNewModal={btnNewModal}
+                            handleNewModal={handleNewModal}
                         />
                     </div>
-
-                    {/* Botões flutuantes */}
-                    {/* <ButtonsFloating
-                        isVisible={isVisible}
-                        dataButtons={dataButtons}
-                        btnSave={btnSave}
-                        btnPrint={btnPrint}
-                        matches={matches}
-                        routes={routes}
-                        currentUrl={currentUrl}
-                    /> */}
-                    {/* <Box sx={{ mt: 4 }}>
-                        {status && !matches && (
-                            <Box display='flex' alignItems='center' justifyContent='flex-start'>
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                            </Box>
-                        )}
-                    </Box> */}
                 </div>
             </div>
         </>

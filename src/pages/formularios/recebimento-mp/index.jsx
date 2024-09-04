@@ -11,10 +11,8 @@ import RecebimentoMpNaoConformidade from 'src/components/RecebimentoMp/NaoConfor
 
 const RecebimentoMp = () => {
     const router = useRouter()
-    const { id, setId } = useContext(RouteContext)
-    const [value, setValue] = useState('1')
-
-    console.log('🚀 ~ router:', router.pathname)
+    const { id } = useContext(RouteContext)
+    const [value, setValue] = useState('recebimento')
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -29,10 +27,8 @@ const RecebimentoMp = () => {
     }
 
     const getTabFromURL = () => {
-        return router.query.aba || '1'
+        return router.query.aba || 'recebimento'
     }
-
-    console.log('Aba atual: ', getTabFromURL())
 
     useEffect(() => {
         setValue(getTabFromURL())
@@ -51,7 +47,7 @@ const RecebimentoMp = () => {
                                         <p>Recebimento de MP</p>
                                     </div>
                                 }
-                                value='1'
+                                value='recebimento'
                                 sx={{ textTransform: 'none', fontSize: '1rem' }}
                             />
                             <Tab
@@ -61,24 +57,24 @@ const RecebimentoMp = () => {
                                         <p>Não Conformidade</p>
                                     </div>
                                 }
-                                value='2'
+                                value='nao-conformidade'
                                 sx={{ textTransform: 'none', fontSize: '1rem' }}
                             />
                         </TabList>
                     </Box>
-                    <TabPanel value='1'>
+                    <TabPanel value='recebimento'>
                         <ListRecebimentoMP />
                     </TabPanel>
-                    <TabPanel value='2'>
+                    <TabPanel value='nao-conformidade'>
                         <ListNaoConformidade />
                     </TabPanel>
                 </TabContext>
             ) : (
                 <>
                     {/* Aba 1 (recebimento de mp)  */}
-                    {getTabFromURL() === '1' && <FormRecebimentoMp id={id} model={null} />}
+                    {getTabFromURL() === 'recebimento' && <FormRecebimentoMp id={id} model={null} />}
                     {/* Aba 2 (nao conformidade) */}
-                    {getTabFromURL() === '2' && <RecebimentoMpNaoConformidade id={id} />}
+                    {getTabFromURL() === 'nao-conformidade' && <RecebimentoMpNaoConformidade id={id} />}
                 </>
             )}
         </>

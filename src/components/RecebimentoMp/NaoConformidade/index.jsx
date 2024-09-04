@@ -14,9 +14,15 @@ import DialogFormConclusionNC from 'src/components/Defaults/Dialogs/DialogFormCo
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from 'src/components/Defaults/Dialogs/DialogReOpenForm'
 import { RouteContext } from 'src/context/RouteContext'
+import CustomChip from 'src/@core/components/mui/chip'
 import { toastMessage } from 'src/configs/defaultConfigs'
+import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
+import NewContent from './NewContent'
+import { Card, CardContent } from '@mui/material'
 
-const RecebimentoMpNaoConformidade = ({ id }) => {
+const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
+    console.log('🚀 ~ RecebimentoMpNaoConformidade id, recebimentoMpID, model:', id, recebimentoMpID, modelID)
+
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -25,8 +31,9 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
     const [block, setBlock] = useState(null)
     const [change, setChange] = useState(false)
     const [openModal, setOpenModal] = useState(false)
+    const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
-    const { setId } = useContext(RouteContext)
+    const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -54,7 +61,7 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
         const products = form.getValues(`productsConclude`)
         if (!products) return
 
-        if (!id || !header.recebimentoMpID) return
+        if (!id || !header.recebimento.id) return
 
         //? Valida se nenhuma quantidade nova do produto é maior que a quantidade do recebimento de MP
         if (!isValidProductsQuantity(products)) {
@@ -69,7 +76,7 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
             },
             params: {
                 id,
-                recebimentoMpID: header.recebimentoMpID,
+                recebimentoMpID: header.recebimento.id,
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID,
@@ -116,11 +123,21 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
 
     const getData = async () => {
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getData`, {
-                id,
+            const values = {
+                id: id ?? 0, //? Novo (id == null)
+                modelID: modelID ?? 0, //? Novo (modelID)
+                recebimentoMpID: recebimentoMpID ?? 0, //? Novo (recebimentoMpID)
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID
-            })
+            }
+            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getData`, values)
+
+            if (response.status === 204) {
+                //? Estava no formulário NOVO que passa dados do contexto, se recarregar a página perde os valores do contexto, então redireciona pra listagem
+                setId(null)
+                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+            }
+
             console.log('🚀 ~ getData: ', response.data)
             form.reset(response.data)
             setHeader(response.data.header)
@@ -163,8 +180,16 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
         }
 
         try {
-            await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
-            toast.success('Dados atualizados com sucesso!')
+            if (type === 'new') {
+                const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/insertData`, data)
+                toast.success('Dados cadastrados com sucesso!')
+                //? Redireciona pro ID criado
+                setId(response.data.id)
+                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+            } else if (type === 'edit') {
+                await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
+                toast.success('Dados atualizados com sucesso!')
+            }
         } catch (e) {
             console.log(e)
             return
@@ -176,6 +201,11 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
     const goToFormConfig = () => {
         setId(header.modelo.id) //? ID do modelo do formulário
         router.push(`/configuracoes/formularios/recebimentomp-naoconformidade/`)
+    }
+
+    const goToReceive = () => {
+        setId(header.recebimento.id)
+        router.push(`/formularios/recebimento-mp/`)
     }
 
     const canConfigForm = () => {
@@ -192,10 +222,29 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
         return canConfig
     }
 
+    const handleNew = () => {
+        //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
+        const values = form.getValues('new')
+        setRecebimentoMpID(header.recebimento.id)
+        setModelID(values.modelo.id)
+        router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
+    }
+
     //* Actions data
     const actionsData = []
-    const objReOpenForm = {
+    const objGoToReceive = {
         id: 1,
+        name: 'Acessar Recebimento',
+        description: 'Acessar formulário de Recebimento de MP',
+        route: null,
+        type: null,
+        action: goToReceive,
+        modal: false,
+        icon: 'ci:external-link',
+        identification: null
+    }
+    const objReOpenForm = {
+        id: 2,
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
         component: <DialogReOpenForm />,
@@ -209,7 +258,7 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
         identification: null
     }
     const objFormConfig = {
-        id: 2,
+        id: 3,
         name: 'Configurações do formulário',
         description: 'Alterar as configurações do modelo de formulário.',
         route: null,
@@ -219,7 +268,8 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
         icon: 'bi:gear',
         identification: null
     }
-    if (user.papelID == 1 && header?.status >= 40) actionsData.push(objReOpenForm)
+    if (user.papelID == 1) actionsData.push(objGoToReceive)
+    if (user.papelID == 1 && header && header.status.id >= 40) actionsData.push(objReOpenForm)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
     useEffect(() => {
@@ -232,18 +282,20 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
             }
         })
         getData()
-    }, [change])
+    }, [change, user])
 
     return (
-        <>
-            <form onSubmit={e => customSubmit(e)} className='space-y-4'>
-                {header && (
+        <form onSubmit={e => customSubmit(e)}>
+            {header && (
+                <>
                     <FormHeader
+                        btnNewModal={type === 'edit' ? true : false}
+                        handleNewModal={() => setOpenNew(true)}
                         btnCancel
-                        btnSave={header?.status < 40 ? true : false}
-                        btnSend={header?.status >= 30 && header?.status < 40 ? true : false}
+                        btnSave={header?.status?.id < 40 ? true : false}
+                        btnSend={header?.status?.id >= 30 && header?.status?.id < 40 ? true : false}
                         btnPrint={type == 'edit' ? true : false}
-                        btnDelete
+                        btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
                         onclickDelete={() => setOpenDelete(true)}
                         actionsData={actionsData}
                         actions
@@ -253,63 +305,71 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
                         titleConclusion={'Concluir'}
                         title='Não conformidade do Recebimento de MP'
                         type={type}
-                        status={header?.status}
+                        status={header?.status?.id}
                     />
-                )}
 
-                {header && <RecebimentoMpInfo data={header} />}
+                    <div className='flex gap-2 mb-2'>
+                        <CustomChip
+                            size='small'
+                            HeaderFiel
+                            skin='light'
+                            color={header.status.color}
+                            label={header.status.label}
+                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                        />
+                        <CustomChip
+                            size='small'
+                            HeaderFiel
+                            skin='light'
+                            label={header.modelo.nome}
+                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                        />
+                    </div>
 
-                {/* Header */}
-                {header && <Header form={form} data={header} disabled={header.status >= 40} />}
+                    <div className='space-y-4'>
+                        <Card>
+                            <CardContent className='space-y-2 '>
+                                <RecebimentoMpInfo data={header} />
+                            </CardContent>
+                        </Card>
 
-                {/* Modelo com seus blocos */}
-                {block && (
-                    <ModelBlocks
-                        form={form}
-                        data={block}
-                        setBlock={setBlock}
-                        status={header.status}
-                        disabled={header.status >= 40}
-                    />
-                )}
+                        <Header form={form} data={header} disabled={header.status?.id >= 40} />
 
-                {/* Histórico de movimentações */}
-                <HistoricForm
-                    key={change}
-                    id={id}
-                    parFormularioID={3} // Não conformidade do Recebimento de MP
-                />
-            </form>
+                        <ModelBlocks
+                            form={form}
+                            data={block}
+                            setBlock={setBlock}
+                            status={header.status.id}
+                            disabled={header.status.id >= 40}
+                        />
 
-            {/* Modal conclusion */}
-            {header && (
-                <>
+                        <HistoricForm key={change} id={id} parFormularioID={3} />
+                    </div>
+
                     <DialogFormConclusionNC
                         openModal={openModal}
                         handleClose={() => {
-                            setOpenModal(false) //, checkErrors()
+                            setOpenModal(false)
                         }}
                         title='Concluir Formulário'
                         text={`Deseja realmente concluir este formulário?`}
-                        status={header.status}
-                        canChange={true} //{!hasFormPending}
+                        status={header.status.id}
+                        canChange={true}
                         btnCancel
                         btnConfirm
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
-                        // listErrors={listErrors}
                         canApprove={true}
                         type='recebimentoMpNaoConformidade'
                         unity={loggedUnity}
                         values={null}
-                        formularioID={3} // Não conformidade do Recebimento MP
+                        formularioID={3}
                         modeloID={header.modelo.id}
                         produtos={header.produtos}
                         form={form}
                         setores={header.setoresConclusao}
                     />
 
-                    {/* Modal que deleta formulario */}
                     <DialogDelete
                         open={openDelete}
                         handleClose={() => setOpenDelete(false)}
@@ -321,9 +381,19 @@ const RecebimentoMpNaoConformidade = ({ id }) => {
                             MessageError: 'Dado possui pendência!'
                         }}
                     />
+
+                    <DialogActs
+                        title='Nova Não Conformidade'
+                        handleConclusion={handleNew}
+                        size='lg'
+                        setOpenModal={setOpenNew}
+                        openModal={openNew}
+                    >
+                        <NewContent type='form' data={header} form={form} />
+                    </DialogActs>
                 </>
             )}
-        </>
+        </form>
     )
 }
 

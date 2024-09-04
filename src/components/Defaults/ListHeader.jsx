@@ -23,7 +23,9 @@ const ListHeader = ({
     handleSave,
     hasListChange,
     openModal,
-    handleOpenConfig
+    handleOpenConfig,
+    btnNewModal,
+    handleNewModal
 }) => {
     const router = Router
     const { setId } = useContext(RouteContext)
@@ -113,6 +115,24 @@ const ListHeader = ({
                                         <span className='hidden sm:block'>Novo</span>
                                     </Button>
                                 </Link>
+                            )}
+                        {btnNewModal &&
+                            routes.find(
+                                route =>
+                                    (route.rota === router.pathname || route.rota === backRoute(router.pathname)) &&
+                                    route.inserir
+                            ) && (
+                                <Button
+                                    type='button'
+                                    variant='outlined'
+                                    color='primary'
+                                    size='medium'
+                                    sx={{ display: 'flex', gap: 2 }}
+                                    onClick={handleNewModal}
+                                >
+                                    <Icon icon='ic:outline-plus' />
+                                    <span className='hidden sm:block'>Novo</span>
+                                </Button>
                             )}
                     </div>
                     <div>
