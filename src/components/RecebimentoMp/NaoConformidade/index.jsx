@@ -182,12 +182,14 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         try {
             if (type === 'new') {
                 const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/insertData`, data)
+                console.log('🚀 ~ response:', response)
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
                 setId(response.data.id)
                 router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
             } else if (type === 'edit') {
-                await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
+                const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
+                console.log('🚀 ~ response:', response)
                 toast.success('Dados atualizados com sucesso!')
             }
         } catch (e) {
