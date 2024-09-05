@@ -4,8 +4,12 @@ const ProductInfo = ({ value }) => {
     return (
         <>
             <Grid item xs={12} md={2}>
-                <label className='opacity-60'>Quantidade</label>
+                <label className='opacity-60'>Qtd.</label>
                 <p>{value.quantidade}</p>
+            </Grid>
+            <Grid item xs={12} md={2}>
+                <label className='opacity-60'>Qtd. Entrada</label>
+                <p>{value.quantidadeEntrada}</p>
             </Grid>
             <Grid item xs={12} md={2}>
                 <label className='opacity-60'>Data Fabricação</label>

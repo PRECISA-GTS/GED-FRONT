@@ -58,7 +58,7 @@ const ListNaoConformidade = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />, false)
-    }, [router.query, user, loggedUnity])
+    }, [router.query])
 
     const arrColumns = [
         {

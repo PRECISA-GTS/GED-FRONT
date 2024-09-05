@@ -182,16 +182,12 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         try {
             if (type === 'new') {
                 const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/insertData`, data)
-                console.log('🚀 ~ response:', response)
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
                 setId(response.data.id)
-                setTimeout(() => {
-                    router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
-                }, 200)
+                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
             } else if (type === 'edit') {
-                const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
-                console.log('🚀 ~ response:', response)
+                await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
                 toast.success('Dados atualizados com sucesso!')
             }
         } catch (e) {
@@ -205,11 +201,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const goToFormConfig = () => {
         setId(header.modelo.id) //? ID do modelo do formulário
         router.push(`/configuracoes/formularios/recebimentomp-naoconformidade/`)
-    }
-
-    const goToReceive = () => {
-        setId(header.recebimento.id)
-        router.push(`/formularios/recebimento-mp/`)
     }
 
     const canConfigForm = () => {
@@ -236,19 +227,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
     //* Actions data
     const actionsData = []
-    const objGoToReceive = {
-        id: 1,
-        name: 'Acessar Recebimento',
-        description: 'Acessar formulário de Recebimento de MP',
-        route: null,
-        type: null,
-        action: goToReceive,
-        modal: false,
-        icon: 'ci:external-link',
-        identification: null
-    }
     const objReOpenForm = {
-        id: 2,
+        id: 1,
         name: 'Reabrir formulário',
         description: 'Reabrir formulário para preenchimento.',
         component: <DialogReOpenForm />,
@@ -262,7 +242,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         identification: null
     }
     const objFormConfig = {
-        id: 3,
+        id: 2,
         name: 'Configurações do formulário',
         description: 'Alterar as configurações do modelo de formulário.',
         route: null,
@@ -272,7 +252,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         icon: 'bi:gear',
         identification: null
     }
-    if (user.papelID == 1) actionsData.push(objGoToReceive)
     if (user.papelID == 1 && header && header.status.id >= 40) actionsData.push(objReOpenForm)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
