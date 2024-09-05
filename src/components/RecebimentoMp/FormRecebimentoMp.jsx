@@ -141,7 +141,6 @@ const FormRecebimentoMp = ({ id, model }) => {
             console.log(error)
         } finally {
             setChange(!change)
-            // getData()
         }
     }
 

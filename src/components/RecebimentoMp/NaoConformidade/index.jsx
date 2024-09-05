@@ -316,9 +316,10 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             </CardContent>
                         </Card>
 
-                        <Header form={form} data={header} disabled={header.status?.id >= 40} />
+                        <Header key={Math.random()} form={form} data={header} disabled={header.status?.id >= 40} />
 
                         <ModelBlocks
+                            key={Math.random()}
                             form={form}
                             data={block}
                             setBlock={setBlock}

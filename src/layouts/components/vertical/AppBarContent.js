@@ -71,7 +71,7 @@ const AppBarContent = props => {
         </Box>
         <Box
           className='app-title p-1 rounded-xl'
-          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '10px' }}
+          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '0 10px' }}
         >
           <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
           <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
