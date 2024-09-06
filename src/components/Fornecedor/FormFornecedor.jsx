@@ -1126,7 +1126,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 handleClose={() => {
                                     setOpenModal(false), checkErrors()
                                 }}
-                                title='Concluir Formulário'
+                                title='Concluir Fornecedor'
                                 text={`Deseja realmente concluir este formulário?`}
                                 info={info}
                                 canChange={!hasFormPending}

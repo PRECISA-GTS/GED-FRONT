@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import { AuthContext } from 'src/context/AuthContext'
 import { Alert, Grid, Typography } from '@mui/material'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import Result from 'src/components/Defaults/Formularios/Result'
 import { BlobProvider, Document, Page } from '@react-pdf/renderer'
 import { useGlobal } from 'src/hooks/useGlobal'
@@ -17,8 +17,6 @@ import Footer from 'src/components/Reports/Footer'
 import InfoSetores from '../Formularios/InfoSetores'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
-import Select from 'src/components/Form/Select'
-import { api } from 'src/configs/api'
 
 const DialogFormConclusion = ({
     title,
@@ -79,26 +77,6 @@ const DialogFormConclusion = ({
             </Document>
         )
     }
-
-    const getProfissionaisSetores = async () => {
-        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
-            formularioID: formularioID, // fornecedor, recebimento de mp, limpeza...
-            modeloID: modeloID,
-            unidadeID: loggedUnity.unidadeID
-        })
-        setProfissionaisAprova(response.data.conclui)
-        setDefaultProfissional(response.data.conclui)
-    }
-
-    const setDefaultProfissional = arrProfissionais => {
-        const profissionalID = user.profissionalID //? Profissional logado
-        const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-        if (profissional && profissional.id > 0) setValue('fieldsFooter.profissional', profissional)
-    }
-
-    useEffect(() => {
-        getProfissionaisSetores()
-    }, [values])
 
     return (
         <>
