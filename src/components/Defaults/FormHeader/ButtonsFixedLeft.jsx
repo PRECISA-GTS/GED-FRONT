@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, Tooltip } from '@mui/material'
 import { useContext } from 'react'
 import Icon from 'src/@core/components/icon'
 import { AuthContext } from 'src/context/AuthContext'
@@ -23,34 +23,37 @@ const ButtonsFixedLeft = ({
     return (
         <div className='flex gap-2'>
             {btnCancel && !btnClose && hasPermission(router.pathname, 'ler') && (
-                <Button
-                    onClick={() => {
-                        setId(null)
-                        if (type == 'new') {
-                            router.push(router.pathname)
-                        }
-                    }}
-                    type='button'
-                    variant='outlined'
-                    color='primary'
-                    size='medium'
-                >
-                    <Icon icon='grommet-icons:form-previous-link' />
-                </Button>
+                <Tooltip title='Voltar página' placement='top'>
+                    <Button
+                        onClick={() => {
+                            setId(null)
+                            if (type == 'new') {
+                                router.push(router.pathname)
+                            }
+                        }}
+                        type='button'
+                        variant='outlined'
+                        color='primary'
+                        size='medium'
+                    >
+                        <Icon icon='grommet-icons:form-previous-link' />
+                    </Button>
+                </Tooltip>
             )}
 
             {btnDelete && hasPermission(router.pathname, 'excluir') && (
-                <Button
-                    type='button'
-                    onClick={onclickDelete}
-                    variant='outlined'
-                    color='error'
-                    size='medium'
-                    sx={{ display: 'flex', gap: 2 }}
-                >
-                    <Icon icon='material-symbols:delete-outline' />
-                    {/* <span className='hidden sm:block'>Excluir</span> */}
-                </Button>
+                <Tooltip title='Excluir formulário' placement='top'>
+                    <Button
+                        type='button'
+                        onClick={onclickDelete}
+                        variant='outlined'
+                        color='error'
+                        size='medium'
+                        sx={{ display: 'flex', gap: 2 }}
+                    >
+                        <Icon icon='solar:trash-bin-minimalistic-2-outline' />
+                    </Button>
+                </Tooltip>
             )}
 
             {btnClose && (

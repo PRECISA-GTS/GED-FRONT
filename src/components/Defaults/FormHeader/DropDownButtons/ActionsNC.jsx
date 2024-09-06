@@ -31,7 +31,6 @@ const ActionsNC = ({ anchorEl, open, handleClose, handleClick, actionsData }) =>
             >
                 <Icon icon='octicon:chevron-down-12' />
                 <span className='hidden sm:block'>Não Conformidade</span>
-                {/* <Icon icon='typcn:warning-outline' /> */}
             </Button>
 
             <Menu
