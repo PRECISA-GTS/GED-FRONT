@@ -2,6 +2,7 @@ import { Divider, Grid, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import CheckLabel from 'src/components/Form/CheckLabel'
 import RecebimentoMpProdutos from './Produtos'
+import Icon from 'src/@core/components/icon'
 
 const NcType = ({ form, data, disabled }) => {
     if (!data) return
@@ -42,7 +43,13 @@ const NcType = ({ form, data, disabled }) => {
             {form.watch('header.produto') && (
                 <Grid container sx={{ mt: 4 }}>
                     <Grid item xs={12}>
-                        <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700 }}>
+                        <Typography
+                            color='primary'
+                            variant='subtitle1'
+                            sx={{ fontWeight: 700 }}
+                            className='flex items-center gap-1'
+                        >
+                            <Icon icon='ph:plant' className='text-primary' />
                             Selecione os produtos com Não Conformidade
                         </Typography>
                     </Grid>

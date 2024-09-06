@@ -45,8 +45,7 @@ const DialogFormConclusionNC = ({
 }) => {
     if (!modeloID) return null
 
-    console.log('🚀 ~ modeloID:', values)
-
+    const [validParams, setValidParams] = useState(true)
     const { user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [result, setResult] = useState({})
     const { data } = useGlobal()
@@ -174,7 +173,11 @@ const DialogFormConclusionNC = ({
 
                                 {/* Produtos do recebimento */}
                                 {type == 'recebimentoMpNaoConformidade' && (
-                                    <TableProductsConclusionNC data={produtos} form={form} />
+                                    <TableProductsConclusionNC
+                                        data={produtos}
+                                        form={form}
+                                        setValidParams={setValidParams}
+                                    />
                                 )}
                             </>
                         )}
@@ -201,6 +204,7 @@ const DialogFormConclusionNC = ({
                                     <Button
                                         variant='contained'
                                         disabled={
+                                            !validParams ||
                                             !hasSectorPermission(values?.setores ?? []) ||
                                             (status < 40 &&
                                                 ((listErrors && listErrors.status) ||

@@ -5,17 +5,21 @@ import Icon from 'src/@core/components/icon'
 import { backRoute } from 'src/configs/defaultConfigs'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
-// import LayoutReport from 'src/components/Reports/Layout'
 import CustomChip from 'src/@core/components/mui/chip'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import OptionsDots from './OptionsDots'
+import Actions from './DropDownButtons/Actions'
 import ButtonsFloating from './ButtonsFloating'
 import ButtonsFixedRight from './ButtonsFixedRight'
 import ButtonsFixedLeft from './ButtonsFixedLeft'
 import useLoad from 'src/hooks/useLoad'
 import { SettingsContext } from 'src/@core/context/settingsContext'
+import ActionsNC from './DropDownButtons/ActionsNC'
+import { api } from 'src/configs/api'
+import NewContent from 'src/components/RecebimentoMp/NaoConformidade/NewContent'
+import { useForm } from 'react-hook-form'
 
 const FormHeader = ({
+    id,
     btnCancel,
     btnSave,
     btnSend,
@@ -41,29 +45,42 @@ const FormHeader = ({
     actions,
     actionsData,
     type,
+    module,
     status,
     partialRoute,
     outsideID,
     btnNewModal,
-    handleNewModal
+    handleNewModal,
+    actionsNC
 }) => {
     const router = Router
     const { routes } = useContext(AuthContext)
-    const { setId } = useContext(RouteContext)
+    const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
     const [isVisible, setIsVisible] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorElNC, setAnchorElNC] = useState(null)
     const { isLoading } = useLoad()
     const { settings } = useContext(SettingsContext)
+    const [actionsNCData, setActionsNCData] = useState(null)
+
+    const form = useForm({ mode: 'onChange' })
 
     const matches = useMediaQuery('(min-width:640px)')
 
     const open = Boolean(anchorEl)
+    const openNC = Boolean(anchorElNC)
     const handleClick = event => {
         setAnchorEl(event.currentTarget)
+    }
+    const handleClickNC = event => {
+        setAnchorElNC(event.currentTarget)
     }
 
     const handleClose = () => {
         setAnchorEl(null)
+    }
+    const handleCloseNC = () => {
+        setAnchorElNC(null)
     }
 
     //? Função que volta ao topo
@@ -127,6 +144,64 @@ const FormHeader = ({
         }
     ]
 
+    //! Não Conformidades
+    const handleNewNC = () => {
+        switch (module) {
+            case 'recebimentoMp':
+                const values = form.getValues('new')
+                setRecebimentoMpID(id)
+                setModelID(values.modelo.id)
+                router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
+                break
+            default:
+                break
+        }
+    }
+    const goToNC = (id, route) => {
+        setId(id)
+        router.push(route)
+    }
+    const getNCData = async () => {
+        try {
+            let params = null
+            switch (module) {
+                case 'recebimentoMp':
+                    params = {
+                        endpoint: 'formularios/recebimento-mp/nao-conformidade/getNCRecebimentoMp',
+                        route: '/formularios/recebimento-mp/?aba=nao-conformidade',
+                        componentNewNC: <NewContent type='form' data={null} form={form} />
+                    }
+                    break
+
+                default:
+                    break
+            }
+
+            const response = await api.post(params.endpoint, { id })
+            const objNew = {
+                icon: 'icons8:plus',
+                name: 'Nova Não Conformidade',
+                modal: true,
+                component: params.componentNewNC,
+                action: handleNewNC,
+                size: 'sm',
+                disabled: false
+            }
+            const formatedData = response.data.map(item => {
+                return {
+                    icon: 'typcn:warning-outline',
+                    name: item.nome,
+                    iconClass: 'text-yellow-600',
+                    action: () => goToNC(item.id, params.route),
+                    disabled: false
+                }
+            })
+            setActionsNCData([objNew, ...formatedData])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     //? Verifica se o usuário deu scroll na página e mostra o botão de salvar
     useEffect(() => {
         const toggleVisibility = () => {
@@ -137,9 +212,8 @@ const FormHeader = ({
                 setIsVisible(false)
             }
         }
-
+        getNCData()
         window.addEventListener('scroll', toggleVisibility)
-
         return () => window.removeEventListener('scroll', toggleVisibility)
     }, [])
 
@@ -168,11 +242,24 @@ const FormHeader = ({
                         type={type}
                     />
 
-                    {/* // 3 pontinhos ao clicar abre opções de seleção */}
+                    {/* 3 pontinhos ao clicar abre opções de seleção */}
                     <div className='flex items-center gap-2'>
                         {/*Div direita */}
+                        {actionsNC && actionsNCData && (
+                            <ActionsNC
+                                anchorEl={anchorElNC}
+                                open={openNC}
+                                handleClose={handleCloseNC}
+                                handleClick={handleClickNC}
+                                disabled={disabled}
+                                disabledPrint={disabledPrint}
+                                btnPrint={btnPrint}
+                                actionsData={actionsNCData}
+                                matches={matches}
+                            />
+                        )}
                         {actions && (
-                            <OptionsDots
+                            <Actions
                                 anchorEl={anchorEl}
                                 open={open}
                                 handleClose={handleClose}
@@ -197,7 +284,6 @@ const FormHeader = ({
                             disabledSend={disabledSend}
                             disabledSubmit={disabledSubmit}
                             handleSend={handleSend}
-                            // componentSaveReport={componentSaveReport}
                             iconConclusion={iconConclusion}
                             titleConclusion={titleConclusion}
                             btnNewModal={btnNewModal}

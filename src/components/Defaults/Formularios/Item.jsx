@@ -20,6 +20,7 @@ const Item = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
+    console.log('🚀 ~ item:', item)
     // if (!item) return null
 
     const { settings } = useContext(SettingsContext)
@@ -88,13 +89,19 @@ const Item = ({
                             control={control}
                             index={indexItem}
                             defaultValue={item?.resposta?.id}
+                            getValues={getValues}
                             values={item.alternativas}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
                             item={item}
                             disabled={disabled}
                             handleChange={e => updateResponse({ e, item, index, indexItem })}
                             errors={errors?.[index]?.itens[indexItem]?.resposta}
-                            blockForm={item.respostaConfig?.bloqueiaFormulario == 1 ? true : false}
+                            // blockForm={item.respostaConfig?.bloqueiaFormulario == 1 ? true : false}
+                            blockForm={
+                                item.alternativas.find(alt => alt.id == item?.resposta?.id)?.bloqueiaFormulario == 1
+                                    ? true
+                                    : false
+                            }
                         />
                     )}
 

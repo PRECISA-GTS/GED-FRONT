@@ -163,14 +163,13 @@ const DialogFormConclusion = ({
                                 )}
 
                                 {!canApprove && (
-                                    <Alert severity='error' sx={{ mt: 2 }}>
+                                    <Alert severity='warning' sx={{ mt: 2 }}>
                                         Este formulário não pode ser aprovado pois possui resposta que gera não
-                                        conformidade
+                                        conformidade!
                                     </Alert>
                                 )}
                                 {user.papelID == 1 && (
                                     <Grid container spacing={4} sx={{ mt: 4 }}>
-                                        {/* Data da conclusão */}
                                         <DateField
                                             xs={12}
                                             md={3}
@@ -186,7 +185,6 @@ const DialogFormConclusion = ({
                                             errors={errors?.fieldsFooter?.dataConclusao}
                                         />
 
-                                        {/* Hora de Abertura */}
                                         <Input
                                             xs={12}
                                             md={3}
@@ -200,8 +198,7 @@ const DialogFormConclusion = ({
                                             errors={errors?.fieldsFooter?.horaConclusao}
                                         />
 
-                                        {/* Profissional responsável */}
-                                        <Select
+                                        {/* <Select
                                             xs={12}
                                             md={6}
                                             title='Profissional que aprova'
@@ -213,7 +210,7 @@ const DialogFormConclusion = ({
                                             setValue={setValue}
                                             control={control}
                                             errors={errors?.fieldsFooter?.profissional}
-                                        />
+                                        /> */}
 
                                         {/* Resultado */}
                                         <Grid item xs={12}>

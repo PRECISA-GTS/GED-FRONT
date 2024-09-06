@@ -19,10 +19,9 @@ import { toastMessage } from 'src/configs/defaultConfigs'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from './NewContent'
 import { Card, CardContent } from '@mui/material'
+import { fractionedToFloat } from 'src/configs/functions'
 
 const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
-    console.log('🚀 ~ RecebimentoMpNaoConformidade id, recebimentoMpID, model:', id, recebimentoMpID, modelID)
-
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -37,21 +36,10 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
     const form = useForm({ mode: 'onChange' })
 
-    const handleConclude = () => {
-        setOpenModal(true)
-    }
-
-    const convertToFload = value => {
-        if (!value) return
-        const formattedStr = value.replace('.', '').replace(',', '.')
-        const floatNumber = parseFloat(formattedStr)
-        return floatNumber
-    }
-
     const isValidProductsQuantity = values => {
         let isValid = true
         values.forEach(value => {
-            if (value.novaQuantidade && convertToFload(value.novaQuantidade) > convertToFload(value.quantidade))
+            if (value.novaQuantidade && fractionedToFloat(value.novaQuantidade) > fractionedToFloat(value.quantidade))
                 isValid = false
         })
         return isValid
@@ -72,7 +60,13 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         values = {
             form: {
                 ...values,
-                products: products
+                products: products,
+                prazo: form.getValues('header.prazoSolucao'),
+                data: form.getValues('header.data'),
+                data_: form.getValues('header.data') && form.getValues('header.data').split('-').reverse().join('/'),
+                hora: form.getValues('header.hora'),
+                transporte: form.getValues('header.transporte'),
+                produto: form.getValues('header.produto')
             },
             params: {
                 id,
@@ -83,6 +77,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 profissionalID: user.profissionalID
             }
         }
+
+        setHeader(null)
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
@@ -283,7 +279,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         actionsData={actionsData}
                         actions
                         handleSubmit={() => form.handleSubmit(onSubmit)}
-                        handleSend={handleConclude}
+                        handleSend={() => setOpenModal(true)}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
                         title='Não conformidade do Recebimento de MP'
@@ -316,10 +312,9 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             </CardContent>
                         </Card>
 
-                        <Header key={Math.random()} form={form} data={header} disabled={header.status?.id >= 40} />
+                        <Header form={form} data={header} disabled={header.status?.id >= 40} />
 
                         <ModelBlocks
-                            key={Math.random()}
                             form={form}
                             data={block}
                             setBlock={setBlock}
@@ -335,7 +330,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         handleClose={() => {
                             setOpenModal(false)
                         }}
-                        title='Concluir Formulário'
+                        title='Concluir Não Conformidade do Recebimento de MP'
                         text={`Deseja realmente concluir este formulário?`}
                         status={header.status.id}
                         canChange={true}

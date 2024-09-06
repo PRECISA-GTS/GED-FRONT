@@ -10,7 +10,7 @@ import DialogFormStatus from '../Defaults/Dialogs/DialogFormStatus'
 import Input from 'src/components/Form/Input'
 import AnexoModeView from 'src/components/Anexos/ModeView'
 import CustomChip from 'src/@core/components/mui/chip'
-import { Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
@@ -31,6 +31,9 @@ import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { ParametersContext } from 'src/context/ParametersContext'
+import Icon from 'src/@core/components/icon'
+import OptionsDots from '../Defaults/FormHeader/DropDownButtons/Actions'
+import { ca } from 'date-fns/locale'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -388,6 +391,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const handleSendForm = blob => {
         setBlobSaveReport(blob)
         checkErrors()
+        verifyIfCanAproveForm(blocos)
         setOpenModal(true)
     }
 
@@ -395,7 +399,7 @@ const FormRecebimentoMp = ({ id, model }) => {
         let tempCanApprove = true
         blocos.forEach(block => {
             block.itens.forEach(item => {
-                if (item.respostaConfig && item.respostaConfig.bloqueiaFormulario == 1) {
+                if (item.resposta && item.resposta.bloqueiaFormulario == 1) {
                     tempCanApprove = false
                 }
             })
@@ -693,14 +697,14 @@ const FormRecebimentoMp = ({ id, model }) => {
         <>
             <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
+                    key={id}
+                    id={id}
                     btnCancel
                     btnSave={!info.concluido}
                     btnSend={user.papelID == 1 && info.status >= 30 && !info.concluido}
                     btnPrint={type == 'edit' ? true : false}
                     btnDelete={info.status < 40 ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
-                    actionsData={actionsData}
-                    actions
                     handleSubmit={() => handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
@@ -710,6 +714,10 @@ const FormRecebimentoMp = ({ id, model }) => {
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
+                    actions
+                    actionsData={actionsData}
+                    module='recebimentoMp'
+                    actionsNC={info.naoConformidade && info.status > 40}
                 />
 
                 <>
@@ -835,19 +843,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 </Card>
                             </>
                         )}
-                        {/* Não Conformidade */}
-                        {/* {info.naoConformidade && (
-                        <RecebimentoMpNaoConformidade
-                            recebimentoMpID={id}
-                            values={naoConformidade}
-                            info={info}
-                            getValues={getValues}
-                            register={register}
-                            control={control}
-                            setValue={setValue}
-                            errors={errors}
-                        />
-                    )} */}
+
                         <HistoricForm
                             key={change}
                             id={id}
@@ -876,7 +872,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                             handleClose={() => {
                                 setOpenModal(false), checkErrors()
                             }}
-                            title='Concluir Formulário'
+                            title='Concluir Recebimento de MP'
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}

@@ -56,18 +56,22 @@ const NewContent = ({ type, data, form }) => {
                         helpText='Selecione o Recebimento de MP para lançar uma nova não conformidade'
                     />
                 )}
-                <Select
-                    xs={12}
-                    md={type === 'form' ? 12 : 6}
-                    title='Modelo de formulário'
-                    name={`new.modelo`}
-                    options={models ?? []}
-                    value={data?.modelo || { nome: '' }}
-                    register={form.register}
-                    setValue={form.setValue}
-                    control={form.control}
-                    helpText='Selecione um modelo de formulário para o preenchimento desta não conformidade para este Recebimento de MP'
-                />
+                {models && (
+                    <Select
+                        xs={12}
+                        md={type === 'form' ? 12 : 6}
+                        title='Modelo de formulário'
+                        name={`new.modelo`}
+                        options={models ?? []}
+                        value={
+                            data?.modelo || models?.length === 1 ? models[0] : { nome: '' } //? Apenas 1 opção, traz selecionado
+                        }
+                        register={form.register}
+                        setValue={form.setValue}
+                        control={form.control}
+                        helpText='Selecione um modelo de formulário para o preenchimento desta não conformidade para este Recebimento de MP'
+                    />
+                )}
             </Grid>
         </div>
     )

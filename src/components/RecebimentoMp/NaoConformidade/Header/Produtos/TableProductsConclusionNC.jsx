@@ -2,8 +2,9 @@ import { Divider, Grid, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import Icon from 'src/@core/components/icon'
 import Input from 'src/components/Form/Input'
+import { floatToFractioned, fractionedToFloat } from 'src/configs/functions'
 
-const TableProductsConclusionNC = ({ data, form }) => {
+const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
     const [sortedData, setSortedData] = useState(null)
 
     //? Ordena os dados, trazendo primeiro os itens marcados na nao conformidade (checked_ == true)
@@ -15,6 +16,18 @@ const TableProductsConclusionNC = ({ data, form }) => {
             return 0
         })
         setSortedData(sorted)
+
+        sorted.map((row, index) => {
+            calculateDiff(row.quantidade, row.quantidadeEntrada, index)
+        })
+    }
+
+    const calculateDiff = (qtd, qtdEntrada, index) => {
+        if (!qtd || !qtdEntrada) return '--'
+        const formatedQtd = fractionedToFloat(qtd)
+        const formatedQtdEntrada = fractionedToFloat(qtdEntrada)
+        const diff = floatToFractioned(formatedQtd - formatedQtdEntrada)
+        form.setValue(`productsConclude.${index}.diff`, diff)
     }
 
     useEffect(() => {
@@ -37,7 +50,7 @@ const TableProductsConclusionNC = ({ data, form }) => {
                 sortedData.length > 0 &&
                 sortedData.map((row, index) => (
                     <>
-                        <Grid container spacing={2} sx={{ mt: 4 }} className='items-center'>
+                        <Grid container spacing={4} sx={{ mt: 4 }} className='items-center'>
                             <Grid item md={12}>
                                 <Typography variant='body2' sx={{ fontWeight: 600 }}>
                                     {row.nome}
@@ -45,7 +58,7 @@ const TableProductsConclusionNC = ({ data, form }) => {
                             </Grid>
 
                             <Grid item md={2}>
-                                <p className='text-xs opacity-50'>Quantidade do recebimento</p>
+                                <p className='text-xs opacity-50'>Qtd. Recebimento</p>
                                 <p>{row.quantidade}</p>
                             </Grid>
 
@@ -65,7 +78,7 @@ const TableProductsConclusionNC = ({ data, form }) => {
                                     />
                                     <Input
                                         md={2}
-                                        title='Nova quantidade'
+                                        title='Qtd. Entrada'
                                         name={`productsConclude.${index}.novaQuantidade`}
                                         defaultValue={row.quantidadeEntrada}
                                         helpText='Quantidade recebida'
@@ -74,15 +87,34 @@ const TableProductsConclusionNC = ({ data, form }) => {
                                         control={form.control}
                                         errors={form.errors?.productsConclude?.[index]?.novaQuantidade}
                                         mask='fractioned3'
+                                        onChange={value => {
+                                            fractionedToFloat(
+                                                form.getValues(`productsConclude[${index}].novaQuantidade`)
+                                            ) > fractionedToFloat(row.quantidade)
+                                                ? setValidParams(false)
+                                                : setValidParams(true)
+
+                                            calculateDiff(row.quantidade, value, index)
+                                        }}
+                                        errorText={
+                                            fractionedToFloat(
+                                                form.getValues(`productsConclude[${index}].novaQuantidade`)
+                                            ) > fractionedToFloat(row.quantidade)
+                                                ? 'Quantidade excedida'
+                                                : null
+                                        }
                                     />
                                 </>
                             ) : (
                                 <Grid item md={2}>
-                                    <p className='text-xs opacity-50'>Nova quantidade</p>
-                                    <p>{row.quantidade}</p>
+                                    <p className='text-xs opacity-50'>Qtd. Entrada</p>
+                                    <p>{row.quantidadeEntrada}</p>
                                 </Grid>
                             )}
-
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Diferença</p>
+                                <p>{form.watch(`productsConclude.${index}.diff`)}</p>
+                            </Grid>
                             <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Data Fabricação</p>
                                 <p>{row.dataFabricacao}</p>
@@ -92,15 +124,11 @@ const TableProductsConclusionNC = ({ data, form }) => {
                                 <p>{row.lote}</p>
                             </Grid>
                             <Grid item md={2}>
-                                <p className='text-xs opacity-50'>Apresentação</p>
-                                <p>{row.apresentacao.nome}</p>
-                            </Grid>
-                            <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Data Validade</p>
                                 <p>{row.dataValidade}</p>
                             </Grid>
                         </Grid>
-                        {index < sortedData.length - 1 && <Divider sx={{ pb: 2 }} />}
+                        {index < sortedData.length - 1 && <Divider sx={{ pt: 4 }} />}
                     </>
                 ))}
         </>

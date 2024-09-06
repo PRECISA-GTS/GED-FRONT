@@ -5,11 +5,26 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import { useEffect } from 'react'
 
 const Header = ({ form, data, disabled }) => {
     if (!data) return
 
-    console.log('🚀 ~ data:', data)
+    const calculateValidDate = () => {
+        const initialDate = form.getValues('header.data')
+        const days = parseInt(form.getValues('header.prazoSolucao'), 10)
+        if (!initialDate || isNaN(days)) return '--'
+        const date = new Date(initialDate + 'T00:00:00')
+        date.setDate(date.getDate() + days)
+        const day = String(date.getDate()).padStart(2, '0')
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const year = date.getFullYear()
+        return `${day}/${month}/${year}`
+    }
+
+    useEffect(() => {
+        calculateValidDate()
+    }, [form.watch('header.data'), form.watch('header.prazoSolucao')])
 
     return (
         <Card>
@@ -47,7 +62,7 @@ const Header = ({ form, data, disabled }) => {
                     />
                     <Input
                         xs={12}
-                        md={6}
+                        md={3}
                         title='Prazo para a solução (em dias)'
                         name={`header.prazoSolucao`}
                         disabled={disabled}
@@ -56,6 +71,11 @@ const Header = ({ form, data, disabled }) => {
                         control={form.control}
                         helpText='Informe o prazo pra solução da não conformidade. Será gerado um alerta no vencimento do prazo.'
                     />
+
+                    <Grid item xs={12} md={3}>
+                        <label className='opacity-60'>Vencimento</label>
+                        <p className='text-red-500'>{calculateValidDate()}</p>
+                    </Grid>
 
                     <Grid item xs={12} md={12}>
                         <WhoFills form={form} data={data} disabled={disabled} />

@@ -243,7 +243,13 @@ const HeaderFields = ({
                     {/* Produtos */}
                     <Grid container alignItems='stretch' spacing={6} sx={{ mt: 2 }}>
                         <Grid item xs={12}>
-                            <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700 }}>
+                            <Typography
+                                color='primary'
+                                variant='subtitle1'
+                                sx={{ fontWeight: 700 }}
+                                className='flex items-center gap-1'
+                            >
+                                <Icon icon='ph:plant' className='text-primary' />
                                 Produtos aprovados do fornecedor
                             </Typography>
                             {produtos && produtos.length == 0 && (

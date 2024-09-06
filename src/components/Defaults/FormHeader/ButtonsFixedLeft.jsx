@@ -49,7 +49,7 @@ const ButtonsFixedLeft = ({
                     sx={{ display: 'flex', gap: 2 }}
                 >
                     <Icon icon='material-symbols:delete-outline' />
-                    <span className='hidden sm:block'>Excluir</span>
+                    {/* <span className='hidden sm:block'>Excluir</span> */}
                 </Button>
             )}
 

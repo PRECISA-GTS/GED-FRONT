@@ -37,13 +37,10 @@ const Input = ({
     helpTextPosition,
     alertRequired,
     opacity,
+    errorText,
     ...props
 }) => {
     const theme = useTheme()
-
-    if (mask == 'telefone') {
-        console.log('value: ', value, mask, cellPhoneMask(value))
-    }
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -174,6 +171,7 @@ const Input = ({
                         <HelpText text={helpText} position={helpTextPosition ?? 'top'} />
                     </div>
                 )}
+                {errorText && <p className='pt-1 text-xs text-red-500'>{errorText}</p>}
             </div>
         </Grid>
     )

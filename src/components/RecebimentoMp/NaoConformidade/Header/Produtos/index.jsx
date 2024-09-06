@@ -3,7 +3,17 @@ import { api } from 'src/configs/api'
 import { useEffect, useState } from 'react'
 import ProductInfo from './ProductInfo'
 
-const RecebimentoMpProdutos = ({ index, produto, handleCheck, setValue, register, control, errors, disabled }) => {
+const RecebimentoMpProdutos = ({
+    index,
+    produto,
+    handleCheck,
+    setValue,
+    register,
+    control,
+    errors,
+    disabled,
+    change
+}) => {
     const [apresentacoes, setApresentacoes] = useState([])
 
     const getApresentacoes = async () => {
