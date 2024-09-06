@@ -1,11 +1,13 @@
 import { Divider, Grid, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Icon from 'src/@core/components/icon'
 import Input from 'src/components/Form/Input'
 import { floatToFractioned, fractionedToFloat } from 'src/configs/functions'
+import { AuthContext } from 'src/context/AuthContext'
 
 const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
     const [sortedData, setSortedData] = useState(null)
+    const { user } = useContext(AuthContext)
 
     //? Ordena os dados, trazendo primeiro os itens marcados na nao conformidade (checked_ == true)
     const sortData = () => {
@@ -83,6 +85,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                         defaultValue={row.quantidadeEntrada}
                                         helpText='Quantidade recebida'
                                         required
+                                        disabled={user.papelID != 1}
                                         register={form.register}
                                         control={form.control}
                                         errors={form.errors?.productsConclude?.[index]?.novaQuantidade}

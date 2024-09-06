@@ -111,7 +111,7 @@ const ListNaoConformidade = () => {
                     result={filteredDataRecebimentoMP}
                     columns={columns}
                     btnNew={false}
-                    btnNewModal
+                    btnNewModal={user.papelID === 1 ? true : false}
                     handleNewModal={() => setOpenNew(true)}
                 />
             )}

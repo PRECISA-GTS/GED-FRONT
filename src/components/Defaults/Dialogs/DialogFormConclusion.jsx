@@ -46,8 +46,6 @@ const DialogFormConclusion = ({
 }) => {
     if (!modeloID) return null
 
-    console.log('🚀 ~ modeloID:', values)
-
     const { user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [result, setResult] = useState({})
     const { data } = useGlobal()

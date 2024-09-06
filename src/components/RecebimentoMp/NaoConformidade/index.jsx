@@ -153,13 +153,13 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const onSubmit = async values => {
         if (!values) return
 
-        if (!values.header.transporte && !values.header.produto) {
+        if (user.papelID === 1 && !values.header.transporte && !values.header.produto) {
             toast.error('Selecione o tipo de não conformidade (Transporte ou Produto)!')
             return
         }
 
         const hasSomeCheckedProduct = values.header.produtos.some(item => item.checked_)
-        if (values.header.produto && !hasSomeCheckedProduct) {
+        if (user.papelID === 1 && values.header.produto && !hasSomeCheckedProduct) {
             toast.error('Selecione pelo menos um produto!')
             return
         }
@@ -268,16 +268,21 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             {header && (
                 <>
                     <FormHeader
-                        btnNewModal={type === 'edit' ? true : false}
+                        btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
                         handleNewModal={() => setOpenNew(true)}
                         btnCancel
                         btnSave={header?.status?.id < 40 ? true : false}
-                        btnSend={header?.status?.id >= 30 && header?.status?.id < 40 ? true : false}
+                        btnSend={
+                            (user.papelID === 1 && header?.status?.id >= 30 && header?.status?.id <= 40) ||
+                            (user.papelID === 2 && header?.status?.id === 30)
+                                ? true
+                                : false
+                        }
                         btnPrint={type == 'edit' ? true : false}
-                        btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
+                        btnDelete={user.papelID === 1 && header?.status?.id < 40 && type === 'edit' ? true : false}
                         onclickDelete={() => setOpenDelete(true)}
                         actionsData={actionsData}
-                        actions
+                        actions={user.papelID === 1 ? true : false}
                         handleSubmit={() => form.handleSubmit(onSubmit)}
                         handleSend={() => setOpenModal(true)}
                         iconConclusion={'mdi:check-bold'}
@@ -312,7 +317,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             </CardContent>
                         </Card>
 
-                        <Header form={form} data={header} disabled={header.status?.id >= 40} />
+                        <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
 
                         <ModelBlocks
                             form={form}

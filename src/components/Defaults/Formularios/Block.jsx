@@ -87,7 +87,7 @@ const Block = ({
             return
         }
 
-        if (status >= 40 || user.papelID !== 1) {
+        if (status >= 40) {
             setBlockPermission(false)
             return
         }

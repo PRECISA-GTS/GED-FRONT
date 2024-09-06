@@ -59,48 +59,52 @@ const ActionsNC = ({ anchorEl, open, handleClose, handleClick, actionsData }) =>
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                {actionsData?.map(item => {
-                    return (
-                        <MenuItem
-                            key={item.id}
-                            onClick={() => {
-                                handleClose()
-                            }}
-                            disabled={item.disabled ? true : false}
-                            sx={{
-                                textAlign: 'left',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px'
-                            }}
-                        >
-                            {item.identification ? (
-                                <span style={{ padding: '0 7px' }}>
-                                    <span>{item.identification}</span> -
-                                </span>
-                            ) : (
-                                <Icon icon={item.icon} className={item.iconClass} />
-                            )}
+                {actionsData &&
+                    actionsData.length > 0 &&
+                    actionsData?.map(item => {
+                        if (!item) return null
 
-                            {item.type == 'report' ? (
-                                <a onClick={() => handleOpenReport(item)}>{item.name}</a>
-                            ) : (
-                                <p
-                                    onClick={
-                                        item.modal
-                                            ? () => {
-                                                  setOpenModal(true)
-                                                  setItem(item)
-                                              }
-                                            : item.action
-                                    }
-                                >
-                                    {item.name}
-                                </p>
-                            )}
-                        </MenuItem>
-                    )
-                })}
+                        return (
+                            <MenuItem
+                                key={item.id}
+                                onClick={() => {
+                                    handleClose()
+                                }}
+                                disabled={item.disabled ? true : false}
+                                sx={{
+                                    textAlign: 'left',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px'
+                                }}
+                            >
+                                {item?.identification ? (
+                                    <span style={{ padding: '0 7px' }}>
+                                        <span>{item.identification}</span> -
+                                    </span>
+                                ) : (
+                                    <Icon icon={item.icon} className={item.iconClass} />
+                                )}
+
+                                {item.type == 'report' ? (
+                                    <a onClick={() => handleOpenReport(item)}>{item.name}</a>
+                                ) : (
+                                    <p
+                                        onClick={
+                                            item.modal
+                                                ? () => {
+                                                      setOpenModal(true)
+                                                      setItem(item)
+                                                  }
+                                                : item.action
+                                        }
+                                    >
+                                        {item.name}
+                                    </p>
+                                )}
+                            </MenuItem>
+                        )
+                    })}
             </Menu>
 
             {/* Modal */}

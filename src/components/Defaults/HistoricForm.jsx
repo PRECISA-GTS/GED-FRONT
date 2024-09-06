@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
 import { statusDefault } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
@@ -13,6 +13,7 @@ import TimelineDot from '@mui/lab/TimelineDot'
 import Typography from '@mui/material/Typography'
 import MuiTimeline from '@mui/lab/Timeline'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { AuthContext } from 'src/context/AuthContext'
 
 //? Styled Timeline component
 const Timeline = styled(MuiTimeline)({
@@ -28,12 +29,18 @@ const Timeline = styled(MuiTimeline)({
 
 const HistoricForm = ({ parFormularioID, id }) => {
     const [historic, setHistoric] = useState(false)
+    const { user } = useContext(AuthContext)
 
     const getMovementHistory = async () => {
         try {
-            await api.post(`/formularios/fornecedor/getMovementHistory/${id}`, { parFormularioID }).then(response => {
-                setHistoric(response.data)
-            })
+            await api
+                .post(`/formularios/fornecedor/getMovementHistory/${id}`, {
+                    parFormularioID,
+                    papelID: user.papelID
+                })
+                .then(response => {
+                    setHistoric(response.data)
+                })
         } catch (error) {
             console.log(error)
         }

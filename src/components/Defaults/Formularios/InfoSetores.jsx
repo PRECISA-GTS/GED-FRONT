@@ -4,8 +4,10 @@ import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 
 const InfoSetores = ({ data }) => {
-    const { loggedUnity } = useContext(AuthContext)
+    const { loggedUnity, user } = useContext(AuthContext)
     const [professsionals, setProfessionals] = useState([])
+
+    if (user?.papelID !== 1) return null
 
     const getProfessionals = async () => {
         try {

@@ -714,7 +714,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    actions
+                    actions={actionsData.length > 0 ? true : false}
                     actionsData={actionsData}
                     module='recebimentoMp'
                     actionsNC={info.naoConformidade && info.status > 40}

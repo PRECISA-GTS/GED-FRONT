@@ -54,7 +54,7 @@ const FormHeader = ({
     actionsNC
 }) => {
     const router = Router
-    const { routes } = useContext(AuthContext)
+    const { routes, user } = useContext(AuthContext)
     const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
     const [isVisible, setIsVisible] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -188,15 +188,19 @@ const FormHeader = ({
                 disabled: false
             }
             const formatedData = response.data.map(item => {
-                return {
-                    icon: 'typcn:warning-outline',
-                    name: item.nome,
-                    iconClass: 'text-yellow-600',
-                    action: () => goToNC(item.id, params.route),
-                    disabled: false
+                //? É fábrica ou ta habilitado o preenchimento pelo fornecedor
+                if (user.papelID === 1 || item.fornecedorPreenche) {
+                    return {
+                        icon: 'typcn:warning-outline',
+                        name: item.nome,
+                        iconClass: 'text-yellow-600',
+                        action: () => goToNC(item.id, params.route),
+                        disabled: false
+                    }
                 }
             })
-            setActionsNCData([objNew, ...formatedData])
+            const validateOptions = user.papelID === 1 ? [objNew, ...formatedData] : formatedData
+            setActionsNCData(validateOptions)
         } catch (error) {
             console.log(error)
         }

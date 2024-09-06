@@ -3,11 +3,14 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import Icon from 'src/@core/components/icon'
 import CustomChip from 'src/@core/components/mui/chip'
+import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
 
 const RecebimentoMpInfo = ({ data }) => {
     if (!data) return
+
     const router = useRouter()
+    const { user } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)
 
     const goToReceive = () => {
@@ -47,11 +50,13 @@ const RecebimentoMpInfo = ({ data }) => {
                         color={data.recebimento.status.color}
                         sx={{ height: 28, fontSize: '0.75rem' }}
                     />
-                    <Tooltip title='Acessar Recebimento de MP' placement='top'>
-                        <div className='cursor-pointer'>
-                            <Icon icon='ci:external-link' onClick={goToReceive} />
-                        </div>
-                    </Tooltip>
+                    {(user.papelID != 2 || data.fornecedorAcessaRecebimento) && (
+                        <Tooltip title='Acessar Recebimento de MP' placement='top'>
+                            <div className='cursor-pointer'>
+                                <Icon icon='ci:external-link' onClick={goToReceive} />
+                            </div>
+                        </Tooltip>
+                    )}
                 </div>
             </Grid>
         </Grid>
