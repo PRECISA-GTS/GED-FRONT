@@ -57,6 +57,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
         reset,
         formState: { errors },
         setValue,
+        setError,
         register
     } = useForm({})
 

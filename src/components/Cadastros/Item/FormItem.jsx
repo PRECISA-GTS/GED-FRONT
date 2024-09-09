@@ -46,6 +46,8 @@ const FormItem = ({
         watch,
         getValues,
         setValue,
+        clearErrors,
+        setError,
         reset,
         control,
         formState: { errors },
@@ -225,6 +227,8 @@ const FormItem = ({
                                         register={register}
                                         setValue={setValue}
                                         control={control}
+                                        clearErrors={clearErrors}
+                                        setError={setError}
                                         errors={errors?.fields?.formulario}
                                     />
                                     <Check
@@ -257,6 +261,8 @@ const FormItem = ({
                                         register={register}
                                         setValue={setValue}
                                         control={control}
+                                        clearErrors={clearErrors}
+                                        setError={setError}
                                         errors={errors?.fields?.alternativa}
                                     />
                                     <Input

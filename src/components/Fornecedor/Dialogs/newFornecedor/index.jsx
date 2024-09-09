@@ -16,6 +16,7 @@ const NewFornecedor = ({
     register,
     errors,
     clearErrors,
+    setError,
     reset,
     getValues,
     watch,
@@ -149,7 +150,7 @@ const NewFornecedor = ({
             if (getValues('fields.razaoSocial')) clearErrors('fields.razaoSocial')
             if (getValues('fields.nomeFantasia')) clearErrors('fields.nomeFantasia')
             if (getValues('fields.email')) clearErrors('fields.email')
-            if (getValues('fields.categoria')) clearErrors('fields.categoria')
+            // if (getValues('fields.categoria')) clearErrors('fields.categoria')
             if (getValues('fields.risco')) clearErrors('fields.risco')
             if (getValues('fields.produtos')) clearErrors('fields.produtos')
         } catch (err) {
@@ -214,10 +215,12 @@ const NewFornecedor = ({
                                 watch={watch}
                                 trigger={trigger}
                                 register={register}
+                                clearErrors={clearErrors}
                                 handleCnpjCpf={handleCnpjCpf}
                                 validCnpj={validationCnpj}
                                 setIsNotFactory={setIsNotFactory}
                                 isNotFactory={isNotFactory}
+                                setError={setError}
                             />
                         </Box>
 

@@ -42,6 +42,8 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
         reset,
         getValues,
         control,
+        setError,
+        clearErrors,
         formState: { errors },
         register
     } = useForm({ mode: 'onChange' })
@@ -224,6 +226,8 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         options={data.formulario.options}
                                         register={register}
                                         setValue={setValue}
+                                        clearErrors={clearErrors}
+                                        setError={setError}
                                         control={control}
                                         errors={errors?.formulario?.fields}
                                     />

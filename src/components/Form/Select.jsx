@@ -26,7 +26,9 @@ const Select = ({
     helpText,
     alertRequired,
     helpTextPosition,
-    opacity
+    opacity,
+    setError,
+    clearErrors
 }) => {
     const theme = useTheme()
     const { settings } = useSettings()
@@ -62,9 +64,12 @@ const Select = ({
                                     } else {
                                         onChange && onChange(newValue)
                                         setValue(name, newValue)
-                                        // type === 'registroestabelecimento'
-                                        //     ? handleRegistroEstabelecimento(newValue ? newValue.id : null)
-                                        //     : null
+                                        if (newValue) clearErrors(name)
+                                        else
+                                            setError(name, {
+                                                type: 'required',
+                                                message: `${title} é obrigatório`
+                                            })
                                     }
                                 }}
                                 renderInput={params => (

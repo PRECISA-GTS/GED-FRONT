@@ -21,6 +21,8 @@ const FormNewFornecedor = ({
     getValues,
     control,
     errors,
+    clearErrors,
+    setError,
     setValue,
     register,
     watch,
@@ -287,6 +289,8 @@ const FormNewFornecedor = ({
                             register={register}
                             setValue={setValue}
                             control={control}
+                            clearErrors={clearErrors}
+                            setError={setError}
                             errors={errors?.fields?.categoria}
                         />
                         <Select

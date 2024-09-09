@@ -6,7 +6,7 @@ import Select from 'src/components/Form/Select'
 import { Divider } from '@mui/material'
 import { api } from 'src/configs/api'
 
-const AnexosList = ({ getValues, removeAnexo, setValue, control, register, errors, type }) => {
+const AnexosList = ({ getValues, removeAnexo, setValue, control, register, errors, clearErrors, setError, type }) => {
     const [formularios, setFormularios] = useState([])
 
     const getFormularios = async () => {
@@ -42,6 +42,8 @@ const AnexosList = ({ getValues, removeAnexo, setValue, control, register, error
                     register={register}
                     setValue={setValue}
                     control={control}
+                    clearErrors={clearErrors}
+                    setError={setError}
                     errors={errors?.anexos?.[index]?.formulario}
                     helpText='Formulário em que será solicitado esse anexo para este produto'
                 />
