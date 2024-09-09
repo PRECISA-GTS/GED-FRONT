@@ -22,7 +22,7 @@ const ItemObservacao = ({ blockIndex, itemIndex, values, control, disabled }) =>
             // value={observacao} // Use o estado observacao
             multiline
             disabled={disabled}
-            control={control}
+            form={form}
         />
     ) : null
 }

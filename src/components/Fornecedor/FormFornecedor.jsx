@@ -198,24 +198,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         icon: 'fluent:form-new-20-regular',
         identification: null
     }
-    const objGerarNotificacao = {
-        id: 2,
-        name: 'Gerar notificação',
-        description: 'Gerar uma nova notificação para o fornecedor, podendo ser um e-mail e/ou alerta do sistema.',
-        component: (
-            <FormNotification
-                data={{
-                    email: field?.find(row => row.nomeColuna == 'email')?.email
-                }}
-            />
-        ),
-        route: null,
-        type: null,
-        modal: true,
-        action: sendNotification,
-        icon: 'cil:bell',
-        identification: null
-    }
     const objCopiarLink = {
         id: 3,
         name: 'Copiar link do formulário',
@@ -272,7 +254,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         actionsData.push(objNovoFormulario)
         if (info?.status >= 40) actionsData.push(objReOpenForm)
     }
-    actionsData.push(objGerarNotificacao)
     actionsData.push(objCopiarLink)
     actionsData.push(objRelatorio)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)

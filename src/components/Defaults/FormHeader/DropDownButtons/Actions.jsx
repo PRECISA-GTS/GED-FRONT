@@ -106,6 +106,7 @@ const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
                     setOpenModal={setOpenModal}
                     openModal={openModal}
                     fullHeight={item.fullHeight}
+                    clone
                 >
                     {item.component}
                 </DialogActs>

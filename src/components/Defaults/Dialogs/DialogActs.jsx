@@ -17,7 +17,7 @@ const DialogActs = ({
     handleCopyLink,
     handleLink,
     size,
-    type,
+    clone,
     fullHeight = false
 }) => {
     const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
@@ -55,7 +55,7 @@ const DialogActs = ({
                                 py: 2
                             }}
                         >
-                            {React.cloneElement(children, type == 'fornecedor' ? { form: form } : null)}
+                            {React.cloneElement(children, clone ? { form: form } : null)}
                         </DialogContentText>
                     </DialogContent>
 

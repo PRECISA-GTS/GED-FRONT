@@ -154,8 +154,6 @@ const DialogFormConclusion = ({
                                             name={`fieldsFooter.dataConclusao`}
                                             type='date'
                                             value={values?.dataConclusao ?? new Date()}
-                                            register={register}
-                                            control={control}
                                             typeValidation='dataPassado'
                                             daysValidation={365}
                                             required

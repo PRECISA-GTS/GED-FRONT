@@ -307,11 +307,12 @@ const AuthProvider = ({ children }) => {
       const rota = `/${route}${paramns}`
       router.replace(rota)
     }
+  }, [router.query.f, router.query.r])
 
+  useEffect(() => {
     //? Logout no F5
     handleLogout()
-
-  }, [router.query.f, router.query.r])
+  }, [])
 
   const hasSectorPermission = setores => {
     if (!setores || setores.length == 0 || user.admin === 1 || user.papelID == 2) return true

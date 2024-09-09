@@ -3,7 +3,6 @@ import { useEffect, useCallback, useRef, useState } from 'react'
 import SearchDataNew from './SearchDataNew'
 const searchData = SearchDataNew
 
-
 // ** Next Imports
 import { useRouter } from 'next/router'
 
@@ -127,8 +126,6 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [options, setOptions] = useState([])
   const { setId } = useContext(RouteContext)
-
-
 
   // ** Hooks & Vars
   const theme = useTheme()
