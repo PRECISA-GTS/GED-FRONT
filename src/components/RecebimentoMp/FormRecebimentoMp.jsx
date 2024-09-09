@@ -82,18 +82,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = type == 'edit' ? router.pathname : backRoute(router.pathname)
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        watch,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const copyLinkForm = () => {
         navigator.clipboard.writeText(link)
@@ -215,7 +204,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setNaoConformidade(response.data.naoConformidade) //! Seta não conformidades
 
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
 
                     let objStatus = statusDefault[response?.data?.info?.status]
                     setStatus(objStatus)
@@ -254,7 +243,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     let arrErrors = []
 
     const setFormError = (fieldName, fieldTitle) => {
-        setError(fieldName, {
+        form.setError(fieldName, {
             type: 'manual',
             message: 'Campo obrigatório'
         })
@@ -263,19 +252,19 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const checkErrors = () => {
-        clearErrors()
+        form.clearErrors()
 
         //? Header
         // Fields estáticos (todos obrigatórios)
-        if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
-        if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+        if (!form.getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+        if (!form.getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
         // if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
         // if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
 
         // Fields dinâmicos
         field?.forEach((field, index) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
-            const fieldValue = getValues(fieldName)
+            const fieldValue = form.getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
                 setFormError(fieldName, field?.nomeCampo)
             }
@@ -287,7 +276,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 produto.produtoAnexosDescricao &&
                     produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-                            setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
+                            form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
                                 type: 'manual',
                                 message: 'Campo obrigatório'
                             })
@@ -301,10 +290,10 @@ const FormRecebimentoMp = ({ id, model }) => {
         //? Blocos
         blocos.forEach((block, indexBlock) => {
             block.itens.forEach((item, indexItem) => {
-                const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                const fieldValue = form.getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
                 //? Valida resposta do item
                 if (item?.obrigatorio === 1 && !fieldValue) {
-                    setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
+                    form.setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
                         type: 'manual',
                         message: 'Campo obrigatário'
                     })
@@ -320,7 +309,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 ) {
                     item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                            setError(
+                            form.setError(
                                 `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
                                 {
                                     type: 'manual',
@@ -340,7 +329,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             grupoAnexo.forEach((grupo, indexGrupo) => {
                 grupo.itens.forEach((item, indexItem) => {
                     if (item.obrigatorio === 1 && item.anexos.length == 0) {
-                        setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+                        form.setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
                             type: 'manual',
                             message: 'Campo obrigatário'
                         })
@@ -409,7 +398,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     const conclusionForm = async values => {
         values['conclusion'] = true
-        await handleSubmit(onSubmit)(values)
+        await form.handleSubmit(onSubmit)(values)
     }
 
     //? Trata notificações
@@ -522,7 +511,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/produto/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos produtos
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -552,7 +541,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/grupo-anexo/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos grupos
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -583,7 +572,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -635,7 +624,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/produto`)
                 .then(response => {
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -654,7 +643,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/item`)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -669,7 +658,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
         e.preventDefault()
-        const values = getValues()
+        const values = form.getValues()
         onSubmit(values)
     }
 
@@ -705,7 +694,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     btnPrint={type == 'edit' ? true : false}
                     btnDelete={info.status < 40 ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir'}
@@ -768,12 +757,12 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 modelo={unidade.modelo}
                                 values={fieldsHeader}
                                 fields={field}
-                                getValues={getValues}
+                                getValues={form.getValues}
                                 disabled={!canEdit.status}
-                                register={register}
-                                errors={errors}
-                                setValue={setValue}
-                                control={control}
+                                register={form.register}
+                                errors={form.formState?.errors}
+                                setValue={form.setValue}
+                                control={form.control}
                                 getAddressByCep={getAddressByCep}
                                 setProdutos={setProdutos}
                                 produtos={produtos}
@@ -787,13 +776,13 @@ const FormRecebimentoMp = ({ id, model }) => {
                                     bloco={bloco}
                                     blockKey={`parRecebimentoMpModeloBlocoID`}
                                     setBlocos={setBlocos}
-                                    setValue={setValue}
+                                    setValue={form.setValue}
                                     blocos={blocos}
-                                    getValues={getValues}
-                                    register={register}
-                                    control={control}
+                                    getValues={form.getValues}
+                                    register={form.register}
+                                    control={form.control}
                                     disabled={hasFormPending}
-                                    errors={errors?.blocos}
+                                    errors={form.formState?.errors?.blocos}
                                     handleFileSelect={handleFileSelectItem}
                                     handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     status={info.status}
@@ -812,7 +801,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                         handleRemove: handleRemoveAnexoGroup,
                                         folder: 'grupo-anexo',
                                         disabled: !canEdit.status,
-                                        error: errors
+                                        error: form.formState?.errors
                                     }}
                                 />
                             ))}
@@ -834,7 +823,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                                         rows={4}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
-                                                        control={control}
+                                                        control={form.control}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -876,10 +865,10 @@ const FormRecebimentoMp = ({ id, model }) => {
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}
-                            register={register}
-                            setValue={setValue}
-                            getValues={getValues}
-                            control={control}
+                            register={form.register}
+                            setValue={form.setValue}
+                            getValues={form.getValues}
+                            control={form.control}
                             btnCancel
                             btnConfirm
                             btnConfirmColor='primary'
@@ -891,7 +880,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                             unity={unidade}
                             values={fieldsFooter}
                             formularioID={2} // Recebimento MP
-                            errors={errors}
+                            errors={form.formState?.errors}
                             modeloID={unidade?.modelo?.id}
                         />
                         {/* Modal que deleta formulario */}

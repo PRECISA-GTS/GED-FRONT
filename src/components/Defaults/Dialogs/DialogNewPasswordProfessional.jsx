@@ -34,13 +34,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
         event.preventDefault()
     }
 
-    const {
-        handleSubmit,
-        watch,
-        reset,
-        formState: { errors },
-        register
-    } = useForm({})
+    const form = useForm({})
 
     const onSubmit = async data => {
         console.log('passa aki', data)
@@ -51,7 +45,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                 unidadeID: loggedUnity.unidadeID
             })
             toast.success('Senha atualizada com sucesso!')
-            reset()
+            form.reset()
             setOpenModalNewPassword(false)
         } catch (e) {
             console.log(e)
@@ -66,7 +60,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                     <DialogContentText sx={{ mb: 3 }}>
                         Preencha os campos abaixo para definir sua nova senha
                     </DialogContentText>
-                    <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
                         <TextField
                             fullWidth
                             label='Nova senha'
@@ -75,8 +69,8 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                             size='small'
                             type={values.showPassword ? 'text' : 'password'}
                             name='senha'
-                            error={!!errors.senha}
-                            helperText={errors.senha && errors.senha.message}
+                            error={!!form.formState?.errors.senha}
+                            helperText={form.formState?.errors.senha && form.formState?.errors.senha.message}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position='end'>
@@ -92,7 +86,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                                     </InputAdornment>
                                 )
                             }}
-                            {...register('senha', {
+                            {...form.register('senha', {
                                 minLength: {
                                     value: 4,
                                     message: 'Senha deve ter pelo menos 4 caracteres'
@@ -108,8 +102,10 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                             size='small'
                             type={values.showConfirmPassword ? 'text' : 'password'}
                             name='confirmaSenha'
-                            error={!!errors.confirmaSenha}
-                            helperText={errors.confirmaSenha && errors.confirmaSenha.message}
+                            error={!!form.formState?.errors.confirmaSenha}
+                            helperText={
+                                form.formState?.errors.confirmaSenha && form.formState?.errors.confirmaSenha.message
+                            }
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position='end'>
@@ -132,7 +128,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                             onChange={e => {
                                 setLenghtPassword(e.target.value)
                             }}
-                            {...register('confirmaSenha', {
+                            {...form.register('confirmaSenha', {
                                 validate: value => value === watch('senha') || 'As senhas não coincidem'
                             })}
                         />
@@ -143,7 +139,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                     <Button variant='outlined' onClick={handleClose}>
                         Cancelar
                     </Button>
-                    <Button variant='contained' onClick={handleSubmit(onSubmit)}>
+                    <Button variant='contained' onClick={form.handleSubmit(onSubmit)}>
                         Salvar
                     </Button>
                 </DialogActions>

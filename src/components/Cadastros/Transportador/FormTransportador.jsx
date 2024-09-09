@@ -36,14 +36,7 @@ const FormTransportador = ({
     const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -104,7 +97,7 @@ const FormTransportador = ({
             if (type === 'edit') {
                 await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
                     setData(response.data)
-                    reset(response.data) //* Insere os dados no formulário
+                    form.reset(response.data) //* Insere os dados no formulário
                 })
             } else {
                 setData({
@@ -125,7 +118,7 @@ const FormTransportador = ({
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
@@ -133,7 +126,7 @@ const FormTransportador = ({
         <>
             {/* {!data && <Loading />} */}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
                         btnNew={handleConfirmNew ? false : true}
@@ -141,7 +134,7 @@ const FormTransportador = ({
                         manualUrl={manualUrl}
                         btnClose={btnClose}
                         handleModalClose={handleModalClose}
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -156,8 +149,8 @@ const FormTransportador = ({
                                     title='Nome'
                                     name='fields.nome'
                                     required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
+                                    control={form.control}
+                                    errors={form.formState?.errors?.fields?.nome}
                                 />
                                 <Check
                                     xs={1}
@@ -166,7 +159,7 @@ const FormTransportador = ({
                                     name='fields.status'
                                     value={data?.fields.status}
                                     typePage={type}
-                                    register={register}
+                                    register={form.register}
                                 />
                             </Grid>
                         </CardContent>

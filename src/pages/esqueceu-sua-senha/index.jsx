@@ -47,12 +47,7 @@ const EsqueceuSenha = () => {
 
     const emailToShow = getData?.email?.replace(/^(.{3}).*@/, '$1****@')
 
-    const {
-        handleSubmit,
-        formState: { errors },
-        setValue,
-        register
-    } = useForm({})
+    const form = useForm({})
 
     console.log('errors', errors)
 
@@ -107,7 +102,7 @@ const EsqueceuSenha = () => {
                                 : 'Digite seu CNPJ e enviaremos instruções para redefinir sua senha'}
                         </Typography>
                     </Box>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         {type === 'login' ? (
                             <FormControl fullWidth>
                                 <TextField
@@ -116,16 +111,16 @@ const EsqueceuSenha = () => {
                                     size='small'
                                     aria-describedby='validation-schema-nome'
                                     name='cpf'
-                                    {...register(`cpf`, {
+                                    {...form.register(`cpf`, {
                                         required: true,
                                         validate: value => validationCPF(value) || 'CPF inválido'
                                     })}
-                                    error={errors.cpf}
-                                    helperText={errors.cpf?.message}
+                                    error={form.formState?.errors.cpf}
+                                    helperText={form.formState?.errors.cpf?.message}
                                     inputProps={{
                                         maxLength: 14,
                                         onChange: e => {
-                                            setValue('cpf', cpfMask(e.target.value))
+                                            form.setValue('cpf', cpfMask(e.target.value))
                                             OnchangeValue(e.target.value)
                                             setCampo(e.target.value)
                                         }
@@ -139,16 +134,16 @@ const EsqueceuSenha = () => {
                                     placeholder='CNPJ'
                                     aria-describedby='validation-schema-nome'
                                     name='cnpj'
-                                    {...register(`cnpj`, {
+                                    {...form.register(`cnpj`, {
                                         required: true,
                                         validate: value => validationCNPJ(value) || 'CNPJ inválido'
                                     })}
-                                    error={errors?.cnpj}
-                                    helperText={errors?.cnpj?.message}
+                                    error={form.formState?.errors?.cnpj}
+                                    helperText={form.formState?.errors?.cnpj?.message}
                                     inputProps={{
                                         maxLength: 18,
                                         onChange: e => {
-                                            setValue('cnpj', cnpjMask(e.target.value))
+                                            form.setValue('cnpj', cnpjMask(e.target.value))
                                             OnchangeValue(e.target.value)
                                             setCampo(e.target.value)
                                         }

@@ -139,13 +139,7 @@ const FornecedorPage = ({ units }) => {
     // ** Vars
     const { skin } = settings
 
-    const {
-        control,
-        setError,
-        handleSubmit,
-        getValues,
-        formState: { errors }
-    } = useForm({
+    const form = useForm({
         defaultValues,
         mode: 'onBlur',
         resolver: yupResolver(schema)
@@ -158,7 +152,7 @@ const FornecedorPage = ({ units }) => {
         const { cnpj, password } = data
         setId(null)
         auth.loginFornecedor({ type: isCpf ? 'cpf' : 'cnpj', cnpjCpf: cnpj, password, rememberMe }, error => {
-            setError('cnpj', {
+            form.setError('cnpj', {
                 type: 'manual',
                 message: isCpf ? 'CPF e/ou senha inválidos!' : 'CNPJ e/ou senha inválidos!'
             })
@@ -269,7 +263,7 @@ const FornecedorPage = ({ units }) => {
                                 <Typography variant='body2'>Digite seu CNPJ ou CPF e senha para começar</Typography>
                             </Box>
 
-                            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+                            <form noValidate autoComplete='off' onSubmit={form.handleSubmit(onSubmit)}>
                                 <div className='flex items-start justify-center gap-0 '>
                                     <FormControl fullWidth sx={{ mb: 4 }}>
                                         <Controller
@@ -287,7 +281,7 @@ const FornecedorPage = ({ units }) => {
                                                         onChange(e)
                                                         validationExistCNPJCPF(e.target.value, isCpf)
                                                     }}
-                                                    error={Boolean(errors.cnpj)}
+                                                    error={Boolean(form.formState?.errors.cnpj)}
                                                     placeholder={isCpf ? '000.000.000-00' : '00.000.000/0000-00'}
                                                     inputProps={{
                                                         maxLength: isCpf ? 14 : 18,
@@ -297,9 +291,9 @@ const FornecedorPage = ({ units }) => {
                                                 />
                                             )}
                                         />
-                                        {errors.cnpj && (
+                                        {form.formState?.errors.cnpj && (
                                             <FormHelperText sx={{ color: 'error.main' }}>
-                                                {errors.cnpj.message}
+                                                {form.formState?.errors.cnpj.message}
                                             </FormHelperText>
                                         )}
                                     </FormControl>
@@ -322,7 +316,7 @@ const FornecedorPage = ({ units }) => {
                                 <FormControl fullWidth>
                                     <Controller
                                         name='password'
-                                        control={control}
+                                        control={form.control}
                                         rules={{ required: true }}
                                         render={({ field }) => (
                                             <TextField
@@ -331,7 +325,7 @@ const FornecedorPage = ({ units }) => {
                                                 variant='outlined'
                                                 size='small'
                                                 id='auth-login-v2-password'
-                                                error={Boolean(errors.password)}
+                                                error={Boolean(form.formState?.errors.password)}
                                                 type={showPassword ? 'text' : 'password'}
                                                 InputProps={{
                                                     endAdornment: (
@@ -356,7 +350,7 @@ const FornecedorPage = ({ units }) => {
                                             />
                                         )}
                                     />
-                                    {errors.password && (
+                                    {form.formState?.errors.password && (
                                         <FormHelperText sx={{ color: 'error.main' }} id=''>
                                             Campo obrigatório
                                         </FormHelperText>

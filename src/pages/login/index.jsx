@@ -145,12 +145,7 @@ const LoginPage = ({ units }) => {
     // ** Vars
     const { skin } = settings
 
-    const {
-        control,
-        setError,
-        handleSubmit,
-        formState: { errors }
-    } = useForm({
+    const form = useForm({
         defaultValues,
         mode: 'onBlur',
         resolver: yupResolver(schema)
@@ -162,7 +157,7 @@ const LoginPage = ({ units }) => {
         setData(data)
         setId(null)
         auth.login({ cpf, password, rememberMe, verifyUnits }, error => {
-            setError('cpf', {
+            form.setError('cpf', {
                 type: 'manual',
                 message: 'CPF e/ou senha inválidos!'
             })
@@ -194,7 +189,7 @@ const LoginPage = ({ units }) => {
         getRoutes(userAux.usuarioID, selectedUnit.unidadeID, userAux.admin, selectedUnit.papelID)
 
         auth.login({ cpf, password, rememberMe, verifyUnits, selectedUnit }, () => {
-            setError('cpf', {
+            form.setError('cpf', {
                 type: 'manual',
                 message: 'CPF e/ou senha inválidos!'
             })
@@ -264,11 +259,11 @@ const LoginPage = ({ units }) => {
                                 <Typography variant='body2'>Digite seu CPF e senha para começar</Typography>
                             </Box>
 
-                            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+                            <form noValidate autoComplete='off' onSubmit={form.handleSubmit(onSubmit)}>
                                 <FormControl fullWidth sx={{ mb: 4 }}>
                                     <Controller
                                         name='cpf'
-                                        control={control}
+                                        control={form.control}
                                         rules={{ required: true }}
                                         render={({ field: { value, onChange, onBlur } }) => (
                                             <TextField
@@ -278,7 +273,7 @@ const LoginPage = ({ units }) => {
                                                 onBlur={onBlur}
                                                 size='small'
                                                 onChange={onChange}
-                                                error={Boolean(errors.cpf)}
+                                                error={Boolean(form.formState?.errors.cpf)}
                                                 placeholder='000.000.000-00'
                                                 inputProps={{
                                                     maxLength: 14,
@@ -288,16 +283,16 @@ const LoginPage = ({ units }) => {
                                             />
                                         )}
                                     />
-                                    {errors.cpf && (
+                                    {form.formState?.errors.cpf && (
                                         <FormHelperText sx={{ color: 'error.main' }}>
-                                            {errors.cpf.message}
+                                            {form.formState?.errors.cpf.message}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
                                 <FormControl fullWidth>
                                     <Controller
                                         name='password'
-                                        control={control}
+                                        control={form.control}
                                         rules={{ required: true }}
                                         render={({ field }) => (
                                             <TextField
@@ -306,7 +301,7 @@ const LoginPage = ({ units }) => {
                                                 variant='outlined'
                                                 size='small'
                                                 id='auth-login-v2-password'
-                                                error={Boolean(errors.password)}
+                                                error={Boolean(form.formState?.errors.password)}
                                                 type={showPassword ? 'text' : 'password'}
                                                 InputProps={{
                                                     endAdornment: (
@@ -331,7 +326,7 @@ const LoginPage = ({ units }) => {
                                             />
                                         )}
                                     />
-                                    {errors.password && (
+                                    {form.formState?.errors.password && (
                                         <FormHelperText sx={{ color: 'error.main' }} id=''>
                                             Campo obrigatório
                                         </FormHelperText>

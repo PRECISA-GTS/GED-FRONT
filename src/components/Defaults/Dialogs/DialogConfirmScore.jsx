@@ -14,7 +14,7 @@ const DialogConfirmScore = ({ openModal, setOpenModalConfirmScore, itemScore, se
         setOpenModalConfirmScore(false)
     }
 
-    const { handleSubmit, register } = useForm({})
+    const form = useForm({})
 
     const onSubmit = values => {
         const data = {
@@ -37,7 +37,7 @@ const DialogConfirmScore = ({ openModal, setOpenModalConfirmScore, itemScore, se
         <>
             {itemScore?.alternatives && (
                 <Dialog open={openModal} onClose={handleClose} aria-labelledby='form-dialog-title'>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <DialogTitle id='form-dialog-title'>Pontuação das respostas</DialogTitle>
                         <DialogContent>
                             <DialogContentText sx={{ mb: 3 }}>
@@ -102,7 +102,7 @@ const DialogConfirmScore = ({ openModal, setOpenModalConfirmScore, itemScore, se
                                 variant='contained'
                                 color='primary'
                                 // startIcon={<Icon icon='line-md:circle-to-confirm-circle-transition' />}
-                                onClick={handleSubmit(onSubmit)}
+                                onClick={form.handleSubmit(onSubmit)}
                             >
                                 Confirmar
                             </Button>

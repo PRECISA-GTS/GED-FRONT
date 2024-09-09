@@ -1,10 +1,8 @@
-import { Alert, Box, Button, Card, CardContent, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid } from '@mui/material'
 import toast from 'react-hot-toast'
 import Loading from 'src/components/Loading'
-import Select from 'src/components/Form/Select'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
-import FormHeader from 'src/components/Defaults/FormHeader'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import { useForm } from 'react-hook-form'
 import Icon from 'src/@core/components/icon'
@@ -23,18 +21,7 @@ const SelectModel = () => {
     const { settings } = useContext(SettingsContext)
     const mode = settings.mode
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        watch,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm()
+    const form = useForm()
 
     const onSubmit = async values => {
         try {
@@ -99,7 +86,7 @@ const SelectModel = () => {
     return (
         <>
             <Loading show={isLoading} />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
                     {/* Botão voltar */}
                     <div>

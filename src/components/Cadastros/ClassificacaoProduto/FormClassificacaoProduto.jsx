@@ -35,14 +35,7 @@ const FormClassificacaoProduto = ({
     const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        register,
-        control,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -124,7 +117,7 @@ const FormClassificacaoProduto = ({
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
@@ -132,7 +125,7 @@ const FormClassificacaoProduto = ({
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)} id='formItem'>
+                <form onSubmit={form.handleSubmit(onSubmit)} id='formItem'>
                     <FormHeader
                         btnCancel
                         btnNew
@@ -156,8 +149,8 @@ const FormClassificacaoProduto = ({
                                     title='Nome'
                                     name='fields.nome'
                                     required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
+                                    control={form.control}
+                                    errors={form.formState?.errors?.fields?.nome}
                                 />
                                 <Check
                                     xs={1}
@@ -166,7 +159,7 @@ const FormClassificacaoProduto = ({
                                     name='fields.status'
                                     value={data?.fields?.status}
                                     typePage={type}
-                                    register={register}
+                                    register={form.register}
                                 />
                             </Grid>
                         </CardContent>

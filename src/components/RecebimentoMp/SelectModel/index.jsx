@@ -24,18 +24,7 @@ const SelectModel = () => {
     const { settings } = useContext(SettingsContext)
     const mode = settings.mode
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        watch,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm()
+    const form = useForm()
 
     const onSubmit = async values => {
         try {
@@ -108,7 +97,7 @@ const SelectModel = () => {
         <>
             {model && <FormRecebimentoMp id={null} model={model} />}
             {!model && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
                         {/* Botão voltar */}
                         <div>

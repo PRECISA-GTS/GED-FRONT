@@ -46,18 +46,7 @@ const FormProfissional = ({ id }) => {
     const routeVeryfyCNP = type == 'edit' ? `${staticUrl}/verifyCPF` : `${backRoute(staticUrl)}/verifyCPF`
     const today = new Date().toISOString().substring(0, 10)
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        setError,
-        setValue,
-        getValues,
-        watch,
-        trigger,
-        register,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const resetFields = () => {
         setUserNewVerifyCPF(false)
@@ -149,7 +138,7 @@ const FormProfissional = ({ id }) => {
         try {
             const response = await api.post(route)
             console.log('🚀 ~ getData:', response.data)
-            reset(response.data)
+            form.reset(response.data)
             setPhotoProfile(response.data.imagem)
             setData(response.data)
 
@@ -303,7 +292,7 @@ const FormProfissional = ({ id }) => {
             //? Ao copiar permissões de outro profissional, seta edit como true em todos os campos pra atualizar no backend
             const permissionsEdit = setPermissionsEdit(response.data)
             //
-            setValue('menu', permissionsEdit)
+            form.setValue('menu', permissionsEdit)
             setData({
                 ...data,
                 menu: permissionsEdit
@@ -321,7 +310,7 @@ const FormProfissional = ({ id }) => {
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
@@ -334,7 +323,7 @@ const FormProfissional = ({ id }) => {
 
     //? Gerencia o array de setores
     const { fields, append, remove } = useFieldArray({
-        control,
+        control: form.control,
         name: 'fields.setores'
     })
 
@@ -344,18 +333,18 @@ const FormProfissional = ({ id }) => {
         append: appendCargoFuncao,
         remove: removeCargoFuncao
     } = useFieldArray({
-        control,
+        control: form.control,
         name: 'cargosFuncoes'
     })
 
     return (
         data && (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormHeader
                     btnCancel
                     btnSave
                     btnNew
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     btnDelete={type === 'edit' ? true : false}
                     onclickDelete={() => setOpen(true)}
                     type={type}
@@ -449,13 +438,13 @@ const FormProfissional = ({ id }) => {
                                     <Grid container spacing={5}>
                                         <Fields
                                             data={data}
-                                            control={control}
-                                            errors={errors}
-                                            register={register}
-                                            watch={watch}
-                                            getValues={getValues}
-                                            setError={setError}
-                                            setValue={setValue}
+                                            control={form.control}
+                                            errors={form.formState?.errors}
+                                            register={form.register}
+                                            watch={form.watch}
+                                            getValues={form.getValues}
+                                            setError={form.setError}
+                                            setValue={form.setValue}
                                             userNewVerifyCPF={userNewVerifyCPF}
                                             setUserNewVerifyCPF={setUserNewVerifyCPF}
                                             userExistVerifyCPF={userExistVerifyCPF}
@@ -481,10 +470,10 @@ const FormProfissional = ({ id }) => {
                                             key={item.id}
                                             item={item}
                                             index={index}
-                                            setValue={setValue}
-                                            control={control}
-                                            register={register}
-                                            errors={errors}
+                                            setValue={form.setValue}
+                                            control={form.control}
+                                            register={form.register}
+                                            errors={form.formState?.errors}
                                             remove={() => remove(index)}
                                         />
                                     ))}
@@ -514,9 +503,9 @@ const FormProfissional = ({ id }) => {
                                             key={field.id}
                                             item={field}
                                             index={index}
-                                            control={control}
-                                            register={register}
-                                            errors={errors}
+                                            control={form.control}
+                                            register={form.register}
+                                            errors={form.formState?.errors}
                                             remove={() => removeItem(field, index)}
                                         />
                                     ))}
@@ -548,18 +537,18 @@ const FormProfissional = ({ id }) => {
                                             value={null}
                                             options={data?.professionals}
                                             onChange={copyPermissions}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
+                                            register={form.register}
+                                            setValue={form.setValue}
+                                            control={form.control}
                                         />
                                     </Grid>
                                     <Permissions
                                         key={changePermissions}
                                         menu={data.menu}
-                                        control={control}
-                                        register={register}
-                                        setValue={setValue}
-                                        getValues={getValues}
+                                        control={form.control}
+                                        register={form.register}
+                                        setValue={form.setValue}
+                                        getValues={form.getValues}
                                     />
                                 </CardContent>
                             </Card>

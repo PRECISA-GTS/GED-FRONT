@@ -19,26 +19,14 @@ const DialogActs = ({
     size,
     fullHeight = false
 }) => {
-    const {
-        control,
-        register,
-        handleSubmit,
-        trigger,
-        reset,
-        getValues,
-        setValue,
-        watch,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
+    const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
         handleSubmit(onSubmit)(values)
     }
 
     const onSubmit = values => {
-        reset()
+        form.reset()
         setOpenModal(false)
         handleConclusion(values)
     }
@@ -66,16 +54,18 @@ const DialogActs = ({
                             }}
                         >
                             {React.cloneElement(children, {
-                                getValues: getValues,
-                                control: control,
-                                register: register,
-                                setValue: setValue,
-                                errors: errors,
-                                clearErrors: clearErrors,
-                                setError: setError,
-                                watch: watch,
-                                trigger: trigger,
-                                reset: reset,
+                                // getValues: getValues,
+                                // control: control,
+                                // register: register,
+                                // setValue: setValue,
+                                // errors: errors,
+                                // clearErrors: clearErrors,
+                                // setError: setError,
+                                // watch: watch,
+                                // trigger: trigger,
+                                // reset: reset,
+
+                                form: form,
                                 onSubmit: onSubmit
                             })}
                         </DialogContentText>

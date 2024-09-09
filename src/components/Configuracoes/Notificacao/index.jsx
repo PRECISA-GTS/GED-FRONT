@@ -18,12 +18,7 @@ const FormNotificacao = () => {
     const [data, setData] = useState(null)
     const { user, loggedUnity } = useContext(AuthContext)
 
-    const {
-        handleSubmit,
-        reset,
-        register,
-        formState: { errors }
-    } = useForm()
+    const form = useForm()
 
     const onSubmit = async values => {
         try {
@@ -42,7 +37,7 @@ const FormNotificacao = () => {
             const response = await api.get(`${staticUrl}/getData/${user.usuarioID}/${loggedUnity.unidadeID}`)
             console.log('🚀 ~ getData:', response.data)
             setData(response.data)
-            reset(response.data)
+            form.reset(response.data)
         } catch (error) {
             console.log(error)
         }
@@ -57,8 +52,8 @@ const FormNotificacao = () => {
             {!data ? (
                 <Loading show />
             ) : (
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <FormHeader btnSave handleSubmit={() => handleSubmit(onSubmit)} type='edit' />
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <FormHeader btnSave handleSubmit={() => form.handleSubmit(onSubmit)} type='edit' />
 
                     <Box display='flex' flexDirection='column' gap={4}>
                         {data &&
@@ -78,7 +73,7 @@ const FormNotificacao = () => {
                                                 <TableRotinas
                                                     category={index}
                                                     values={item.rotinas}
-                                                    register={register}
+                                                    register={form.register}
                                                 />
                                             </CardContent>
                                         </Card>

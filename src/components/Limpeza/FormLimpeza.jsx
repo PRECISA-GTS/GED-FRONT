@@ -64,18 +64,7 @@ const FormLimpeza = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        watch,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm()
+    const form = useForm()
 
     const canConfigForm = () => {
         let canConfig = false
@@ -190,7 +179,7 @@ const FormLimpeza = ({ id }) => {
                     // setNaoConformidade(response.data.naoConformidade) //! Seta não conformidades
 
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
 
                     let objStatus = statusDefault[response?.data?.info?.status]
                     setStatus(objStatus)
@@ -226,14 +215,14 @@ const FormLimpeza = ({ id }) => {
     }
 
     const checkErrors = () => {
-        clearErrors()
+        form.clearErrors()
         let hasErrors = false
         let arrErrors = []
 
         //? Header
         field?.forEach((field, index) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
-            const fieldValue = getValues(fieldName)
+            const fieldValue = form.getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
                 setError(fieldName, {
                     type: 'manual',
@@ -247,7 +236,7 @@ const FormLimpeza = ({ id }) => {
         //? Blocos
         blocos.forEach((block, indexBlock) => {
             block.itens.forEach((item, indexItem) => {
-                const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                const fieldValue = form.getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
                 //? Valida resposta do item
                 if (item?.obrigatorio === 1 && !fieldValue) {
                     setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
@@ -312,7 +301,7 @@ const FormLimpeza = ({ id }) => {
     const conclusionForm = async values => {
         setOpenModal(false)
         values['conclusion'] = true
-        await handleSubmit(onSubmit)(values)
+        await form.handleSubmit(onSubmit)(values)
     }
 
     //? Trata notificações
@@ -453,7 +442,7 @@ const FormLimpeza = ({ id }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -506,7 +495,7 @@ const FormLimpeza = ({ id }) => {
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/item`)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -557,7 +546,7 @@ const FormLimpeza = ({ id }) => {
                 const newResposta = item.alternativas[colIndex]
 
                 // Atualiza o valor no formulário
-                setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
+                form.setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
 
                 // Atualiza o estado local (blocos)
                 item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
@@ -574,7 +563,7 @@ const FormLimpeza = ({ id }) => {
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
         e.preventDefault()
-        const values = getValues()
+        const values = form.getValues()
         onSubmit(values)
     }
 
@@ -610,7 +599,7 @@ const FormLimpeza = ({ id }) => {
                     onclickDelete={() => setOpenModalDeleted(true)}
                     actionsData={actionsData}
                     actions
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
                     titleConclusion={'Concluir'}
@@ -671,12 +660,12 @@ const FormLimpeza = ({ id }) => {
                                 modelo={unidade.modelo}
                                 values={fieldsHeader}
                                 fields={field}
-                                getValues={getValues}
+                                getValues={form.getValues}
                                 disabled={!canEdit.status}
-                                register={register}
-                                errors={errors}
-                                setValue={setValue}
-                                control={control}
+                                register={form.register}
+                                errors={form.formState?.errors}
+                                setValue={form.setValue}
+                                control={form.control}
                             />
                         )}
                         {/* Blocos */}
@@ -687,13 +676,13 @@ const FormLimpeza = ({ id }) => {
                                     index={index}
                                     blockKey={`parLimpezaModeloBlocoID`}
                                     setBlocos={setBlocos}
-                                    setValue={setValue}
+                                    setValue={form.setValue}
                                     blocos={blocos}
-                                    getValues={getValues}
-                                    register={register}
-                                    control={control}
+                                    getValues={form.getValues}
+                                    register={form.register}
+                                    control={form.control}
                                     disabled={!canEdit.status}
-                                    errors={errors?.blocos}
+                                    errors={form.formState?.errors?.blocos}
                                     handleFileSelect={handleFileSelectItem}
                                     handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     status={info.status}
@@ -718,7 +707,7 @@ const FormLimpeza = ({ id }) => {
                                                         rows={4}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
-                                                        control={control}
+                                                        control={form.control}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -734,7 +723,7 @@ const FormLimpeza = ({ id }) => {
                             values={fieldsFooter}
                             register={register}
                             disabled={false}
-                            errors={errors}
+                            errors={form.formState?.errors}
                             setValue={setValue}
                             control={control}
                         />
@@ -777,9 +766,9 @@ const FormLimpeza = ({ id }) => {
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}
-                            register={register}
-                            setValue={setValue}
-                            getValues={getValues}
+                            register={form.register}
+                            setValue={form.setValue}
+                            getValues={form.getValues}
                             btnCancel
                             btnConfirm
                             btnConfirmColor='primary'
@@ -789,9 +778,9 @@ const FormLimpeza = ({ id }) => {
                             type='limpeza'
                             unity={unidade}
                             values={fieldsFooter}
-                            control={control}
+                            control={form.control}
                             formularioID={4} // Limpeza
-                            errors={errors}
+                            errors={form.formState?.errors}
                             modeloID={unidade?.modelo?.id}
                         />
                         {/* Modal que deleta formulario */}
