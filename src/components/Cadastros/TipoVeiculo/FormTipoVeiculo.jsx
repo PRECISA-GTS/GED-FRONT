@@ -144,15 +144,7 @@ const FormTipoVeiculo = ({
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={11} md={11} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Check
                                     xs={1}
                                     md={1}
@@ -160,7 +152,7 @@ const FormTipoVeiculo = ({
                                     name='fields.status'
                                     value={data?.fields.status}
                                     typePage={type}
-                                    register={form.register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

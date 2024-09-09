@@ -9,18 +9,7 @@ import { api } from 'src/configs/api'
 import HeaderInfo from './Info'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
-const HeaderFields = ({
-    limpezaID,
-    modelo,
-    values,
-    fields,
-    disabled,
-    register,
-    errors,
-    getValues,
-    setValue,
-    control
-}) => {
+const HeaderFields = ({ form, limpezaID, modelo, values, fields, disabled }) => {
     const { user } = useContext(AuthContext)
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
 
@@ -36,7 +25,7 @@ const HeaderFields = ({
     const setDefaultProfissional = arrProfissionais => {
         const profissionalID = user.profissionalID //? Profissional logado
         const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-        if (profissional && profissional.id > 0) setValue('fieldsHeader.profissional', profissional)
+        if (profissional && profissional.id > 0) form.setValue('fieldsHeader.profissional', profissional)
     }
 
     useEffect(() => {
@@ -98,11 +87,9 @@ const HeaderFields = ({
                                     type='date'
                                     value={values?.data ?? new Date()}
                                     disabled={disabled}
-                                    register={register}
-                                    control={control}
                                     typeValidation='dataPassado'
                                     daysValidation={365}
-                                    errors={errors?.fieldsHeader?.['data']}
+                                    form={form}
                                 />
                                 {/* Hora de avaliação */}
                                 <Input
@@ -112,9 +99,7 @@ const HeaderFields = ({
                                     name={`fieldsHeader.hora`}
                                     type='time'
                                     disabled={disabled}
-                                    register={register}
-                                    control={control}
-                                    errors={errors?.fieldsHeader?.['hora']}
+                                    form={form}
                                 />
                                 {/* Profissional que preenche */}
                                 <Select
@@ -126,22 +111,10 @@ const HeaderFields = ({
                                     options={profissionaisPreenchimento}
                                     // value={profissionaisPreenchimento[1]}
                                     disabled={disabled}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
-                                    errors={errors?.fieldsHeader?.['profissional']}
+                                    form={form}
                                 />
                                 {/* Fields dinâmicos */}
-                                <Fields
-                                    register={register}
-                                    errors={errors}
-                                    getValues={getValues}
-                                    setValue={setValue}
-                                    control={control}
-                                    fields={fields}
-                                    values={fields}
-                                    disabled={disabled}
-                                />
+                                <Fields fields={fields} values={fields} disabled={disabled} form={form} />
                             </Grid>
                         </CardContent>
                     </Card>

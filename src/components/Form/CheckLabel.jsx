@@ -1,22 +1,7 @@
-import { Grid, Typography, Box, FormControlLabel, Checkbox, ListItem, ListItemButton } from '@mui/material'
+import { Grid, Box, FormControlLabel, Checkbox } from '@mui/material'
 import HelpText from '../Defaults/HelpText'
 
-const CheckLabel = ({
-    xs,
-    md,
-    title,
-    index,
-    name,
-    typePage,
-    value,
-    disabled,
-    register,
-    onClick,
-    helpText,
-    helpTextPosition
-}) => {
-    console.log('🚀 ~ CheckLabel:', value)
-
+const CheckLabel = ({ form, xs, md, title, name, value, disabled, onClick, helpText, helpTextPosition }) => {
     return (
         <Grid item xs={xs ?? '12'} md={md ?? '12'}>
             <Box display='flex' alignItems='center' justifyContent='start' sx={{ gap: 0 }}>
@@ -26,7 +11,7 @@ const CheckLabel = ({
                             <Checkbox
                                 name={name}
                                 onClick={onClick}
-                                {...register(name)}
+                                {...form.register(name)}
                                 defaultChecked={value}
                                 disabled={disabled}
                             />

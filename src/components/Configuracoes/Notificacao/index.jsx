@@ -70,11 +70,7 @@ const FormNotificacao = () => {
                                                 </Box>
                                             </CardContent>
                                             <CardContent>
-                                                <TableRotinas
-                                                    category={index}
-                                                    values={item.rotinas}
-                                                    register={form.register}
-                                                />
+                                                <TableRotinas category={index} values={item.rotinas} form={form} />
                                             </CardContent>
                                         </Card>
                                     )

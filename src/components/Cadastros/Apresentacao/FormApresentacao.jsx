@@ -125,15 +125,7 @@ const FormApresentacao = ({ id }) => {
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState.errors}
-                                />
+                                <Input xs={11} md={11} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Check
                                     xs={1}
                                     md={1}
@@ -142,6 +134,7 @@ const FormApresentacao = ({ id }) => {
                                     value={data?.fields.status}
                                     typePage={type}
                                     register={form.register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

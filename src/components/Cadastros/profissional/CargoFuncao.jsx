@@ -2,10 +2,9 @@ import { Grid, IconButton } from '@mui/material'
 import React from 'react'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
-import Remove from 'src/components/Form/Remove'
 import Icon from 'src/@core/components/icon'
 
-const CargoFuncao = ({ index, item, control, register, errors, remove }) => {
+const CargoFuncao = ({ index, item, remove, form }) => {
     return (
         <>
             <Input
@@ -14,8 +13,7 @@ const CargoFuncao = ({ index, item, control, register, errors, remove }) => {
                 required
                 title='Formação / Cargo'
                 name={`cargosFuncoes.${[index]}.formacaoCargo`}
-                control={control}
-                errors={errors?.cargosFuncoes?.[index]?.formacaoCargo}
+                form={form}
                 opacity={item.status === 0 ? true : false}
             />
             <Input
@@ -23,8 +21,7 @@ const CargoFuncao = ({ index, item, control, register, errors, remove }) => {
                 md={3}
                 title='Conselho'
                 name={`cargosFuncoes.${[index]}.conselho`}
-                control={control}
-                errors={errors?.cargosFuncoes?.[index]?.conselho}
+                form={form}
                 opacity={item.status === 0 ? true : false}
             />
             <DateField
@@ -34,13 +31,11 @@ const CargoFuncao = ({ index, item, control, register, errors, remove }) => {
                 type='date'
                 required
                 name={`cargosFuncoes.${[index]}.data`}
-                register={register}
-                control={control}
                 value={item.data}
                 typeValidation='dataPassado'
                 daysValidation={999999}
-                errors={errors?.cargosFuncoes?.[index]?.data}
                 opacity={item.status === 0 ? true : false}
+                form={form}
             />
             <DateField
                 xs={12}
@@ -49,9 +44,8 @@ const CargoFuncao = ({ index, item, control, register, errors, remove }) => {
                 name={`cargosFuncoes.${[index]}.dataInativacao`}
                 type='date'
                 value={item.dataInativacao}
-                control={control}
-                errors={errors?.cargosFuncoes?.[index]?.dataInativacao}
                 opacity={item.status === 0 ? true : false}
+                form={form}
             />
             <Grid item xs={12} md={1} className='flex items-center'>
                 <IconButton

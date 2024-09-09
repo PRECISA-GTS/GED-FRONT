@@ -66,8 +66,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             name='telefone'
             defaultValue={dataGlobal?.sectionTwo?.telefone}
             mask='telefone'
-            control={form.control}
-            errors={form.formState?.errors?.telefone}
+            form={form}
           />
           <Input
             xs={12}
@@ -76,8 +75,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             name='cep'
             defaultValue={dataGlobal?.sectionTwo?.cep}
             mask='cep2'
-            control={form.control}
-            errors={form.formState?.errors?.cnpj}
+            form={form}
             onChange={(value) => getCep(value)}
           />
           <Input
@@ -86,8 +84,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Rua'
             name='logradouro'
             defaultValue={dataGlobal?.sectionTwo?.logradouro}
-            control={form.control}
-            errors={form.formState?.errors?.logradouro}
+            form={form}
           />
           <Input
             xs={12}
@@ -95,8 +92,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Número'
             name='numero'
             defaultValue={dataGlobal?.sectionTwo?.numero}
-            control={form.control}
-            errors={form.formState?.errors?.numero}
+            form={form}
           />
           <Input
             xs={12}
@@ -104,8 +100,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Complemento'
             name='complemento'
             defaultValue={dataGlobal?.sectionTwo?.complemento}
-            control={form.control}
-            errors={form.formState?.errors?.complemento}
+            form={form}
           />
           <Input
             xs={12}
@@ -113,8 +108,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Bairro'
             name='bairro'
             defaultValue={dataGlobal?.sectionTwo?.bairro}
-            control={form.control}
-            errors={form.formState?.errors?.bairro}
+            form={form}
           />
           <Input
             xs={12}
@@ -122,8 +116,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Cidade'
             name='cidade'
             defaultValue={dataGlobal?.sectionTwo?.cidade}
-            control={form.control}
-            errors={form.formState?.errors?.cidade}
+            form={form}
           />
           <Input
             xs={12}
@@ -131,8 +124,7 @@ const SectionTwo = ({ handleNext, handlePrev, setDataGlobal, dataGlobal }) => {
             title='Estado'
             name='uf'
             defaultValue={dataGlobal?.sectionTwo?.uf}
-            control={form.control}
-            errors={form.formState?.errors?.uf}
+            form={form}
             mask='estado'
           />
           <Grid item xs={12}>

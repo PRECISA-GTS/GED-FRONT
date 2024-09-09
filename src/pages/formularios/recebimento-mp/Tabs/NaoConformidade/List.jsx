@@ -124,7 +124,7 @@ const ListNaoConformidade = () => {
                 setOpenModal={setOpenNew}
                 openModal={openNew}
             >
-                <NewContent type='list' data={null} form={form} />
+                <NewContent form={form} type='list' data={null} />
             </DialogActs>
         </>
     )

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Icon from 'src/@core/components/icon'
 import { set } from 'nprogress'
 
-const ListOptions = ({ data, addAnexo, register, control, errors, handleRemoveAnexo, getValues, watch }) => {
+const ListOptions = ({ data, addAnexo, register, handleRemoveAnexo, form }) => {
     const [change, setChange] = useState(false)
 
     const getInitialAnexos = () => {
@@ -43,7 +43,7 @@ const ListOptions = ({ data, addAnexo, register, control, errors, handleRemoveAn
                                     name={`fields.opcoes[${index}].anexo`}
                                     onClick={() => handleChangeAnexo(index)}
                                     value={item.anexo}
-                                    register={register}
+                                    form={form}
                                 />
                             </Box>
                             <Box>
@@ -51,7 +51,7 @@ const ListOptions = ({ data, addAnexo, register, control, errors, handleRemoveAn
                                     title='Gera Não Conformidade (NC)'
                                     name={`fields.opcoes[${index}].bloqueiaFormulario`}
                                     value={item.bloqueiaFormulario}
-                                    register={register}
+                                    form={form}
                                     helpText='Se marcada esta resposta, bloqueia a aprovação do formulário e obrigatoriamente gera uma não conformidade (Plano de ação)'
                                 />
                             </Box>
@@ -60,7 +60,7 @@ const ListOptions = ({ data, addAnexo, register, control, errors, handleRemoveAn
                                     title='Observação'
                                     name={`fields.opcoes[${index}].observacao`}
                                     value={item.observacao}
-                                    register={register}
+                                    form={form}
                                 />
                             </Box>
                         </Box>
@@ -79,10 +79,8 @@ const ListOptions = ({ data, addAnexo, register, control, errors, handleRemoveAn
                                         index={index}
                                         indexAnexo={indexAnexo}
                                         data={anexo}
-                                        control={control}
                                         handleRemoveAnexo={handleRemoveAnexo}
-                                        register={register}
-                                        errors={errors}
+                                        form={form}
                                     />
                                 ))}
                             </Grid>

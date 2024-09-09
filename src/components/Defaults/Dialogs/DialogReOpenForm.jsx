@@ -1,17 +1,9 @@
 import Input from 'src/components/Form/Input'
 
-const DialogReOpenForm = ({ control, register }) => {
+const DialogReOpenForm = ({ form }) => {
     return (
         <div>
-            <Input
-                name='obs'
-                title='Observação'
-                register={register}
-                control={control}
-                defaultValue=''
-                multiline
-                rows={6}
-            />
+            <Input name='obs' title='Observação' defaultValue='' multiline rows={6} form={form} />
         </div>
     )
 }

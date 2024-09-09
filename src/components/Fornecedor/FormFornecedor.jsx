@@ -994,12 +994,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                             values={fieldsHeader}
                                             fields={field}
                                             disabled={!canEdit.status || hasFormPending}
-                                            register={form.register}
-                                            errors={form.formState?.errors}
-                                            setValue={form.setValue}
-                                            control={form.control}
-                                            getValues={form.getValues}
                                             getAddressByCep={getAddressByCep}
+                                            form={form}
                                         />
                                     )}
                                 </CardContent>
@@ -1026,17 +1022,13 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             {blocos &&
                                 blocos.map((bloco, index) => (
                                     <Block
+                                        form={form}
                                         bloco={bloco}
                                         index={index}
                                         blockKey={`parFornecedorModeloBlocoID`}
                                         setBlocos={setBlocos}
-                                        setValue={form.setValue}
                                         blocos={blocos}
-                                        getValues={form.getValues}
-                                        register={form.register}
-                                        control={form.control}
                                         disabled={!canEdit.status || hasFormPending}
-                                        errors={form.formState?.errors?.blocos}
                                         handleFileSelect={handleFileSelectItem}
                                         handleRemoveAnexoItem={handleRemoveAnexoItem}
                                         status={info.status}
@@ -1081,7 +1073,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                                             rows={4}
                                                             value={info.obs}
                                                             disabled={!canEdit.status || hasFormPending}
-                                                            control={form.control}
+                                                            form={form}
                                                         />
                                                     </FormControl>
                                                 </Grid>
@@ -1119,10 +1111,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 text={`Deseja realmente concluir este formulário?`}
                                 info={info}
                                 canChange={!hasFormPending}
-                                register={form.register}
-                                setValue={form.setValue}
-                                getValues={form.getValues}
-                                control={form.control}
+                                form={form}
                                 btnCancel
                                 btnConfirm
                                 btnConfirmColor='primary'
@@ -1134,7 +1123,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 unity={unidade}
                                 values={fieldsFooter}
                                 formularioID={1} // Fornecedor
-                                errors={form.formState?.errors}
                                 modeloID={unidade?.parFornecedorModeloID}
                             />
 

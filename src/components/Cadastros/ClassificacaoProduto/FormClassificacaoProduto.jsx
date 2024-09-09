@@ -96,7 +96,7 @@ const FormClassificacaoProduto = ({
             if (type === 'edit') {
                 await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
                     setData(response.data)
-                    reset(response.data) //* Insere os dados no formulário
+                    form.reset(response.data) //* Insere os dados no formulário
                 })
             } else {
                 setData({
@@ -134,7 +134,7 @@ const FormClassificacaoProduto = ({
                         manualUrl={manualUrl}
                         btnClose={btnClose}
                         handleModalClose={handleModalClose}
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -143,15 +143,7 @@ const FormClassificacaoProduto = ({
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={11} md={11} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Check
                                     xs={1}
                                     md={1}
@@ -159,7 +151,7 @@ const FormClassificacaoProduto = ({
                                     name='fields.status'
                                     value={data?.fields?.status}
                                     typePage={type}
-                                    register={form.register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

@@ -355,8 +355,7 @@ const FormUsuario = ({ id }) => {
                                                 name='fields.nome'
                                                 value={data?.fields?.nome}
                                                 required={true}
-                                                control={form.control}
-                                                errors={form.formState?.errors?.fields?.nome}
+                                                form={form}
                                             />
 
                                             <DateField
@@ -365,9 +364,7 @@ const FormUsuario = ({ id }) => {
                                                 title='Data de Nascimento'
                                                 value={data?.fields?.dataNascimento}
                                                 name={`fields.dataNascimento`}
-                                                errors={form.formState?.errors?.fields?.dataNascimento}
-                                                control={form.control}
-                                                register={form.register}
+                                                form={form}
                                             />
 
                                             <Input
@@ -377,8 +374,7 @@ const FormUsuario = ({ id }) => {
                                                 name='fields.email'
                                                 value={data?.fields?.email}
                                                 required={true}
-                                                control={form.control}
-                                                errors={form.formState?.errors?.fields?.email}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -388,8 +384,7 @@ const FormUsuario = ({ id }) => {
                                                 mask='cpf'
                                                 value={data?.fields?.cpf}
                                                 required={true}
-                                                control={form.control}
-                                                errors={form.formState?.errors?.fields?.cpf}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -397,8 +392,7 @@ const FormUsuario = ({ id }) => {
                                                 title='RG'
                                                 name='fields.rg'
                                                 value={data?.fields?.rg}
-                                                control={form.control}
-                                                errors={form.formState?.errors?.fields?.rg}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -406,8 +400,7 @@ const FormUsuario = ({ id }) => {
                                                 title='Registro Conselho Classe'
                                                 name='fields.registroConselhoClasse'
                                                 value={data?.fields?.registroConselhoClasse}
-                                                control={form.control}
-                                                errors={form.formState?.errors?.fields?.registroConselhoClasse}
+                                                form={form}
                                             />
 
                                             {data && user.admin == 0 && (

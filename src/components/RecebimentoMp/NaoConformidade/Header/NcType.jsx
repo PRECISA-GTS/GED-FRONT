@@ -25,7 +25,7 @@ const NcType = ({ form, data, disabled }) => {
                     title='Transporte'
                     name={`header.transporte`}
                     value={data.transporte}
-                    register={form.register}
+                    form={form}
                     disabled={disabled}
                 />
             </Grid>
@@ -34,7 +34,7 @@ const NcType = ({ form, data, disabled }) => {
                     title='Produto'
                     name={`header.produto`}
                     value={data.produto}
-                    register={form.register}
+                    form={form}
                     disabled={disabled}
                 />
             </Grid>
@@ -65,11 +65,7 @@ const NcType = ({ form, data, disabled }) => {
                                         setProdutos={setProdutos}
                                         handleCheck={handleCheck}
                                         disabled={disabled}
-                                        getValues={form.getValues}
-                                        setValue={form.setValue}
-                                        register={form.register}
-                                        control={form.control}
-                                        errors={form.errors}
+                                        form={form}
                                     />
                                     {index < produtos.length - 1 && <Divider />}
                                 </>

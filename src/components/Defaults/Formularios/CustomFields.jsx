@@ -46,10 +46,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                             mask={field.tabela}
                             disabled={disabled || disabledField(field.nomeColuna)}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
-                            register={form.register}
-                            setValue={form.setValue}
-                            control={form.control}
-                            errors={form.errors?.fields?.[index]?.[field.tabela]}
+                            form={form}
                         />
                     )}
 
@@ -67,9 +64,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                             typeValidation='dataPassado'
                             daysValidation={365}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
-                            errors={form.errors?.fields?.[index]?.[field.nomeColuna]}
-                            control={form.control}
-                            register={form.register}
+                            form={form}
                         />
                     )}
 
@@ -89,9 +84,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
-                            errors={form.errors?.fields?.[index]?.nomeColuna}
-                            register={form.register}
-                            control={form.control}
+                            form={form}
                         />
                     )}
 
@@ -113,9 +106,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
-                            register={form.register}
-                            control={form.control}
-                            errors={form.errors?.fields?.[index]?.nomeColuna}
+                            form={form}
                         />
                     )}
                 </>

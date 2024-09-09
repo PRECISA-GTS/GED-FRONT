@@ -343,8 +343,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                     name={`model.nome`}
                                     value={model.nome}
                                     required={true}
-                                    control={form.control}
-                                    errors={form.formState?.model?.nome}
+                                    form={form}
                                 />
                                 <Input
                                     className='order-1'
@@ -355,9 +354,8 @@ const FormParametrosFornecedor = ({ id }) => {
                                     name={`model.ciclo`}
                                     value={model.ciclo}
                                     required={true}
-                                    control={form.control}
                                     helpText='Ciclo de vencimento deste formulário. Caso não tenha ciclo, use dias igual a 0 (zero)'
-                                    errors={form.formState?.model?.ciclo}
+                                    form={form}
                                 />
                                 <Check
                                     className='order-2 md:order-3'
@@ -366,7 +364,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                     title='Ativo'
                                     name={`model.status`}
                                     value={model.status}
-                                    register={form.register}
+                                    form={form}
                                 />
 
                                 {/* Setores que preenchem */}
@@ -381,10 +379,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                             name={`model.setoresPreenchem`}
                                             options={setores ?? []}
                                             value={model?.setoresPreenchem ?? []}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
-                                            clearErrors={form.clearErrors}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário (válido apenas para preenchimento da fábrica)'
                                         />
                                         <Select
@@ -396,9 +391,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                             name={`model.setoresConcluem`}
                                             options={setores ?? []}
                                             value={model?.setoresConcluem ?? []}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário (válido apenas para preenchimento da fábrica)'
                                         />
                                     </>
@@ -414,7 +407,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                     value={model.cabecalho}
                                     multiline
                                     rows={4}
-                                    control={form.control}
+                                    form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento pelo fornecedor.'
                                 />
                             </Grid>
@@ -468,7 +461,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                                         ? true
                                                         : header.mostra
                                                 }
-                                                register={form.register}
+                                                form={form}
                                                 helpText={
                                                     header.nomeColuna == 'cnpj' ||
                                                     header.nomeColuna == 'razaoSocial' ||
@@ -494,7 +487,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                                         ? true
                                                         : header.obrigatorio
                                                 }
-                                                register={form.register}
+                                                form={form}
                                                 helpText={
                                                     header.nomeColuna == 'cnpj' ||
                                                     header.nomeColuna == 'razaoSocial' ||
@@ -512,9 +505,8 @@ const FormParametrosFornecedor = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].ordem`}
                                                 value={header.ordem}
-                                                register={form.register}
-                                                control={form.control}
                                                 type='number'
+                                                form={form}
                                             />
                                         </>
                                     ))}
@@ -529,15 +521,9 @@ const FormParametrosFornecedor = ({ id }) => {
                 {blocks && (
                     <Blocos
                         blocks={blocks}
-                        errors={form.formState?.errors}
-                        control={form.control}
-                        register={form.register}
-                        watch={form.watch}
                         removeItem={removeItem}
                         addItem={addItem}
-                        getValues={form.getValues}
                         removeBlock={removeBlock}
-                        setValue={form.setValue}
                         allOptions={allOptions}
                         openModalConfirmScore={openModalConfirmScore}
                         setOpenModalConfirmScore={setOpenModalConfirmScore}
@@ -547,6 +533,7 @@ const FormParametrosFornecedor = ({ id }) => {
                         viewItem={viewItem}
                         key={change}
                         setores={setores}
+                        form={form}
                     />
                 )}
                 {/* Botão inserir bloco */}
@@ -579,7 +566,7 @@ const FormParametrosFornecedor = ({ id }) => {
                                     value={orientacoes?.obs}
                                     multiline
                                     rows={4}
-                                    control={form.control}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

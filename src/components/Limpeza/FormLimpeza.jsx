@@ -224,7 +224,7 @@ const FormLimpeza = ({ id }) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
             const fieldValue = form.getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
-                setError(fieldName, {
+                form.setError(fieldName, {
                     type: 'manual',
                     message: 'Campo obrigatório'
                 })
@@ -239,7 +239,7 @@ const FormLimpeza = ({ id }) => {
                 const fieldValue = form.getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
                 //? Valida resposta do item
                 if (item?.obrigatorio === 1 && !fieldValue) {
-                    setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
+                    form.setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
                         type: 'manual',
                         message: 'Campo obrigatário'
                     })
@@ -255,7 +255,7 @@ const FormLimpeza = ({ id }) => {
                 ) {
                     item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                            setError(
+                            form.setError(
                                 `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
                                 {
                                     type: 'manual',
@@ -660,29 +660,21 @@ const FormLimpeza = ({ id }) => {
                                 modelo={unidade.modelo}
                                 values={fieldsHeader}
                                 fields={field}
-                                getValues={form.getValues}
                                 disabled={!canEdit.status}
-                                register={form.register}
-                                errors={form.formState?.errors}
-                                setValue={form.setValue}
-                                control={form.control}
+                                form={form}
                             />
                         )}
                         {/* Blocos */}
                         {blocos &&
                             blocos.map((bloco, index) => (
                                 <Block
+                                    form={form}
                                     bloco={bloco}
                                     index={index}
                                     blockKey={`parLimpezaModeloBlocoID`}
                                     setBlocos={setBlocos}
-                                    setValue={form.setValue}
                                     blocos={blocos}
-                                    getValues={form.getValues}
-                                    register={form.register}
-                                    control={form.control}
                                     disabled={!canEdit.status}
-                                    errors={form.formState?.errors?.blocos}
                                     handleFileSelect={handleFileSelectItem}
                                     handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     status={info.status}
@@ -707,7 +699,7 @@ const FormLimpeza = ({ id }) => {
                                                         rows={4}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
-                                                        control={form.control}
+                                                        form={form}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -766,9 +758,6 @@ const FormLimpeza = ({ id }) => {
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}
-                            register={form.register}
-                            setValue={form.setValue}
-                            getValues={form.getValues}
                             btnCancel
                             btnConfirm
                             btnConfirmColor='primary'
@@ -780,8 +769,8 @@ const FormLimpeza = ({ id }) => {
                             values={fieldsFooter}
                             control={form.control}
                             formularioID={4} // Limpeza
-                            errors={form.formState?.errors}
                             modeloID={unidade?.modelo?.id}
+                            form={form}
                         />
                         {/* Modal que deleta formulario */}
                         <DialogDelete

@@ -7,22 +7,16 @@ import RadioLabel from 'src/components/Form/RadioLabel'
 import DateField from 'src/components/Form/DateField'
 
 const Item = ({
+    form,
     blockKey,
     index,
     indexItem,
     item,
-    errors,
     disabled,
-    control,
-    register,
-    getValues,
     updateResponse,
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
-    console.log('🚀 ~ item:', item)
-    // if (!item) return null
-
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)
@@ -48,7 +42,7 @@ const Item = ({
                 type='hidden'
                 name={`blocos[${index}].itens[${indexItem}].itemID`}
                 defaultValue={item.itemID}
-                {...register(`blocos[${index}].itens[${indexItem}].itemID`)}
+                {...form.register(`blocos[${index}].itens[${indexItem}].itemID`)}
             />
 
             {/* Descrição do item */}
@@ -60,7 +54,7 @@ const Item = ({
                         color:
                             item.obrigatorio &&
                             !item.resposta &&
-                            !getValues(`blocos[${index}].itens[${indexItem}].resposta`)
+                            !form.getValues(`blocos[${index}].itens[${indexItem}].resposta`)
                                 ? 'error.main'
                                 : 'text.primary'
                     }}
@@ -76,7 +70,7 @@ const Item = ({
                         type='hidden'
                         name={`blocos[${index}].itens[${indexItem}].tipoAlternativa`}
                         defaultValue={item.alternativa}
-                        {...register(`blocos[${index}].itens[${indexItem}].tipoAlternativa`)}
+                        {...form.register(`blocos[${index}].itens[${indexItem}].tipoAlternativa`)}
                     />
 
                     {/* +1 opção pra selecionar (Radio) */}
@@ -86,22 +80,19 @@ const Item = ({
                             xs={12}
                             md={12}
                             blockIndex={index}
-                            control={control}
                             index={indexItem}
                             defaultValue={item?.resposta?.id}
-                            getValues={getValues}
                             values={item.alternativas}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
                             item={item}
                             disabled={disabled}
                             handleChange={e => updateResponse({ e, item, index, indexItem })}
-                            errors={errors?.[index]?.itens[indexItem]?.resposta}
-                            // blockForm={item.respostaConfig?.bloqueiaFormulario == 1 ? true : false}
                             blockForm={
                                 item.alternativas.find(alt => alt.id == item?.resposta?.id)?.bloqueiaFormulario == 1
                                     ? true
                                     : false
                             }
+                            form={form}
                         />
                     )}
 
@@ -115,9 +106,7 @@ const Item = ({
                             value={item.resposta}
                             type={null}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
-                            errors={errors?.[index]?.itens[indexItem]?.resposta}
-                            control={control}
-                            register={register}
+                            form={form}
                         />
                     )}
 
@@ -134,8 +123,7 @@ const Item = ({
                                 value={item.resposta}
                                 multiline
                                 disabled={disabled}
-                                control={control}
-                                errors={errors?.[index]?.itens[indexItem]?.resposta}
+                                form={form}
                             />
                         )}
 
@@ -149,7 +137,7 @@ const Item = ({
                             value={item?.observacao}
                             multiline
                             disabled={disabled}
-                            control={control}
+                            form={form}
                         />
                     )}
                 </Grid>
@@ -167,8 +155,7 @@ const Item = ({
                         value={item.resposta}
                         multiline
                         disabled={disabled}
-                        control={control}
-                        errors={errors?.blocos?.[index]?.itens[indexItem]?.resposta}
+                        form={form}
                     />
                 </FormControl>
             )}
@@ -199,8 +186,9 @@ const Item = ({
                             handleFileSelect={handleFileSelect}
                             folder='item'
                             handleRemove={handleRemoveAnexoItem}
-                            error={errors}
+                            error={form.formState?.errors}
                             disabled={disabled}
+                            form={form}
                         />
                     </Grid>
                 ))}

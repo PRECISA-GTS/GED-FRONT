@@ -346,8 +346,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     name={`model.nome`}
                                     value={model.nome}
                                     required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.model?.nome}
+                                    form={form}
                                 />
                                 <Input
                                     className='order-1'
@@ -358,9 +357,8 @@ const FormParametrosLimpeza = ({ id }) => {
                                     name={`model.ciclo`}
                                     value={model.ciclo}
                                     required={true}
-                                    control={form.control}
                                     helpText='Ciclo de vencimento deste formulário. Caso não tenha ciclo, use dias igual a 0 (zero)'
-                                    errors={form.formState?.errors?.model?.ciclo}
+                                    form={form}
                                 />
                                 <Check
                                     className='order-2 md:order-3'
@@ -369,7 +367,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     title='Ativo'
                                     name={`model.status`}
                                     value={model.status}
-                                    register={form.register}
+                                    form={form}
                                 />
 
                                 {/* Setores que preenchem */}
@@ -384,9 +382,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                             name={`model.setoresPreenchem`}
                                             options={setores ?? []}
                                             value={model?.setoresPreenchem ?? []}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                         <Select
@@ -398,9 +394,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                             name={`model.setoresConcluem`}
                                             options={setores ?? []}
                                             value={model?.setoresConcluem ?? []}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                     </>
@@ -416,7 +410,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     value={model.cabecalho}
                                     multiline
                                     rows={4}
-                                    control={form.control}
+                                    form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
                             </Grid>
@@ -462,7 +456,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].mostra`}
                                                 value={header.mostra}
-                                                register={form.register}
+                                                form={form}
                                             />
 
                                             <CheckLabel
@@ -471,7 +465,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].obrigatorio`}
                                                 value={header.obrigatorio}
-                                                register={form.register}
+                                                form={form}
                                             />
 
                                             <Input
@@ -480,9 +474,8 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].ordem`}
                                                 value={header.ordem}
-                                                register={form.register}
-                                                control={form.control}
                                                 type='number'
+                                                form={form}
                                             />
                                         </>
                                     ))}
@@ -496,16 +489,11 @@ const FormParametrosLimpeza = ({ id }) => {
                 {!blocks && <Loading />}
                 {blocks && (
                     <Blocos
+                        form={form}
                         blocks={blocks}
-                        errors={form.formState?.errors}
-                        control={form.control}
-                        register={form.register}
-                        watch={form.watch}
                         removeItem={removeItem}
                         addItem={addItem}
-                        getValues={form.getValues}
                         removeBlock={removeBlock}
-                        setValue={form.setValue}
                         allOptions={allOptions}
                         openModalConfirmScore={openModalConfirmScore}
                         setOpenModalConfirmScore={setOpenModalConfirmScore}
@@ -547,7 +535,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     value={orientacoes?.obs}
                                     multiline
                                     rows={4}
-                                    control={form.control}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

@@ -438,13 +438,6 @@ const FormProfissional = ({ id }) => {
                                     <Grid container spacing={5}>
                                         <Fields
                                             data={data}
-                                            control={form.control}
-                                            errors={form.formState?.errors}
-                                            register={form.register}
-                                            watch={form.watch}
-                                            getValues={form.getValues}
-                                            setError={form.setError}
-                                            setValue={form.setValue}
                                             userNewVerifyCPF={userNewVerifyCPF}
                                             setUserNewVerifyCPF={setUserNewVerifyCPF}
                                             userExistVerifyCPF={userExistVerifyCPF}
@@ -453,6 +446,7 @@ const FormProfissional = ({ id }) => {
                                             routeVeryfyCNP={routeVeryfyCNP}
                                             userExistDefault={userExistDefault}
                                             type={type}
+                                            form={form}
                                         />
                                     </Grid>
                                 </Grid>
@@ -467,13 +461,10 @@ const FormProfissional = ({ id }) => {
                                 {fields &&
                                     fields.map((item, index) => (
                                         <Setor
+                                            form={form}
                                             key={item.id}
                                             item={item}
                                             index={index}
-                                            setValue={form.setValue}
-                                            control={form.control}
-                                            register={form.register}
-                                            errors={form.formState?.errors}
                                             remove={() => remove(index)}
                                         />
                                     ))}
@@ -503,10 +494,8 @@ const FormProfissional = ({ id }) => {
                                             key={field.id}
                                             item={field}
                                             index={index}
-                                            control={form.control}
-                                            register={form.register}
-                                            errors={form.formState?.errors}
                                             remove={() => removeItem(field, index)}
+                                            form={form}
                                         />
                                     ))}
 
@@ -537,19 +526,10 @@ const FormProfissional = ({ id }) => {
                                             value={null}
                                             options={data?.professionals}
                                             onChange={copyPermissions}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
+                                            form={form}
                                         />
                                     </Grid>
-                                    <Permissions
-                                        key={changePermissions}
-                                        menu={data.menu}
-                                        control={form.control}
-                                        register={form.register}
-                                        setValue={form.setValue}
-                                        getValues={form.getValues}
-                                    />
+                                    <Permissions form={form} key={changePermissions} menu={data.menu} />
                                 </CardContent>
                             </Card>
                         )}

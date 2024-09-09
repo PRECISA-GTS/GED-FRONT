@@ -3,17 +3,7 @@ import { api } from 'src/configs/api'
 import { useEffect, useState } from 'react'
 import ProductInfo from './ProductInfo'
 
-const RecebimentoMpProdutos = ({
-    index,
-    produto,
-    handleCheck,
-    setValue,
-    register,
-    control,
-    errors,
-    disabled,
-    change
-}) => {
+const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, change }) => {
     const [apresentacoes, setApresentacoes] = useState([])
 
     const getApresentacoes = async () => {
@@ -35,7 +25,7 @@ const RecebimentoMpProdutos = ({
                 type='hidden'
                 value={produto.produtoID}
                 name={`header.produtos[${index}].produtoID`}
-                {...register(`header.produtos[${index}].produtoID`)}
+                {...form.register(`header.produtos[${index}].produtoID`)}
             />
             {/* Checkbox com produto */}
             <Grid item xs={12} md={12}>

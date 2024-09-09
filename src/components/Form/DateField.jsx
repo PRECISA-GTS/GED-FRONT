@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { dateConfig } from 'src/configs/defaultConfigs'
 
 const DateField = ({
+    form,
     xs,
     md,
     title,
@@ -14,9 +15,7 @@ const DateField = ({
     value,
     name,
     typeValidation,
-    errors,
     alertRequired,
-    control,
     opacity
 }) => {
     const theme = useTheme()
@@ -70,7 +69,7 @@ const DateField = ({
             <FormControl fullWidth>
                 <Controller
                     name={name}
-                    control={control}
+                    control={form.control}
                     rules={{ required: required }}
                     render={({ field }) => (
                         <TextField
@@ -79,7 +78,7 @@ const DateField = ({
                             label={title}
                             disabled={disabled ? true : false}
                             defaultValue={value ? formatDate(value) : ''}
-                            error={!!errors || !!inputError}
+                            error={!!form.formState?.errors || !!inputError}
                             helperText={inputError}
                             onChange={e => {
                                 const dateValue = e.target.value

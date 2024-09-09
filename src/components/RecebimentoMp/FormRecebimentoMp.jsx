@@ -757,32 +757,24 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 modelo={unidade.modelo}
                                 values={fieldsHeader}
                                 fields={field}
-                                getValues={form.getValues}
                                 disabled={!canEdit.status}
-                                register={form.register}
-                                errors={form.formState?.errors}
-                                setValue={form.setValue}
-                                control={form.control}
                                 getAddressByCep={getAddressByCep}
                                 setProdutos={setProdutos}
                                 produtos={produtos}
+                                form={form}
                             />
                         )}
                         {/* Blocos */}
                         {blocos &&
                             blocos.map((bloco, index) => (
                                 <Block
+                                    form={form}
                                     index={index}
                                     bloco={bloco}
                                     blockKey={`parRecebimentoMpModeloBlocoID`}
                                     setBlocos={setBlocos}
-                                    setValue={form.setValue}
                                     blocos={blocos}
-                                    getValues={form.getValues}
-                                    register={form.register}
-                                    control={form.control}
                                     disabled={hasFormPending}
-                                    errors={form.formState?.errors?.blocos}
                                     handleFileSelect={handleFileSelectItem}
                                     handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     status={info.status}
@@ -823,7 +815,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                                         rows={4}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
-                                                        control={form.control}
+                                                        form={form}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -865,10 +857,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}
-                            register={form.register}
-                            setValue={form.setValue}
-                            getValues={form.getValues}
-                            control={form.control}
                             btnCancel
                             btnConfirm
                             btnConfirmColor='primary'
@@ -880,8 +868,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                             unity={unidade}
                             values={fieldsFooter}
                             formularioID={2} // Recebimento MP
-                            errors={form.formState?.errors}
                             modeloID={unidade?.modelo?.id}
+                            form={form}
                         />
                         {/* Modal que deleta formulario */}
                         <DialogDelete

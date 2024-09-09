@@ -268,7 +268,7 @@ const FornecedorPage = ({ units }) => {
                                     <FormControl fullWidth sx={{ mb: 4 }}>
                                         <Controller
                                             name='cnpj'
-                                            control={control}
+                                            control={form.control}
                                             rules={{ required: true }}
                                             render={({ field: { value, onChange, onBlur } }) => (
                                                 <TextField

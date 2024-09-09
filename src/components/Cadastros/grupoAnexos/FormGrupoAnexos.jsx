@@ -179,8 +179,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         title='Nome'
                                         name='fields.nome'
                                         required={true}
-                                        control={form.control}
-                                        errors={form.formState?.errors?.fields?.nome}
+                                        form={form}
                                     />
 
                                     <Check
@@ -190,7 +189,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         name='fields.status'
                                         value={data.fields.status}
                                         typePage={type}
-                                        register={form.register}
+                                        form={form}
                                     />
 
                                     <Input
@@ -199,8 +198,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         title='Descrição'
                                         name='fields.descricao'
                                         required={false}
-                                        control={form.control}
-                                        errors={form.formState?.errors?.fields?.descricao}
+                                        form={form}
                                     />
 
                                     <Select
@@ -213,12 +211,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         limitTags={5}
                                         required={true}
                                         options={data.formulario.options}
-                                        register={form.register}
-                                        setValue={form.setValue}
-                                        clearErrors={form.clearErrors}
-                                        setError={form.setError}
-                                        control={form.control}
-                                        errors={form.formState?.errors?.formulario?.fields}
+                                        form={form}
                                     />
                                 </Grid>
                             </CardContent>
@@ -233,10 +226,8 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                     key={change}
                                     getValues={form.getValues}
                                     removeItem={removeItem}
-                                    control={form.control}
-                                    register={form.register}
-                                    errors={form.errors}
                                     type={type}
+                                    form={form}
                                 />
                             </Grid>
                             <Button

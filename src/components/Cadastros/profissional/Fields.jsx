@@ -14,14 +14,8 @@ import { Button, TextField, FormControl } from '@mui/material'
 import DialogNewPasswordProfessional from 'src/components/Defaults/Dialogs/DialogNewPasswordProfessional'
 
 const Fields = ({
-    control,
-    setError,
-    errors,
+    form,
     data,
-    register,
-    watch,
-    getValues,
-    setValue,
     userNewVerifyCPF,
     setUserNewVerifyCPF,
     userExistVerifyCPF,
@@ -61,31 +55,31 @@ const Fields = ({
         const cpf = getValues('fields').cpf
 
         if (cpf && cpf.length < 14) {
-            setValue('isUsuario', false)
+            form.setValue('isUsuario', false)
             resetFields()
         }
 
         if (!validationCPF(cpf)) {
-            setError('fields.cpf', {
+            form.setError('fields.cpf', {
                 type: 'manual',
                 message: 'CPF inválido'
             })
         } else {
-            setError('fields.cpf', null)
-            watch()
+            form.setError('fields.cpf', null)
+            form.watch()
         }
-        watch()
+        form.watch()
     }
 
     // Vai até o back e verifica se o já existe um usuario ncom o cpf digitado
     const verifyCPF = async () => {
         resetFields()
 
-        const isUsuario = getValues('isUsuario')
+        const isUsuario = form.getValues('isUsuario')
 
         if (!isUsuario) {
             const data = {
-                cpf: getValues('fields').cpf
+                cpf: form.getValues('fields').cpf
             }
             try {
                 const response = await api.post(routeVeryfyCNP, data)
@@ -108,25 +102,16 @@ const Fields = ({
     return (
         data && (
             <>
-                <Input
-                    md={12}
-                    title='Nome'
-                    name='fields.nome'
-                    required
-                    control={control}
-                    errors={errors?.fields?.nome}
-                />
+                <Input md={12} title='Nome' name='fields.nome' required form={form} />
                 <Input
                     xs={12}
                     md={4}
                     title='CPF'
                     mask='cpf'
                     name='fields.cpf'
-                    // required={userExistVerifyCPF ?? false}
                     required
-                    control={control}
-                    errors={errors?.fields?.cpf}
                     onChange={onChangeField}
+                    form={form}
                 />
                 <DateField
                     xs={12}
@@ -136,10 +121,8 @@ const Fields = ({
                     type='date'
                     required
                     value={data?.fields?.dataNascimento}
-                    register={register}
-                    control={control}
-                    errors={errors?.fields?.dataNascimento}
                     typeValidation='dataPassado'
+                    form={form}
                 />
                 <Input
                     xs={12}
@@ -148,27 +131,21 @@ const Fields = ({
                     type='email'
                     required={userExistVerifyCPF ?? false}
                     name='fields.email'
-                    control={control}
-                    errors={errors?.fields?.email}
                     onChange={onChangeField}
+                    form={form}
                 />
-                <Input
-                    xs={12}
-                    md={userNewVerifyCPF ? 2 : 4}
-                    title='Matricula'
-                    name='fields.matricula'
-                    control={control}
-                    errors={errors?.fields?.matricula}
-                />
+                <Input xs={12} md={userNewVerifyCPF ? 2 : 4} title='Matricula' name='fields.matricula' form={form} />
                 <CheckLabel
                     xs={12}
                     md={2}
+                    form={form}
                     onClick={handleClickIsUser}
                     title='Usuário do sistema'
                     name='isUsuario'
                     value={data.fields.usuarioID > 0 ? true : false}
-                    register={register}
-                    disabled={getValues('fields').email && validationCPF(getValues('fields').cpf) ? false : true}
+                    disabled={
+                        form.getValues('fields').email && validationCPF(form.getValues('fields').cpf) ? false : true
+                    }
                     helpText='Preencha com um CPF e email válidos para habilitar esta função'
                 />
                 {userExistVerifyCPF && (
@@ -227,8 +204,10 @@ const Fields = ({
                                 size='small'
                                 type={values.showConfirmPassword ? 'text' : 'password'}
                                 name='confirmaSenha'
-                                error={!!errors.confirmaSenha}
-                                helperText={errors.confirmaSenha && errors.confirmaSenha.message}
+                                error={!!form.formState?.errors.confirmaSenha}
+                                helperText={
+                                    form.formState?.errors.confirmaSenha && form.formState?.errors.confirmaSenha.message
+                                }
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position='end'>

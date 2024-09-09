@@ -166,8 +166,7 @@ const SectionOne = ({ handleNext, setDataGlobal, dataGlobal }) => {
             name='cnpj'
             defaultValue={dataGlobal?.sectionOne?.cnpj}
             mask='cnpj'
-            control={form.control}
-            errors={form.formState?.errors?.cnpj}
+            form={form}
             onChange={(value) => handleGetCnpj(value)}
           />
           {/* Mostra quando cnpj digitado for inválido  */}
@@ -317,8 +316,7 @@ const SectionOne = ({ handleNext, setDataGlobal, dataGlobal }) => {
                   name='nomeFantasia'
                   defaultValue={dataGlobal?.sectionOne.nomeFantasia || nome}
                   required
-                  control={form.control}
-                  errors={form.formState?.errors?.nomeFantasia}
+                  form={form}
                 />
                 <Input
                   xs={12}
@@ -327,8 +325,7 @@ const SectionOne = ({ handleNext, setDataGlobal, dataGlobal }) => {
                   name='razaoSocial'
                   defaultValue={dataGlobal?.sectionOne?.razaoSocial || nome}
                   required
-                  control={form.control}
-                  errors={form.formState?.errors?.razaoSocial}
+                  form={form}
                 />
                 <Input
                   xs={12}
@@ -337,8 +334,7 @@ const SectionOne = ({ handleNext, setDataGlobal, dataGlobal }) => {
                   name='email'
                   defaultValue={dataGlobal?.sectionOne?.email || email}
                   required
-                  control={form.control}
-                  errors={form.formState?.errors?.email}
+                  form={form}
                 />
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>

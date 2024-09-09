@@ -17,12 +17,13 @@ const DialogActs = ({
     handleCopyLink,
     handleLink,
     size,
+    type,
     fullHeight = false
 }) => {
     const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
-        handleSubmit(onSubmit)(values)
+        form.handleSubmit(onSubmit)(values)
     }
 
     const onSubmit = values => {
@@ -53,21 +54,7 @@ const DialogActs = ({
                                 py: 2
                             }}
                         >
-                            {React.cloneElement(children, {
-                                // getValues: getValues,
-                                // control: control,
-                                // register: register,
-                                // setValue: setValue,
-                                // errors: errors,
-                                // clearErrors: clearErrors,
-                                // setError: setError,
-                                // watch: watch,
-                                // trigger: trigger,
-                                // reset: reset,
-
-                                form: form,
-                                onSubmit: onSubmit
-                            })}
+                            {React.cloneElement(children, type == 'fornecedor' ? { form: form } : null)}
                         </DialogContentText>
                     </DialogContent>
 

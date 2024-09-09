@@ -123,23 +123,14 @@ const FormProdutos = ({ id }) => {
                         />
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={8}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={8} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Input
                                     xs={12}
                                     md={3}
                                     title='Unidade de Medida'
                                     name='fields.unidadeMedida'
                                     required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.unidadeMedida}
+                                    form={form}
                                 />
                                 <Check
                                     xs={2}
@@ -148,7 +139,7 @@ const FormProdutos = ({ id }) => {
                                     name='fields.status'
                                     value={data?.fields.status}
                                     typePage={type}
-                                    register={form.register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

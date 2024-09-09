@@ -225,15 +225,7 @@ const FormSetor = ({ id }) => {
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={11} title='Nome' name='fields.nome' required={true} form={form} />
 
                                 <Check
                                     xs={1}
@@ -242,7 +234,7 @@ const FormSetor = ({ id }) => {
                                     name='fields.status'
                                     value={data?.fields?.status}
                                     typePage={type}
-                                    register={form.register}
+                                    form={form}
                                 />
 
                                 <Grid item xs={12}>
@@ -272,12 +264,7 @@ const FormSetor = ({ id }) => {
                                             value={data?.fields?.profissionais?.[index]?.profissional}
                                             required
                                             options={profissionais ?? []}
-                                            register={form.register}
-                                            setValue={form.setValue}
-                                            control={form.control}
-                                            errors={
-                                                form.formState?.errors?.fields?.profissionais?.[index]?.profissional
-                                            }
+                                            form={form}
                                             opacity={item.status === 0 ? true : false}
                                         />
 
@@ -288,10 +275,8 @@ const FormSetor = ({ id }) => {
                                             name={`fields.profissionais[${index}].dataInicio`}
                                             value={data?.fields?.profissionais?.[index]?.dataInicio ?? today}
                                             required
-                                            register={form.register}
-                                            control={form.control}
-                                            errors={form.formState?.errors?.fields?.profissionais?.[index]?.dataInicio}
                                             opacity={item.status === 0 ? true : false}
+                                            form={form}
                                         />
 
                                         <DateField
@@ -300,9 +285,8 @@ const FormSetor = ({ id }) => {
                                             title='Data Fim'
                                             name={`fields.profissionais[${index}].dataFim`}
                                             value={data?.fields?.profissionais?.[index]?.dataFim}
-                                            register={form.register}
-                                            control={form.control}
                                             opacity={item.status === 0 ? true : false}
+                                            form={form}
                                         />
 
                                         <Grid item xs={12} md={1} className='flex items-center'>

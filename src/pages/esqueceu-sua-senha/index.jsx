@@ -49,8 +49,6 @@ const EsqueceuSenha = () => {
 
     const form = useForm({})
 
-    console.log('errors', errors)
-
     function OnchangeValue(value) {
         setGetData('')
         if (type == 'login' && value.length == 14 && validationCPF(value)) {

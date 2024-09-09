@@ -41,13 +41,11 @@ const Header = ({ form, data, disabled }) => {
                         type='date'
                         required
                         name={`header.data`}
-                        register={form.register}
-                        control={form.control}
                         value={data.data}
                         disabled={disabled}
                         typeValidation='dataPassado'
                         daysValidation={999999}
-                        errors={form.errors?.header?.data}
+                        form={form}
                     />
                     <Input
                         xs={12}
@@ -56,9 +54,7 @@ const Header = ({ form, data, disabled }) => {
                         name={`header.hora`}
                         type='time'
                         disabled={disabled}
-                        register={form.register}
-                        control={form.control}
-                        errors={form.errors?.header?.hora}
+                        form={form}
                     />
                     <Input
                         xs={12}
@@ -68,7 +64,7 @@ const Header = ({ form, data, disabled }) => {
                         disabled={disabled}
                         required
                         type='number'
-                        control={form.control}
+                        form={form}
                         helpText='Informe o prazo pra solução da não conformidade. Será gerado um alerta no vencimento do prazo.'
                     />
 

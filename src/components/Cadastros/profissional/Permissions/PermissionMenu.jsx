@@ -3,16 +3,7 @@ import Icon from 'src/@core/components/icon'
 import PermissionSubmenu from './PermissionSubmenu'
 import Check from 'src/components/Form/Check'
 
-const PermissionMenu = ({
-    menu,
-    indexMenuGroup,
-    indexMenu,
-    expandedItem,
-    handleChangeItem,
-    register,
-    setValue,
-    getValues
-}) => {
+const PermissionMenu = ({ form, menu, indexMenuGroup, indexMenu, expandedItem, handleChangeItem }) => {
     return menu.rota ? (
         <>
             {/* Menu com rota => seleciona permissões */}
@@ -27,7 +18,7 @@ const PermissionMenu = ({
                     type='hidden'
                     value={menu.rota}
                     name={`menu[${indexMenuGroup}].menu[${indexMenu}].rota`}
-                    {...register(`menu[${indexMenuGroup}].menu[${indexMenu}].rota`)}
+                    {...form.register(`menu[${indexMenuGroup}].menu[${indexMenu}].rota`)}
                 />
 
                 {/* Ler */}
@@ -36,8 +27,7 @@ const PermissionMenu = ({
                     md={1}
                     name={`menu[${indexMenuGroup}].menu[${indexMenu}].ler`}
                     value={menu.ler}
-                    register={register}
-                    setValue={setValue}
+                    form={form}
                     edit={`menu[${indexMenuGroup}].menu[${indexMenu}].edit`}
                 />
 
@@ -47,8 +37,7 @@ const PermissionMenu = ({
                     md={1}
                     name={`menu[${indexMenuGroup}].menu[${indexMenu}].inserir`}
                     value={menu.inserir}
-                    register={register}
-                    setValue={setValue}
+                    form={form}
                     edit={`menu[${indexMenuGroup}].menu[${indexMenu}].edit`}
                 />
 
@@ -58,8 +47,7 @@ const PermissionMenu = ({
                     md={1}
                     name={`menu[${indexMenuGroup}].menu[${indexMenu}].editar`}
                     value={menu.editar}
-                    register={register}
-                    setValue={setValue}
+                    form={form}
                     edit={`menu[${indexMenuGroup}].menu[${indexMenu}].edit`}
                 />
 
@@ -69,8 +57,7 @@ const PermissionMenu = ({
                     md={1}
                     name={`menu[${indexMenuGroup}].menu[${indexMenu}].excluir`}
                     value={menu.excluir}
-                    register={register}
-                    setValue={setValue}
+                    form={form}
                     edit={`menu[${indexMenuGroup}].menu[${indexMenu}].edit`}
                 />
             </Grid>
@@ -101,13 +88,12 @@ const PermissionMenu = ({
                     {menu.submenu &&
                         menu.submenu.map((submenu, indexSubmenu) => (
                             <PermissionSubmenu
+                                form={form}
                                 key={indexSubmenu}
                                 submenu={submenu}
                                 indexMenuGroup={indexMenuGroup}
                                 indexMenu={indexMenu}
                                 indexSubmenu={indexSubmenu}
-                                register={register}
-                                setValue={setValue}
                             />
                         ))}
                 </AccordionDetails>

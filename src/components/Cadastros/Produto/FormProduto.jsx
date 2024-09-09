@@ -185,15 +185,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={5}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={11} md={5} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Select
                                     xs={12}
                                     md={3}
@@ -202,10 +194,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     value={data?.unidadeMedida.fields}
                                     required={true}
                                     options={data.unidadeMedida.options}
-                                    register={form.register}
-                                    setValue={form.setValue}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.unidadeMedida?.fields}
+                                    form={form}
                                     helpText='Selecione a unidade de medida'
                                 />
                                 <Select
@@ -215,12 +204,9 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     name='classificacao.fields'
                                     value={data?.classificacao?.fields}
                                     options={data.classificacao.options}
-                                    register={form.register}
-                                    setValue={form.setValue}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.classificacao?.fields}
                                     helpText='Selecione a classificação'
                                     createNew={createNewClassification}
+                                    form={form}
                                 />
                                 <Check
                                     xs={1}
@@ -229,7 +215,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     name='fields.status'
                                     value={data.fields.status}
                                     typePage={type}
-                                    register={form.register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>
@@ -238,16 +224,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                         <CardHeader title='Anexos' />
                         <CardContent>
                             <Grid container spacing={5}>
-                                <AnexosList
-                                    key={change}
-                                    getValues={form.getValues}
-                                    removeAnexo={removeAnexo}
-                                    setValue={form.setValue}
-                                    control={form.control}
-                                    register={form.register}
-                                    errors={form.formState?.errors}
-                                    type={type}
-                                />
+                                <AnexosList key={change} removeAnexo={removeAnexo} type={type} form={form} />
                                 <Grid item xs={12}>
                                     <Button
                                         variant='outlined'

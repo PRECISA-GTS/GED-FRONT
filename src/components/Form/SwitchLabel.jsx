@@ -1,6 +1,6 @@
 import { Grid, Box, FormControlLabel, Switch } from '@mui/material'
 
-const SwitchLabel = ({ xs, md, title, index, name, typePage, value, disabled, register, ...props }) => {
+const SwitchLabel = ({ form, xs, md, title, index, name, typePage, value, disabled, ...props }) => {
     return (
         <Grid item xs={xs} md={md}>
             <Box display='flex' flexDirection='column' alignItems='start'>
@@ -9,7 +9,7 @@ const SwitchLabel = ({ xs, md, title, index, name, typePage, value, disabled, re
                         <Switch
                             {...props}
                             name={name}
-                            {...register(name)}
+                            {...form.register(name)}
                             defaultChecked={value}
                             disabled={disabled}
                             onChange={e => {

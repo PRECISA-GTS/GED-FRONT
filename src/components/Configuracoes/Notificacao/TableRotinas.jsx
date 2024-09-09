@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import Check from 'src/components/Form/Check'
 
-const TableRotinas = ({ category, values, register }) => {
+const TableRotinas = ({ category, values, form }) => {
     return (
         <TableContainer>
             <Table sx={{ minWidth: 500 }}>
@@ -44,7 +44,7 @@ const TableRotinas = ({ category, values, register }) => {
                                         md={1}
                                         name={`[${category}].rotinas.[${index}].email`}
                                         value={item.email}
-                                        register={register}
+                                        form={form}
                                     />
                                 </TableCell>
                                 <TableCell align='center' sx={{ pt: '0 !important', pb: '0 !important' }}>
@@ -53,7 +53,7 @@ const TableRotinas = ({ category, values, register }) => {
                                         md={1}
                                         name={`[${category}].rotinas.[${index}].alerta`}
                                         value={item.alerta}
-                                        register={register}
+                                        form={form}
                                     />
                                 </TableCell>
                             </TableRow>

@@ -9,21 +9,7 @@ import { cnpjMask } from 'src/configs/masks'
 import MapaSipeAgro from './MapaSipeAgro'
 import { FornecedorContext } from 'src/context/FornecedorContext'
 
-const NewFornecedor = ({
-    cnpj,
-    control,
-    setValue,
-    register,
-    errors,
-    clearErrors,
-    setError,
-    reset,
-    getValues,
-    watch,
-    trigger,
-    setIsNotFactory,
-    isNotFactory
-}) => {
+const NewFornecedor = ({ form, cnpj, setIsNotFactory, isNotFactory }) => {
     const [change, setChange] = useState(false)
     const { loggedUnity } = useContext(AuthContext)
     const [fields, setFields] = useState(null)
@@ -116,43 +102,43 @@ const NewFornecedor = ({
             })
 
             //? Seta informações do formulário
-            setValue('fields.cnpj', cnpj)
-            setValue(
+            form.setValue('fields.cnpj', cnpj)
+            form.setValue(
                 'fields.razaoSocial',
                 lastForm.new ? resultAPI.data['RAZAO SOCIAL'] : responseLastForm.data.fields.razaoSocial
             )
-            setValue(
+            form.setValue(
                 'fields.nomeFantasia',
                 lastForm.new ? resultAPI.data['NOME FANTASIA'] : responseLastForm.data.fields.nomeFantasia
             )
-            setValue('fields.nome', lastForm.new ? resultAPI.data['NOME FANTASIA'] : '')
-            setValue('fields.email', lastForm.new ? resultAPI.data['EMAIL'] : responseLastForm.data.fields.email)
-            setValue('fields.modelo', responseLastForm.data.modelo.id > 0 ? responseLastForm.data.modelo : null)
-            setValue('fields.gruposAnexo', responseLastForm.data.gruposAnexo)
-            setValue('fields.produtos', responseLastForm.data.produtos)
+            form.setValue('fields.nome', lastForm.new ? resultAPI.data['NOME FANTASIA'] : '')
+            form.setValue('fields.email', lastForm.new ? resultAPI.data['EMAIL'] : responseLastForm.data.fields.email)
+            form.setValue('fields.modelo', responseLastForm.data.modelo.id > 0 ? responseLastForm.data.modelo : null)
+            form.setValue('fields.gruposAnexo', responseLastForm.data.gruposAnexo)
+            form.setValue('fields.produtos', responseLastForm.data.produtos)
 
-            setValue('fields.telefone', responseLastForm.data.fields.telefone)
-            setValue('fields.cep', responseLastForm.data.fields.cep)
-            setValue('fields.logradouro', responseLastForm.data.fields.logradouro)
-            setValue('fields.numero', responseLastForm.data.fields.numero)
-            setValue('fields.complemento', responseLastForm.data.fields.complemento)
-            setValue('fields.bairro', responseLastForm.data.fields.bairro)
-            setValue('fields.cidade', responseLastForm.data.fields.cidade)
-            setValue('fields.estado', responseLastForm.data.fields.estado)
-            setValue('fields.pais', responseLastForm.data.fields.pais)
-            setValue('fields.ie', responseLastForm.data.fields.ie)
-            setValue('fields.principaisClientes', responseLastForm.data.fields.principaisClientes)
-            setValue('fields.registroSipeagro', responseLastForm.data.fields.registroSipeagro)
-            setValue('fields.categoria', responseLastForm.data.fields.categoria)
-            setValue('fields.risco', responseLastForm.data.fields.risco)
+            form.setValue('fields.telefone', responseLastForm.data.fields.telefone)
+            form.setValue('fields.cep', responseLastForm.data.fields.cep)
+            form.setValue('fields.logradouro', responseLastForm.data.fields.logradouro)
+            form.setValue('fields.numero', responseLastForm.data.fields.numero)
+            form.setValue('fields.complemento', responseLastForm.data.fields.complemento)
+            form.setValue('fields.bairro', responseLastForm.data.fields.bairro)
+            form.setValue('fields.cidade', responseLastForm.data.fields.cidade)
+            form.setValue('fields.estado', responseLastForm.data.fields.estado)
+            form.setValue('fields.pais', responseLastForm.data.fields.pais)
+            form.setValue('fields.ie', responseLastForm.data.fields.ie)
+            form.setValue('fields.principaisClientes', responseLastForm.data.fields.principaisClientes)
+            form.setValue('fields.registroSipeagro', responseLastForm.data.fields.registroSipeagro)
+            form.setValue('fields.categoria', responseLastForm.data.fields.categoria)
+            form.setValue('fields.risco', responseLastForm.data.fields.risco)
 
             //? Atualiza campos pra remover erro de preenchimento
-            if (getValues('fields.razaoSocial')) clearErrors('fields.razaoSocial')
-            if (getValues('fields.nomeFantasia')) clearErrors('fields.nomeFantasia')
-            if (getValues('fields.email')) clearErrors('fields.email')
-            // if (getValues('fields.categoria')) clearErrors('fields.categoria')
-            if (getValues('fields.risco')) clearErrors('fields.risco')
-            if (getValues('fields.produtos')) clearErrors('fields.produtos')
+            if (getValues('fields.razaoSocial')) form.clearErrors('fields.razaoSocial')
+            if (getValues('fields.nomeFantasia')) form.clearErrors('fields.nomeFantasia')
+            if (getValues('fields.email')) form.clearErrors('fields.email')
+            // if (getValues('fields.categoria')) form.clearErrors('fields.categoria')
+            if (getValues('fields.risco')) form.clearErrors('fields.risco')
+            if (getValues('fields.produtos')) form.clearErrors('fields.produtos')
         } catch (err) {
             console.error(err)
         }
@@ -191,7 +177,7 @@ const NewFornecedor = ({
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [])
 
@@ -203,24 +189,15 @@ const NewFornecedor = ({
                     <Grid item xs={12} md={6}>
                         <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
                             <FormNewFornecedor
+                                form={form}
                                 key={change}
                                 setFields={setFields}
                                 fields={fields ?? null}
                                 params={params}
-                                control={control}
-                                errors={errors}
-                                reset={reset}
-                                setValue={setValue}
-                                getValues={getValues}
-                                watch={watch}
-                                trigger={trigger}
-                                register={register}
-                                clearErrors={clearErrors}
                                 handleCnpjCpf={handleCnpjCpf}
                                 validCnpj={validationCnpj}
                                 setIsNotFactory={setIsNotFactory}
                                 isNotFactory={isNotFactory}
-                                setError={setError}
                             />
                         </Box>
 

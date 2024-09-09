@@ -5,35 +5,31 @@ import { useTheme } from '@mui/material/styles'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 const Select = ({
+    form,
     xs,
     md,
     title,
     options,
     name,
-    type,
     limitTags,
     value,
     required,
-    control,
     disabled,
     multiple,
-    setValue,
-    errors,
     onChange,
     className,
     createNew,
-    handleRegistroEstabelecimento,
     helpText,
     alertRequired,
     helpTextPosition,
-    opacity,
-    setError,
-    clearErrors
+    opacity
 }) => {
     const theme = useTheme()
     const { settings } = useSettings()
-    const { mode } = settings
     let optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
+
+    const errorPath = name.split('.').reduce((obj, key) => obj?.[key], form?.formState?.errors)
+    const hasError = Boolean(errorPath)
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -41,7 +37,7 @@ const Select = ({
                 <FormControl fullWidth>
                     <Controller
                         name={name}
-                        control={control}
+                        control={form.control}
                         defaultValue={value}
                         rules={{ required }}
                         render={({ field }) => (
@@ -63,10 +59,10 @@ const Select = ({
                                         createNew()
                                     } else {
                                         onChange && onChange(newValue)
-                                        setValue(name, newValue)
-                                        if (newValue) clearErrors(name)
+                                        form.setValue(name, newValue)
+                                        if (newValue) form.clearErrors(name)
                                         else
-                                            setError(name, {
+                                            form.setError(name, {
                                                 type: 'required',
                                                 message: `${title} é obrigatório`
                                             })
@@ -77,7 +73,8 @@ const Select = ({
                                         {...params}
                                         label={title}
                                         placeholder={title}
-                                        error={errors ? true : false}
+                                        // error={form.formState?.errors ? true : false}
+                                        error={hasError}
                                         sx={{
                                             opacity: opacity ? 0.4 : 1,
                                             '& .MuiInputBase-input': {

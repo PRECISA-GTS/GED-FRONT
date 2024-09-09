@@ -19,6 +19,7 @@ import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
 
 const DialogFormConclusion = ({
+    form,
     title,
     text,
     handleClose,
@@ -158,7 +159,7 @@ const DialogFormConclusion = ({
                                             typeValidation='dataPassado'
                                             daysValidation={365}
                                             required
-                                            errors={errors?.fieldsFooter?.dataConclusao}
+                                            form={form}
                                         />
 
                                         <Input
@@ -169,9 +170,7 @@ const DialogFormConclusion = ({
                                             type='time'
                                             value={values?.horaConclusao ?? getTimeNow()}
                                             required
-                                            register={register}
-                                            control={control}
-                                            errors={errors?.fieldsFooter?.horaConclusao}
+                                            form={form}
                                         />
 
                                         {/* <Select

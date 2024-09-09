@@ -247,6 +247,7 @@ const Fornecedor = () => {
                 openModal={open}
                 size='lg'
                 fullHeight
+                type='fornecedor'
             >
                 <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>

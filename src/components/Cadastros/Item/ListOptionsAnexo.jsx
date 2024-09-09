@@ -3,7 +3,7 @@ import Input from 'src/components/Form/Input'
 import CheckLabel from 'src/components/Form/CheckLabel'
 import Remove from 'src/components/Form/Remove'
 
-const ListOptionsAnexo = ({ data, index, indexAnexo, handleRemoveAnexo, control, register, errors }) => {
+const ListOptionsAnexo = ({ data, index, indexAnexo, handleRemoveAnexo, form }) => {
     return (
         <>
             <Input
@@ -12,8 +12,7 @@ const ListOptionsAnexo = ({ data, index, indexAnexo, handleRemoveAnexo, control,
                 title='Nome'
                 name={`fields.opcoes[${index}].anexos[${indexAnexo}].nome`}
                 required
-                control={control}
-                errors={errors?.fields?.opcoes?.[index]?.anexos?.[indexAnexo]?.nome}
+                form={form}
             />
             <CheckLabel
                 xs={6}
@@ -21,7 +20,7 @@ const ListOptionsAnexo = ({ data, index, indexAnexo, handleRemoveAnexo, control,
                 title='Obrigatório'
                 name={`fields.opcoes[${index}].anexos[${indexAnexo}].obrigatorio`}
                 value={data.obrigatorio}
-                register={register}
+                form={form}
             />
 
             <Remove

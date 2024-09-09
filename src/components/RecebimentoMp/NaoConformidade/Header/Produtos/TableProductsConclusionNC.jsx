@@ -86,9 +86,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                         helpText='Quantidade recebida'
                                         required
                                         disabled={user.papelID != 1}
-                                        register={form.register}
-                                        control={form.control}
-                                        errors={form.errors?.productsConclude?.[index]?.novaQuantidade}
+                                        form={form}
                                         mask='fractioned3'
                                         onChange={value => {
                                             fractionedToFloat(

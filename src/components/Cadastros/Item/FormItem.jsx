@@ -116,7 +116,7 @@ const FormItem = ({
     }
 
     const addAnexo = index => {
-        const copyAnexos = [...getValues(`fields.opcoes`)]
+        const copyAnexos = [...form.getValues(`fields.opcoes`)]
         copyAnexos[index].anexos.push({
             nome: '',
             obrigatorio: false
@@ -148,7 +148,7 @@ const FormItem = ({
     }
 
     const handleRemoveAnexo = (value, index, indexAnexo) => {
-        let copyAnexos = [...getValues(`fields.opcoes`)]
+        let copyAnexos = [...form.getValues(`fields.opcoes`)]
 
         // remover anexo do array
         copyAnexos[index].anexos.splice(indexAnexo, 1)
@@ -212,12 +212,7 @@ const FormItem = ({
                                         required
                                         options={data?.fields?.opcoesForm}
                                         disabled={formType !== 'novo' && formType !== 'item'}
-                                        register={form.register}
-                                        setValue={form.setValue}
-                                        control={form.control}
-                                        clearErrors={form.clearErrors}
-                                        setError={form.setError}
-                                        errors={form.formState?.errors?.fields?.formulario}
+                                        form={form}
                                     />
                                     <Check
                                         xs={1}
@@ -226,17 +221,9 @@ const FormItem = ({
                                         name='fields.status'
                                         value={data?.fields?.status}
                                         typePage={type}
-                                        register={form.register}
+                                        form={form}
                                     />
-                                    <Input
-                                        xs={12}
-                                        md={12}
-                                        title='Nome'
-                                        name='fields.nome'
-                                        required
-                                        control={form.control}
-                                        errors={form.formState?.errors?.fields?.nome}
-                                    />
+                                    <Input xs={12} md={12} title='Nome' name='fields.nome' required form={form} />
                                     <Select
                                         xs={12}
                                         md={12}
@@ -246,12 +233,7 @@ const FormItem = ({
                                         onChange={refreshAlternatives}
                                         required
                                         options={data?.fields?.alternativa?.opcoes}
-                                        register={form.register}
-                                        setValue={form.setValue}
-                                        control={form.control}
-                                        clearErrors={form.clearErrors}
-                                        setError={form.setError}
-                                        errors={form.formState?.errors?.fields?.alternativa}
+                                        form={form}
                                     />
                                     <Input
                                         xs={12}
@@ -260,8 +242,7 @@ const FormItem = ({
                                         rows={4}
                                         title='Ajuda do item (mostrado em (?))'
                                         name='fields.ajuda'
-                                        control={form.control}
-                                        errors={form.formState?.errors?.fields?.ajuda}
+                                        form={form}
                                     />
                                     <Divider />
                                 </Grid>
@@ -273,12 +254,8 @@ const FormItem = ({
                         key={change}
                         data={data?.fields?.opcoes}
                         handleRemoveAnexo={handleRemoveAnexo}
-                        register={form.register}
-                        control={form.control}
-                        errors={form.formState?.errors}
-                        getValues={form.getValues}
                         addAnexo={addAnexo}
-                        watch={form.watch}
+                        form={form}
                     />
                 </>
             )}

@@ -153,15 +153,7 @@ const FormVersao = ({ id }) => {
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={8}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={8} title='Nome' name='fields.nome' required={true} form={form} />
 
                                 <DateField
                                     xs={12}
@@ -169,9 +161,7 @@ const FormVersao = ({ id }) => {
                                     title='Data'
                                     name={`fields.data`}
                                     value={data?.fields.data}
-                                    register={form.register}
-                                    control={form.control}
-                                    errors={form.formState?.errors?.fields?.data}
+                                    form={form}
                                 />
 
                                 <Grid item xs={12}>
@@ -205,15 +195,14 @@ const FormVersao = ({ id }) => {
                                             title='Descrição'
                                             name={`fields.items[${index}].descricao`}
                                             required
-                                            control={form.control}
-                                            errors={form.formState?.errors?.fields?.items?.[index]?.descricao}
+                                            form={form}
                                         />
                                         <Input
                                             xs={12}
                                             md={3}
                                             title='Link (opcional)'
                                             name={`fields.items[${index}].link`}
-                                            control={form.control}
+                                            form={form}
                                         />
                                         <Grid item xs={12} md={1} className='flex items-center'>
                                             <IconButton color='error' size='small' onClick={() => handleRemove(index)}>
