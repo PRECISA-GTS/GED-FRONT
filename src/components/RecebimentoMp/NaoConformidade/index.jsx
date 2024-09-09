@@ -323,7 +323,9 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             data={block}
                             setBlock={setBlock}
                             status={header.status.id}
-                            disabled={header.status.id >= 40}
+                            disabled={
+                                header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
+                            }
                         />
 
                         <HistoricForm key={change} id={id} parFormularioID={3} />

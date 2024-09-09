@@ -309,11 +309,6 @@ const AuthProvider = ({ children }) => {
     }
   }, [router.query.f, router.query.r])
 
-  useEffect(() => {
-    //? Logout no F5
-    handleLogout()
-  }, [])
-
   const hasSectorPermission = setores => {
     if (!setores || setores.length == 0 || user.admin === 1 || user.papelID == 2) return true
     const hasPermission = setores.some(row => user.setores.some(userSetor => userSetor.id === row.id))

@@ -27,7 +27,7 @@ const WhoFills = ({ form, data, disabled }) => {
                             title='Fornecedor acessa o Recebimento?'
                             name={`header.fornecedorAcessaRecebimento`}
                             value={data.fornecedorAcessaRecebimento}
-                            register={form.register}
+                            form={form}
                             disabled={disabled}
                             helpText='Se marcado, fornecesor poderá visualizar o formulário de recebimento vinculado a esta não conformidade.'
                         />

@@ -260,6 +260,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
     const verifyFormPending = async () => {
         try {
+            console.log('🚀 ~ verifyFormPending -> hasFormPending -------:', hasFormPending)
             const parFormularioID = 1 //? Fornecedor
             await api.post(`${staticUrl}/verifyFormPending/${id}`, { parFormularioID }).then(response => {
                 setHasFormPending(response.data) //! true/false
@@ -302,6 +303,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     //* Insere os dados no formulário
                     form.reset(response.data)
 
+                    verifyFormPending()
+
                     //? Copia os dados do fornecedor no contexto loggedUnity se o campo estiver vazio
                     const dataOld = []
                     for (let i = 0; i < response.data.fields.length; i++) {
@@ -309,7 +312,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         const nomeCampo = response.data.fields[i].nomeCampo
 
                         for (let propriedade in loggedUnity) {
-                            if (nomeColuna == 'telefone' && !getValues(`fields[${i}].${nomeColuna}`)) {
+                            if (nomeColuna == 'telefone' && !form.getValues(`fields[${i}].${nomeColuna}`)) {
                                 const telefoneColuna = loggedUnity.telefone1 ?? loggedUnity.telefone2
                                 form.setValue(`fields[${i}].${nomeColuna}`, telefoneColuna ?? '')
                             }
@@ -350,8 +353,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 : null,
                         messageType: user.papelID == 2 ? 'warning' : 'info'
                     })
-
-                    verifyFormPending()
                 })
                 .catch(error => {
                     console.log('🚀 ~ error:', error)
@@ -887,6 +888,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         checkErrors()
     }, [isLoading])
 
+    console.log('🚀 ~~~ hasFormPending:', hasFormPending)
+
     return (
         <>
             <form onSubmit={e => customSubmit(e)}>
@@ -968,9 +971,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             <Card>
                                 {/* Header */}
                                 <CardContent>
-                                    {unidade && (
+                                    {unidade && blocos && (
                                         <HeaderFields
-                                            key={unidade.unidadeID}
+                                            key={isLoading}
                                             modeloID={unidade.parFornecedorModeloID}
                                             values={fieldsHeader}
                                             fields={field}

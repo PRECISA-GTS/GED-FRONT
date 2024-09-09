@@ -1,6 +1,7 @@
 import Block from 'src/components/Defaults/Formularios/Block'
 
 const ModelBlocks = ({ form, data, setBlock, status, disabled }) => {
+    console.log('🚀 ~ disabled:', disabled)
     return (
         <>
             {/* Blocos */}

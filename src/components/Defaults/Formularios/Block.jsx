@@ -95,7 +95,7 @@ const Block = ({
         }
 
         //? Se bloco conter pelo menos 1 setor do profissional
-        if (hasSectorPermission(bloco?.setores ?? [])) {
+        if (!disabled && hasSectorPermission(bloco?.setores ?? [])) {
             setBlockPermission(true)
             return
         }
