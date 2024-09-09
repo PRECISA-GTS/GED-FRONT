@@ -22,6 +22,10 @@ const DateField = ({
     const [dateStatus, setDateStatus] = useState({})
     const [inputError, setInputError] = useState(null)
 
+    //? Valida erro a partir de form
+    const errorPath = name.split('.').reduce((obj, key) => obj?.[key], form?.formState?.errors)
+    const hasError = Boolean(errorPath)
+
     useEffect(() => {
         if (typeValidation && value) {
             setDateFormat(typeValidation, name, value)
@@ -78,7 +82,8 @@ const DateField = ({
                             label={title}
                             disabled={disabled ? true : false}
                             defaultValue={value ? formatDate(value) : ''}
-                            error={!!form.formState?.errors || !!inputError}
+                            // error={!!form.formState?.errors || !!inputError}
+                            error={hasError}
                             helperText={inputError}
                             onChange={e => {
                                 const dateValue = e.target.value
