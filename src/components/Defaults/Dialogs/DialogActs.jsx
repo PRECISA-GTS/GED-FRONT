@@ -23,6 +23,7 @@ const DialogActs = ({
     const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
+        console.log('🚀 ~ validateForm:', values)
         form.handleSubmit(onSubmit)(values)
     }
 

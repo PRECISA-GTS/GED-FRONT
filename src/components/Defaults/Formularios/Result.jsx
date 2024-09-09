@@ -16,7 +16,7 @@ import {
 import CheckLabel from 'src/components/Form/CheckLabel'
 import CheckLabelConditional from 'src/components/Form/CheckLabelConditional'
 
-const Result = ({ title, name, value, papelID, register, setValue, setResult, options, hasNaoConformidade }) => {
+const Result = ({ form, title, name, value, papelID, setResult, options, hasNaoConformidade }) => {
     console.log('🚀 ~ Result:', name)
 
     return (
@@ -68,7 +68,7 @@ const Result = ({ title, name, value, papelID, register, setValue, setResult, op
                             name={`info.naoConformidade`}
                             value={value.status}
                             valueChecked={50} // Se o valor for 50, não pode ser alterado
-                            register={register}
+                            form={form}
                         />
                     )}
                 </>

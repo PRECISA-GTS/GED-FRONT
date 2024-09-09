@@ -193,8 +193,7 @@ const DialogFormConclusion = ({
                                                 title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
                                                 name={'status'}
                                                 value={result}
-                                                register={register}
-                                                setValue={setValue}
+                                                form={form}
                                                 setResult={setResult}
                                                 papelID={user.papelID}
                                                 hasNaoConformidade={hasNaoConformidade}

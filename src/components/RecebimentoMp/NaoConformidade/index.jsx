@@ -47,12 +47,11 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
     const conclude = async values => {
         const products = form.getValues(`productsConclude`)
-        if (!products) return
 
         if (!id || !header.recebimento.id) return
 
         //? Valida se nenhuma quantidade nova do produto é maior que a quantidade do recebimento de MP
-        if (!isValidProductsQuantity(products)) {
+        if (!isValidProductsQuantity(products ?? [])) {
             toast.error('Quantidade não pode ser maior que a quantidade do recebimento de MP!')
             return
         }

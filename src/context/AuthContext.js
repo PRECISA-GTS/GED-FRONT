@@ -307,6 +307,10 @@ const AuthProvider = ({ children }) => {
       const rota = `/${route}${paramns}`
       router.replace(rota)
     }
+
+    //? Logout no F5
+    handleLogout()
+
   }, [router.query.f, router.query.r])
 
   const hasSectorPermission = setores => {

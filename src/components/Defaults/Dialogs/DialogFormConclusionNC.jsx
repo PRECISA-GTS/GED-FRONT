@@ -21,6 +21,7 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import TableProductsConclusionNC from 'src/components/RecebimentoMp/NaoConformidade/Header/Produtos/TableProductsConclusionNC'
 const DialogFormConclusionNC = ({
+    form,
     title,
     text,
     handleClose,
@@ -39,7 +40,6 @@ const DialogFormConclusionNC = ({
     values,
     formularioID,
     modeloID,
-    form,
     produtos,
     setores
 }) => {
@@ -148,8 +148,7 @@ const DialogFormConclusionNC = ({
                                                 }
                                                 name={'status'}
                                                 value={result}
-                                                register={form.register}
-                                                setValue={form.setValue}
+                                                form={form}
                                                 setResult={setResult}
                                                 papelID={user.papelID}
                                                 hasNaoConformidade={hasNaoConformidade}
