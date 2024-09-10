@@ -36,6 +36,7 @@ const Apresentacao = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'ri:pencil-ruler-2-line',
                 title: 'Apresentação',
                 subtitle: {
                     id: id,

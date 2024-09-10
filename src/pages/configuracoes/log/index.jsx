@@ -29,6 +29,7 @@ const Usuario = () => {
             // console.log('🚀 ~ getList ~ response', response.data)
             setData(response.data)
             setTitle({
+                icon: 'material-symbols:engineering-outline',
                 title: 'Log',
                 subtitle: {
                     id: id,

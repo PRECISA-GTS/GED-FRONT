@@ -28,6 +28,7 @@ const Item = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'material-symbols:format-list-bulleted-rounded',
                 title: 'Item',
                 subtitle: {
                     id: id,

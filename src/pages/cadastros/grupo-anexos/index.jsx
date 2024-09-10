@@ -33,6 +33,7 @@ const GrupoAnexos = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'formkit:group',
                 title: 'Grupo de Anexos',
                 subtitle: {
                     id: id,

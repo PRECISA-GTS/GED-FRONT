@@ -28,6 +28,7 @@ const ClassificacaoProduto = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'ant-design:product-outlined',
                 title: 'Classificação de Produtos',
                 subtitle: {
                     id: id,

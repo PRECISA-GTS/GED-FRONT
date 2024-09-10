@@ -33,6 +33,7 @@ const Limpeza = () => {
                 setFilteredData(response.data)
                 setData(response.data)
                 setTitle({
+                    icon: 'carbon:clean',
                     title: 'Limpeza e Higienização',
                     subtitle: {
                         id: id,

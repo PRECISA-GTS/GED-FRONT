@@ -28,6 +28,7 @@ const SistemaQualidade = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'material-symbols:playlist-add-check',
                 title: 'Sistema de Qualidade',
                 subtitle: {
                     id: id,

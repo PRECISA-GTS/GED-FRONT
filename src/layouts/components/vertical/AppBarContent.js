@@ -73,7 +73,12 @@ const AppBarContent = props => {
           className='app-title p-1 rounded-xl'
           sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: isDemo ? 'primary.main' : 'transparent', padding: isDemo && '0 10px' }}
         >
-          <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >{title.title}</Typography>
+          <Typography variant='h6' sx={{ fontWeight: 700, color: isDemo && 'white !important' }} >
+            <div className="flex items-center gap-1">
+              <div><Icon icon={title.icon} /></div>
+              <p>{title.title}</p>
+            </div>
+          </Typography>
           <Typography variant='caption' sx={{ color: isDemo && 'white !important' }}>
             {title.subtitle.new ? `Novo` : title.subtitle.id ? `ID: ${title.subtitle.id}` : title.subtitle.count ? `Total de registros: ${title.subtitle.count}` : ``}
           </Typography>

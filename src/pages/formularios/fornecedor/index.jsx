@@ -65,6 +65,7 @@ const Fornecedor = () => {
             setFilteredDataSupplier(response.data)
             setDataSupplier(response.data)
             setTitle({
+                icon: 'mdi:truck-fast-outline',
                 title: 'Fornecedor',
                 subtitle: {
                     id: id,

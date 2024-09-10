@@ -29,6 +29,7 @@ const Setor = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'material-symbols:work-outline',
                 title: 'Setor',
                 subtitle: {
                     id: id,

@@ -252,6 +252,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
     useEffect(() => {
         setTitle({
+            icon: 'typcn:warning-outline',
             title: 'Não conformidade do Recebimento de MP',
             subtitle: {
                 id: id,

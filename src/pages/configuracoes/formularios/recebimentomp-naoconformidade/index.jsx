@@ -30,6 +30,7 @@ const ListParametrosRecebimentoMpNaoConformidade = () => {
             await api.get(`${currentLink}/getList/${loggedUnity.unidadeID}`).then(response => {
                 setResult(response.data)
                 setTitle({
+                    icon: 'clarity:form-line',
                     title: 'Formulários de Não Conformidade do Recebimento de MP',
                     subtitle: {
                         id: id,

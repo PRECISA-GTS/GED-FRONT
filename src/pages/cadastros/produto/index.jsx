@@ -28,6 +28,7 @@ const Produto = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'ph:plant',
                 title: 'Produto',
                 subtitle: {
                     id: id,

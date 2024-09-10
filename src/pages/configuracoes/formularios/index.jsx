@@ -25,6 +25,7 @@ const ListParametrosFormularios = () => {
             await api.get(currentLink).then(response => {
                 setResult(response.data)
                 setTitle({
+                    icon: 'clarity:form-line',
                     title: 'Formulários',
                     subtitle: {
                         id: id,

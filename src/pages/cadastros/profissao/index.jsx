@@ -28,6 +28,7 @@ const Profissao = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'formkit:group',
                 title: 'Profissão',
                 subtitle: {
                     id: id,

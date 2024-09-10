@@ -19,7 +19,9 @@ const Header = ({ form, data, disabled }) => {
         const day = String(date.getDate()).padStart(2, '0')
         const month = String(date.getMonth() + 1).padStart(2, '0')
         const year = date.getFullYear()
-        return `${day}/${month}/${year}`
+        const dayOfWeek = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(date)
+        const dateFormatted = `${day}/${month}/${year} (${dayOfWeek})`
+        return dateFormatted
     }
 
     useEffect(() => {
@@ -70,7 +72,7 @@ const Header = ({ form, data, disabled }) => {
 
                     <Grid item xs={12} md={3}>
                         <label className='opacity-60'>Vencimento</label>
-                        <p className='text-red-500'>{calculateValidDate()}</p>
+                        <p>{calculateValidDate()}</p>
                     </Grid>
 
                     <Grid item xs={12} md={12}>

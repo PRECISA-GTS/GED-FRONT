@@ -664,6 +664,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     useEffect(() => {
         setTitle({
+            icon: 'icon-park-outline:receive',
             title: 'Recebimento de MP',
             subtitle: {
                 id: id,

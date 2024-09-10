@@ -23,6 +23,7 @@ const ListRecebimentoMP = () => {
                 setFilteredDataRecebimentoMP(response.data)
                 setDataRecebimentoMP(response.data)
                 setTitle({
+                    icon: 'icon-park-outline:receive',
                     title: 'Recebimento de MP',
                     subtitle: {
                         id: null,

@@ -30,6 +30,7 @@ const ListParametrosFornecedor = () => {
             await api.get(`${currentLink}/getList/${loggedUnity.unidadeID}`).then(response => {
                 setResult(response.data)
                 setTitle({
+                    icon: 'clarity:form-line',
                     title: 'Formulários de Fornecedor',
                     subtitle: {
                         id: id,

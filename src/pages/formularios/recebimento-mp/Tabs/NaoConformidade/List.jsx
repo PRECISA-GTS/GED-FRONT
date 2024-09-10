@@ -25,7 +25,6 @@ const ListNaoConformidade = () => {
     const form = useForm({ mode: 'onChange' })
 
     const getList = async () => {
-        console.log('getList....', loggedUnity.unidadeID, user.papelID, user.usuarioID)
         await api
             .post(`/formularios/recebimento-mp/nao-conformidade/getList`, {
                 unidadeID: loggedUnity.unidadeID,
@@ -33,11 +32,11 @@ const ListNaoConformidade = () => {
                 usuarioID: user.usuarioID
             })
             .then(response => {
-                console.log('🚀 ~ response.data:', response.data)
                 setFilteredDataRecebimentoMP(response.data)
                 setDataRecebimentoMP(response.data)
                 setTitle({
                     title: 'Não Conformidades do Recebimento de MP',
+                    icon: 'typcn:warning-outline',
                     subtitle: {
                         id: null,
                         count: response.data.length,
@@ -102,7 +101,6 @@ const ListNaoConformidade = () => {
 
     return (
         <>
-            {/* Exibe loading enquanto não existe result */}
             {!filteredDataRecebimentoMP ? (
                 <Loading show />
             ) : (
