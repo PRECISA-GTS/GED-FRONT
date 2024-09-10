@@ -35,14 +35,7 @@ const FormClassificacaoProduto = ({
     const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        register,
-        control,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -103,7 +96,7 @@ const FormClassificacaoProduto = ({
             if (type === 'edit') {
                 await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
                     setData(response.data)
-                    reset(response.data) //* Insere os dados no formulário
+                    form.reset(response.data) //* Insere os dados no formulário
                 })
             } else {
                 setData({
@@ -124,7 +117,7 @@ const FormClassificacaoProduto = ({
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
@@ -132,7 +125,7 @@ const FormClassificacaoProduto = ({
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)} id='formItem'>
+                <form onSubmit={form.handleSubmit(onSubmit)} id='formItem'>
                     <FormHeader
                         btnCancel
                         btnNew
@@ -141,7 +134,7 @@ const FormClassificacaoProduto = ({
                         manualUrl={manualUrl}
                         btnClose={btnClose}
                         handleModalClose={handleModalClose}
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -150,15 +143,7 @@ const FormClassificacaoProduto = ({
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
-                                />
+                                <Input xs={11} md={11} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Check
                                     xs={1}
                                     md={1}
@@ -166,7 +151,7 @@ const FormClassificacaoProduto = ({
                                     name='fields.status'
                                     value={data?.fields?.status}
                                     typePage={type}
-                                    register={register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

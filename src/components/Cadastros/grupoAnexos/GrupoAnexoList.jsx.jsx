@@ -3,20 +3,12 @@ import Check from 'src/components/Form/Check'
 import Input from 'src/components/Form/Input'
 import Remove from 'src/components/Form/Remove'
 
-const GrupoAnexoList = ({ getValues, removeItem, control, register, errors, type }) => {
+const GrupoAnexoList = ({ getValues, removeItem, form, type }) => {
     return (
         getValues('items') &&
         getValues('items').map((item, index) => (
             <>
-                <Input
-                    xs={12}
-                    md={3}
-                    title='Nome'
-                    name={`items[${index}].nome`}
-                    required={true}
-                    control={control}
-                    errors={errors?.items?.[index]?.nome}
-                />
+                <Input xs={12} md={3} title='Nome' name={`items[${index}].nome`} required={true} form={form} />
 
                 <Input
                     xs={12}
@@ -24,8 +16,7 @@ const GrupoAnexoList = ({ getValues, removeItem, control, register, errors, type
                     title='Descrição'
                     name={`items[${index}].descricao`}
                     required={false}
-                    control={control}
-                    errors={errors?.items?.[index]?.descricao}
+                    form={form}
                 />
 
                 <Check
@@ -36,7 +27,7 @@ const GrupoAnexoList = ({ getValues, removeItem, control, register, errors, type
                     name={`items[${index}].status`}
                     value={item.status}
                     typePage={type}
-                    register={register}
+                    form={form}
                 />
 
                 <Check
@@ -47,7 +38,7 @@ const GrupoAnexoList = ({ getValues, removeItem, control, register, errors, type
                     name={`items[${index}].obrigatorio`}
                     value={item.obrigatorio}
                     typePage={type}
-                    register={register}
+                    form={form}
                 />
 
                 <Remove

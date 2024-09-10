@@ -3,41 +3,17 @@ import { useState } from 'react'
 import Input from 'src/components/Form/Input'
 import SwitchLabel from 'src/components/Form/SwitchLabel'
 
-const FormNotification = ({ data, control, setValue, register, errors }) => {
+const FormNotification = ({ form, data, control, setValue, register, errors }) => {
     const [hasEmail, setHasEmail] = useState(true)
     setValue('emailDestinatario', data.email)
 
     return (
         <div className='flex flex-col gap-2 pt-2'>
             {hasEmail && (
-                <Input
-                    name='emailDestinatario'
-                    type='email'
-                    title='E-mail do destinatário'
-                    required
-                    control={control}
-                    errors={errors.emailDestinatario}
-                />
+                <Input name='emailDestinatario' type='email' title='E-mail do destinatário' required form={form} />
             )}
-            <Input
-                name='assunto'
-                title='Assunto'
-                required={true}
-                register={register}
-                control={control}
-                defaultValue=''
-                errors={errors.assunto}
-            />
-            <Input
-                name='descricao'
-                title='Descrição'
-                multiline
-                rows={4}
-                required
-                control={control}
-                defaultValue=''
-                errors={errors.descricao}
-            />
+            <Input name='assunto' title='Assunto' required={true} defaultValue='' form={form} />
+            <Input name='descricao' title='Descrição' multiline rows={4} required defaultValue='' form={form} />
             <FormGroup row>
                 <SwitchLabel
                     name='email'

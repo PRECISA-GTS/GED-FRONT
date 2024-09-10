@@ -29,6 +29,7 @@ const Versao = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'system-uicons:versions',
                 title: 'Versão',
                 subtitle: {
                     id: id,

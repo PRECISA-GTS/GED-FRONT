@@ -17,27 +17,18 @@ const DialogActs = ({
     handleCopyLink,
     handleLink,
     size,
+    clone,
     fullHeight = false
 }) => {
-    const {
-        control,
-        register,
-        handleSubmit,
-        trigger,
-        reset,
-        getValues,
-        setValue,
-        watch,
-        clearErrors,
-        formState: { errors }
-    } = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
+    const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
 
     const validateForm = values => {
-        handleSubmit(onSubmit)(values)
+        console.log('🚀 ~ validateForm:', values)
+        form.handleSubmit(onSubmit)(values)
     }
 
     const onSubmit = values => {
-        reset()
+        form.reset()
         setOpenModal(false)
         handleConclusion(values)
     }
@@ -64,18 +55,7 @@ const DialogActs = ({
                                 py: 2
                             }}
                         >
-                            {React.cloneElement(children, {
-                                getValues: getValues,
-                                control: control,
-                                register: register,
-                                setValue: setValue,
-                                errors: errors,
-                                clearErrors: clearErrors,
-                                watch: watch,
-                                trigger: trigger,
-                                reset: reset,
-                                onSubmit: onSubmit
-                            })}
+                            {React.cloneElement(children, clone ? { form: form } : null)}
                         </DialogContentText>
                     </DialogContent>
 

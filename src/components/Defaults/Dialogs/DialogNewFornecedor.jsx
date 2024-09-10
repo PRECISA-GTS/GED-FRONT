@@ -52,13 +52,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
     const [gruposAnexo, setGruposAnexo] = useState([])
     const [nomeFornecedor, setNomeFornecedor] = useState('')
 
-    const {
-        handleSubmit,
-        reset,
-        formState: { errors },
-        setValue,
-        register
-    } = useForm({})
+    const form = useForm({})
 
     const copyLink = () => {
         //? Mantém o "copiado" por 5 segundos
@@ -151,7 +145,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
     }, [loadingSave])
 
     useEffect(() => {
-        reset()
+        form.reset()
         setData(null)
         setCnpj(null)
         setNomeFornecedor(null)
@@ -167,7 +161,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
                         Insira o CNPJ da empresa que deseja habilitar como um novo fornecedor. Com isso, a empresa
                         ficará apta a preencher formulários para a {loggedUnity.nomeFantasia}.
                     </DialogContentText>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <Grid container>
                             <Grid item xs={12} md={12}>
                                 <FormControl fullWidth>
@@ -178,16 +172,16 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
                                         aria-describedby='validation-schema-nome'
                                         name='cnpj'
                                         error={errorCnpj}
-                                        {...register(`cnpj`, {
+                                        {...form.register(`cnpj`, {
                                             required: true,
                                             validate: value => validationCNPJ(value) || 'CNPJ inválido'
                                         })}
-                                        helperText={errors.cnpj?.message}
+                                        helperText={form.formState?.errors.cnpj?.message}
                                         inputProps={{
                                             maxLength: 18,
                                             onChange: e => {
                                                 setData(null)
-                                                setValue('cnpj', cnpjMask(e.target.value)),
+                                                form.setValue('cnpj', cnpjMask(e.target.value)),
                                                     setCnpj(cnpjMask(e.target.value)),
                                                     getFornecedorByCnpj(e.target.value),
                                                     setViewEmail(false)
@@ -214,7 +208,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
                                                 placeholder='E-mail'
                                                 aria-describedby='validation-schema-nome'
                                                 name='email'
-                                                {...register(`email`, {
+                                                {...form.register(`email`, {
                                                     required: true,
                                                     validate: value => value.includes('@') || 'E-mail inválido'
                                                 })}
@@ -222,7 +216,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
                                                 helperText={errorEmail ? 'Insira um e-mail válido' : null}
                                                 inputProps={{
                                                     onChange: e => {
-                                                        setValue('email', e.target.value)
+                                                        form.setValue('email', e.target.value)
                                                         setEmail(e.target.value)
                                                         setErrorEmail(validationEmail(e.target.value) ? false : true)
                                                     }
@@ -287,7 +281,7 @@ const DialogNewFornecedor = ({ handleClose, openModal, makeFornecedor, loadingSa
                                                     // })}
                                                     inputProps={{
                                                         onChange: e => {
-                                                            setValue('nomeFornecedor', e.target.value)
+                                                            form.setValue('nomeFornecedor', e.target.value)
                                                             setNomeFornecedor(e.target.value)
                                                         }
                                                     }}

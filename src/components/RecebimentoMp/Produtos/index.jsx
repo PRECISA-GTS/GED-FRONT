@@ -8,18 +8,7 @@ import Icon from 'src/@core/components/icon'
 import { useEffect, useState } from 'react'
 import FieldsProdutos from './FieldsProdutos'
 
-const RecebimentoMpProdutos = ({
-    index,
-    produto,
-    setProdutos,
-    handleCheck,
-    getValues,
-    setValue,
-    register,
-    control,
-    errors,
-    disabled
-}) => {
+const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck, disabled }) => {
     console.log('🚀 ~ produto:', produto)
     const [apresentacoes, setApresentacoes] = useState([])
 
@@ -43,7 +32,7 @@ const RecebimentoMpProdutos = ({
                     type='hidden'
                     value={produto.produtoID}
                     name={`produtos[${index}].produtoID`}
-                    {...register(`produtos[${index}].produtoID`)}
+                    {...form.register(`produtos[${index}].produtoID`)}
                 />
                 {/* Checkbox com produto */}
                 <Grid item xs={12} md={4}>
@@ -82,11 +71,8 @@ const RecebimentoMpProdutos = ({
                         value={produto}
                         apresentacoes={apresentacoes}
                         index={index}
-                        setValue={setValue}
-                        register={register}
-                        control={control}
-                        errors={errors}
                         disabled={disabled}
+                        form={form}
                     />
                 )}
             </Grid>

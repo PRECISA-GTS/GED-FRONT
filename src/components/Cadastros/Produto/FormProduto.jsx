@@ -38,16 +38,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
     const [openClassification, setOpenClassification] = useState(false)
     const [newChangeClassification, setNewChangeClassification] = useState(false)
 
-    const {
-        trigger,
-        handleSubmit,
-        setValue,
-        reset,
-        control,
-        getValues,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     // Envia dados para a API
     const onSubmit = async data => {
@@ -112,7 +103,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     : `${staticUrl}/getData/${id}/${loggedUnity.unidadeID}`
             await api.post(route).then(response => {
                 setData(response.data)
-                reset(response.data)
+                form.reset(response.data)
             })
         } catch (error) {
             console.log(error)
@@ -125,8 +116,8 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
             setRemovedItems([...removedItems, value.produtoAnexoID])
         }
 
-        const newAnexos = getValues('anexos').filter((_, i) => i !== index)
-        setValue('anexos', newAnexos)
+        const newAnexos = form.getValues('anexos').filter((_, i) => i !== index)
+        form.setValue('anexos', newAnexos)
         setChange(!change)
     }
 
@@ -140,8 +131,8 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
             observacao: ''
         }
 
-        const updatedDataAnexos = [...getValues('anexos'), newAnexo]
-        setValue('anexos', updatedDataAnexos)
+        const updatedDataAnexos = [...form.getValues('anexos'), newAnexo]
+        form.setValue('anexos', updatedDataAnexos)
         setChange(!change)
     }
 
@@ -155,7 +146,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
 
     const handleConfirmNewClassification = data => {
         setOpenClassification(false)
-        setValue('classificacao.fields', data)
+        form.setValue('classificacao.fields', data)
         setNewChangeClassification(!newChangeClassification)
     }
 
@@ -165,19 +156,19 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
     useEffect(() => {
-        if (newChange) handleSubmit(onSubmit)()
+        if (newChange) form.handleSubmit(onSubmit)()
     }, [newChange])
 
     return (
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)} className='space-y-3'>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3'>
                     <FormHeader
                         btnCancel
                         btnNew={handleConfirmNew ? false : true}
@@ -185,7 +176,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                         btnClose={btnClose}
                         manualUrl={manualUrl}
                         handleModalClose={handleModalClose}
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -194,15 +185,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={11}
-                                    md={5}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
-                                />
+                                <Input xs={11} md={5} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Select
                                     xs={12}
                                     md={3}
@@ -211,10 +194,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     value={data?.unidadeMedida.fields}
                                     required={true}
                                     options={data.unidadeMedida.options}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
-                                    errors={errors?.unidadeMedida?.fields}
+                                    form={form}
                                     helpText='Selecione a unidade de medida'
                                 />
                                 <Select
@@ -224,12 +204,9 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     name='classificacao.fields'
                                     value={data?.classificacao?.fields}
                                     options={data.classificacao.options}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
-                                    errors={errors?.classificacao?.fields}
                                     helpText='Selecione a classificação'
                                     createNew={createNewClassification}
+                                    form={form}
                                 />
                                 <Check
                                     xs={1}
@@ -238,7 +215,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     name='fields.status'
                                     value={data.fields.status}
                                     typePage={type}
-                                    register={register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>
@@ -247,16 +224,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                         <CardHeader title='Anexos' />
                         <CardContent>
                             <Grid container spacing={5}>
-                                <AnexosList
-                                    key={change}
-                                    getValues={getValues}
-                                    removeAnexo={removeAnexo}
-                                    setValue={setValue}
-                                    control={control}
-                                    register={register}
-                                    errors={errors}
-                                    type={type}
-                                />
+                                <AnexosList key={change} removeAnexo={removeAnexo} type={type} form={form} />
                                 <Grid item xs={12}>
                                     <Button
                                         variant='outlined'

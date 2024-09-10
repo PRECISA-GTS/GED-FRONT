@@ -10,7 +10,7 @@ import DialogFormStatus from '../Defaults/Dialogs/DialogFormStatus'
 import Input from 'src/components/Form/Input'
 import AnexoModeView from 'src/components/Anexos/ModeView'
 import CustomChip from 'src/@core/components/mui/chip'
-import { Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
 import { api } from 'src/configs/api'
@@ -30,10 +30,15 @@ import DialogNewCreate from '../Defaults/Dialogs/DialogNewCreate'
 import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
+import { ParametersContext } from 'src/context/ParametersContext'
+import Icon from 'src/@core/components/icon'
+import OptionsDots from '../Defaults/FormHeader/DropDownButtons/Actions'
+import { ca } from 'date-fns/locale'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [change, setChange] = useState(false)
+    const { setTitle } = useContext(ParametersContext)
     const [loadingFileGroup, setLoadingFileGroup] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileProduct, setLoadingFileProduct] = useState(false) //? loading de carregamento do arquivo
     const [loadingFileItem, setLoadingFileItem] = useState(false) //? loading de carregamento do arquivo
@@ -77,18 +82,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = type == 'edit' ? router.pathname : backRoute(router.pathname)
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        watch,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm()
+    const form = useForm({ mode: 'onChange' })
 
     const copyLinkForm = () => {
         navigator.clipboard.writeText(link)
@@ -139,7 +133,6 @@ const FormRecebimentoMp = ({ id, model }) => {
             console.log(error)
         } finally {
             setChange(!change)
-            // getData()
         }
     }
 
@@ -197,7 +190,6 @@ const FormRecebimentoMp = ({ id, model }) => {
             })
                 .then(response => {
                     console.log('getData: ', response.data)
-
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
@@ -212,7 +204,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setNaoConformidade(response.data.naoConformidade) //! Seta não conformidades
 
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
 
                     let objStatus = statusDefault[response?.data?.info?.status]
                     setStatus(objStatus)
@@ -251,7 +243,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     let arrErrors = []
 
     const setFormError = (fieldName, fieldTitle) => {
-        setError(fieldName, {
+        form.setError(fieldName, {
             type: 'manual',
             message: 'Campo obrigatório'
         })
@@ -260,19 +252,19 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const checkErrors = () => {
-        clearErrors()
+        form.clearErrors()
 
         //? Header
         // Fields estáticos (todos obrigatórios)
-        if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
-        if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+        if (!form.getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+        if (!form.getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
         // if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
         // if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
 
         // Fields dinâmicos
         field?.forEach((field, index) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
-            const fieldValue = getValues(fieldName)
+            const fieldValue = form.getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
                 setFormError(fieldName, field?.nomeCampo)
             }
@@ -284,7 +276,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 produto.produtoAnexosDescricao &&
                     produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-                            setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
+                            form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
                                 type: 'manual',
                                 message: 'Campo obrigatório'
                             })
@@ -298,10 +290,10 @@ const FormRecebimentoMp = ({ id, model }) => {
         //? Blocos
         blocos.forEach((block, indexBlock) => {
             block.itens.forEach((item, indexItem) => {
-                const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                const fieldValue = form.getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
                 //? Valida resposta do item
                 if (item?.obrigatorio === 1 && !fieldValue) {
-                    setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
+                    form.setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
                         type: 'manual',
                         message: 'Campo obrigatário'
                     })
@@ -317,7 +309,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 ) {
                     item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
                         if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                            setError(
+                            form.setError(
                                 `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
                                 {
                                     type: 'manual',
@@ -337,7 +329,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             grupoAnexo.forEach((grupo, indexGrupo) => {
                 grupo.itens.forEach((item, indexItem) => {
                     if (item.obrigatorio === 1 && item.anexos.length == 0) {
-                        setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+                        form.setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
                             type: 'manual',
                             message: 'Campo obrigatário'
                         })
@@ -388,6 +380,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const handleSendForm = blob => {
         setBlobSaveReport(blob)
         checkErrors()
+        verifyIfCanAproveForm(blocos)
         setOpenModal(true)
     }
 
@@ -395,7 +388,7 @@ const FormRecebimentoMp = ({ id, model }) => {
         let tempCanApprove = true
         blocos.forEach(block => {
             block.itens.forEach(item => {
-                if (item.respostaConfig && item.respostaConfig.bloqueiaFormulario == 1) {
+                if (item.resposta && item.resposta.bloqueiaFormulario == 1) {
                     tempCanApprove = false
                 }
             })
@@ -405,7 +398,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
     const conclusionForm = async values => {
         values['conclusion'] = true
-        await handleSubmit(onSubmit)(values)
+        await form.handleSubmit(onSubmit)(values)
     }
 
     //? Trata notificações
@@ -518,7 +511,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/produto/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos produtos
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -548,7 +541,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/grupo-anexo/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos grupos
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -579,7 +572,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -631,7 +624,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/produto`)
                 .then(response => {
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -650,7 +643,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/item`)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -665,11 +658,20 @@ const FormRecebimentoMp = ({ id, model }) => {
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
         e.preventDefault()
-        const values = getValues()
+        const values = form.getValues()
         onSubmit(values)
     }
 
     useEffect(() => {
+        setTitle({
+            icon: 'icon-park-outline:receive',
+            title: 'Recebimento de MP',
+            subtitle: {
+                id: id,
+                count: 1,
+                new: false
+            }
+        })
         getData()
     }, [id, change])
 
@@ -685,24 +687,27 @@ const FormRecebimentoMp = ({ id, model }) => {
         <>
             <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
+                    key={id}
+                    id={id}
                     btnCancel
                     btnSave={!info.concluido}
                     btnSend={user.papelID == 1 && info.status >= 30 && !info.concluido}
                     btnPrint={type == 'edit' ? true : false}
                     btnDelete={info.status < 40 ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
-                    actionsData={actionsData}
-                    actions
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
+                    titleConclusion={'Concluir'}
                     title='Recebimento de MP'
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    setores={fieldsFooter?.setores ?? []}
+                    actions={actionsData.length > 0 ? true : false}
+                    actionsData={actionsData}
+                    module='recebimentoMp'
+                    actionsNC={info.naoConformidade && info.status > 40}
                 />
 
                 <>
@@ -753,32 +758,24 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 modelo={unidade.modelo}
                                 values={fieldsHeader}
                                 fields={field}
-                                getValues={getValues}
                                 disabled={!canEdit.status}
-                                register={register}
-                                errors={errors}
-                                setValue={setValue}
-                                control={control}
                                 getAddressByCep={getAddressByCep}
                                 setProdutos={setProdutos}
                                 produtos={produtos}
+                                form={form}
                             />
                         )}
                         {/* Blocos */}
                         {blocos &&
                             blocos.map((bloco, index) => (
                                 <Block
+                                    form={form}
                                     index={index}
                                     bloco={bloco}
                                     blockKey={`parRecebimentoMpModeloBlocoID`}
                                     setBlocos={setBlocos}
-                                    setValue={setValue}
                                     blocos={blocos}
-                                    getValues={getValues}
-                                    register={register}
-                                    control={control}
                                     disabled={hasFormPending}
-                                    errors={errors?.blocos}
                                     handleFileSelect={handleFileSelectItem}
                                     handleRemoveAnexoItem={handleRemoveAnexoItem}
                                     status={info.status}
@@ -797,7 +794,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                         handleRemove: handleRemoveAnexoGroup,
                                         folder: 'grupo-anexo',
                                         disabled: !canEdit.status,
-                                        error: errors
+                                        error: form.formState?.errors
                                     }}
                                 />
                             ))}
@@ -819,7 +816,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                                         rows={4}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
-                                                        control={control}
+                                                        form={form}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -828,19 +825,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 </Card>
                             </>
                         )}
-                        {/* Não Conformidade */}
-                        {/* {info.naoConformidade && (
-                        <RecebimentoMpNaoConformidade
-                            recebimentoMpID={id}
-                            values={naoConformidade}
-                            info={info}
-                            getValues={getValues}
-                            register={register}
-                            control={control}
-                            setValue={setValue}
-                            errors={errors}
-                        />
-                    )} */}
+
                         <HistoricForm
                             key={change}
                             id={id}
@@ -869,14 +854,10 @@ const FormRecebimentoMp = ({ id, model }) => {
                             handleClose={() => {
                                 setOpenModal(false), checkErrors()
                             }}
-                            title='Concluir Formulário'
+                            title='Concluir Recebimento de MP'
                             text={`Deseja realmente concluir este formulário?`}
                             info={info}
                             canChange={!hasFormPending}
-                            register={register}
-                            setValue={setValue}
-                            getValues={getValues}
-                            control={control}
                             btnCancel
                             btnConfirm
                             btnConfirmColor='primary'
@@ -888,8 +869,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                             unity={unidade}
                             values={fieldsFooter}
                             formularioID={2} // Recebimento MP
-                            errors={errors}
                             modeloID={unidade?.modelo?.id}
+                            form={form}
                         />
                         {/* Modal que deleta formulario */}
                         <DialogDelete

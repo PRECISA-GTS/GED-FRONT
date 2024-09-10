@@ -68,17 +68,7 @@ const FormParametrosLimpeza = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
 
-    const {
-        setValue,
-        register,
-        handleSubmit,
-        reset,
-        trigger,
-        getValues,
-        control,
-        watch,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -146,7 +136,7 @@ const FormParametrosLimpeza = ({ id }) => {
         })
         setBlocks(newBlock)
 
-        setValue(`blocks.[${index}].itens.[${newBlock[index].itens.length - 1}].new`, true)
+        form.setValue(`blocks.[${index}].itens.[${newBlock[index].itens.length - 1}].new`, true)
 
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
@@ -157,12 +147,12 @@ const FormParametrosLimpeza = ({ id }) => {
             return
         }
 
-        const newBlocks = getValues('blocks')
+        const newBlocks = form.getValues('blocks')
         const newItens = arrItens.filter((_, i) => i !== indexItem)
         newBlocks[indexBlock].itens = newItens
 
         setBlocks(newBlocks)
-        setValue(`blocks.[${indexBlock}].itens`, newItens)
+        form.setValue(`blocks.[${indexBlock}].itens`, newItens)
 
         // Inserir no array de itens removidos
         let newRemovedItems = [...arrRemovedItems]
@@ -203,13 +193,13 @@ const FormParametrosLimpeza = ({ id }) => {
         updatedBlocks.splice(index, 1)
         setBlocks(updatedBlocks)
 
-        setValue(`blocks`, updatedBlocks) //* Remove bloco do formulário
+        form.setValue(`blocks`, updatedBlocks) //* Remove bloco do formulário
 
         toast.success('Bloco pré-removido. Salve para concluir!')
     }
 
     const addBlock = () => {
-        const newBlock = [...getValues('blocks')]
+        const newBlock = [...form.getValues('blocks')]
         newBlock.push({
             dados: {
                 ordem: newBlock.length + 1,
@@ -232,7 +222,7 @@ const FormParametrosLimpeza = ({ id }) => {
                 }
             ]
         })
-        setValue('blocks', newBlock)
+        form.setValue('blocks', newBlock)
         setBlocks(newBlock)
     }
 
@@ -255,8 +245,8 @@ const FormParametrosLimpeza = ({ id }) => {
         const updatedModel = { ...model }
         updatedModel.setoresPreenchem = response.data.preenche
         updatedModel.setoresConcluem = response.data.conclui
-        reset({
-            ...getValues(),
+        form.reset({
+            ...form.getValues(),
             model: updatedModel
         })
     }
@@ -285,7 +275,7 @@ const FormParametrosLimpeza = ({ id }) => {
                     setProfissionais(response.data.options?.profissionais)
                     setOrientacoes(response.data.orientations)
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
                     getSetoresModelo(response.data.model)
 
                     setTimeout(() => {
@@ -307,7 +297,7 @@ const FormParametrosLimpeza = ({ id }) => {
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id, user, savingForm])
 
@@ -320,12 +310,12 @@ const FormParametrosLimpeza = ({ id }) => {
     return (
         <>
             <Loading show={!model} />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormHeader
                     partialRoute
                     btnCancel
                     btnSave
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     type={type}
                     btnDelete
                     onclickDelete={() => setOpenModalDeleted(true)}
@@ -356,8 +346,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     name={`model.nome`}
                                     value={model.nome}
                                     required={true}
-                                    control={control}
-                                    errors={errors?.model?.nome}
+                                    form={form}
                                 />
                                 <Input
                                     className='order-1'
@@ -368,9 +357,8 @@ const FormParametrosLimpeza = ({ id }) => {
                                     name={`model.ciclo`}
                                     value={model.ciclo}
                                     required={true}
-                                    control={control}
                                     helpText='Ciclo de vencimento deste formulário. Caso não tenha ciclo, use dias igual a 0 (zero)'
-                                    errors={errors?.model?.ciclo}
+                                    form={form}
                                 />
                                 <Check
                                     className='order-2 md:order-3'
@@ -379,7 +367,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     title='Ativo'
                                     name={`model.status`}
                                     value={model.status}
-                                    register={register}
+                                    form={form}
                                 />
 
                                 {/* Setores que preenchem */}
@@ -394,9 +382,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                             name={`model.setoresPreenchem`}
                                             options={setores ?? []}
                                             value={model?.setoresPreenchem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                         <Select
@@ -408,9 +394,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                             name={`model.setoresConcluem`}
                                             options={setores ?? []}
                                             value={model?.setoresConcluem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                     </>
@@ -426,7 +410,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     value={model.cabecalho}
                                     multiline
                                     rows={4}
-                                    control={control}
+                                    form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
                             </Grid>
@@ -458,7 +442,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                         </Typography>
                                     </Grid>
 
-                                    {getValues(`header`).map((header, index) => (
+                                    {form.getValues(`header`).map((header, index) => (
                                         <>
                                             <Grid item md={6}>
                                                 <Box display='flex' alignItems='center' sx={{ gap: 2 }}>
@@ -472,7 +456,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].mostra`}
                                                 value={header.mostra}
-                                                register={register}
+                                                form={form}
                                             />
 
                                             <CheckLabel
@@ -481,7 +465,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].obrigatorio`}
                                                 value={header.obrigatorio}
-                                                register={register}
+                                                form={form}
                                             />
 
                                             <Input
@@ -490,9 +474,8 @@ const FormParametrosLimpeza = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].ordem`}
                                                 value={header.ordem}
-                                                register={register}
-                                                control={control}
                                                 type='number'
+                                                form={form}
                                             />
                                         </>
                                     ))}
@@ -506,16 +489,11 @@ const FormParametrosLimpeza = ({ id }) => {
                 {!blocks && <Loading />}
                 {blocks && (
                     <Blocos
+                        form={form}
                         blocks={blocks}
-                        errors={errors}
-                        control={control}
-                        register={register}
-                        watch={watch}
                         removeItem={removeItem}
                         addItem={addItem}
-                        getValues={getValues}
                         removeBlock={removeBlock}
-                        setValue={setValue}
                         allOptions={allOptions}
                         openModalConfirmScore={openModalConfirmScore}
                         setOpenModalConfirmScore={setOpenModalConfirmScore}
@@ -557,7 +535,7 @@ const FormParametrosLimpeza = ({ id }) => {
                                     value={orientacoes?.obs}
                                     multiline
                                     rows={4}
-                                    control={control}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

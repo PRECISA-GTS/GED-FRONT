@@ -8,16 +8,11 @@ import Select from 'src/components/Form/Select'
 import DialogConfirmScore from 'src/components/Defaults/Dialogs/DialogConfirmScore'
 
 const Blocos = ({
+    form,
     blocks,
-    errors,
-    control,
-    register,
-    getValues,
     removeItem,
     addItem,
     removeBlock,
-    setValue,
-    watch,
     openModalConfirmScore,
     setOpenModalConfirmScore,
     itemScore,
@@ -28,9 +23,9 @@ const Blocos = ({
 }) => {
     return (
         <>
-            {getValues('blocks') &&
+            {form.getValues('blocks') &&
                 blocks &&
-                getValues('blocks').map((block, index) => (
+                form.getValues('blocks').map((block, index) => (
                     <Card key={index} md={12} sx={{ mt: 4 }}>
                         <CardContent>
                             <Grid container spacing={4}>
@@ -42,8 +37,7 @@ const Blocos = ({
                                     name={`blocks.[${index}].dados.ordem`}
                                     value={block.dados.ordem}
                                     required={true}
-                                    control={control}
-                                    errors={errors?.blocks?.[index]?.dados?.ordem}
+                                    form={form}
                                 />
 
                                 <Input
@@ -54,8 +48,7 @@ const Blocos = ({
                                     name={`blocks.[${index}].dados.nome`}
                                     value={block.dados.nome}
                                     required={true}
-                                    control={control}
-                                    errors={errors?.blocks?.[index]?.dados?.nome}
+                                    form={form}
                                 />
 
                                 <Select
@@ -67,9 +60,7 @@ const Blocos = ({
                                     name={`blocks.[${index}].dados.setores`}
                                     options={setores ?? []}
                                     value={block.dados.setores ?? []}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
+                                    form={form}
                                     helpText='Nenhum setor selecionado significa que o sistema não fará o controle de permissão por setores'
                                 />
 
@@ -80,7 +71,7 @@ const Blocos = ({
                                     title='Ativo'
                                     name={`blocks.[${index}].dados.status`}
                                     value={blocks[index]?.dados?.status}
-                                    register={register}
+                                    form={form}
                                 />
 
                                 <Check
@@ -90,7 +81,7 @@ const Blocos = ({
                                     title='Observação'
                                     name={`blocks.[${index}].dados.obs`}
                                     value={blocks[index]?.dados.obs}
-                                    register={register}
+                                    form={form}
                                 />
                             </Grid>
 
@@ -115,8 +106,7 @@ const Blocos = ({
                                             name={`blocks.[${index}].itens.[${indexItem}].ordem`}
                                             value={item.ordem}
                                             required={true}
-                                            control={control}
-                                            errors={errors?.blocks?.[index]?.itens?.[indexItem]?.ordem}
+                                            form={form}
                                         />
 
                                         {/* Item */}
@@ -134,10 +124,7 @@ const Blocos = ({
                                             required={true}
                                             disabled={item.hasPending == 1 ? true : false}
                                             options={blocks[index]?.optionsBlock?.itens}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                            errors={errors?.blocks?.[index]?.itens?.[indexItem]?.item}
+                                            form={form}
                                         />
 
                                         {/* Mais detalhes do item */}
@@ -152,7 +139,7 @@ const Blocos = ({
                                                 {indexItem == 0 && <Typography variant='caption'>Detalhes</Typography>}
                                                 <Tooltip
                                                     title={
-                                                        watch(`blocks.[${index}].itens.[${indexItem}].item`)
+                                                        form.watch(`blocks.[${index}].itens.[${indexItem}].item`)
                                                             ? 'Ver mais detalhes do item selecionado'
                                                             : 'Selecione o item'
                                                     }
@@ -161,21 +148,21 @@ const Blocos = ({
                                                         color='primary'
                                                         size='small'
                                                         onClick={() => {
-                                                            watch(`blocks.[${index}].itens.[${indexItem}].item`)
+                                                            form.watch(`blocks.[${index}].itens.[${indexItem}].item`)
                                                                 ? viewItem(
-                                                                      getValues(
+                                                                      form.getValues(
                                                                           `blocks.[${index}].itens.[${indexItem}].item`
                                                                       )
                                                                   )
                                                                 : null
                                                         }}
                                                         sx={{
-                                                            opacity: watch(
+                                                            opacity: form.watch(
                                                                 `blocks.[${index}].itens.[${indexItem}].item`
                                                             )
                                                                 ? 1
                                                                 : 0.5,
-                                                            disabled: watch(
+                                                            disabled: form.watch(
                                                                 `blocks.[${index}].itens.[${indexItem}].item`
                                                             )
                                                                 ? false
@@ -195,7 +182,7 @@ const Blocos = ({
                                             index={indexItem}
                                             name={`blocks.[${index}].itens.[${indexItem}].status`}
                                             value={blocks[index]?.itens[indexItem]?.status}
-                                            register={register}
+                                            form={form}
                                         />
 
                                         <Check
@@ -205,7 +192,7 @@ const Blocos = ({
                                             index={indexItem}
                                             name={`blocks.[${index}].itens.[${indexItem}].obrigatorio`}
                                             value={blocks[index]?.itens[indexItem]?.obrigatorio}
-                                            register={register}
+                                            form={form}
                                         />
 
                                         {/* Deletar */}

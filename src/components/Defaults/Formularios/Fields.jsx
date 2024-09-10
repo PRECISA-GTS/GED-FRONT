@@ -4,17 +4,13 @@ import Select from 'src/components/Form/Select'
 import DateField from 'src/components/Form/DateField'
 
 const Fields = ({
-    register,
-    errors,
-    setValue,
+    form,
     fields,
     disabled,
     disabledFields,
     getAddressByCep,
-    control,
     setNameSelected,
     setColumnSelected,
-    getValues,
     setOpenModalNew
 }) => {
     const getMaskForField = fieldName => {
@@ -70,11 +66,8 @@ const Fields = ({
                             value={field?.[field.tabela]}
                             mask={field.tabela}
                             disabled={disabled || disabledField(field.nomeColuna)}
-                            register={register}
-                            setValue={setValue}
-                            control={control}
-                            errors={errors?.fields?.[index]?.[field.tabela]}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                            form={form}
                         />
                     )}
 
@@ -89,11 +82,9 @@ const Fields = ({
                             value={field?.[field.nomeColuna] ?? new Date()}
                             type={field.nomeColuna}
                             name={`fields[${index}].${field.nomeColuna}`}
-                            errors={errors?.fields?.[index]?.[field.nomeColuna]}
-                            control={control}
                             typeValidation='dataPassado'
                             daysValidation={365}
-                            register={register}
+                            form={form}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}
@@ -106,16 +97,36 @@ const Fields = ({
                             md={4}
                             title={field.nomeCampo}
                             name={`fields[${index}].${field.nomeColuna}`}
-                            register={register}
-                            control={control}
                             value={field?.[field.nomeColuna] ?? ''}
-                            errors={errors?.fields?.[index]?.nomeColuna}
                             type={field.nomeColuna}
                             getAddressByCep={getAddressByCep}
                             mask={getMaskForField(field.nomeColuna)}
                             disabled={
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
+                            form={form}
+                            alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
+                        />
+                    )}
+
+                    {/* Text (texto longo) */}
+                    {field && field.tipo == 'text' && (
+                        <Input
+                            key={`input-${index}`}
+                            xs={12}
+                            md={12}
+                            multiline
+                            rows={6}
+                            title={field.nomeCampo}
+                            name={`fields[${index}].${field.nomeColuna}`}
+                            value={field?.[field.nomeColuna] ?? ''}
+                            type={field.nomeColuna}
+                            getAddressByCep={getAddressByCep}
+                            mask={getMaskForField(field.nomeColuna)}
+                            disabled={
+                                disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
+                            }
+                            form={form}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                         />
                     )}

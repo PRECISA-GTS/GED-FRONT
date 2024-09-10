@@ -40,11 +40,7 @@ const FormValidationAsync = () => {
   })
 
   // ** Hook
-  const {
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
+  const form = useForm({ defaultValues })
 
   const handleClickShowPassword = () => {
     setState({ ...state, showPassword: !state.showPassword })
@@ -66,13 +62,13 @@ const FormValidationAsync = () => {
     <Card>
       <CardHeader title='Async Submit' />
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <Controller
                   name='firstName'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -80,12 +76,12 @@ const FormValidationAsync = () => {
                       label='First Name'
                       onChange={onChange}
                       placeholder='Leonard'
-                      error={Boolean(errors.firstName)}
+                      error={Boolean(form.formState?.errors.firstName)}
                       aria-describedby='validation-async-first-name'
                     />
                   )}
                 />
-                {errors.firstName && (
+                {form.formState?.errors.firstName && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-async-first-name'>
                     This field is required
                   </FormHelperText>
@@ -97,7 +93,7 @@ const FormValidationAsync = () => {
               <FormControl fullWidth>
                 <Controller
                   name='lastName'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -105,12 +101,12 @@ const FormValidationAsync = () => {
                       label='Last Name'
                       onChange={onChange}
                       placeholder='Carter'
-                      error={Boolean(errors.lastName)}
+                      error={Boolean(form.formState?.errors.lastName)}
                       aria-describedby='validation-async-last-name'
                     />
                   )}
                 />
-                {errors.lastName && (
+                {form.formState?.errors.lastName && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-async-last-name'>
                     This field is required
                   </FormHelperText>
@@ -122,7 +118,7 @@ const FormValidationAsync = () => {
               <FormControl fullWidth>
                 <Controller
                   name='email'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -130,13 +126,13 @@ const FormValidationAsync = () => {
                       value={value}
                       label='Email'
                       onChange={onChange}
-                      error={Boolean(errors.email)}
+                      error={Boolean(form.formState?.errors.email)}
                       placeholder='carterleonard@gmail.com'
                       aria-describedby='validation-async-email'
                     />
                   )}
                 />
-                {errors.email && (
+                {form.formState?.errors.email && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-async-email'>
                     This field is required
                   </FormHelperText>
@@ -146,12 +142,12 @@ const FormValidationAsync = () => {
 
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='validation-async-password' error={Boolean(errors.password)}>
+                <InputLabel htmlFor='validation-async-password' error={Boolean(form.formState?.errors.password)}>
                   Password
                 </InputLabel>
                 <Controller
                   name='password'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <OutlinedInput
@@ -159,7 +155,7 @@ const FormValidationAsync = () => {
                       label='Password'
                       onChange={onChange}
                       id='validation-async-password'
-                      error={Boolean(errors.password)}
+                      error={Boolean(form.formState?.errors.password)}
                       type={state.showPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position='end'>
@@ -176,7 +172,7 @@ const FormValidationAsync = () => {
                     />
                   )}
                 />
-                {errors.password && (
+                {form.formState?.errors.password && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-async-password'>
                     This field is required
                   </FormHelperText>

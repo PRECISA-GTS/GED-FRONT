@@ -31,6 +31,7 @@ const TipoVeiculo = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'mdi:truck-outline',
                 title: 'Tipo de Veículo',
                 subtitle: {
                     id: id,

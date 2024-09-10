@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import { AuthContext } from 'src/context/AuthContext'
 import { Alert, Grid, Typography } from '@mui/material'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import Result from 'src/components/Defaults/Formularios/Result'
 import { BlobProvider, Document, Page } from '@react-pdf/renderer'
 import { useGlobal } from 'src/hooks/useGlobal'
@@ -17,10 +17,9 @@ import Footer from 'src/components/Reports/Footer'
 import InfoSetores from '../Formularios/InfoSetores'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
-import Select from 'src/components/Form/Select'
-import { api } from 'src/configs/api'
 
 const DialogFormConclusion = ({
+    form,
     title,
     text,
     handleClose,
@@ -45,8 +44,6 @@ const DialogFormConclusion = ({
     modeloID
 }) => {
     if (!modeloID) return null
-
-    console.log('🚀 ~ modeloID:', values)
 
     const { user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
     const [result, setResult] = useState({})
@@ -81,26 +78,6 @@ const DialogFormConclusion = ({
             </Document>
         )
     }
-
-    const getProfissionaisSetores = async () => {
-        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
-            formularioID: formularioID, // fornecedor, recebimento de mp, limpeza...
-            modeloID: modeloID,
-            unidadeID: loggedUnity.unidadeID
-        })
-        setProfissionaisAprova(response.data.conclui)
-        setDefaultProfissional(response.data.conclui)
-    }
-
-    const setDefaultProfissional = arrProfissionais => {
-        const profissionalID = user.profissionalID //? Profissional logado
-        const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-        if (profissional && profissional.id > 0) setValue('fieldsFooter.profissional', profissional)
-    }
-
-    useEffect(() => {
-        getProfissionaisSetores()
-    }, [values])
 
     return (
         <>
@@ -163,14 +140,13 @@ const DialogFormConclusion = ({
                                 )}
 
                                 {!canApprove && (
-                                    <Alert severity='error' sx={{ mt: 2 }}>
+                                    <Alert severity='warning' sx={{ mt: 2 }}>
                                         Este formulário não pode ser aprovado pois possui resposta que gera não
-                                        conformidade
+                                        conformidade!
                                     </Alert>
                                 )}
                                 {user.papelID == 1 && (
                                     <Grid container spacing={4} sx={{ mt: 4 }}>
-                                        {/* Data da conclusão */}
                                         <DateField
                                             xs={12}
                                             md={3}
@@ -178,15 +154,12 @@ const DialogFormConclusion = ({
                                             name={`fieldsFooter.dataConclusao`}
                                             type='date'
                                             value={values?.dataConclusao ?? new Date()}
-                                            register={register}
-                                            control={control}
                                             typeValidation='dataPassado'
                                             daysValidation={365}
                                             required
-                                            errors={errors?.fieldsFooter?.dataConclusao}
+                                            form={form}
                                         />
 
-                                        {/* Hora de Abertura */}
                                         <Input
                                             xs={12}
                                             md={3}
@@ -195,13 +168,10 @@ const DialogFormConclusion = ({
                                             type='time'
                                             value={values?.horaConclusao ?? getTimeNow()}
                                             required
-                                            register={register}
-                                            control={control}
-                                            errors={errors?.fieldsFooter?.horaConclusao}
+                                            form={form}
                                         />
 
-                                        {/* Profissional responsável */}
-                                        <Select
+                                        {/* <Select
                                             xs={12}
                                             md={6}
                                             title='Profissional que aprova'
@@ -213,7 +183,7 @@ const DialogFormConclusion = ({
                                             setValue={setValue}
                                             control={control}
                                             errors={errors?.fieldsFooter?.profissional}
-                                        />
+                                        /> */}
 
                                         {/* Resultado */}
                                         <Grid item xs={12}>
@@ -221,8 +191,7 @@ const DialogFormConclusion = ({
                                                 title={user.papelID == 1 ? 'Resultado do Processo' : 'Observação'}
                                                 name={'status'}
                                                 value={result}
-                                                register={register}
-                                                setValue={setValue}
+                                                form={form}
                                                 setResult={setResult}
                                                 papelID={user.papelID}
                                                 hasNaoConformidade={hasNaoConformidade}
@@ -261,32 +230,34 @@ const DialogFormConclusion = ({
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions className='dialog-actions-dense'>
-                    {btnCancel && (
-                        <Button variant='outlined' color='primary' onClick={handleClose}>
-                            Fechar
-                        </Button>
-                    )}
-                    {btnConfirm && canChange && (
-                        <BlobProvider document={<DocumentPdf />}>
-                            {({ blob, url, loading, error }) => (
-                                <Button
-                                    variant='contained'
-                                    disabled={
-                                        !hasSectorPermission(values?.setores ?? []) ||
-                                        (info.status < 40 &&
-                                            ((listErrors && listErrors.status) ||
-                                                (user.papelID == 1 && !result.status)))
-                                    }
-                                    color='primary'
-                                    onClick={() => {
-                                        conclusionForm(result, blob)
-                                    }}
-                                >
-                                    Concluir
-                                </Button>
-                            )}
-                        </BlobProvider>
-                    )}
+                    <div className='flex items-center gap-2 p-2'>
+                        {btnCancel && (
+                            <Button variant='outlined' color='primary' onClick={handleClose}>
+                                Fechar
+                            </Button>
+                        )}
+                        {btnConfirm && canChange && (
+                            <BlobProvider document={<DocumentPdf />}>
+                                {({ blob, url, loading, error }) => (
+                                    <Button
+                                        variant='contained'
+                                        disabled={
+                                            !hasSectorPermission(values?.setores ?? []) ||
+                                            (info.status < 40 &&
+                                                ((listErrors && listErrors.status) ||
+                                                    (user.papelID == 1 && !result.status)))
+                                        }
+                                        color='primary'
+                                        onClick={() => {
+                                            conclusionForm(result, blob)
+                                        }}
+                                    >
+                                        Concluir
+                                    </Button>
+                                )}
+                            </BlobProvider>
+                        )}
+                    </div>
                 </DialogActions>
             </Dialog>
         </>

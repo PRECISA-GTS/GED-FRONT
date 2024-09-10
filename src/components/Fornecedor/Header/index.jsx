@@ -7,18 +7,7 @@ import { api } from 'src/configs/api'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
-const HeaderFields = ({
-    modeloID,
-    values,
-    fields,
-    disabled,
-    register,
-    errors,
-    setValue,
-    control,
-    getValues,
-    getAddressByCep
-}) => {
+const HeaderFields = ({ form, modeloID, values, fields, disabled, getAddressByCep }) => {
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
 
     const getProfissionais = async () => {
@@ -32,10 +21,10 @@ const HeaderFields = ({
     useEffect(() => {
         getProfissionais()
         if (values && !values.data) {
-            setValue('fieldsHeader.data', getCurrentDate())
+            form.setValue('fieldsHeader.data', getCurrentDate())
         }
         if (values && !values.hora) {
-            setValue('fieldsHeader.hora', getCurrentTime())
+            form.setValue('fieldsHeader.hora', getCurrentTime())
         }
     }, [values])
 
@@ -89,11 +78,9 @@ const HeaderFields = ({
                 type='date'
                 value={values?.data ?? getCurrentDate()}
                 disabled={disabled}
-                register={register}
-                control={control}
                 typeValidation='dataPassado'
                 daysValidation={365}
-                errors={errors?.fieldsHeader?.['data']}
+                form={form}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
@@ -106,9 +93,7 @@ const HeaderFields = ({
                 value={values?.data ?? getCurrentTime()}
                 type='time'
                 disabled={disabled}
-                register={register}
-                control={control}
-                errors={errors?.fieldsHeader?.['hora']}
+                form={form}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
@@ -138,9 +123,7 @@ const HeaderFields = ({
                 type='string'
                 mask={values.cpf ? 'cpf' : 'cnpj'}
                 disabled={true}
-                register={register}
-                control={control}
-                errors={errors?.fieldsHeader?.['cnpj']}
+                form={form}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
@@ -152,9 +135,7 @@ const HeaderFields = ({
                 name={`fieldsHeader.razaoSocial`}
                 type='string'
                 disabled={disabled}
-                register={register}
-                control={control}
-                errors={errors?.fieldsHeader?.['razaoSocial']}
+                form={form}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
@@ -166,24 +147,12 @@ const HeaderFields = ({
                 name={`fieldsHeader.nomeFantasia`}
                 type='string'
                 disabled={disabled}
-                register={register}
-                control={control}
-                errors={errors?.fieldsHeader?.['nomeFantasia']}
+                form={form}
                 alertRequired //! Apenas pinta o campo de vermelho, não valida
             />
 
             {/* Fields dinâmicos */}
-            <Fields
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                control={control}
-                getValues={getValues}
-                fields={fields}
-                values={fields}
-                getAddressByCep={getAddressByCep}
-                disabled={disabled}
-            />
+            <Fields fields={fields} values={fields} getAddressByCep={getAddressByCep} disabled={disabled} form={form} />
         </Grid>
     )
 }

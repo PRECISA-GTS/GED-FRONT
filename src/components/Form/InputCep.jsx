@@ -3,6 +3,7 @@ import { FormControl, Grid, TextField } from '@mui/material'
 import { cnpjMask, cellPhoneMask, cepMask, ufMask, cpfMask, rgMask } from 'src/configs/masks'
 
 const InputCep = ({
+    form,
     xs,
     md,
     title,
@@ -15,19 +16,15 @@ const InputCep = ({
     multiline,
     disabled,
     required,
-    control,
-    errors,
     onChange,
     ...props
 }) => {
-    console.log('🚀 ~ Input mask:', mask)
-
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }}>
             <FormControl fullWidth>
                 <Controller
                     name={name}
-                    control={control}
+                    control={form.control}
                     rules={{ required: required }}
                     render={({ field }) => (
                         <TextField
@@ -41,7 +38,7 @@ const InputCep = ({
                             size='small'
                             disabled={disabled}
                             aria-describedby='validation-schema-nome'
-                            error={errors}
+                            error={form.formState?.errors}
                             onChange={e => {
                                 let value = e.target.value
 

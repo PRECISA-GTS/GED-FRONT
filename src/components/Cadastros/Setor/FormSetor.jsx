@@ -32,15 +32,7 @@ const FormSetor = ({ id }) => {
     const [profissionais, setProfissionais] = useState([])
     const today = new Date().toISOString().substring(0, 10)
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        setValue,
-        control,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const updateProfessionalSector = values => {
         //? Atualiza setores ativos no contexto e localstorage
@@ -172,7 +164,7 @@ const FormSetor = ({ id }) => {
             if (type === 'edit') {
                 const response = await api.post(`${staticUrl}/getData/${id}`, { id })
                 setData(response.data)
-                reset(response.data)
+                form.reset(response.data)
             } else {
                 setData({
                     fields: {
@@ -182,7 +174,7 @@ const FormSetor = ({ id }) => {
                     }
                 })
                 // Setar data de hoje no campo de data
-                reset({
+                form.reset({
                     ...data,
                     fields: {
                         ...data.fields
@@ -207,25 +199,25 @@ const FormSetor = ({ id }) => {
         getProfissionais()
 
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
     //? Gerencia o array de profissionais
     const { fields, append, remove } = useFieldArray({
-        control,
+        control: form.control,
         name: 'fields.profissionais'
     })
 
     return (
         <>
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
                         btnNew={true}
                         btnSave
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -233,15 +225,7 @@ const FormSetor = ({ id }) => {
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={11}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={11} title='Nome' name='fields.nome' required={true} form={form} />
 
                                 <Check
                                     xs={1}
@@ -250,7 +234,7 @@ const FormSetor = ({ id }) => {
                                     name='fields.status'
                                     value={data?.fields?.status}
                                     typePage={type}
-                                    register={register}
+                                    form={form}
                                 />
 
                                 <Grid item xs={12}>
@@ -280,10 +264,7 @@ const FormSetor = ({ id }) => {
                                             value={data?.fields?.profissionais?.[index]?.profissional}
                                             required
                                             options={profissionais ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
-                                            errors={errors?.fields?.profissionais?.[index]?.profissional}
+                                            form={form}
                                             opacity={item.status === 0 ? true : false}
                                         />
 
@@ -294,10 +275,8 @@ const FormSetor = ({ id }) => {
                                             name={`fields.profissionais[${index}].dataInicio`}
                                             value={data?.fields?.profissionais?.[index]?.dataInicio ?? today}
                                             required
-                                            register={register}
-                                            control={control}
-                                            errors={errors?.fields?.profissionais?.[index]?.dataInicio}
                                             opacity={item.status === 0 ? true : false}
+                                            form={form}
                                         />
 
                                         <DateField
@@ -306,9 +285,8 @@ const FormSetor = ({ id }) => {
                                             title='Data Fim'
                                             name={`fields.profissionais[${index}].dataFim`}
                                             value={data?.fields?.profissionais?.[index]?.dataFim}
-                                            register={register}
-                                            control={control}
                                             opacity={item.status === 0 ? true : false}
+                                            form={form}
                                         />
 
                                         <Grid item xs={12} md={1} className='flex items-center'>
@@ -328,7 +306,7 @@ const FormSetor = ({ id }) => {
                                                 id: null,
                                                 dataInicio: new Date()
                                             })
-                                            trigger()
+                                            form.trigger()
                                         }}
                                         startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
                                     >

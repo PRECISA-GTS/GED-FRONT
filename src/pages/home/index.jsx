@@ -15,6 +15,7 @@ const Home = () => {
     useEffect(() => {
         startFilter()
         setTitle({
+            icon: 'mdi:home-silo-outline',
             title: 'Início',
             subtitle: ''
         })

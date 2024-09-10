@@ -4,7 +4,7 @@ import { useState } from 'react'
 /*
 Esse componente é um checkbox que pode ser desmarcado se o valor for diferente do valor passado no valueChecked, caso contrário o checkbox fica fixo e habilitado, se valueChecked for igual a 50, por exemplo, o checkbox não pode ser desmarcado. Utilizado pra manter fixa a não conformidade se for marcado Reprovado, por exedmplo.
  */
-const CheckLabelConditional = ({ xs, md, title, name, value, valueChecked, register }) => {
+const CheckLabelConditional = ({ form, xs, md, title, name, value, valueChecked }) => {
     const [checked, setChecked] = useState(true) // Set the initial state to the value prop
 
     const handleChange = () => {
@@ -22,7 +22,7 @@ const CheckLabelConditional = ({ xs, md, title, name, value, valueChecked, regis
                         <Checkbox
                             size='small'
                             name={name}
-                            {...register(name)}
+                            {...form.register(name)}
                             checked={checked || value == valueChecked}
                             onChange={handleChange}
                         />

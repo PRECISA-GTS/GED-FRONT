@@ -5,25 +5,8 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { Box, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
-import Input from './Input'
 
-const RadioLabel = ({
-    xs,
-    md,
-    index,
-    values,
-    totalColumns,
-    blockIndex,
-    item,
-    defaultValue,
-    name,
-    control,
-    changeAllOptions,
-    disabled,
-    errors,
-    handleChange,
-    blockForm
-}) => {
+const RadioLabel = ({ form, xs, md, values, defaultValue, name, disabled, handleChange, blockForm }) => {
     return (
         <Grid item xs={xs} md={md}>
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>
@@ -34,7 +17,9 @@ const RadioLabel = ({
                                 <FormControlLabel
                                     key={indexCol}
                                     value={item.id}
-                                    control={<Radio disabled={disabled} error={errors ? true : false} />}
+                                    control={
+                                        <Radio disabled={disabled} error={form?.formState?.errors ? true : false} />
+                                    }
                                     label={item.nome}
                                     fullWidth
                                     sx={{
@@ -51,7 +36,7 @@ const RadioLabel = ({
                                 {/* ícone informando que resposta impede aprovação do formulário */}
                                 {blockForm && indexCol == values.length - 1 && (
                                     <Tooltip
-                                        title='Esta resposta impede a aprovação deste formulário e obrigatoriamente será gerada uma Não Conformidade (plano de ação)'
+                                        title='Esta resposta impede a aprovação deste formulário e obrigatoriamente será gerada uma Não Conformidade'
                                         placement='top'
                                         arrow
                                     >

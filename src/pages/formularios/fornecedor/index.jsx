@@ -65,6 +65,7 @@ const Fornecedor = () => {
             setFilteredDataSupplier(response.data)
             setDataSupplier(response.data)
             setTitle({
+                icon: 'mdi:truck-fast-outline',
                 title: 'Fornecedor',
                 subtitle: {
                     id: id,
@@ -247,6 +248,7 @@ const Fornecedor = () => {
                 openModal={open}
                 size='lg'
                 fullHeight
+                clone
             >
                 <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>

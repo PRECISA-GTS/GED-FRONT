@@ -68,17 +68,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
 
-    const {
-        setValue,
-        trigger,
-        register,
-        handleSubmit,
-        reset,
-        getValues,
-        control,
-        watch,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const onSubmit = async values => {
         const data = {
@@ -150,7 +140,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         })
         setBlocks(newBlock)
 
-        setValue(`blocks.[${index}].itens.[${newBlock[index].itens.length - 1}].new`, true)
+        form.setValue(`blocks.[${index}].itens.[${newBlock[index].itens.length - 1}].new`, true)
 
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
@@ -161,12 +151,12 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
             return
         }
 
-        const newBlocks = getValues('blocks')
+        const newBlocks = form.getValues('blocks')
         const newItens = arrItens.filter((_, i) => i !== indexItem)
         newBlocks[indexBlock].itens = newItens
 
         setBlocks(newBlocks)
-        setValue(`blocks.[${indexBlock}].itens`, newItens)
+        form.setValue(`blocks.[${indexBlock}].itens`, newItens)
 
         // Inserir no array de itens removidos
         let newRemovedItems = [...arrRemovedItems]
@@ -207,13 +197,13 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         updatedBlocks.splice(index, 1)
         setBlocks(updatedBlocks)
 
-        setValue(`blocks`, updatedBlocks) //* Remove bloco do formulário
+        form.setValue(`blocks`, updatedBlocks) //* Remove bloco do formulário
 
         toast.success('Bloco pré-removido. Salve para concluir!')
     }
 
     const addBlock = () => {
-        const newBlock = [...getValues('blocks')]
+        const newBlock = [...form.getValues('blocks')]
         newBlock.push({
             dados: {
                 ordem: newBlock.length + 1,
@@ -236,7 +226,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                 }
             ]
         })
-        setValue('blocks', newBlock)
+        form.setValue('blocks', newBlock)
         setBlocks(newBlock)
     }
 
@@ -259,8 +249,8 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
         const updatedModel = { ...model }
         updatedModel.setoresPreenchem = response.data.preenche
         updatedModel.setoresConcluem = response.data.conclui
-        reset({
-            ...getValues(),
+        form.reset({
+            ...form.getValues(),
             model: updatedModel
         })
     }
@@ -292,7 +282,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                     setOrientacoes(response.data.orientations)
 
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
                     getSetoresModelo(response.data.model)
 
                     setTimeout(() => {
@@ -314,7 +304,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id, savingForm])
 
@@ -327,12 +317,12 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
     return (
         <>
             <Loading show={!model} />
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormHeader
                     partialRoute
                     btnCancel
                     btnSave
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     type={type}
                     btnDelete
                     onclickDelete={() => setOpenModalDeleted(true)}
@@ -362,8 +352,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     name={`model.nome`}
                                     value={model.nome}
                                     required={true}
-                                    control={control}
-                                    errors={errors?.model?.nome}
+                                    form={form}
                                 />
                                 <Check
                                     className='order-2 md:order-3'
@@ -372,7 +361,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     title='Ativo'
                                     name={`model.status`}
                                     value={model.status}
-                                    register={register}
+                                    form={form}
                                 />
 
                                 {/* Setores que preenchem */}
@@ -387,9 +376,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                             name={`model.setoresPreenchem`}
                                             options={setores ?? []}
                                             value={model?.setoresPreenchem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                         <Select
@@ -401,9 +388,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                             name={`model.setoresConcluem`}
                                             options={setores ?? []}
                                             value={model?.setoresConcluem ?? []}
-                                            register={register}
-                                            setValue={setValue}
-                                            control={control}
+                                            form={form}
                                             helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                     </>
@@ -419,7 +404,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     value={model.cabecalho}
                                     multiline
                                     rows={4}
-                                    control={control}
+                                    form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
                             </Grid>
@@ -451,7 +436,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                         </Typography>
                                     </Grid>
 
-                                    {getValues(`header`).map((header, index) => (
+                                    {form.getValues(`header`).map((header, index) => (
                                         <>
                                             <Grid item md={6}>
                                                 <Box display='flex' alignItems='center' sx={{ gap: 2 }}>
@@ -473,7 +458,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                                         ? true
                                                         : header.mostra
                                                 }
-                                                register={register}
+                                                form={form}
                                                 helpText={
                                                     header.nomeColuna == 'cnpj' ||
                                                     header.nomeColuna == 'razaoSocial' ||
@@ -499,7 +484,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                                         ? true
                                                         : header.obrigatorio
                                                 }
-                                                register={register}
+                                                form={form}
                                                 helpText={
                                                     header.nomeColuna == 'cnpj' ||
                                                     header.nomeColuna == 'razaoSocial' ||
@@ -517,9 +502,8 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                                 title=''
                                                 name={`header.[${index}].ordem`}
                                                 value={header.ordem}
-                                                register={register}
-                                                control={control}
                                                 type='number'
+                                                form={form}
                                             />
                                         </>
                                     ))}
@@ -533,16 +517,11 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                 {!blocks && <Loading />}
                 {blocks && (
                     <Blocos
+                        form={form}
                         blocks={blocks}
-                        errors={errors}
-                        control={control}
-                        register={register}
-                        watch={watch}
                         removeItem={removeItem}
                         addItem={addItem}
-                        getValues={getValues}
                         removeBlock={removeBlock}
-                        setValue={setValue}
                         allOptions={allOptions}
                         openModalConfirmScore={openModalConfirmScore}
                         setOpenModalConfirmScore={setOpenModalConfirmScore}
@@ -584,7 +563,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     value={orientacoes?.obs}
                                     multiline
                                     rows={4}
-                                    control={control}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

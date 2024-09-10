@@ -3,14 +3,14 @@ import { Grid, Button, ButtonGroup } from '@mui/material'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
 import Icon from 'src/@core/components/icon'
 
-const ToggleButtonLabel = React.memo(({ xs, md, name, register, setValue, setIsNotFactory }) => {
+const ToggleButtonLabel = React.memo(({ form, xs, md, name, setIsNotFactory }) => {
     const [selectedOption, setSelectedOption] = useState(1)
 
     useEffect(() => {
-        if (name && register) {
-            setValue(name, selectedOption)
+        if (name && form.register) {
+            form.setValue(name, selectedOption)
         }
-    }, [name, register, selectedOption, setValue, setIsNotFactory])
+    }, [name, form.register, selectedOption, form.setValue, setIsNotFactory])
 
     return (
         <Grid item xs={xs} md={md}>
@@ -50,7 +50,9 @@ const ToggleButtonLabel = React.memo(({ xs, md, name, register, setValue, setIsN
                         : 'Fornecedor ficará responsável pelo preenchimento do formulário, será enviado um e-mail com instruções de preenchimento ao fornecedor e a fábrica irá monitorar o status'
                 }`}</p>
             </div>
-            {name && register && <input type='hidden' name={name} {...register(name)} value={selectedOption} />}
+            {name && form.register && (
+                <input type='hidden' name={name} {...form.register(name)} value={selectedOption} />
+            )}
         </Grid>
     )
 })

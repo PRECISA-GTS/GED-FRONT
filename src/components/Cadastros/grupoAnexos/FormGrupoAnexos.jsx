@@ -35,23 +35,14 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
     const [change, setChange] = useState(false)
     const { startLoading, stopLoading } = useLoad()
 
-    const {
-        trigger,
-        handleSubmit,
-        setValue,
-        reset,
-        getValues,
-        control,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     const getData = async () => {
         try {
             const route = type === 'new' ? `cadastros/grupo-anexos/new/getData` : `${staticUrl}/getData/${id}`
             await api.post(route, { unidadeID: loggedUnity.unidadeID }).then(response => {
                 setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
+                form.reset(response.data) //* Insere os dados no formulário
             })
         } catch (error) {
             console.log(error)
@@ -66,8 +57,8 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
             obrigatorio: true
         }
 
-        const updatedData = [...getValues('items'), newValue]
-        setValue('items', updatedData)
+        const updatedData = [...form.getValues('items'), newValue]
+        form.setValue('items', updatedData)
         setChange(!change)
     }
 
@@ -83,7 +74,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
         }
 
         const newValue = getValues('items').filter((_, i) => i !== index)
-        setValue(`items`, newValue) //* Remove item do formulário
+        form.setValue(`items`, newValue) //* Remove item do formulário
         setChange(!change)
     }
 
@@ -149,19 +140,19 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
     useEffect(() => {
-        if (newChange) handleSubmit(onSubmit)()
+        if (newChange) form.handleSubmit(onSubmit)()
     }, [newChange])
 
     return (
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     {/* Botões cabeçalho */}
                     <FormHeader
                         btnCancel
@@ -170,7 +161,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                         manualUrl={manualUrl}
                         btnClose={btnClose}
                         handleModalClose={handleModalClose}
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpenDelete(true)}
                         type={type}
@@ -188,8 +179,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         title='Nome'
                                         name='fields.nome'
                                         required={true}
-                                        control={control}
-                                        errors={errors?.fields?.nome}
+                                        form={form}
                                     />
 
                                     <Check
@@ -199,7 +189,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         name='fields.status'
                                         value={data.fields.status}
                                         typePage={type}
-                                        register={register}
+                                        form={form}
                                     />
 
                                     <Input
@@ -208,8 +198,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         title='Descrição'
                                         name='fields.descricao'
                                         required={false}
-                                        control={control}
-                                        errors={errors?.fields?.descricao}
+                                        form={form}
                                     />
 
                                     <Select
@@ -222,10 +211,7 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                                         limitTags={5}
                                         required={true}
                                         options={data.formulario.options}
-                                        register={register}
-                                        setValue={setValue}
-                                        control={control}
-                                        errors={errors?.formulario?.fields}
+                                        form={form}
                                     />
                                 </Grid>
                             </CardContent>
@@ -238,12 +224,10 @@ const FormGrupoAnexos = ({ id, btnClose, handleConfirmNew, handleModalClose, new
                             <Grid container spacing={3}>
                                 <GrupoAnexoList
                                     key={change}
-                                    getValues={getValues}
+                                    getValues={form.getValues}
                                     removeItem={removeItem}
-                                    control={control}
-                                    register={register}
-                                    errors={errors}
                                     type={type}
+                                    form={form}
                                 />
                             </Grid>
                             <Button

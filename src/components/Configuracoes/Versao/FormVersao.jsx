@@ -29,14 +29,7 @@ const FormVersao = ({ id }) => {
     const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -91,7 +84,7 @@ const FormVersao = ({ id }) => {
             if (type === 'edit') {
                 await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
                     setData(response.data)
-                    reset(response.data)
+                    form.reset(response.data)
                 })
             } else {
                 const today = new Date().toISOString().substring(0, 10)
@@ -103,7 +96,7 @@ const FormVersao = ({ id }) => {
                     }
                 })
                 // Setar data de hoje no campo de data
-                reset({
+                form.reset({
                     ...data,
                     fields: {
                         ...data.fields,
@@ -125,13 +118,13 @@ const FormVersao = ({ id }) => {
         })
 
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }, [id])
 
     //? Gerencia o array de itens (descrição e link)
     const { fields, append, remove } = useFieldArray({
-        control,
+        control: form.control,
         name: 'fields.items'
     })
 
@@ -147,12 +140,12 @@ const FormVersao = ({ id }) => {
     return (
         <>
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FormHeader
                         btnCancel
                         btnNew={true}
                         btnSave
-                        handleSubmit={() => handleSubmit(onSubmit)}
+                        handleSubmit={() => form.handleSubmit(onSubmit)}
                         btnDelete={type === 'edit' ? true : false}
                         onclickDelete={() => setOpen(true)}
                         type={type}
@@ -160,15 +153,7 @@ const FormVersao = ({ id }) => {
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={8}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={8} title='Nome' name='fields.nome' required={true} form={form} />
 
                                 <DateField
                                     xs={12}
@@ -176,9 +161,7 @@ const FormVersao = ({ id }) => {
                                     title='Data'
                                     name={`fields.data`}
                                     value={data?.fields.data}
-                                    register={register}
-                                    control={control}
-                                    errors={errors?.fields?.data}
+                                    form={form}
                                 />
 
                                 <Grid item xs={12}>
@@ -212,15 +195,14 @@ const FormVersao = ({ id }) => {
                                             title='Descrição'
                                             name={`fields.items[${index}].descricao`}
                                             required
-                                            control={control}
-                                            errors={errors?.fields?.items?.[index]?.descricao}
+                                            form={form}
                                         />
                                         <Input
                                             xs={12}
                                             md={3}
                                             title='Link (opcional)'
                                             name={`fields.items[${index}].link`}
-                                            control={control}
+                                            form={form}
                                         />
                                         <Grid item xs={12} md={1} className='flex items-center'>
                                             <IconButton color='error' size='small' onClick={() => handleRemove(index)}>

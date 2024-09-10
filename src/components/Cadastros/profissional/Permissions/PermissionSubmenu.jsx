@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material'
 import Check from 'src/components/Form/Check'
 
-const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, register, setValue }) => {
+const PermissionSubmenu = ({ form, submenu, indexMenuGroup, indexMenu, indexSubmenu }) => {
     return (
         <Grid
             container
@@ -20,7 +20,7 @@ const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, r
                 type='hidden'
                 value={submenu.rota}
                 name={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].rota`}
-                {...register(`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].rota`)}
+                {...form.register(`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].rota`)}
             />
 
             {/* Ler */}
@@ -29,8 +29,7 @@ const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, r
                 md={1}
                 name={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].ler`}
                 value={submenu.ler}
-                register={register}
-                setValue={setValue}
+                form={form}
                 edit={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].edit`}
             />
 
@@ -40,8 +39,7 @@ const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, r
                 md={1}
                 name={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].inserir`}
                 value={submenu.inserir}
-                register={register}
-                setValue={setValue}
+                form={form}
                 edit={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].edit`}
             />
 
@@ -51,8 +49,7 @@ const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, r
                 md={1}
                 name={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].editar`}
                 value={submenu.editar}
-                register={register}
-                setValue={setValue}
+                form={form}
                 edit={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].edit`}
             />
 
@@ -62,8 +59,7 @@ const PermissionSubmenu = ({ submenu, indexMenuGroup, indexMenu, indexSubmenu, r
                 md={1}
                 name={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].excluir`}
                 value={submenu.excluir}
-                register={register}
-                setValue={setValue}
+                form={form}
                 edit={`menu[${indexMenuGroup}].menu[${indexMenu}].submenu[${indexSubmenu}].edit`}
             />
         </Grid>

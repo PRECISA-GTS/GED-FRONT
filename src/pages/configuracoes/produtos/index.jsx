@@ -28,6 +28,7 @@ const Produtos = () => {
         await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
             setResult(response.data)
             setTitle({
+                icon: 'ph:plant',
                 title: 'Produtos',
                 subtitle: {
                     id: id,

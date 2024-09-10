@@ -68,15 +68,7 @@ const FormUsuario = ({ id }) => {
     const [expandedItem, setExpandedItem] = useState(false)
     const [photoProfile, setPhotoProfile] = useState(null)
 
-    const {
-        control,
-        handleSubmit,
-        watch,
-        reset,
-        setValue,
-        register,
-        formState: { errors }
-    } = useForm({})
+    const form = useForm({})
 
     data &&
         data.units &&
@@ -225,7 +217,7 @@ const FormUsuario = ({ id }) => {
                     console.log('🚀 ~ response:', response.data)
                     setData(response.data)
                     setPhotoProfile(response.data.fields.imagem)
-                    reset(response.data) //* Insere os dados no formulário
+                    form.reset(response.data) //* Insere os dados no formulário
                 })
             } catch (error) {
                 console.log(error)
@@ -244,14 +236,14 @@ const FormUsuario = ({ id }) => {
         <>
             {!data && <Loading />}
             {data && (
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                     {/* Deixar atualizar e salvar a foto do usuário */}
                     {(type == 'new' || data) && (
                         <Card>
                             <FormHeader
                                 btnCancel
                                 btnSave
-                                handleSubmit={() => handleSubmit(onSubmit)}
+                                handleSubmit={() => form.handleSubmit(onSubmit)}
                                 btnDelete={type === 'edit' ? true : false}
                                 onclickDelete={() => setOpen(true)}
                                 type={type}
@@ -363,8 +355,7 @@ const FormUsuario = ({ id }) => {
                                                 name='fields.nome'
                                                 value={data?.fields?.nome}
                                                 required={true}
-                                                control={control}
-                                                errors={errors?.fields?.nome}
+                                                form={form}
                                             />
 
                                             <DateField
@@ -373,9 +364,7 @@ const FormUsuario = ({ id }) => {
                                                 title='Data de Nascimento'
                                                 value={data?.fields?.dataNascimento}
                                                 name={`fields.dataNascimento`}
-                                                errors={errors?.fields?.dataNascimento}
-                                                control={control}
-                                                register={register}
+                                                form={form}
                                             />
 
                                             <Input
@@ -385,8 +374,7 @@ const FormUsuario = ({ id }) => {
                                                 name='fields.email'
                                                 value={data?.fields?.email}
                                                 required={true}
-                                                control={control}
-                                                errors={errors?.fields?.email}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -396,8 +384,7 @@ const FormUsuario = ({ id }) => {
                                                 mask='cpf'
                                                 value={data?.fields?.cpf}
                                                 required={true}
-                                                control={control}
-                                                errors={errors?.fields?.cpf}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -405,8 +392,7 @@ const FormUsuario = ({ id }) => {
                                                 title='RG'
                                                 name='fields.rg'
                                                 value={data?.fields?.rg}
-                                                control={control}
-                                                errors={errors?.fields?.rg}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -414,8 +400,7 @@ const FormUsuario = ({ id }) => {
                                                 title='Registro Conselho Classe'
                                                 name='fields.registroConselhoClasse'
                                                 value={data?.fields?.registroConselhoClasse}
-                                                control={control}
-                                                errors={errors?.fields?.registroConselhoClasse}
+                                                form={form}
                                             />
 
                                             {data && user.admin == 0 && (
@@ -515,7 +500,7 @@ const FormUsuario = ({ id }) => {
                                                                 {...register(`fields.senha`, {
                                                                     required: type == 'new' ? true : false
                                                                 })}
-                                                                error={errors?.fields?.senha}
+                                                                error={form.formState?.errors?.fields?.senha}
                                                                 endAdornment={
                                                                     <InputAdornment position='end'>
                                                                         <IconButton
@@ -541,7 +526,11 @@ const FormUsuario = ({ id }) => {
                                                         <FormControl fullWidth>
                                                             <InputLabel
                                                                 htmlFor='input-confirm-password'
-                                                                color={errors.confirmarSenha?.message ? 'error' : ''}
+                                                                color={
+                                                                    form.formState?.errors.confirmarSenha?.message
+                                                                        ? 'error'
+                                                                        : ''
+                                                                }
                                                             >
                                                                 Confirmar Senha
                                                             </InputLabel>
@@ -561,7 +550,7 @@ const FormUsuario = ({ id }) => {
                                                                         value === watch('fields.senha') ||
                                                                         'As senhas não conferem.'
                                                                 })}
-                                                                error={errors.confirmarSenha}
+                                                                error={form.formState?.errors.confirmarSenha}
                                                                 endAdornment={
                                                                     <InputAdornment position='end'>
                                                                         <IconButton
@@ -579,9 +568,9 @@ const FormUsuario = ({ id }) => {
                                                                     </InputAdornment>
                                                                 }
                                                             />
-                                                            {errors.confirmarSenha?.message && (
+                                                            {form.formState?.errors.confirmarSenha?.message && (
                                                                 <Typography variant='body2' color='error'>
-                                                                    {errors.confirmarSenha?.message}
+                                                                    {form.formState?.errors.confirmarSenha?.message}
                                                                 </Typography>
                                                             )}
                                                         </FormControl>
@@ -655,7 +644,10 @@ const FormUsuario = ({ id }) => {
                                                                         label='Selecione a unidade'
                                                                         placeholder='Selecionar unidade'
                                                                         aria-describedby='formulario-error'
-                                                                        error={errors.units?.[indexUnit]?.unidade}
+                                                                        error={
+                                                                            form.formState?.errors.units?.[indexUnit]
+                                                                                ?.unidade
+                                                                        }
                                                                     />
                                                                 )}
                                                             />
@@ -695,7 +687,9 @@ const FormUsuario = ({ id }) => {
                                                                     label='Selecione o papel'
                                                                     placeholder='Selecione o papel'
                                                                     aria-describedby='formulario-error'
-                                                                    error={errors.units?.[indexUnit]?.papel}
+                                                                    error={
+                                                                        form.formState?.errors.units?.[indexUnit]?.papel
+                                                                    }
                                                                 />
                                                             )}
                                                         />
@@ -730,7 +724,7 @@ const FormUsuario = ({ id }) => {
                                                                     label='Selecione a profissão'
                                                                     placeholder='Selecione a profissão'
                                                                     aria-describedby='formulario-error'
-                                                                    error={errors.units?.[indexUnit]?.profissao}
+                                                                    error={form.formState?.errors.units?.[indexUnit]?.profissao}
                                                                 />
                                                             )}
                                                         />
@@ -765,7 +759,9 @@ const FormUsuario = ({ id }) => {
                                                                     {...params}
                                                                     label='Cargos'
                                                                     placeholder='Cargos'
-                                                                    error={errors.units?.[indexUnit]?.cargo}
+                                                                    error={
+                                                                        form.formState?.errors.units?.[indexUnit]?.cargo
+                                                                    }
                                                                 />
                                                             )}
                                                         />
@@ -780,9 +776,9 @@ const FormUsuario = ({ id }) => {
                                                     expandedItem={expandedItem}
                                                     handleChange={handleChange}
                                                     handleChangeItem={handleChangeItem}
-                                                    control={control}
-                                                    register={register}
-                                                    setValue={setValue}
+                                                    control={form.control}
+                                                    register={form.register}
+                                                    setValue={form.setValue}
                                                 />
                                             </CardContent>
 

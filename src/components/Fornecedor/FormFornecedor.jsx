@@ -76,18 +76,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const staticUrl = router.pathname
     console.log('🚀 ~ canEdit:', canEdit.status)
 
-    const {
-        reset,
-        register,
-        getValues,
-        setValue,
-        control,
-        trigger,
-        handleSubmit,
-        clearErrors,
-        setError,
-        formState: { errors }
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //* Reabre o formulário pro fornecedor alterar novamente se ainda nao estiver vinculado com recebimento
     const changeFormStatus = async values => {
@@ -209,24 +198,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         icon: 'fluent:form-new-20-regular',
         identification: null
     }
-    const objGerarNotificacao = {
-        id: 2,
-        name: 'Gerar notificação',
-        description: 'Gerar uma nova notificação para o fornecedor, podendo ser um e-mail e/ou alerta do sistema.',
-        component: (
-            <FormNotification
-                data={{
-                    email: field?.find(row => row.nomeColuna == 'email')?.email
-                }}
-            />
-        ),
-        route: null,
-        type: null,
-        modal: true,
-        action: sendNotification,
-        icon: 'cil:bell',
-        identification: null
-    }
     const objCopiarLink = {
         id: 3,
         name: 'Copiar link do formulário',
@@ -283,13 +254,13 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         actionsData.push(objNovoFormulario)
         if (info?.status >= 40) actionsData.push(objReOpenForm)
     }
-    actionsData.push(objGerarNotificacao)
     actionsData.push(objCopiarLink)
     actionsData.push(objRelatorio)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
     const verifyFormPending = async () => {
         try {
+            console.log('🚀 ~ verifyFormPending -> hasFormPending -------:', hasFormPending)
             const parFormularioID = 1 //? Fornecedor
             await api.post(`${staticUrl}/verifyFormPending/${id}`, { parFormularioID }).then(response => {
                 setHasFormPending(response.data) //! true/false
@@ -330,7 +301,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     verifyIfCanAproveForm(response.data.blocos) //? Verifica se há alguma resposta que bloqueie o formulário, se sim, o mesmo não pode ser aprovado
 
                     //* Insere os dados no formulário
-                    reset(response.data)
+                    form.reset(response.data)
+
+                    verifyFormPending()
 
                     //? Copia os dados do fornecedor no contexto loggedUnity se o campo estiver vazio
                     const dataOld = []
@@ -339,15 +312,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         const nomeCampo = response.data.fields[i].nomeCampo
 
                         for (let propriedade in loggedUnity) {
-                            if (nomeColuna == 'telefone' && !getValues(`fields[${i}].${nomeColuna}`)) {
+                            if (nomeColuna == 'telefone' && !form.getValues(`fields[${i}].${nomeColuna}`)) {
                                 const telefoneColuna = loggedUnity.telefone1 ?? loggedUnity.telefone2
-                                setValue(`fields[${i}].${nomeColuna}`, telefoneColuna ?? '')
+                                form.setValue(`fields[${i}].${nomeColuna}`, telefoneColuna ?? '')
                             }
                             if (
                                 propriedade === nomeColuna &&
-                                !getValues(`fields[${i}].${nomeColuna}`, loggedUnity[propriedade])
+                                !form.getValues(`fields[${i}].${nomeColuna}`, loggedUnity[propriedade])
                             ) {
-                                setValue(`fields[${i}].${nomeColuna}`, loggedUnity[propriedade])
+                                form.setValue(`fields[${i}].${nomeColuna}`, loggedUnity[propriedade])
 
                                 if (loggedUnity[propriedade] !== null && loggedUnity[propriedade] !== '') {
                                     dataOld.push({
@@ -380,8 +353,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 : null,
                         messageType: user.papelID == 2 ? 'warning' : 'info'
                     })
-
-                    verifyFormPending()
                 })
                 .catch(error => {
                     console.log('🚀 ~ error:', error)
@@ -397,7 +368,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     let arrErrors = []
 
     const setFormError = (fieldName, fieldTitle) => {
-        setError(fieldName, {
+        form.setError(fieldName, {
             type: 'manual',
             message: 'Campo obrigatório'
         })
@@ -406,19 +377,19 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     }
 
     const checkErrors = () => {
-        clearErrors()
+        form.clearErrors()
 
         //? Header
         // Fields estáticos (todos obrigatórios)
-        if (!getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
-        if (!getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
-        if (!getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
-        if (!getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
+        if (!form.getValues(`fieldsHeader.data`)) setFormError('fieldsHeader.data', 'Data da avaliação')
+        if (!form.getValues(`fieldsHeader.hora`)) setFormError('fieldsHeader.hora', 'Hora da avaliação')
+        if (!form.getValues(`fieldsHeader.razaoSocial`)) setFormError('fieldsHeader.razaoSocial', 'Razão Social')
+        if (!form.getValues(`fieldsHeader.nomeFantasia`)) setFormError('fieldsHeader.nomeFantasia', 'Nome Fantasia')
 
         // Fields dinâmicos
         field?.forEach((field, index) => {
             const fieldName = field.tabela ? `fields[${index}].${field.tabela}` : `fields[${index}].${field.nomeColuna}`
-            const fieldValue = getValues(fieldName)
+            const fieldValue = form.getValues(fieldName)
             if (field.obrigatorio === 1 && !fieldValue) {
                 setFormError(fieldName, field?.nomeCampo)
             }
@@ -429,7 +400,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             produtos.forEach((produto, indexProduto) => {
                 produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
                     if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-                        setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
+                        form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
                             type: 'manual',
                             message: 'Campo obrigatório'
                         })
@@ -444,10 +415,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         if (blocos && blocos.length > 0) {
             blocos.forEach((block, indexBlock) => {
                 block.itens.forEach((item, indexItem) => {
-                    const fieldValue = getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
+                    const fieldValue = form.getValues(`blocos[${indexBlock}].itens[${indexItem}].resposta`)
                     //? Valida resposta do item
                     if (item?.obrigatorio === 1 && !fieldValue) {
-                        setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
+                        form.setError(`blocos[${indexBlock}].itens[${indexItem}].resposta`, {
                             type: 'manual',
                             message: 'Campo obrigatário'
                         })
@@ -463,7 +434,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     ) {
                         item.respostaConfig.anexosSolicitados.forEach((anexo, indexAnexo) => {
                             if (anexo.obrigatorio == 1 && anexo.anexos && anexo.anexos.length == 0) {
-                                setError(
+                                form.setError(
                                     `blocos[${indexBlock}].itens[${indexItem}].respostaConfig.anexosSolicitados[${indexAnexo}].anexos`,
                                     {
                                         type: 'manual',
@@ -484,7 +455,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             grupoAnexo.forEach((grupo, indexGrupo) => {
                 grupo.itens.forEach((item, indexItem) => {
                     if (item.obrigatorio === 1 && item.anexos.length == 0) {
-                        setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
+                        form.setError(`grupoAnexo[${indexGrupo}].itens[${indexItem}].anexos`, {
                             type: 'manual',
                             message: 'Campo obrigatário'
                         })
@@ -503,7 +474,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         // Inserir o erro em errors do react hook form
         if (hasErrors) {
             arrErrors.forEach(error => {
-                trigger(error)
+                form.trigger(error)
             })
         }
     }
@@ -521,10 +492,10 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             row.nomeColuna === 'cidade' ||
                             row.nomeColuna === 'estado'
                         ) {
-                            await setValue(`fields[${index}].logradouro`, response.data.logradouro)
-                            await setValue(`fields[${index}].bairro`, response.data.bairro)
-                            await setValue(`fields[${index}].cidade`, response.data.localidade)
-                            await setValue(`fields[${index}].estado`, response.data.uf)
+                            await form.setValue(`fields[${index}].logradouro`, response.data.logradouro)
+                            await form.setValue(`fields[${index}].bairro`, response.data.bairro)
+                            await form.setValue(`fields[${index}].cidade`, response.data.localidade)
+                            await form.setValue(`fields[${index}].estado`, response.data.uf)
                         }
                     })
 
@@ -567,7 +538,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             sendPdfToServer(id, blob, 'fornecedor')
         }
         values['conclusion'] = true
-        await handleSubmit(onSubmit)(values)
+        await form.handleSubmit(onSubmit)(values)
     }
 
     //? Trata notificações
@@ -624,7 +595,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             values['status'] = user && user.papelID == 1 ? param.status : 40 //? Seta o status somente se for fábrica
             values['obsConclusao'] = param.obsConclusao
         } else {
-            clearErrors()
+            form.clearErrors()
         }
 
         const data = {
@@ -692,7 +663,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 )
 
                 //* Submete formulário pra atualizar configurações dos produtos
-                const values = getValues()
+                const values = form.getValues()
                 onSubmit(values)
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
@@ -720,7 +691,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     formData
                 )
                 //* Submete formulário pra atualizar configurações dos grupos
-                const values = getValues()
+                const values = form.getValues()
                 onSubmit(values)
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
@@ -749,7 +720,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     formData
                 )
                 //* Submete formulário pra atualizar configurações dos itens
-                const values = getValues()
+                const values = form.getValues()
                 onSubmit(values)
             } catch (error) {
                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
@@ -798,7 +769,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             await api
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/produto`)
                 .then(response => {
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -818,7 +789,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     `${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/grupo-anexo`
                 )
                 .then(response => {
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -837,7 +808,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 .delete(`${staticUrl}/deleteAnexo/${id}/${item.anexoID}/${unidade.unidadeID}/${user.usuarioID}/item`)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = getValues()
+                    const values = form.getValues()
                     onSubmit(values)
                 })
                 .catch(error => {
@@ -887,7 +858,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 const newResposta = item.alternativas[colIndex]
 
                 // Atualiza o valor no formulário
-                setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
+                form.setValue(`blocos[${blocoIndex}].itens[${itemIndex}].resposta`, newResposta)
 
                 // Atualiza o estado local (blocos)
                 item.resposta = newResposta && newResposta.id > 0 ? newResposta : null
@@ -904,7 +875,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     //* Envia o formulário mesmo havendo erros (salva rascunho)
     const customSubmit = e => {
         e.preventDefault()
-        const values = getValues()
+        const values = form.getValues()
         onSubmit(values)
     }
 
@@ -916,6 +887,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     useEffect(() => {
         checkErrors()
     }, [isLoading])
+
+    console.log('🚀 ~~~ hasFormPending:', hasFormPending)
 
     return (
         <>
@@ -936,16 +909,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     btnPrint={type == 'edit' ? true : false}
                     actionsData={actionsData}
                     actions
-                    handleSubmit={() => handleSubmit(onSubmit)}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
                     iconConclusion={'mdi:check-bold'}
-                    titleConclusion={'Concluir Formulário'}
+                    titleConclusion={'Concluir'}
                     title='Fornecedor'
                     btnStatus={type == 'edit' ? true : false}
                     handleBtnStatus={() => setOpenModalStatus(true)}
                     type={type}
                     status={status}
-                    setores={fieldsFooter?.setores ?? []}
                 />
 
                 {hasModel && (
@@ -999,19 +971,15 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             <Card>
                                 {/* Header */}
                                 <CardContent>
-                                    {unidade && (
+                                    {unidade && blocos && (
                                         <HeaderFields
-                                            key={unidade.unidadeID}
+                                            key={isLoading}
                                             modeloID={unidade.parFornecedorModeloID}
                                             values={fieldsHeader}
                                             fields={field}
                                             disabled={!canEdit.status || hasFormPending}
-                                            register={register}
-                                            errors={errors}
-                                            setValue={setValue}
-                                            control={control}
-                                            getValues={getValues}
                                             getAddressByCep={getAddressByCep}
+                                            form={form}
                                         />
                                     )}
                                 </CardContent>
@@ -1028,7 +996,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                             handleFileSelect={handleFileSelectProduct}
                                             handleRemove={handleRemoveAnexoProduct}
                                             disabled={!canEdit.status || hasFormPending}
-                                            errors={errors?.produtos}
+                                            errors={form.formState?.errors?.produtos}
                                         />
                                     </CardContent>
                                 </Card>
@@ -1038,17 +1006,13 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             {blocos &&
                                 blocos.map((bloco, index) => (
                                     <Block
+                                        form={form}
                                         bloco={bloco}
                                         index={index}
                                         blockKey={`parFornecedorModeloBlocoID`}
                                         setBlocos={setBlocos}
-                                        setValue={setValue}
                                         blocos={blocos}
-                                        getValues={getValues}
-                                        register={register}
-                                        control={control}
                                         disabled={!canEdit.status || hasFormPending}
-                                        errors={errors?.blocos}
                                         handleFileSelect={handleFileSelectItem}
                                         handleRemoveAnexoItem={handleRemoveAnexoItem}
                                         status={info.status}
@@ -1070,7 +1034,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                             handleRemove: handleRemoveAnexoGroup,
                                             folder: 'grupo-anexo',
                                             disabled: !canEdit.status,
-                                            error: errors
+                                            error: form.formState?.errors
                                         }}
                                     />
                                 ))}
@@ -1093,7 +1057,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                                             rows={4}
                                                             value={info.obs}
                                                             disabled={!canEdit.status || hasFormPending}
-                                                            control={control}
+                                                            form={form}
                                                         />
                                                     </FormControl>
                                                 </Grid>
@@ -1127,14 +1091,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 handleClose={() => {
                                     setOpenModal(false), checkErrors()
                                 }}
-                                title='Concluir Formulário'
+                                title='Concluir Fornecedor'
                                 text={`Deseja realmente concluir este formulário?`}
                                 info={info}
                                 canChange={!hasFormPending}
-                                register={register}
-                                setValue={setValue}
-                                getValues={getValues}
-                                control={control}
+                                form={form}
                                 btnCancel
                                 btnConfirm
                                 btnConfirmColor='primary'
@@ -1146,7 +1107,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                 unity={unidade}
                                 values={fieldsFooter}
                                 formularioID={1} // Fornecedor
-                                errors={errors}
                                 modeloID={unidade?.parFornecedorModeloID}
                             />
 

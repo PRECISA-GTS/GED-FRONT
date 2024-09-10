@@ -5,17 +5,13 @@ import InfoSetores from './InfoSetores'
 import { AuthContext } from 'src/context/AuthContext'
 
 const Block = ({
+    form,
     bloco,
     index,
     blockKey,
     setBlocos,
-    setValue,
     blocos,
-    getValues,
-    register,
-    control,
     disabled,
-    errors,
     handleFileSelect,
     handleRemoveAnexoItem,
     status,
@@ -32,14 +28,14 @@ const Block = ({
         const newResponse = item.alternativas.find(item => item.id == e.target.value)
         newBlocos[index].itens[indexItem].resposta = newResponse
         setBlocos(newBlocos)
-        setValue(`blocos[${index}].itens[${indexItem}].resposta`, newResponse)
+        form.setValue(`blocos[${index}].itens[${indexItem}].resposta`, newResponse)
     }
 
     const changeAllOptions = (bloco, blockIndex, colIndex) => {
         bloco.itens.forEach((item, indexItem) => {
             if (item.alternativas.length > 0) {
                 //? ignora data e dissertativa
-                setValue(`blocos[${blockIndex}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
+                form.setValue(`blocos[${blockIndex}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
             }
         })
 
@@ -87,7 +83,7 @@ const Block = ({
             return
         }
 
-        if (status >= 40 || user.papelID !== 1) {
+        if (status >= 40) {
             setBlockPermission(false)
             return
         }
@@ -99,7 +95,7 @@ const Block = ({
         }
 
         //? Se bloco conter pelo menos 1 setor do profissional
-        if (hasSectorPermission(bloco?.setores ?? [])) {
+        if (!disabled && hasSectorPermission(bloco?.setores ?? [])) {
             setBlockPermission(true)
             return
         }
@@ -140,7 +136,10 @@ const Block = ({
                                         <FormControlLabel
                                             value={indexCol}
                                             control={
-                                                <Radio disabled={!blockPermission} error={errors ? true : false} />
+                                                <Radio
+                                                    disabled={!blockPermission}
+                                                    error={form?.formState?.errors ? true : false}
+                                                />
                                             }
                                             onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
                                             label='Todos'
@@ -165,15 +164,12 @@ const Block = ({
 
                     {bloco.itens.map((item, indexItem) => (
                         <Item
+                            form={form}
                             blockKey={blockKey}
                             index={index}
                             indexItem={indexItem}
                             item={item}
-                            errors={errors}
                             disabled={!blockPermission}
-                            control={control}
-                            register={register}
-                            getValues={getValues}
                             updateResponse={updateResponse}
                             handleFileSelect={handleFileSelect}
                             handleRemoveAnexoItem={handleRemoveAnexoItem}

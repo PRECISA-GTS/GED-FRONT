@@ -29,6 +29,7 @@ const Transportador = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'ph:truck-bold',
                 title: 'Transportador',
                 subtitle: {
                     id: id,

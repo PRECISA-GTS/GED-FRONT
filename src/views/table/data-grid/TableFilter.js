@@ -54,8 +54,6 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
     }
   };
 
-  console.log("🚀 ~ rows:", rows)
-
   return (
     <>
       <DataGrid

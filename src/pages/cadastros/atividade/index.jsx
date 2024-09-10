@@ -26,6 +26,7 @@ const Atividade = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
+                icon: 'fluent:food-grains-24-regular',
                 title: 'Atividade',
                 subtitle: {
                     id: id,

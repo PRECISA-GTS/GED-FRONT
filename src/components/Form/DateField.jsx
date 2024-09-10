@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { dateConfig } from 'src/configs/defaultConfigs'
 
 const DateField = ({
+    form,
     xs,
     md,
     title,
@@ -14,14 +15,16 @@ const DateField = ({
     value,
     name,
     typeValidation,
-    errors,
     alertRequired,
-    control,
     opacity
 }) => {
     const theme = useTheme()
     const [dateStatus, setDateStatus] = useState({})
     const [inputError, setInputError] = useState(null)
+
+    //? Valida erro a partir de form
+    const errorPath = name.split('.').reduce((obj, key) => obj?.[key], form?.formState?.errors)
+    const hasError = Boolean(errorPath)
 
     useEffect(() => {
         if (typeValidation && value) {
@@ -70,7 +73,7 @@ const DateField = ({
             <FormControl fullWidth>
                 <Controller
                     name={name}
-                    control={control}
+                    control={form.control}
                     rules={{ required: required }}
                     render={({ field }) => (
                         <TextField
@@ -79,7 +82,8 @@ const DateField = ({
                             label={title}
                             disabled={disabled ? true : false}
                             defaultValue={value ? formatDate(value) : ''}
-                            error={!!errors || !!inputError}
+                            // error={!!form.formState?.errors || !!inputError}
+                            error={hasError}
                             helperText={inputError}
                             onChange={e => {
                                 const dateValue = e.target.value

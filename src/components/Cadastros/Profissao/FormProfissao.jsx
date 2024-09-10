@@ -30,12 +30,7 @@ const FormProfissao = () => {
         nome: yup.string().required('Campo obrigatório')
     })
 
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-        reset
-    } = useForm({
+    const form = useForm({
         mode: 'onChange',
         resolver: yupResolver(schema)
     })
@@ -89,7 +84,7 @@ const FormProfissao = () => {
             const getData = async () => {
                 try {
                     const response = await api.get(`${staticUrl}/${id}`)
-                    reset(response.data)
+                    form.reset(response.data)
                 } catch (error) {
                     console.log(error)
                 }
@@ -98,7 +93,7 @@ const FormProfissao = () => {
 
             //? Seta error nos campos obrigatórios
             setTimeout(() => {
-                trigger()
+                form.trigger()
             }, 300)
         }
     }, [])
@@ -108,12 +103,12 @@ const FormProfissao = () => {
             {!data && <Loading />}
             {data && (
                 <Card>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FormHeader
                             btnCancel
                             btnSave
                             disabled={Object.keys(errors).length > 0 ? true : false}
-                            handleSubmit={() => handleSubmit(onSubmit)}
+                            handleSubmit={() => form.handleSubmit(onSubmit)}
                             btnDelete={type === 'edit' ? true : false}
                             onclickDelete={() => setOpen(true)}
                         />
@@ -123,7 +118,7 @@ const FormProfissao = () => {
                                     <FormControl fullWidth>
                                         <Controller
                                             name='nome'
-                                            control={control}
+                                            control={form.control}
                                             render={({ field: { value, onChange } }) => (
                                                 <TextField
                                                     value={value ?? ''}
@@ -148,7 +143,7 @@ const FormProfissao = () => {
                                     <FormControl>
                                         <Controller
                                             name='status'
-                                            control={control}
+                                            control={form.control}
                                             rules={{ required: false }}
                                             render={({ field: { value, onChange } }) => (
                                                 <FormControlLabel

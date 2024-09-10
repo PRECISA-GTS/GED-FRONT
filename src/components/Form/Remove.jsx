@@ -1,4 +1,4 @@
-import { Grid, Typography, Box, FormControlLabel, Checkbox, Tooltip, IconButton } from '@mui/material'
+import { Grid, Typography, Box, Tooltip, IconButton } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 
 const Remove = ({ xs, md, icon, color, title, removeItem, item, pending, index, textSuccess, textError }) => {

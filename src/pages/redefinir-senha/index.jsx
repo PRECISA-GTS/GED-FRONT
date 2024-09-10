@@ -79,12 +79,7 @@ const ResetPassword = () => {
         event.preventDefault()
     }
 
-    const {
-        handleSubmit,
-        formState: { errors },
-        register,
-        watch
-    } = useForm({})
+    const form = useForm({})
 
     const onSubmit = value => {
         const usuarioID = router.query.userId
@@ -132,7 +127,7 @@ const ResetPassword = () => {
                         <FormControl fullWidth sx={{ mb: 4 }}>
                             <InputLabel
                                 htmlFor='auth-reset-password-new-password'
-                                color={errors?.newPassword ? 'error' : ''}
+                                color={form.formState?.errors?.newPassword ? 'error' : ''}
                             >
                                 Nova senha
                             </InputLabel>
@@ -142,11 +137,11 @@ const ResetPassword = () => {
                                 name='newPassword'
                                 id='auth-reset-password-new-password'
                                 type={values.showNewPassword ? 'text' : 'password'}
-                                {...register(`newPassword`, {
+                                {...form.register(`newPassword`, {
                                     required: true,
                                     validate: value => value.length >= 4 || 'A senha deve conter no mínimo 4 dígitos.'
                                 })}
-                                error={errors.newPassword}
+                                error={form.formState?.errors.newPassword}
                                 endAdornment={
                                     <InputAdornment position='end'>
                                         <IconButton
@@ -164,9 +159,9 @@ const ResetPassword = () => {
                                     </InputAdornment>
                                 }
                             />
-                            {errors.newPassword && (
+                            {form.formState?.errors.newPassword && (
                                 <Typography variant='caption' color='error'>
-                                    {errors.newPassword.message}
+                                    {form.formState?.errors.newPassword.message}
                                 </Typography>
                             )}
                         </FormControl>
@@ -193,7 +188,7 @@ const ResetPassword = () => {
                                             value.length >= 4 || 'A senha deve conter no mínimo 4 dígitos.'
                                     }
                                 })}
-                                error={errors.confirmNewPassword}
+                                error={form.formState?.errors.confirmNewPassword}
                                 endAdornment={
                                     <InputAdornment position='end'>
                                         <IconButton
@@ -213,9 +208,9 @@ const ResetPassword = () => {
                                     </InputAdornment>
                                 }
                             />
-                            {errors.confirmNewPassword && (
+                            {form.formState?.errors.confirmNewPassword && (
                                 <Typography variant='caption' color='error'>
-                                    {errors.confirmNewPassword.message}
+                                    {form.formState?.errors.confirmNewPassword.message}
                                 </Typography>
                             )}
                         </FormControl>

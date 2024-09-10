@@ -54,11 +54,7 @@ const FormValidationBasic = () => {
   })
 
   // ** Hooks
-  const {
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
+  const form = useForm({ defaultValues })
 
   const handleClickShowPassword = () => {
     setState({ ...state, showPassword: !state.showPassword })
@@ -73,13 +69,13 @@ const FormValidationBasic = () => {
     <Card>
       <CardHeader title='Basic' />
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <Controller
                   name='firstName'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -87,12 +83,12 @@ const FormValidationBasic = () => {
                       label='First Name'
                       onChange={onChange}
                       placeholder='Leonard'
-                      error={Boolean(errors.firstName)}
+                      error={Boolean(form.formState?.errors.firstName)}
                       aria-describedby='validation-basic-first-name'
                     />
                   )}
                 />
-                {errors.firstName && (
+                {form.formState?.errors.firstName && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-first-name'>
                     This field is required
                   </FormHelperText>
@@ -104,7 +100,7 @@ const FormValidationBasic = () => {
               <FormControl fullWidth>
                 <Controller
                   name='lastName'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -112,12 +108,12 @@ const FormValidationBasic = () => {
                       label='Last Name'
                       onChange={onChange}
                       placeholder='Carter'
-                      error={Boolean(errors.lastName)}
+                      error={Boolean(form.formState?.errors.lastName)}
                       aria-describedby='validation-basic-last-name'
                     />
                   )}
                 />
-                {errors.lastName && (
+                {form.formState?.errors.lastName && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-last-name'>
                     This field is required
                   </FormHelperText>
@@ -129,7 +125,7 @@ const FormValidationBasic = () => {
               <FormControl fullWidth>
                 <Controller
                   name='email'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <TextField
@@ -137,13 +133,13 @@ const FormValidationBasic = () => {
                       value={value}
                       label='Email'
                       onChange={onChange}
-                      error={Boolean(errors.email)}
+                      error={Boolean(form.formState?.errors.email)}
                       placeholder='carterleonard@gmail.com'
                       aria-describedby='validation-basic-email'
                     />
                   )}
                 />
-                {errors.email && (
+                {form.formState?.errors.email && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-email'>
                     This field is required
                   </FormHelperText>
@@ -153,12 +149,12 @@ const FormValidationBasic = () => {
 
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='validation-basic-password' error={Boolean(errors.password)}>
+                <InputLabel htmlFor='validation-basic-password' error={Boolean(form.formState?.errors.password)}>
                   Password
                 </InputLabel>
                 <Controller
                   name='password'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <OutlinedInput
@@ -166,7 +162,7 @@ const FormValidationBasic = () => {
                       label='Password'
                       onChange={onChange}
                       id='validation-basic-password'
-                      error={Boolean(errors.password)}
+                      error={Boolean(form.formState?.errors.password)}
                       type={state.showPassword ? 'text' : 'password'}
                       endAdornment={
                         <InputAdornment position='end'>
@@ -183,7 +179,7 @@ const FormValidationBasic = () => {
                     />
                   )}
                 />
-                {errors.password && (
+                {form.formState?.errors.password && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-password'>
                     This field is required
                   </FormHelperText>
@@ -194,7 +190,7 @@ const FormValidationBasic = () => {
             <Grid item xs={12} sm={6}>
               <Controller
                 name='dob'
-                control={control}
+                control={form.control}
                 rules={{ required: true }}
                 render={({ field: { value, onChange } }) => (
                   <DatePicker
@@ -208,14 +204,14 @@ const FormValidationBasic = () => {
                         value={value}
                         onChange={onChange}
                         label='Date of Birth'
-                        error={Boolean(errors.dob)}
+                        error={Boolean(form.formState?.errors.dob)}
                         aria-describedby='validation-basic-dob'
                       />
                     }
                   />
                 )}
               />
-              {errors.dob && (
+              {form.formState?.errors.dob && (
                 <FormHelperText sx={{ mx: 3.5, color: 'error.main' }} id='validation-basic-dob'>
                   This field is required
                 </FormHelperText>
@@ -226,21 +222,21 @@ const FormValidationBasic = () => {
               <FormControl fullWidth>
                 <InputLabel
                   id='validation-basic-select'
-                  error={Boolean(errors.select)}
+                  error={Boolean(form.formState?.errors.select)}
                   htmlFor='validation-basic-select'
                 >
                   Country
                 </InputLabel>
                 <Controller
                   name='select'
-                  control={control}
+                  control={form.control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <Select
                       value={value}
                       label='Country'
                       onChange={onChange}
-                      error={Boolean(errors.select)}
+                      error={Boolean(form.formState?.errors.select)}
                       labelId='validation-basic-select'
                       aria-describedby='validation-basic-select'
                     >
@@ -251,7 +247,7 @@ const FormValidationBasic = () => {
                     </Select>
                   )}
                 />
-                {errors.select && (
+                {form.formState?.errors.select && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-select'>
                     This field is required
                   </FormHelperText>
@@ -271,12 +267,12 @@ const FormValidationBasic = () => {
                       multiline
                       {...field}
                       label='Bio'
-                      error={Boolean(errors.textarea)}
+                      error={Boolean(form.formState?.errors.textarea)}
                       aria-describedby='validation-basic-textarea'
                     />
                   )}
                 />
-                {errors.textarea && (
+                {form.formState?.errors.textarea && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-textarea'>
                     This field is required
                   </FormHelperText>
@@ -285,7 +281,7 @@ const FormValidationBasic = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <FormControl error={Boolean(errors.radio)}>
+              <FormControl error={Boolean(form.formState?.errors.radio)}>
                 <FormLabel>Gender</FormLabel>
                 <Controller
                   name='radio'
@@ -296,25 +292,25 @@ const FormValidationBasic = () => {
                       <FormControlLabel
                         value='female'
                         label='Female'
-                        sx={errors.radio ? { color: 'error.main' } : null}
-                        control={<Radio sx={errors.radio ? { color: 'error.main' } : null} />}
+                        sx={form.formState?.errors.radio ? { color: 'error.main' } : null}
+                        control={<Radio sx={form.formState?.errors.radio ? { color: 'error.main' } : null} />}
                       />
                       <FormControlLabel
                         value='male'
                         label='Male'
-                        sx={errors.radio ? { color: 'error.main' } : null}
-                        control={<Radio sx={errors.radio ? { color: 'error.main' } : null} />}
+                        sx={form.formState?.errors.radio ? { color: 'error.main' } : null}
+                        control={<Radio sx={form.formState?.errors.radio ? { color: 'error.main' } : null} />}
                       />
                       <FormControlLabel
                         value='other'
                         label='Other'
-                        sx={errors.radio ? { color: 'error.main' } : null}
-                        control={<Radio sx={errors.radio ? { color: 'error.main' } : null} />}
+                        sx={form.formState?.errors.radio ? { color: 'error.main' } : null}
+                        control={<Radio sx={form.formState?.errors.radio ? { color: 'error.main' } : null} />}
                       />
                     </RadioGroup>
                   )}
                 />
-                {errors.radio && (
+                {form.formState?.errors.radio && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-radio'>
                     This field is required
                   </FormHelperText>
@@ -331,18 +327,18 @@ const FormValidationBasic = () => {
                   render={({ field }) => (
                     <FormControlLabel
                       label='Agree to our terms and conditions'
-                      sx={errors.checkbox ? { color: 'error.main' } : null}
+                      sx={form.formState?.errors.checkbox ? { color: 'error.main' } : null}
                       control={
                         <Checkbox
                           {...field}
                           name='validation-basic-checkbox'
-                          sx={errors.checkbox ? { color: 'error.main' } : null}
+                          sx={form.formState?.errors.checkbox ? { color: 'error.main' } : null}
                         />
                       }
                     />
                   )}
                 />
-                {errors.checkbox && (
+                {form.formState?.errors.checkbox && (
                   <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-checkbox'>
                     This field is required
                   </FormHelperText>

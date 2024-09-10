@@ -15,6 +15,7 @@ import Icon from 'src/@core/components/icon'
 import HelpText from '../Defaults/HelpText'
 
 const Input = ({
+    form,
     xs,
     md,
     title,
@@ -27,8 +28,6 @@ const Input = ({
     multiline,
     disabled,
     required,
-    control,
-    errors,
     onChange,
     className,
     help,
@@ -37,13 +36,15 @@ const Input = ({
     helpTextPosition,
     alertRequired,
     opacity,
+    errorText,
+    error,
     ...props
 }) => {
     const theme = useTheme()
 
-    if (mask == 'telefone') {
-        console.log('value: ', value, mask, cellPhoneMask(value))
-    }
+    //? Valida erro a partir de form
+    const errorPath = name.split('.').reduce((obj, key) => obj?.[key], form?.formState?.errors)
+    const hasError = Boolean(errorPath)
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -51,7 +52,7 @@ const Input = ({
                 <FormControl fullWidth sx={{ position: 'relative' }}>
                     <Controller
                         name={name}
-                        control={control}
+                        control={form.control}
                         rules={{ required: required }}
                         render={({ field }) => (
                             <>
@@ -66,7 +67,7 @@ const Input = ({
                                     size='small'
                                     disabled={disabled}
                                     aria-describedby='validation-schema-nome'
-                                    error={errors}
+                                    error={hasError}
                                     onChange={e => {
                                         let value = e.target.value
 
@@ -174,6 +175,7 @@ const Input = ({
                         <HelpText text={helpText} position={helpTextPosition ?? 'top'} />
                     </div>
                 )}
+                {errorText && <p className='pt-1 text-xs text-red-500'>{errorText}</p>}
             </div>
         </Grid>
     )

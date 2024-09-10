@@ -12,16 +12,12 @@ import Icon from 'src/@core/components/icon'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
 
 const HeaderFields = ({
+    form,
     recebimentoMpID,
     modelo,
     values,
     fields,
     disabled,
-    register,
-    errors,
-    getValues,
-    setValue,
-    control,
     getAddressByCep,
     nameSelected,
     setNameSelected,
@@ -63,7 +59,7 @@ const HeaderFields = ({
     const setDefaultProfissional = arrProfissionais => {
         const profissionalID = user.profissionalID //? Profissional logado
         const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-        if (profissional && profissional.id > 0) setValue('fieldsHeader.profissional', profissional)
+        if (profissional && profissional.id > 0) form.setValue('fieldsHeader.profissional', profissional)
     }
 
     const selectFornecedor = (e, fornecedoresAprovados) => {
@@ -82,12 +78,12 @@ const HeaderFields = ({
                 return produto
             })
         setProdutos(newProducts)
-        setValue('produtos', newProducts)
+        form.setValue('produtos', newProducts)
     }
 
     const handleCheck = (e, index) => {
         const { checked } = e.target
-        setValue(`produtos[${index}].checked_`, checked)
+        form.setValue(`produtos[${index}].checked_`, checked)
 
         const updatedProducts = produtos.map((produto, i) =>
             i === index ? { ...produto, checked_: checked } : produto
@@ -159,12 +155,10 @@ const HeaderFields = ({
                                     type='date'
                                     value={values?.data ?? new Date()}
                                     disabled={disabled}
-                                    register={register}
-                                    control={control}
                                     typeValidation='dataPassado'
                                     daysValidation={365}
-                                    errors={errors?.fieldsHeader?.['data']}
                                     alertRequired //! Apenas pinta o campo de vermelho, não valida
+                                    form={form}
                                 />
                                 {/* Hora de avaliação */}
                                 <Input
@@ -174,10 +168,8 @@ const HeaderFields = ({
                                     name={`fieldsHeader.hora`}
                                     type='time'
                                     disabled={disabled}
-                                    register={register}
-                                    control={control}
-                                    errors={errors?.fieldsHeader?.['hora']}
                                     alertRequired //! Apenas pinta o campo de vermelho, não valida
+                                    form={form}
                                 />
                                 {/* Profissional que preenche */}
                                 <Select
@@ -188,31 +180,24 @@ const HeaderFields = ({
                                     type='string'
                                     options={profissionaisPreenchimento}
                                     disabled={disabled}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
-                                    errors={errors?.fieldsHeader?.['profissional']}
                                     alertRequired //! Apenas pinta o campo de vermelho, não valida
+                                    form={form}
                                 />
                                 {/* Fields dinâmicos */}
                                 <Fields
-                                    register={register}
-                                    errors={errors}
-                                    setValue={setValue}
-                                    control={control}
                                     fields={fields}
                                     values={fields}
                                     getAddressByCep={getAddressByCep}
                                     disabled={disabled}
                                     nameSelected={nameSelected}
                                     setNameSelected={setNameSelected}
-                                    getValues={getValues}
                                     columnSelected={columnSelected}
                                     setColumnSelected={setColumnSelected}
                                     openModalNew={openModalNew}
                                     setOpenModalNew={setOpenModalNew}
                                     newChange={newChange}
                                     setNewChange={setNewChange}
+                                    form={form}
                                 />
                                 {/* Fornecedor */}
                                 <Select
@@ -225,10 +210,7 @@ const HeaderFields = ({
                                     onChange={e => selectFornecedor(e, fornecedoresAprovados)}
                                     value={values?.fornecedor}
                                     disabled={disabled}
-                                    register={register}
-                                    setValue={setValue}
-                                    control={control}
-                                    errors={errors?.fieldsHeader?.['fornecedor']}
+                                    form={form}
                                     alertRequired //! Apenas pinta o campo de vermelho, não valida
                                 />
                             </Grid>
@@ -243,7 +225,13 @@ const HeaderFields = ({
                     {/* Produtos */}
                     <Grid container alignItems='stretch' spacing={6} sx={{ mt: 2 }}>
                         <Grid item xs={12}>
-                            <Typography color='primary' variant='subtitle1' sx={{ fontWeight: 700 }}>
+                            <Typography
+                                color='primary'
+                                variant='subtitle1'
+                                sx={{ fontWeight: 700 }}
+                                className='flex items-center gap-1'
+                            >
+                                <Icon icon='ph:plant' className='text-primary' />
                                 Produtos aprovados do fornecedor
                             </Typography>
                             {produtos && produtos.length == 0 && (
@@ -266,12 +254,8 @@ const HeaderFields = ({
                                             produto={produto}
                                             setProdutos={setProdutos}
                                             handleCheck={handleCheck}
-                                            getValues={getValues}
-                                            setValue={setValue}
-                                            register={register}
-                                            control={control}
-                                            errors={errors}
                                             disabled={disabled}
+                                            form={form}
                                         />
                                         {index < produtos.length - 1 && <Divider />}
                                     </>

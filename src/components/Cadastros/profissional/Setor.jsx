@@ -6,7 +6,7 @@ import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 
-const Setor = ({ index, setValue, control, register, errors, item, remove }) => {
+const Setor = ({ form, index, item, remove }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [setores, setSetores] = useState([])
     const today = new Date().toISOString().substring(0, 10)
@@ -38,10 +38,7 @@ const Setor = ({ index, setValue, control, register, errors, item, remove }) => 
                 value={item?.setor}
                 required
                 options={setores ?? []}
-                register={register}
-                setValue={setValue}
-                control={control}
-                errors={errors?.fields?.setores?.[index]?.setor ?? null}
+                form={form}
                 opacity={item.status === 0 ? true : false}
             />
 
@@ -52,9 +49,7 @@ const Setor = ({ index, setValue, control, register, errors, item, remove }) => 
                 name={`fields.setores[${index}].dataInicio`}
                 value={item?.dataInicio}
                 required
-                register={register}
-                control={control}
-                errors={errors?.fields?.setores?.[index]?.dataInicio}
+                form={form}
                 opacity={item.status === 0 ? true : false}
             />
 
@@ -64,8 +59,7 @@ const Setor = ({ index, setValue, control, register, errors, item, remove }) => 
                 title='Data Fim'
                 name={`fields.setores[${index}].dataFim`}
                 value={item?.dataFim}
-                register={register}
-                control={control}
+                form={form}
                 opacity={item.status === 0 ? true : false}
             />
 

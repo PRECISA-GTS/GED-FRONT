@@ -27,14 +27,7 @@ const FormProdutos = ({ id }) => {
     const { title } = useContext(ParametersContext)
     const { loggedUnity } = useContext(AuthContext)
 
-    const {
-        trigger,
-        handleSubmit,
-        reset,
-        control,
-        formState: { errors },
-        register
-    } = useForm()
+    const form = useForm()
 
     //? Envia dados para a api
     const onSubmit = async values => {
@@ -95,7 +88,7 @@ const FormProdutos = ({ id }) => {
             const route = type === 'new' ? `${backRoute(staticUrl)}/new/getData` : `${staticUrl}/getData/${id}`
             await api.post(route, { id }).then(response => {
                 setData(response.data)
-                reset(response.data) //* Insere os dados no formulário
+                form.reset(response.data) //* Insere os dados no formulário
             })
         } catch (error) {
             console.log(error)
@@ -109,7 +102,7 @@ const FormProdutos = ({ id }) => {
         //? Seta error nos campos obrigatórios
         if (type === 'new') {
             setTimeout(() => {
-                trigger()
+                form.trigger()
             }, 300)
         }
     }, [id])
@@ -119,34 +112,25 @@ const FormProdutos = ({ id }) => {
             {!data && <Loading />}
             {data && (
                 <Card>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FormHeader
                             btnCancel
                             btnSave
-                            handleSubmit={() => handleSubmit(onSubmit)}
+                            handleSubmit={() => form.handleSubmit(onSubmit)}
                             btnDelete={type === 'edit' ? true : false}
                             onclickDelete={() => setOpen(true)}
                             type={type}
                         />
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input
-                                    xs={12}
-                                    md={8}
-                                    title='Nome'
-                                    name='fields.nome'
-                                    required={true}
-                                    control={control}
-                                    errors={errors?.fields?.nome}
-                                />
+                                <Input xs={12} md={8} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Input
                                     xs={12}
                                     md={3}
                                     title='Unidade de Medida'
                                     name='fields.unidadeMedida'
                                     required={true}
-                                    control={control}
-                                    errors={errors?.fields?.unidadeMedida}
+                                    form={form}
                                 />
                                 <Check
                                     xs={2}
@@ -155,7 +139,7 @@ const FormProdutos = ({ id }) => {
                                     name='fields.status'
                                     value={data?.fields.status}
                                     typePage={type}
-                                    register={register}
+                                    form={form}
                                 />
                             </Grid>
                         </CardContent>

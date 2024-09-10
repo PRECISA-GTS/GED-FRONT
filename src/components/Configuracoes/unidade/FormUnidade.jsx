@@ -50,18 +50,7 @@ const FormUnidade = ({ id }) => {
     const mode = settings.mode
     const [categories, setCategories] = useState([])
 
-    const {
-        trigger,
-        handleSubmit,
-        setValue,
-        getValues,
-        setError,
-        reset,
-        control,
-        watch,
-        formState: { errors },
-        register
-    } = useForm({ mode: 'onChange' })
+    const form = useForm({ mode: 'onChange' })
 
     //? Função que busca o CEP
     const handleCep = async cep => {
@@ -70,10 +59,10 @@ const FormUnidade = ({ id }) => {
             const cepNumber = cep.replace(/\D/g, '')
             api.get('https://viacep.com.br/ws/' + cepNumber + '/json/').then(response => {
                 if (response.data.localidade) {
-                    setValue('fields.logradouro', response.data.logradouro)
-                    setValue('fields.bairro', response.data.bairro)
-                    setValue('fields.cidade', response.data.localidade)
-                    setValue('fields.uf', response.data.uf)
+                    form.setValue('fields.logradouro', response.data.logradouro)
+                    form.setValue('fields.bairro', response.data.bairro)
+                    form.setValue('fields.cidade', response.data.localidade)
+                    form.setValue('fields.uf', response.data.uf)
                     toast.success('Endereço encontrado!')
                 } else {
                     toast.error('Endereço não encontrado!')
@@ -88,7 +77,7 @@ const FormUnidade = ({ id }) => {
         const cnpjCpfValidation =
             datas.fields.cpf === 1 ? validationCPF(datas.fields.cnpj) : validationCNPJ(datas.fields.cnpj)
         if (!cnpjCpfValidation) {
-            setError('fields.cnpj', {
+            form.setError('fields.cnpj', {
                 type: 'required',
                 message: datas.fields.cpf === 1 ? 'CPF inválido' : 'CNPJ inválido'
             })
@@ -183,7 +172,7 @@ const FormUnidade = ({ id }) => {
         if (type == 'edit') {
             try {
                 const response = await api.get(`${staticUrl}/${id}`)
-                reset(response.data)
+                form.reset(response.data)
                 setData(response.data)
                 setFileCurrent(response.data.fields.cabecalhoRelatorioTitle)
                 setPhotoProfile(response.data?.fields?.cabecalhoRelatorio)
@@ -192,7 +181,7 @@ const FormUnidade = ({ id }) => {
             }
         } else {
             setData({}) //? Sair loading
-            reset({
+            form.reset({
                 //Todo: Pra não bugar campos quando carrega endereço pelo CEP
                 fields: {
                     logradouro: '--',
@@ -204,7 +193,7 @@ const FormUnidade = ({ id }) => {
         }
 
         setTimeout(() => {
-            trigger()
+            form.trigger()
         }, 300)
     }
     useEffect(() => {
@@ -269,11 +258,11 @@ const FormUnidade = ({ id }) => {
             {!data && <Loading />}
             {data && (
                 <>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FormHeader
                             btnCancel={user.papelID === 1 ? true : false}
                             btnSave
-                            handleSubmit={() => handleSubmit(onSubmit)}
+                            handleSubmit={() => form.handleSubmit(onSubmit)}
                             btnDelete={type === 'edit' && user.papelID === 1 ? true : false}
                             onclickDelete={() => setOpenModalDeleted(true)}
                             type={type}
@@ -381,9 +370,7 @@ const FormUnidade = ({ id }) => {
                                                 title={data.fields.cpf === 1 ? 'Nome' : 'Razão Social'}
                                                 name='fields.razaoSocial'
                                                 required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.razaoSocial}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -391,9 +378,7 @@ const FormUnidade = ({ id }) => {
                                                 title={data.fields.cpf === 1 ? 'Apelido' : 'Nome Fantasia'}
                                                 name='fields.nomeFantasia'
                                                 required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.nomeFantasia}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -403,9 +388,7 @@ const FormUnidade = ({ id }) => {
                                                 mask={data.fields.cpf === 1 ? 'cpf' : 'cnpj'}
                                                 required
                                                 disabled={user.papelID !== 1}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.cnpj}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -413,9 +396,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Responsável'
                                                 name='fields.responsavel'
                                                 required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.responsavel}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -424,9 +405,7 @@ const FormUnidade = ({ id }) => {
                                                 name='fields.email'
                                                 type='email'
                                                 required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.email}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -435,9 +414,7 @@ const FormUnidade = ({ id }) => {
                                                 name='fields.telefone1'
                                                 mask='telefone'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.telefone1}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -446,9 +423,7 @@ const FormUnidade = ({ id }) => {
                                                 name='fields.telefone2'
                                                 mask='telefone'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.telefone2}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -458,9 +433,7 @@ const FormUnidade = ({ id }) => {
                                                 getAddressByCep={handleCep}
                                                 mask='cep'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.cep}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -468,9 +441,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Rua'
                                                 name='fields.logradouro'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.logradouro}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -478,9 +449,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Número'
                                                 name='fields.numero'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.numero}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -488,9 +457,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Complemento'
                                                 name='fields.complemento'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.complemento}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -498,9 +465,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Bairro'
                                                 name='fields.bairro'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.bairro}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -508,9 +473,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Cidade'
                                                 name='fields.cidade'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.cidade}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -519,9 +482,7 @@ const FormUnidade = ({ id }) => {
                                                 name='fields.uf'
                                                 mask='estado'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.uf}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -529,9 +490,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Pais'
                                                 name='fields.pais'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.pais}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -539,9 +498,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Principais Clientes'
                                                 name='fields.principaisClientes'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.principaisClientes}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -549,9 +506,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Resgistro de Sipeagro'
                                                 name='fields.registroSipeagro'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.registroSipeagro}
+                                                form={form}
                                             />
                                             <Input
                                                 xs={12}
@@ -559,27 +514,22 @@ const FormUnidade = ({ id }) => {
                                                 title='IE'
                                                 name='fields.ie'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.ie}
+                                                form={form}
                                             />
                                             <Select
                                                 xs={12}
                                                 md={4}
                                                 title='Categoria'
                                                 name='fields.categoria'
-                                                value={getValues('fields.categoria')}
+                                                value={form.getValues('fields.categoria')}
                                                 onChange={newValue => {
-                                                    setValue('fields.risco', null)
-                                                    setValue('fields.categoria', newValue)
-                                                    watch('fields.categoria')
+                                                    form.setValue('fields.risco', null)
+                                                    form.setValue('fields.categoria', newValue)
+                                                    form.watch('fields.categoria')
                                                 }}
                                                 required
                                                 options={categories ?? []}
-                                                register={register}
-                                                setValue={setValue}
-                                                control={control}
-                                                errors={errors?.fields?.categoria}
+                                                form={form}
                                             />
                                             <Select
                                                 xs={12}
@@ -589,26 +539,23 @@ const FormUnidade = ({ id }) => {
                                                 value={data?.fields?.risco}
                                                 required
                                                 options={
-                                                    (getValues('fields.categoria')?.riscos ||
+                                                    (form.getValues('fields.categoria')?.riscos ||
                                                         categories.filter(cat => cat.id == data?.fields?.categoriaID)[0]
                                                             ?.riscos) ??
                                                     []
                                                 }
-                                                register={register}
-                                                setValue={setValue}
-                                                control={control}
-                                                errors={errors?.fields?.risco}
+                                                form={form}
                                             />
                                             <Grid item xs={12} md={4}></Grid>
                                             {/* Editar a senha | Trocar senha */}
                                             {type == 'edit' && user.papelID == 2 && (
                                                 <>
                                                     <NewPassword
-                                                        register={register}
-                                                        errors={errors}
+                                                        register={form.register}
+                                                        errors={form.formState?.errors}
                                                         showNewPassword={showNewPassword}
                                                         setShowNewPassword={setShowNewPassword}
-                                                        watch={watch}
+                                                        watch={form.watch}
                                                     />
                                                 </>
                                             )}
@@ -633,9 +580,7 @@ const FormUnidade = ({ id }) => {
                                                 title='Título do relatório'
                                                 name='fields.tituloRelatorio'
                                                 required={false}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.tituloRelatorio}
+                                                form={form}
                                                 helpText='Título que aparecerá no cabeçalho dos relatórios'
                                             />
 
@@ -647,9 +592,7 @@ const FormUnidade = ({ id }) => {
                                                 name={`fields.extensoes`}
                                                 options={data.fields.allExtensions}
                                                 value={data.fields.extensoes}
-                                                register={register}
-                                                setValue={setValue}
-                                                control={control}
+                                                form={form}
                                             />
 
                                             <Input
@@ -658,16 +601,14 @@ const FormUnidade = ({ id }) => {
                                                 title='Tamanho máximo dos anexos (MB)'
                                                 name='fields.anexosTamanhoMaximo'
                                                 required={true}
-                                                register={register}
-                                                control={control}
-                                                errors={errors?.fields?.anexosTamanhoMaximo}
+                                                form={form}
                                             />
 
                                             <CheckLabel
                                                 title='Obrigatório o produto no formulário de qualificação do fornecedor'
                                                 name={`fields.obrigatorioProdutoFornecedor`}
                                                 value={data.fields.obrigatorioProdutoFornecedor}
-                                                register={register}
+                                                form={form}
                                                 helpText='Com esta opção marcada, será obrigatório selecionar um ou mais produtos no formulário de qualificação do fornecedor.'
                                             />
                                         </Grid>
@@ -678,7 +619,7 @@ const FormUnidade = ({ id }) => {
                                                     title='Habilita quem preenche o formulário de qualificação do fornecedor (Fábrica ou Fornecedor)'
                                                     name={`fields.habilitaQuemPreencheFormFornecedor`}
                                                     value={data.fields.habilitaQuemPreencheFormFornecedor}
-                                                    register={register}
+                                                    form={form}
                                                     helpText='Com esta opção marcada, será definido quem preenche o formulário de qualificação do fornecedor na criação de um novo formulário, caso contrário somente o fornecedor poderá preencher.'
                                                 />
                                             </Grid>

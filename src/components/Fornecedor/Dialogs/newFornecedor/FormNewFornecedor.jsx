@@ -12,20 +12,12 @@ import { validationCNPJ, validationCPF } from 'src/configs/validations'
 import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const FormNewFornecedor = ({
+    form,
     fields,
     params,
-    habilitaQuemPreencheFormFornecedor,
     setFields,
     handleCnpjCpf,
     validCnpj,
-    getValues,
-    control,
-    errors,
-    setValue,
-    register,
-    watch,
-    trigger,
-    reset,
     setIsNotFactory,
     isNotFactory
 }) => {
@@ -61,7 +53,7 @@ const FormNewFornecedor = ({
         const result = await api.post(`/configuracoes/formularios/fornecedor/getCategories`, {
             unidadeID: loggedUnity.unidadeID
         })
-        updateRisks(result.data, getValues('fields.categoria')?.id)
+        updateRisks(result.data, form.getValues('fields.categoria')?.id)
         setCategories(result.data)
     }
 
@@ -71,26 +63,26 @@ const FormNewFornecedor = ({
     }
 
     const copyNameToNickname = () => {
-        if (isCpf && (!getValues('fields.nomeFantasia') || getValues('fields.nomeFantasia') == '')) {
-            setValue('fields.nomeFantasia', getValues('fields.razaoSocial'))
+        if (isCpf && (!form.getValues('fields.nomeFantasia') || form.getValues('fields.nomeFantasia') == '')) {
+            setValue('fields.nomeFantasia', form.getValues('fields.razaoSocial'))
             setFields({
                 ...fields,
-                nomeFantasia: getValues('fields.razaoSocial')
+                nomeFantasia: form.getValues('fields.razaoSocial')
             })
         }
     }
 
     const clearCnpj = () => {
         setFields(null)
-        setValue('fields.cnpj', '')
-        setValue('fields.razaoSocial', '')
-        setValue('fields.nomeFantasia', '')
-        setValue('fields.email', '')
-        setValue('fields.categoria', null)
-        setValue('fields.risco', null)
-        setValue('fields.modelo', null)
-        setValue('fields.gruposAnexo', [])
-        setValue('fields.produtos', [])
+        form.setValue('fields.cnpj', '')
+        form.setValue('fields.razaoSocial', '')
+        form.setValue('fields.nomeFantasia', '')
+        form.setValue('fields.email', '')
+        form.setValue('fields.categoria', null)
+        form.setValue('fields.risco', null)
+        form.setValue('fields.modelo', null)
+        form.setValue('fields.gruposAnexo', [])
+        form.setValue('fields.produtos', [])
     }
 
     const handleCnpjChange = async e => {
@@ -99,7 +91,7 @@ const FormNewFornecedor = ({
     }
 
     useEffect(() => {
-        reset()
+        form.reset()
         getModels()
         getProducts()
         // getGruposAnexo()
@@ -108,29 +100,29 @@ const FormNewFornecedor = ({
 
     useEffect(() => {
         // Atualiza os riscos quando categories ou categoria mudam
-        if (categories.length > 0 && getValues('fields.categoria')) {
-            updateRisks(categories, getValues('fields.categoria').id)
+        if (categories.length > 0 && form.getValues('fields.categoria')) {
+            updateRisks(categories, form.getValues('fields.categoria').id)
         }
-    }, [categories, getValues('fields.categoria')])
+    }, [categories, form.getValues('fields?.categoria')])
 
     useEffect(() => {
         // Revalida o campo 'fields.cnpj' quando 'isCpf' muda
-        setValue('fields.cnpj', '')
-        trigger('fields.cnpj')
-    }, [isCpf, trigger])
+        form.setValue('fields.cnpj', '')
+        form.trigger('fields.cnpj')
+    }, [isCpf, form.trigger])
 
     const handleConfirmNew = async (data, name) => {
         setOpenModalNew(false)
         if (name == 'gruposAnexo') {
             setGruposAnexo(prevGrupoAnexo => [...prevGrupoAnexo, data])
-            const prevGruposAnexo = [...getValues('fields.gruposAnexo')]
+            const prevGruposAnexo = [...form.getValues('fields.gruposAnexo')]
             prevGruposAnexo.push(data)
-            setValue('fields.gruposAnexo', prevGruposAnexo)
+            form.setValue('fields.gruposAnexo', prevGruposAnexo)
         } else if (name == 'produtos') {
             setProducts(prevProduto => [...prevProduto, data])
-            const prevProdutos = [...getValues('fields.produtos')]
+            const prevProdutos = [...form.getValues('fields.produtos')]
             prevProdutos.push(data)
-            setValue('fields.produtos', prevProdutos)
+            form.setValue('fields.produtos', prevProdutos)
         }
 
         setNewChange(!newChange)
@@ -170,10 +162,10 @@ const FormNewFornecedor = ({
     }
 
     useEffect(() => {
-        const cnpjCpf = watch('fields.cnpj')
+        const cnpjCpf = form.watch('fields.cnpj')
         const tempValid = isCpf ? validationCPF(cnpjCpf) : validationCNPJ(cnpjCpf)
         setIsValidCnpjCpf(tempValid)
-    }, [isCpf, getValues('fields.cnpj')])
+    }, [isCpf, form.getValues('fields.cnpj')])
 
     return (
         models &&
@@ -185,10 +177,9 @@ const FormNewFornecedor = ({
                             <ToggleButtonLabel
                                 xs={12}
                                 md={12}
-                                register={register}
                                 name='habilitaQuemPreencheFormFornecedor'
-                                setValue={setValue}
                                 setIsNotFactory={setIsNotFactory}
+                                form={form}
                             />
                         </div>
                     )}
@@ -203,11 +194,10 @@ const FormNewFornecedor = ({
                                 onChange={e => {
                                     handleCnpjChange(e)
                                 }}
-                                clearField={getValues('fields.cnpj') ? clearCnpj : null}
+                                clearField={form.getValues('fields.cnpj') ? clearCnpj : null}
                                 mask={isCpf ? 'cpf' : 'cnpj'}
                                 required
-                                control={control}
-                                errors={errors?.fields?.cnpj}
+                                form={form}
                             />
                             {!isValidCnpjCpf && (
                                 <Typography variant='body2' color='error'>
@@ -223,7 +213,7 @@ const FormNewFornecedor = ({
                                     checked={isCpf}
                                     onChange={e => {
                                         setIsCpf(e.target.checked)
-                                        handleCnpjCpf(getValues('fields.cnpj'), e.target.checked)
+                                        handleCnpjCpf(form.getValues('fields.cnpj'), e.target.checked)
                                     }}
                                 />
                             }
@@ -240,8 +230,7 @@ const FormNewFornecedor = ({
                     onBlur={copyNameToNickname}
                     disabled={!validCnpj}
                     required
-                    control={control}
-                    errors={errors?.fields?.razaoSocial}
+                    form={form}
                 />
                 <Input
                     xs={12}
@@ -251,8 +240,7 @@ const FormNewFornecedor = ({
                     value={fields?.nomeFantasia}
                     disabled={!validCnpj}
                     required
-                    control={control}
-                    errors={errors?.fields?.nomeFantasia}
+                    form={form}
                 />
                 {isNotFactory && (
                     <Input
@@ -264,8 +252,7 @@ const FormNewFornecedor = ({
                         value={fields?.email}
                         disabled={!validCnpj}
                         required
-                        control={control}
-                        errors={errors?.fields?.email}
+                        form={form}
                     />
                 )}
                 {!isNotFactory && (
@@ -278,30 +265,24 @@ const FormNewFornecedor = ({
                             value={fields?.categoria}
                             disabled={!validCnpj}
                             onChange={newValue => {
-                                setValue('fields.categoria', newValue)
-                                setValue('fields.risco', null)
+                                form.setValue('fields.categoria', newValue)
+                                form.setValue('fields.risco', null)
                                 updateRisks(categories, newValue ? newValue.id : null)
                             }}
                             required
                             options={categories ?? []}
-                            register={register}
-                            setValue={setValue}
-                            control={control}
-                            errors={errors?.fields?.categoria}
+                            form={form}
                         />
                         <Select
                             xs={12}
                             md={12}
-                            disabled={getValues('fields.categoria') == null}
+                            disabled={form.getValues('fields.categoria') == null}
                             title='Risco'
                             name='fields.risco'
                             value={fields?.risco}
                             required
                             options={risks ?? []}
-                            register={register}
-                            setValue={setValue}
-                            control={control}
-                            errors={errors?.fields?.risco}
+                            form={form}
                         />
                     </>
                 )}
@@ -347,10 +328,7 @@ const FormNewFornecedor = ({
                     createNew={() => createNew('produtos')}
                     required={params?.obrigatorioProdutoFornecedor}
                     options={products ?? []}
-                    register={register}
-                    setValue={setValue}
-                    control={control}
-                    errors={errors?.fields?.produtos}
+                    form={form}
                 />
 
                 {/* Modal para criação de novo grupo de anexo ou  */}

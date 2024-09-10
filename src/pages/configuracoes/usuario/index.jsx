@@ -28,6 +28,7 @@ const Usuario = () => {
                 .then(response => {
                     setResult(response.data)
                     setTitle({
+                        icon: 'material-symbols:engineering-outline',
                         title: 'Usuário',
                         subtitle: {
                             id: id,
