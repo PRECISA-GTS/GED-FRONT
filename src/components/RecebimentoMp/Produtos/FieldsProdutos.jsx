@@ -15,7 +15,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
     return (
         <>
             {fields.map((field, fieldIndex) => (
-                <Fragment key={Math.random()}>
+                <Fragment key={field.id}>
                     <input
                         type='hidden'
                         value={field.recebimentoMpProdutoID}
