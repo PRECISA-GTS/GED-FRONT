@@ -54,8 +54,9 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                         md={3}
                         title='Apresentação'
                         name={`produtos[${index}].variacoes[${fieldIndex}].apresentacao`}
-                        type='string'
                         options={apresentacoes ?? []}
+                        value={field.apresentacao}
+                        type='string'
                         disabled={disabled}
                         form={form}
                     />
@@ -79,7 +80,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                                     disabled={fieldIndex < fields.length - 1}
                                     onClick={() =>
                                         append({
-                                            // quantidade: '0,020'
+                                            quantidade: '0,000'
                                         })
                                     }
                                 >

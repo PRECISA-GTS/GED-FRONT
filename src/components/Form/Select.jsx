@@ -58,14 +58,18 @@ const Select = ({
                                     if (newValue && e.target.innerText == '-- Novo --') {
                                         createNew()
                                     } else {
+                                        // Use field.onChange para garantir que o valor esteja sendo controlado corretamente
+                                        field.onChange(newValue)
                                         onChange && onChange(newValue)
-                                        form.setValue(name, newValue)
-                                        if (newValue) form.clearErrors(name)
-                                        else
+
+                                        if (newValue) {
+                                            form.clearErrors(name)
+                                        } else {
                                             form.setError(name, {
                                                 type: 'required',
                                                 message: `${title} é obrigatório`
                                             })
+                                        }
                                     }
                                 }}
                                 renderInput={params => (
