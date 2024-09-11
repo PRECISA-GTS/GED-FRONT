@@ -1,12 +1,15 @@
 import { Divider, Grid, Typography } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import Icon from 'src/@core/components/icon'
+import Check from 'src/components/Form/Check'
 import Input from 'src/components/Form/Input'
 import { floatToFractioned, fractionedToFloat } from 'src/configs/functions'
 import { AuthContext } from 'src/context/AuthContext'
 
 const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
+    console.log('🚀 ~ modal data:', data)
     const [sortedData, setSortedData] = useState(null)
+
     const { user } = useContext(AuthContext)
 
     //? Ordena os dados, trazendo primeiro os itens marcados na nao conformidade (checked_ == true)
@@ -78,6 +81,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                         value={row.quantidade}
                                         {...form.register(`productsConclude.${index}.quantidade`)}
                                     />
+
                                     <Input
                                         md={2}
                                         title='Qtd. Entrada'
@@ -116,7 +120,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                 <p className='text-xs opacity-50'>Diferença</p>
                                 <p>{form.watch(`productsConclude.${index}.diff`)}</p>
                             </Grid>
-                            <Grid item md={2}>
+                            <Grid item md={1}>
                                 <p className='text-xs opacity-50'>Data Fabricação</p>
                                 <p>{row.dataFabricacao}</p>
                             </Grid>

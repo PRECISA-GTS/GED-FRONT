@@ -4,6 +4,7 @@ import Select from 'src/components/Form/Select'
 import { Grid, IconButton, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import { useFieldArray } from 'react-hook-form'
+import { Fragment } from 'react'
 
 const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
     const { fields, append, remove } = useFieldArray({
@@ -14,7 +15,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
     return (
         <>
             {fields.map((field, fieldIndex) => (
-                <>
+                <Fragment key={Math.random()}>
                     <input
                         type='hidden'
                         value={field.recebimentoMpProdutoID}
@@ -78,7 +79,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                                     disabled={fieldIndex < fields.length - 1}
                                     onClick={() =>
                                         append({
-                                            quantidade: '0,000'
+                                            // quantidade: '0,020'
                                         })
                                     }
                                 >
@@ -98,7 +99,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                             </Tooltip>
                         </div>
                     </Grid>
-                </>
+                </Fragment>
             ))}
         </>
     )

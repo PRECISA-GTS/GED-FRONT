@@ -21,7 +21,7 @@ const ProductInfo = ({ value }) => {
             </Grid>
             <Grid item xs={12} md={2}>
                 <label className='opacity-60'>Apresentação</label>
-                <p>{value.apresentacao.nome}</p>
+                <p>{value.apresentacao?.nome}</p>
             </Grid>
             <Grid item xs={12} md={2}>
                 <label className='opacity-60'>Data de validade</label>

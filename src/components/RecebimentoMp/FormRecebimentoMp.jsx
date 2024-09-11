@@ -44,7 +44,6 @@ const FormRecebimentoMp = ({ id, model }) => {
     const [loadingFileItem, setLoadingFileItem] = useState(false) //? loading de carregamento do arquivo
     const [savingForm, setSavingForm] = useState(false)
     const [hasFormPending, setHasFormPending] = useState(false) //? Tem pendencia no formulário (já vinculado em formulário de recebimento, não altera mais o status)
-    const [naoConformidade, setNaoConformidade] = useState(null)
     const [canApprove, setCanApprove] = useState(true) //? Se true, pode aprovar o formulário
     const [unidade, setUnidade] = useState(null)
     // const [produtos, setProdutos] = useState([])
@@ -193,7 +192,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
-                    // setProdutos(response.data.produtos)
                     setBlocos(response.data.blocos)
                     setGrupoAnexo(response.data.grupoAnexo)
                     setInfo(response.data.info)
@@ -201,7 +199,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setLink(response.data.link)
                     setMovimentacao(response.data.ultimaMovimentacao)
                     verifyIfCanAproveForm(response.data.blocos) //? Verifica se há alguma resposta que bloqueie o formulário, se sim, o mesmo não pode ser aprovado
-                    setNaoConformidade(response.data.naoConformidade) //! Seta não conformidades
 
                     //* Insere os dados no formulário
                     form.reset(response.data)
@@ -466,7 +463,6 @@ const FormRecebimentoMp = ({ id, model }) => {
             }
         }
         console.log('🚀 ~ onSubmit:', data)
-        return
 
         if (id == true) return
         setOpenModal(false)

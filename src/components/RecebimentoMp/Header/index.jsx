@@ -27,12 +27,10 @@ const HeaderFields = ({
     newChange,
     setNewChange
 }) => {
-    const { user, loggedUnity } = useContext(AuthContext)
+    const { loggedUnity } = useContext(AuthContext)
     const [produtos, setProdutos] = useState([])
     const [apresentacoes, setApresentacoes] = useState([])
-    const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
-    const [fornecedor, setFornecedor] = useState(null)
 
     const getFornecedoresAprovados = async () => {
         const response = await api.post(`/formularios/fornecedor/getFornecedoresAprovados`, {
@@ -41,7 +39,6 @@ const HeaderFields = ({
             modelo: modelo
         })
         setFornecedoresAprovados(response.data)
-        // selectFornecedor(values.fornecedor, response.data)
     }
 
     const getProdutosRecebimento = async fornecedorCnpj => {

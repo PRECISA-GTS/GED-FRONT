@@ -351,7 +351,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         values={null}
                         formularioID={3}
                         modeloID={header.modelo.id}
-                        produtos={header.produtos}
+                        // produtos={header.produtos}
+                        produtos={form.getValues('header.produtos')}
                         form={form}
                         setores={header.setoresConclusao}
                     />
