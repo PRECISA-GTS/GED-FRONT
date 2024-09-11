@@ -8,8 +8,17 @@ import Icon from 'src/@core/components/icon'
 import { useEffect, useState } from 'react'
 import FieldsProdutos from './FieldsProdutos'
 
-const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck, disabled }) => {
-    console.log('🚀 ~ produto:', produto)
+const RecebimentoMpProdutos = ({
+    form,
+    index,
+    produto,
+    setProdutos,
+    handleCheck,
+    addProduct,
+    removeProduct,
+    disabled
+}) => {
+    console.log('🚀 ~ produto:', produto.variacoes)
     const [apresentacoes, setApresentacoes] = useState([])
 
     const getApresentacoes = async () => {
@@ -66,14 +75,28 @@ const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck,
 
                 {/* Conteúdo */}
                 {produto.checked_ && (
-                    <FieldsProdutos
-                        key={produto.produtoID} // Alterado para usar produtoID
-                        value={produto}
-                        apresentacoes={apresentacoes}
-                        index={index}
-                        disabled={disabled}
-                        form={form}
-                    />
+                    <>
+                        <FieldsProdutos
+                            index={index}
+                            produto={produto}
+                            disabled={disabled}
+                            form={form}
+                            apresentacoes={produto.apresentacoes}
+                        />
+                        {/* <FieldsProdutos
+                      key={index2}
+                      value={row}
+                      setProdutos={setProdutos}
+                      apresentacoes={apresentacoes}
+                      index={index}
+                      index2={index2}
+                      disabled={disabled}
+                      form={form}
+                      addProduct={addProduct}
+                      removeProduct={removeProduct}
+                      total={produto.variacoes.length}
+                  /> */}
+                    </>
                 )}
             </Grid>
         </>

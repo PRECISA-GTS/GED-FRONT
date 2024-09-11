@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 //* Default Form Components
 import Block from 'src/components/Defaults/Formularios/Block'
@@ -47,7 +47,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const [naoConformidade, setNaoConformidade] = useState(null)
     const [canApprove, setCanApprove] = useState(true) //? Se true, pode aprovar o formulário
     const [unidade, setUnidade] = useState(null)
-    const [produtos, setProdutos] = useState([])
+    // const [produtos, setProdutos] = useState([])
     const [grupoAnexo, setGrupoAnexo] = useState([])
     const [status, setStatus] = useState(null)
     const { createNewNotification } = useContext(NotificationContext)
@@ -193,7 +193,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     setFieldsHeader(response.data.fieldsHeader)
                     setFieldsFooter(response.data.fieldsFooter)
                     setField(response.data.fields)
-                    setProdutos(response.data.produtos)
+                    // setProdutos(response.data.produtos)
                     setBlocos(response.data.blocos)
                     setGrupoAnexo(response.data.grupoAnexo)
                     setInfo(response.data.info)
@@ -271,21 +271,21 @@ const FormRecebimentoMp = ({ id, model }) => {
         })
 
         //? Produtos
-        if (produtos && produtos.length > 0) {
-            produtos.forEach((produto, indexProduto) => {
-                produto.produtoAnexosDescricao &&
-                    produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
-                        if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-                            form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
-                                type: 'manual',
-                                message: 'Campo obrigatório'
-                            })
-                            arrErrors.push(`Anexo: ${produto?.nome} / ${anexo?.nome}`)
-                            hasErrors = true
-                        }
-                    })
-            })
-        }
+        // if (produtos && produtos.length > 0) {
+        //     produtos.forEach((produto, indexProduto) => {
+        //         produto.produtoAnexosDescricao &&
+        //             produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
+        //                 if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
+        //                     form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
+        //                         type: 'manual',
+        //                         message: 'Campo obrigatório'
+        //                     })
+        //                     arrErrors.push(`Anexo: ${produto?.nome} / ${anexo?.nome}`)
+        //                     hasErrors = true
+        //                 }
+        //             })
+        //     })
+        // }
 
         //? Blocos
         blocos.forEach((block, indexBlock) => {
@@ -465,6 +465,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
+        console.log('🚀 ~ onSubmit:', data)
+        return
 
         if (id == true) return
         setOpenModal(false)
@@ -760,8 +762,8 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 fields={field}
                                 disabled={!canEdit.status}
                                 getAddressByCep={getAddressByCep}
-                                setProdutos={setProdutos}
-                                produtos={produtos}
+                                // setProdutos={setProdutos}
+                                // produtos={produtos}
                                 form={form}
                             />
                         )}
