@@ -37,7 +37,7 @@ const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, ch
                             disabled={disabled}
                         />
                     }
-                    label={`${produto.nome} - Lote ${produto.lote}`}
+                    label={`${produto.nome} ${produto.lote ? ` - Lote: ${produto.lote}` : ' - Lote não informado'}`}
                     size='small'
                     sx={{
                         marginRight: '4px',

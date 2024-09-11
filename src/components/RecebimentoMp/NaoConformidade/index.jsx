@@ -319,15 +319,17 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
                         <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
 
-                        <ModelBlocks
-                            form={form}
-                            data={block}
-                            setBlock={setBlock}
-                            status={header.status.id}
-                            disabled={
-                                header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
-                            }
-                        />
+                        {type === 'edit' && (
+                            <ModelBlocks
+                                form={form}
+                                data={block}
+                                setBlock={setBlock}
+                                status={header.status.id}
+                                disabled={
+                                    header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
+                                }
+                            />
+                        )}
 
                         <HistoricForm key={change} id={id} parFormularioID={3} />
                     </div>

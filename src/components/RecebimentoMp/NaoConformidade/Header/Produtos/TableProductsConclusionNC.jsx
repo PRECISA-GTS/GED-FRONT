@@ -58,7 +58,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                         <Grid container spacing={4} sx={{ mt: 4 }} className='items-center'>
                             <Grid item md={12}>
                                 <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                                    {row.nome}
+                                    {`${row.nome} ${row.lote ? ` - Lote: ${row.lote}` : ' - Lote não informado'}`}
                                 </Typography>
                             </Grid>
 
@@ -120,17 +120,21 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                 <p className='text-xs opacity-50'>Diferença</p>
                                 <p>{form.watch(`productsConclude.${index}.diff`)}</p>
                             </Grid>
-                            <Grid item md={1}>
-                                <p className='text-xs opacity-50'>Data Fabricação</p>
-                                <p>{row.dataFabricacao}</p>
-                            </Grid>
                             <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Data Fabricação</p>
+                                <p>{row.dataFabricacao ?? '--'}</p>
+                            </Grid>
+                            {/* <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Lote</p>
-                                <p>{row.lote}</p>
+                                <p>{row.lote ?? '--'}</p>
+                            </Grid> */}
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Apresentação</p>
+                                <p>{row.apresentacao?.nome ?? '--'}</p>
                             </Grid>
                             <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Data Validade</p>
-                                <p>{row.dataValidade}</p>
+                                <p>{row.dataValidade ?? '--'}</p>
                             </Grid>
                         </Grid>
                         {index < sortedData.length - 1 && <Divider sx={{ pt: 4 }} />}

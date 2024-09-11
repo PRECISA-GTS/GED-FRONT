@@ -691,7 +691,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     btnSave={!info.concluido}
                     btnSend={user.papelID == 1 && info.status >= 30 && !info.concluido}
                     btnPrint={type == 'edit' ? true : false}
-                    btnDelete={info.status < 40 ? true : false}
+                    btnDelete={info.status < 40 && type === 'edit' ? true : false}
                     onclickDelete={() => setOpenModalDeleted(true)}
                     handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
