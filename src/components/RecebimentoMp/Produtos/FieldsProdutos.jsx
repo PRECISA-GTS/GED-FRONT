@@ -1,27 +1,15 @@
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
-import { Button, Grid, IconButton, Tooltip } from '@mui/material'
+import { Grid, IconButton, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import { useFieldArray } from 'react-hook-form'
 
-const FieldsProdutos = ({
-    value,
-    setProdutos,
-    addProduct,
-    removeProduct,
-    index,
-    apresentacoes,
-    disabled,
-    form,
-    total
-}) => {
+const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: `produtos[${index}].variacoes`
     })
-
-    console.log('FieldsProdutos: ', fields)
 
     return (
         <>
@@ -33,8 +21,6 @@ const FieldsProdutos = ({
                         name={`produtos[${index}].variacoes[${fieldIndex}].recebimentoMpProdutoID`}
                         {...form.register(`produtos[${index}].variacoes[${fieldIndex}].recebimentoMpProdutoID`)}
                     />
-
-                    {/* Quantidade */}
                     <Input
                         xs={12}
                         md={2}
@@ -44,8 +30,6 @@ const FieldsProdutos = ({
                         mask='fractioned3' //? Ex.: 1.580.000,587
                         form={form}
                     />
-
-                    {/* Data de fabricação */}
                     <DateField
                         xs={12}
                         md={2}
@@ -56,8 +40,6 @@ const FieldsProdutos = ({
                         typeValidation='dataPassado'
                         form={form}
                     />
-
-                    {/* Nº Lote */}
                     <Input
                         xs={12}
                         md={2}
@@ -66,8 +48,6 @@ const FieldsProdutos = ({
                         disabled={disabled}
                         form={form}
                     />
-
-                    {/* Apresentação */}
                     <Select
                         xs={12}
                         md={3}
@@ -78,8 +58,6 @@ const FieldsProdutos = ({
                         disabled={disabled}
                         form={form}
                     />
-
-                    {/* Data de validade */}
                     <DateField
                         xs={12}
                         md={2}
@@ -90,10 +68,10 @@ const FieldsProdutos = ({
                         form={form}
                     />
 
-                    {/* Botões inserir e remover */}
+                    {/* Inserir e remover */}
                     <Grid item xs={12} md={1}>
                         <div className='flex items-center gap-1 mt-1'>
-                            <Tooltip title={`Inserir variação de ${field.nome}`} placement='top'>
+                            <Tooltip title='Inserir variação' placement='top'>
                                 <IconButton
                                     color='primary'
                                     aria-label='delete'
@@ -108,11 +86,11 @@ const FieldsProdutos = ({
                                 </IconButton>
                             </Tooltip>
 
-                            <Tooltip title={`Remover variação de ${field.nome}`} placement='top'>
+                            <Tooltip title='Remover variação' placement='top'>
                                 <IconButton
                                     color='error'
                                     aria-label='delete'
-                                    disabled={total === 1}
+                                    disabled={fields.length === 1}
                                     onClick={() => remove(fieldIndex)}
                                 >
                                     <Icon icon='icons8:minus' />

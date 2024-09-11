@@ -6,7 +6,6 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
-import HeaderInfo from './Info'
 import RecebimentoMpProdutos from '../Produtos'
 import Icon from 'src/@core/components/icon'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
@@ -27,25 +26,13 @@ const HeaderFields = ({
     setOpenModalNew,
     newChange,
     setNewChange
-
-    // setProdutos,
-    // produtos
 }) => {
     const { user, loggedUnity } = useContext(AuthContext)
     const [produtos, setProdutos] = useState([])
+    const [apresentacoes, setApresentacoes] = useState([])
     const [profissionaisPreenchimento, setProfissionaisPreenchimento] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
     const [fornecedor, setFornecedor] = useState(null)
-
-    // const getProfissionaisSetores = async () => {
-    //     const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
-    //         formularioID: 2, // recebimento de MP
-    //         modeloID: modelo.id,
-    //         unidadeID: loggedUnity.unidadeID
-    //     })
-    //     setProfissionaisPreenchimento(response.data.preenche)
-    //     // setDefaultProfissional(response.data.preenche)
-    // }
 
     const getFornecedoresAprovados = async () => {
         const response = await api.post(`/formularios/fornecedor/getFornecedoresAprovados`, {
@@ -57,48 +44,18 @@ const HeaderFields = ({
         // selectFornecedor(values.fornecedor, response.data)
     }
 
-    const getProdutosRecebimento = async () => {
+    const getProdutosRecebimento = async fornecedorCnpj => {
         const response = await api.post(`/formularios/recebimento-mp/getProdutosRecebimento`, {
             recebimentoMpID: recebimentoMpID,
-            fornecedorCnpj: values.fornecedor?.cnpj_,
+            fornecedorCnpj: fornecedorCnpj,
             unidadeID: loggedUnity.unidadeID
         })
-        console.log('🚀 ~ getProdutosRecebimento:', response.data)
         setProdutos(response.data)
-
-        // setValue
         form.setValue('produtos', response.data)
     }
 
-    // const setDefaultProfissional = arrProfissionais => {
-    //     const profissionalID = user.profissionalID //? Profissional logado
-    //     const profissional = arrProfissionais.find(profissional => profissional.id === profissionalID)
-    //     if (profissional && profissional.id > 0) form.setValue('fieldsHeader.profissional', profissional)
-    // }
-
-    // const selectFornecedor = (e, fornecedoresAprovados) => {
-    //     if (!e) {
-    //         setFornecedor(null)
-    //         setProdutos([])
-    //         return
-    //     }
-    //     const checkedProducts = produtos.filter(row => row.checked_ === true).map(row => row.produtoID)
-    //     const newProducts = fornecedoresAprovados
-    //         .find(row => row.id === e.id)
-    //         ?.produtos?.map(produto => {
-    //             if (checkedProducts.includes(produto.produtoID)) {
-    //                 return { ...produto, checked_: true }
-    //             }
-    //             return produto
-    //         })
-    //     setProdutos(newProducts)
-    //     form.setValue('produtos', newProducts)
-    // }
-
     const handleCheck = (e, index) => {
         const { checked } = e.target
-        // form.setValue(`produtos[${index}].checked_`, checked)
-
         const updatedProducts = produtos.map((produto, i) =>
             i === index
                 ? {
@@ -115,24 +72,19 @@ const HeaderFields = ({
         form.setValue('produtos', updatedProducts)
     }
 
-    const addProduct = index => {
-        const updatedProducts = [...produtos]
-        updatedProducts[index].variacoes.push({
-            quantidade: '0,000'
-        })
-        setProdutos(updatedProducts)
-    }
-
-    const removeProduct = (indexProduct, indexVariation) => {
-        const updatedProducts = [...produtos]
-        updatedProducts[indexProduct].variacoes.splice(indexVariation, 1)
-        setProdutos(updatedProducts)
+    const getApresentacoes = async () => {
+        try {
+            const response = await api.get(`/cadastros/apresentacao`)
+            setApresentacoes(response.data)
+        } catch (error) {
+            console.log('🚀 ~ error:', error)
+        }
     }
 
     useEffect(() => {
+        getApresentacoes()
         getFornecedoresAprovados()
-        getProdutosRecebimento()
-        // getProfissionaisSetores()
+        if (values) getProdutosRecebimento(values.fornecedor?.cnpj_)
     }, [values])
 
     return (
@@ -178,7 +130,7 @@ const HeaderFields = ({
                             name={`fieldsHeader.fornecedor`}
                             type='string'
                             options={fornecedoresAprovados ?? []}
-                            // onChange={e => selectFornecedor(e, fornecedoresAprovados)}
+                            onChange={value => getProdutosRecebimento(value?.cnpj_)}
                             value={values?.fornecedor}
                             disabled={disabled}
                             form={form}
@@ -233,12 +185,10 @@ const HeaderFields = ({
                                             key={index}
                                             index={index}
                                             produto={produto}
-                                            setProdutos={setProdutos}
                                             handleCheck={handleCheck}
-                                            addProduct={addProduct}
-                                            removeProduct={removeProduct}
                                             disabled={disabled}
                                             form={form}
+                                            apresentacoes={apresentacoes}
                                         />
                                         {index < produtos.length - 1 && <Divider />}
                                     </>

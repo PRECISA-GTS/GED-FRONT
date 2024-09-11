@@ -762,8 +762,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 fields={field}
                                 disabled={!canEdit.status}
                                 getAddressByCep={getAddressByCep}
-                                // setProdutos={setProdutos}
-                                // produtos={produtos}
                                 form={form}
                             />
                         )}
