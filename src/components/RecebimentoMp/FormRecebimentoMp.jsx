@@ -147,7 +147,8 @@ const FormRecebimentoMp = ({ id, model }) => {
         modal: true,
         size: 'sm',
         icon: 'heroicons:lock-open',
-        identification: null
+        identification: null,
+        ncPending: true //? Campo que desabilita opção se houver NC
     }
     const objFormConfig = {
         id: 2,

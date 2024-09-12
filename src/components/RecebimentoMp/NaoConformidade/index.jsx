@@ -81,7 +81,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
-            toast.success('Dados atualizados com sucesso!')
+            await onSubmit(form.getValues()) //? Atualiza dados do formulário
         } catch (e) {
             console.log(e)
             return
@@ -162,6 +162,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             toast.error('Selecione pelo menos um produto!')
             return
         }
+
+        console.log('🚀 ~ onSubmit values:', values)
 
         const data = {
             form: values,
