@@ -32,12 +32,6 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                         form={form}
                         value={field.quantidade} // <- Adicione o defaultValue
                     />
-                    {/* <TextField
-                        title='Quantidade'
-                        name={`produtos[${index}].variacoes[${fieldIndex}].quantidade`}
-                        disabled={disabled}
-                        {...form.register(`produtos[${index}].variacoes[${fieldIndex}].quantidade`)}
-                    /> */}
                     <DateField
                         xs={12}
                         md={2}
@@ -66,7 +60,6 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                         type='string'
                         disabled={disabled}
                         form={form}
-                        alertRequired
                     />
                     <DateField
                         xs={12}
