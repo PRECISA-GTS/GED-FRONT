@@ -1,7 +1,7 @@
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
-import { Grid, IconButton, Tooltip } from '@mui/material'
+import { Grid, IconButton, TextField, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import { useFieldArray } from 'react-hook-form'
 import { Fragment } from 'react'
@@ -30,7 +30,14 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                         disabled={disabled}
                         mask='fractioned3' //? Ex.: 1.580.000,587
                         form={form}
+                        value={field.quantidade} // <- Adicione o defaultValue
                     />
+                    {/* <TextField
+                        title='Quantidade'
+                        name={`produtos[${index}].variacoes[${fieldIndex}].quantidade`}
+                        disabled={disabled}
+                        {...form.register(`produtos[${index}].variacoes[${fieldIndex}].quantidade`)}
+                    /> */}
                     <DateField
                         xs={12}
                         md={2}
@@ -59,6 +66,7 @@ const FieldsProdutos = ({ index, disabled, form, apresentacoes }) => {
                         type='string'
                         disabled={disabled}
                         form={form}
+                        alertRequired
                     />
                     <DateField
                         xs={12}
