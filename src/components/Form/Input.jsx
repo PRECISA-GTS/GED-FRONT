@@ -24,6 +24,7 @@ const Input = ({
     type,
     mask,
     getAddressByCep,
+    defaultValue,
     multiline,
     disabled,
     required,
@@ -100,6 +101,7 @@ const Input = ({
                         size='small'
                         disabled={disabled}
                         aria-describedby='validation-schema-nome'
+                        defaultValue={defaultValue}
                         error={hasError}
                         InputLabelProps={{
                             shrink: true

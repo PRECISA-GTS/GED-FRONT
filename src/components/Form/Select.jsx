@@ -2,6 +2,7 @@ import { Grid, FormControl, Autocomplete, TextField, Paper } from '@mui/material
 import HelpText from '../Defaults/HelpText'
 import { useTheme } from '@mui/material/styles'
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { useEffect } from 'react'
 
 const Select = ({
     xs,
@@ -51,6 +52,18 @@ const Select = ({
             }
         }
     }
+
+    //? Função que verifica se há apenas 1 opção pra seleção, se sim, já seta a opção como selecionada
+    const onlyOneOption = () => {
+        if (optionsWithNovo.length === 1) {
+            setValue(name, optionsWithNovo[0])
+            onChange && onChange(optionsWithNovo[0])
+        }
+    }
+
+    useEffect(() => {
+        onlyOneOption()
+    }, [])
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
