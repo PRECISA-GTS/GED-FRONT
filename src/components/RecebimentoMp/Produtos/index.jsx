@@ -43,7 +43,13 @@ const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, ap
 
                 {/* Conteúdo */}
                 {produto.checked_ && (
-                    <FieldsProdutos index={index} disabled={disabled} form={form} apresentacoes={apresentacoes} />
+                    <FieldsProdutos
+                        key={index}
+                        index={index}
+                        disabled={disabled}
+                        form={form}
+                        apresentacoes={apresentacoes}
+                    />
                 )}
             </Grid>
         </>

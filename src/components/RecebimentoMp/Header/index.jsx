@@ -63,8 +63,6 @@ const HeaderFields = ({
                   }
                 : produto
         )
-        console.log('🚀 ~ updatedProducts:', updatedProducts)
-
         setProdutos(updatedProducts)
         form.setValue('produtos', updatedProducts)
     }
@@ -179,7 +177,6 @@ const HeaderFields = ({
                                 produtos.map((produto, index) => (
                                     <>
                                         <RecebimentoMpProdutos
-                                            key={index}
                                             index={index}
                                             produto={produto}
                                             handleCheck={handleCheck}
