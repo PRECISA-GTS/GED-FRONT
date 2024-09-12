@@ -27,6 +27,9 @@ import AuthGuard from 'src/@core/components/auth/AuthGuard'
 import GuestGuard from 'src/@core/components/auth/GuestGuard'
 import WindowWrapper from 'src/@core/components/window-wrapper'
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { ptBR } from 'date-fns/locale'
+
 // ** Spinner Import
 import Spinner from 'src/@core/components/spinner'
 
@@ -61,6 +64,7 @@ import { FilterProvider } from 'src/context/FilterContext'
 import { CommonDataProvider } from 'src/context/CommonDataContext'
 import { api } from 'src/configs/api'
 import { useEffect } from 'react'
+import { LocalizationProvider } from '@mui/x-date-pickers'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -185,50 +189,56 @@ const App = props => {
                 <meta name='viewport' content='initial-scale=1, width=device-width' />
             </Head>
             <RouteProvider>
-                <ParametersProvider>
-                    <AuthProvider>
-                        <FornecedorProvider>
-                            <FormProvider>
-                                <CommonDataProvider>
-                                    <FilterProvider>
-                                        <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-                                            <SettingsConsumer>
-                                                {({ settings }) => {
-                                                    return (
-                                                        <NotificationProvider>
-                                                            <ThemeComponent settings={settings}>
-                                                                <WindowWrapper>
-                                                                    <Guard
-                                                                        authGuard={authGuard}
-                                                                        guestGuard={guestGuard}
-                                                                    >
-                                                                        <AclGuard
-                                                                            aclAbilities={aclAbilities}
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ptBR}>
+                    <ParametersProvider>
+                        <AuthProvider>
+                            <FornecedorProvider>
+                                <FormProvider>
+                                    <CommonDataProvider>
+                                        <FilterProvider>
+                                            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+                                                <SettingsConsumer>
+                                                    {({ settings }) => {
+                                                        return (
+                                                            <NotificationProvider>
+                                                                <ThemeComponent settings={settings}>
+                                                                    <WindowWrapper>
+                                                                        <Guard
+                                                                            authGuard={authGuard}
                                                                             guestGuard={guestGuard}
                                                                         >
-                                                                            {getLayout(<Component {...pageProps} />)}
-                                                                        </AclGuard>
-                                                                    </Guard>
-                                                                </WindowWrapper>
-                                                                <ReactHotToast>
-                                                                    <Toaster
-                                                                        position={settings.toastPosition}
-                                                                        toastOptions={{ className: 'react-hot-toast' }}
-                                                                        style={{ zIndex: 999999 }}
-                                                                    />
-                                                                </ReactHotToast>
-                                                            </ThemeComponent>
-                                                        </NotificationProvider>
-                                                    )
-                                                }}
-                                            </SettingsConsumer>
-                                        </SettingsProvider>
-                                    </FilterProvider>
-                                </CommonDataProvider>
-                            </FormProvider>
-                        </FornecedorProvider>
-                    </AuthProvider>
-                </ParametersProvider>
+                                                                            <AclGuard
+                                                                                aclAbilities={aclAbilities}
+                                                                                guestGuard={guestGuard}
+                                                                            >
+                                                                                {getLayout(
+                                                                                    <Component {...pageProps} />
+                                                                                )}
+                                                                            </AclGuard>
+                                                                        </Guard>
+                                                                    </WindowWrapper>
+                                                                    <ReactHotToast>
+                                                                        <Toaster
+                                                                            position={settings.toastPosition}
+                                                                            toastOptions={{
+                                                                                className: 'react-hot-toast'
+                                                                            }}
+                                                                            style={{ zIndex: 999999 }}
+                                                                        />
+                                                                    </ReactHotToast>
+                                                                </ThemeComponent>
+                                                            </NotificationProvider>
+                                                        )
+                                                    }}
+                                                </SettingsConsumer>
+                                            </SettingsProvider>
+                                        </FilterProvider>
+                                    </CommonDataProvider>
+                                </FormProvider>
+                            </FornecedorProvider>
+                        </AuthProvider>
+                    </ParametersProvider>
+                </LocalizationProvider>
             </RouteProvider>
         </>
     )

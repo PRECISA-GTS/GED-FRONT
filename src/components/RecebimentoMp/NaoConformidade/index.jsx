@@ -81,7 +81,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
-            toast.success('Dados atualizados com sucesso!')
+            await onSubmit(form.getValues()) //? Atualiza dados do formulário
         } catch (e) {
             console.log(e)
             return
@@ -162,6 +162,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             toast.error('Selecione pelo menos um produto!')
             return
         }
+
+        console.log('🚀 ~ onSubmit values:', values)
 
         const data = {
             form: values,
@@ -319,15 +321,17 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
 
                         <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
 
-                        <ModelBlocks
-                            form={form}
-                            data={block}
-                            setBlock={setBlock}
-                            status={header.status.id}
-                            disabled={
-                                header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
-                            }
-                        />
+                        {type === 'edit' && (
+                            <ModelBlocks
+                                form={form}
+                                data={block}
+                                setBlock={setBlock}
+                                status={header.status.id}
+                                disabled={
+                                    header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
+                                }
+                            />
+                        )}
 
                         <HistoricForm key={change} id={id} parFormularioID={3} />
                     </div>
@@ -351,7 +355,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         values={null}
                         formularioID={3}
                         modeloID={header.modelo.id}
-                        produtos={header.produtos}
+                        // produtos={header.produtos}
+                        produtos={form.getValues('header.produtos')}
                         form={form}
                         setores={header.setoresConclusao}
                     />

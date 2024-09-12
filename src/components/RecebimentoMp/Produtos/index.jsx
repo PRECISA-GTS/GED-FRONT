@@ -1,30 +1,7 @@
-import { Box, Button, Grid, Typography, Divider, Checkbox, FormControlLabel } from '@mui/material'
-import { api } from 'src/configs/api'
-import Input from 'src/components/Form/Input'
-import CheckLabel from 'src/components/Form/CheckLabel'
-import DateField from 'src/components/Form/DateField'
-import Select from 'src/components/Form/Select'
-import Icon from 'src/@core/components/icon'
-import { useEffect, useState } from 'react'
+import { Grid, Checkbox, FormControlLabel } from '@mui/material'
 import FieldsProdutos from './FieldsProdutos'
 
-const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck, disabled }) => {
-    console.log('🚀 ~ produto:', produto)
-    const [apresentacoes, setApresentacoes] = useState([])
-
-    const getApresentacoes = async () => {
-        try {
-            const response = await api.get(`/cadastros/apresentacao`)
-            setApresentacoes(response.data)
-        } catch (error) {
-            console.log('🚀 ~ error:', error)
-        }
-    }
-
-    useEffect(() => {
-        getApresentacoes()
-    }, [])
-
+const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, apresentacoes }) => {
     return (
         <>
             <Grid container spacing={4} sx={{ pb: 2 }}>
@@ -35,7 +12,7 @@ const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck,
                     {...form.register(`produtos[${index}].produtoID`)}
                 />
                 {/* Checkbox com produto */}
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={12}>
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -47,7 +24,7 @@ const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck,
                         label={produto.nome}
                         size='small'
                         sx={{
-                            marginRight: '4px', // Define a margem como 0 para reduzir o espaçamento
+                            marginRight: '4px',
                             '&:hover': {
                                 '& .MuiFormControlLabel-label': {
                                     color: 'primary.main'
@@ -58,21 +35,20 @@ const RecebimentoMpProdutos = ({ form, index, produto, setProdutos, handleCheck,
                 </Grid>
 
                 {/* Informações do produto */}
-                <Grid item xs={12} md={8}>
+                {/* <Grid item xs={12} md={6}>
                     <Box display='flex' alignItems='center' justifyContent='end' sx={{ gap: 4, mt: 3 }}>
                         <Typography variant='body2'>Última avaliação: {produto.ultimaAvaliacao}</Typography>
                     </Box>
-                </Grid>
+                </Grid> */}
 
                 {/* Conteúdo */}
                 {produto.checked_ && (
                     <FieldsProdutos
-                        key={produto.produtoID} // Alterado para usar produtoID
-                        value={produto}
-                        apresentacoes={apresentacoes}
+                        key={index}
                         index={index}
                         disabled={disabled}
                         form={form}
+                        apresentacoes={apresentacoes}
                     />
                 )}
             </Grid>

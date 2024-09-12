@@ -9,13 +9,13 @@ const DefaultSuggestions = ({ setOpenDialog }) => {
 
   return (
     <Grid container spacing={6} sx={{ ml: 0 }}>
-      {defaultSuggestionsData.map((item, index) => (
-        <Grid item xs={12} sm={12 / defaultSuggestionsData.length} key={index}>
+      {defaultSuggestionsData.map((item, index) => item.category !== 'Geral' && (
+        <Grid item xs={12} sm={12 / (defaultSuggestionsData.length - 1)} key={index}>
           <Typography component='p' variant='overline' sx={{ lineHeight: 1.25, color: 'text.disabled' }}>
             {item.category}
           </Typography>
           <List sx={{ py: 2.5 }}>
-            {item.suggestions.map((suggestionItem, index2) => (
+            {item.suggestions.map((suggestionItem, index2) => suggestionItem.link !== '/home' && (
               <ListItem key={index2} sx={{ py: 2 }} disablePadding>
                 <Box
                   component={Link}

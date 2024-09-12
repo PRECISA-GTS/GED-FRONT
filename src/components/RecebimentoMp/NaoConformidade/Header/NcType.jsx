@@ -15,7 +15,9 @@ const NcType = ({ form, data, disabled }) => {
         const updatedProducts = produtos.map((produto, i) =>
             i === index ? { ...produto, checked_: checked } : produto
         )
+        console.log('🚀 ~ updatedProducts:', updatedProducts)
         setProdutos(updatedProducts)
+        form.setValue('header.produtos', updatedProducts)
     }
 
     return (

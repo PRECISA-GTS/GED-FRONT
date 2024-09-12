@@ -272,6 +272,7 @@ const FormHeader = ({
                                 disabledPrint={disabledPrint}
                                 btnPrint={btnPrint}
                                 actionsData={actionsData}
+                                actionsNCData={actionsNCData}
                                 matches={matches}
                             />
                         )}

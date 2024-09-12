@@ -37,10 +37,10 @@ const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, ch
                             disabled={disabled}
                         />
                     }
-                    label={produto.nome}
+                    label={`${produto.nome} ${produto.lote ? ` - Lote: ${produto.lote}` : ' - Lote não informado'}`}
                     size='small'
                     sx={{
-                        marginRight: '4px', // Define a margem como 0 para reduzir o espaçamento
+                        marginRight: '4px',
                         '&:hover': {
                             '& .MuiFormControlLabel-label': {
                                 color: 'primary.main'
@@ -51,7 +51,11 @@ const RecebimentoMpProdutos = ({ form, index, produto, handleCheck, disabled, ch
             </Grid>
 
             {/* Conteúdo */}
-            {produto.checked_ && <ProductInfo value={produto} />}
+            {produto.checked_ && (
+                <Grid container spacing={4} sx={{ pb: 2 }}>
+                    <ProductInfo value={produto} />
+                </Grid>
+            )}
         </Grid>
     )
 }

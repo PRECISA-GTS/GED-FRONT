@@ -13,19 +13,15 @@ const ProductInfo = ({ value }) => {
             </Grid>
             <Grid item xs={12} md={2}>
                 <label className='opacity-60'>Data Fabricação</label>
-                <p>{value.dataFabricacao}</p>
+                <p>{value.dataFabricacao ?? '--'}</p>
             </Grid>
-            <Grid item xs={12} md={2}>
-                <label className='opacity-60'>Nº Lote</label>
-                <p>{value.lote}</p>
-            </Grid>
-            <Grid item xs={12} md={2}>
+            <Grid item xs={12} md={4}>
                 <label className='opacity-60'>Apresentação</label>
-                <p>{value.apresentacao.nome}</p>
+                <p>{value.apresentacao?.nome ?? '--'}</p>
             </Grid>
             <Grid item xs={12} md={2}>
                 <label className='opacity-60'>Data de validade</label>
-                <p>{value.dataValidade}</p>
+                <p>{value.dataValidade ?? '--'}</p>
             </Grid>
         </>
     )

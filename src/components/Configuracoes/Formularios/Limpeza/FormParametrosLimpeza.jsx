@@ -135,9 +135,7 @@ const FormParametrosLimpeza = ({ id }) => {
             obrigatorio: 1
         })
         setBlocks(newBlock)
-
         form.setValue(`blocks.[${index}].itens.[${newBlock[index].itens.length - 1}].new`, true)
-
         refreshOptions(newBlock[index], index, blocks, allOptions)
     }
 

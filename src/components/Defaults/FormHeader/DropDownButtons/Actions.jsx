@@ -4,7 +4,7 @@ import DialogActs from '../../Dialogs/DialogActs'
 import { useContext, useState } from 'react'
 import { api_url } from 'src/configs/api'
 
-const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
+const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData, actionsNCData }) => {
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
 
@@ -17,6 +17,12 @@ const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
             //? Não concluído, gera o relatório
             window.open(`/relatorio/${item.route}`, '_blank')
         }
+    }
+
+    //? Tem NC vinculada ao formulário, não pode realizar ação
+    const hasNcPending = value => {
+        if (value.ncPending && actionsNCData && actionsNCData.length > 1) return true
+        return false
     }
 
     return (
@@ -65,7 +71,7 @@ const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
                             onClick={() => {
                                 handleClose()
                             }}
-                            disabled={item.disabled ? true : false}
+                            disabled={item.disabled || hasNcPending(item) ? true : false}
                             style={{ textAlign: 'left', display: 'flex', alignItems: 'center', gap: '4px' }}
                         >
                             {item.identification ? (

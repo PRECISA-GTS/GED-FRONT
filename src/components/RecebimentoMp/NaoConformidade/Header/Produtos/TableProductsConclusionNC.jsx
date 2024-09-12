@@ -1,12 +1,15 @@
 import { Divider, Grid, Typography } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import Icon from 'src/@core/components/icon'
+import Check from 'src/components/Form/Check'
 import Input from 'src/components/Form/Input'
 import { floatToFractioned, fractionedToFloat } from 'src/configs/functions'
 import { AuthContext } from 'src/context/AuthContext'
 
 const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
+    console.log('🚀 ~ modal data:', data)
     const [sortedData, setSortedData] = useState(null)
+
     const { user } = useContext(AuthContext)
 
     //? Ordena os dados, trazendo primeiro os itens marcados na nao conformidade (checked_ == true)
@@ -55,7 +58,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                         <Grid container spacing={4} sx={{ mt: 4 }} className='items-center'>
                             <Grid item md={12}>
                                 <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                                    {row.nome}
+                                    {`${row.nome} ${row.lote ? ` - Lote: ${row.lote}` : ' - Lote não informado'}`}
                                 </Typography>
                             </Grid>
 
@@ -78,6 +81,7 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                                         value={row.quantidade}
                                         {...form.register(`productsConclude.${index}.quantidade`)}
                                     />
+
                                     <Input
                                         md={2}
                                         title='Qtd. Entrada'
@@ -118,15 +122,19 @@ const TableProductsConclusionNC = ({ data, form, setValidParams }) => {
                             </Grid>
                             <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Data Fabricação</p>
-                                <p>{row.dataFabricacao}</p>
+                                <p>{row.dataFabricacao ?? '--'}</p>
                             </Grid>
-                            <Grid item md={2}>
+                            {/* <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Lote</p>
-                                <p>{row.lote}</p>
+                                <p>{row.lote ?? '--'}</p>
+                            </Grid> */}
+                            <Grid item md={2}>
+                                <p className='text-xs opacity-50'>Apresentação</p>
+                                <p>{row.apresentacao?.nome ?? '--'}</p>
                             </Grid>
                             <Grid item md={2}>
                                 <p className='text-xs opacity-50'>Data Validade</p>
-                                <p>{row.dataValidade}</p>
+                                <p>{row.dataValidade ?? '--'}</p>
                             </Grid>
                         </Grid>
                         {index < sortedData.length - 1 && <Divider sx={{ pt: 4 }} />}

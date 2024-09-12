@@ -19,6 +19,15 @@ const ButtonsFixedLeft = ({
     onclickDelete
 }) => {
     const { hasPermission } = useContext(AuthContext)
+    const completeRoute = `${router.pathname}${router.query.aba ? `?aba=${router.query.aba}` : ''}`
+
+    const removeRouteNew = route => {
+        //? Verifica se há /novo na rota, se sim, remove
+        if (route.includes('/novo')) {
+            return route.replace('/novo', '')
+        }
+        return route
+    }
 
     return (
         <div className='flex gap-2'>
@@ -27,9 +36,7 @@ const ButtonsFixedLeft = ({
                     <Button
                         onClick={() => {
                             setId(null)
-                            if (type == 'new') {
-                                router.push(router.pathname)
-                            }
+                            router.push(removeRouteNew(completeRoute))
                         }}
                         type='button'
                         variant='outlined'

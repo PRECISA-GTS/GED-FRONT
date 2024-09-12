@@ -38,7 +38,7 @@ const RecebimentoMpInfo = ({ data }) => {
                 <label className='opacity-60'>NF</label>
                 <div className='flex items-center gap-2 '>
                     <Icon icon='ion:document-text-outline' />
-                    <p>{data.recebimento.nfRecebimentoMp}</p>
+                    <p>{data.recebimento.nfRecebimentoMp ?? '--'}</p>
                 </div>
             </Grid>
             <Grid item xs={12} md={2}>
