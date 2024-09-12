@@ -35,16 +35,20 @@ const Select = ({
     const optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
     const handleChange = (e, newValue) => {
-        setValue(name, newValue)
-        onChange && onChange(newValue)
-
-        if (required && (!newValue || (multiple && newValue.length === 0))) {
-            setError(name, {
-                type: 'required',
-                message: `${title} é obrigatório`
-            })
+        if (newValue && e.target.innerText == '-- Novo --') {
+            createNew()
         } else {
-            clearErrors(name)
+            setValue(name, newValue)
+            onChange && onChange(newValue)
+
+            if (required && (!newValue || (multiple && newValue.length === 0))) {
+                setError(name, {
+                    type: 'required',
+                    message: `${title} é obrigatório`
+                })
+            } else {
+                clearErrors(name)
+            }
         }
     }
 

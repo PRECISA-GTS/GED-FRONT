@@ -347,7 +347,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderTop: `1px solid ${theme.palette.divider}`,
-                  height: fullScreenDialog ? 'calc(100vh - 69px)' : '100%'
+                  height: fullScreenDialog ? 'calc(100vh - 20px)' : '100%'
                 }}
               >
                 <DefaultSuggestions setOpenDialog={setOpenDialog} />
