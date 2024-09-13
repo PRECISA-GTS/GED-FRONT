@@ -9,6 +9,7 @@ import { api } from 'src/configs/api'
 import RecebimentoMpProdutos from '../Produtos'
 import Icon from 'src/@core/components/icon'
 import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import { useFieldArray } from 'react-hook-form'
 
 const HeaderFields = ({
     form,
@@ -32,6 +33,16 @@ const HeaderFields = ({
     const [apresentacoes, setApresentacoes] = useState([])
     const [fornecedoresAprovados, setFornecedoresAprovados] = useState([])
 
+    const {
+        fields: fieldsProduct,
+        append,
+        remove,
+        update
+    } = useFieldArray({
+        control: form.control, // Usar o controle do react-hook-form
+        name: 'produtos' // Nome do campo controlado
+    })
+
     const getFornecedoresAprovados = async () => {
         const response = await api.post(`/formularios/fornecedor/getFornecedoresAprovados`, {
             unidadeID: loggedUnity.unidadeID,
@@ -47,24 +58,21 @@ const HeaderFields = ({
             fornecedorCnpj: fornecedorCnpj,
             unidadeID: loggedUnity.unidadeID
         })
-        setProdutos(response.data)
-        form.setValue('produtos', response.data)
+        remove()
+        response.data.forEach(produto => append(produto)) // Adiciona os produtos ao array controlado pelo formulário
     }
 
     const handleCheck = (e, index) => {
         const { checked } = e.target
-        const updatedProducts = produtos.map((produto, i) =>
-            i === index
-                ? {
-                      ...produto,
-                      checked_: checked,
-                      variacoes:
-                          produto.variacoes.length > 0 ? [...produtos[index].variacoes] : [{ quantidade: '0,000' }]
-                  }
-                : produto
-        )
-        setProdutos(updatedProducts)
-        form.setValue('produtos', updatedProducts)
+        const produtoAtualizado = {
+            ...fieldsProduct[index],
+            checked_: checked,
+            variacoes:
+                fieldsProduct[index]?.variacoes.length > 0
+                    ? [...fieldsProduct[index].variacoes]
+                    : [{ quantidade: '0,000' }]
+        }
+        update(index, produtoAtualizado)
     }
 
     const getApresentacoes = async () => {
@@ -161,7 +169,7 @@ const HeaderFields = ({
                                 <Icon icon='ph:plant' className='text-primary' />
                                 Produtos aprovados do fornecedor
                             </Typography>
-                            {produtos && produtos.length == 0 && (
+                            {fieldsProduct && fieldsProduct.length == 0 && (
                                 <Typography color='warning' variant='subtitle1' className='italic'>
                                     <Box display='flex' alignItems='center' sx={{ gap: 1 }}>
                                         <Icon icon='typcn:warning' color='#FFC107' />
@@ -172,11 +180,12 @@ const HeaderFields = ({
                         </Grid>
 
                         <Grid item xs={12}>
-                            {produtos &&
-                                produtos.length > 0 &&
-                                produtos.map((produto, index) => (
+                            {fieldsProduct &&
+                                fieldsProduct.length > 0 &&
+                                fieldsProduct.map((produto, index) => (
                                     <>
                                         <RecebimentoMpProdutos
+                                            key={produto.id}
                                             index={index}
                                             produto={produto}
                                             handleCheck={handleCheck}
@@ -184,7 +193,7 @@ const HeaderFields = ({
                                             form={form}
                                             apresentacoes={apresentacoes}
                                         />
-                                        {index < produtos.length - 1 && <Divider />}
+                                        {index < fieldsProduct.length - 1 && <Divider />}
                                     </>
                                 ))}
                         </Grid>
