@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from 'react'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { api } from 'src/configs/api'
-import { Card, CardContent, Divider, Grid } from '@mui/material'
+import { Alert, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Loading from 'src/components/Loading'
@@ -13,10 +13,12 @@ import { backRoute } from 'src/configs/defaultConfigs'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
+import Icon from 'src/@core/components/icon'
 import Check from 'src/components/Form/Check'
 import { AuthContext } from 'src/context/AuthContext'
 import ListOptions from './ListOptions'
 import useLoad from 'src/hooks/useLoad'
+import ModelsWithItem from './ModelsWithItem'
 
 const FormItem = ({
     id,
@@ -29,6 +31,8 @@ const FormItem = ({
     manualUrl
 }) => {
     const [open, setOpen] = useState(false)
+    const [openInactivate, setOpenInactivate] = useState(false)
+    const [openActivate, setOpenActivate] = useState(false)
     const [change, setChange] = useState(false)
     const [data, setData] = useState(null)
     const router = Router
@@ -97,6 +101,36 @@ const FormItem = ({
         }
     }
 
+    const handleClickInactivate = async () => {
+        try {
+            await api.post(`${staticUrl}/inactivate/${id}`, {
+                usuarioID: user.usuarioID,
+                unidadeID: loggedUnity.unidadeID
+            })
+            setOpenInactivate(false)
+            toast.success('Dado inativado com sucesso!')
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setChange(!change)
+        }
+    }
+
+    const handleClickActivate = async () => {
+        try {
+            await api.post(`${staticUrl}/activate/${id}`, {
+                usuarioID: user.usuarioID,
+                unidadeID: loggedUnity.unidadeID
+            })
+            setOpenActivate(false)
+            toast.success('Dado ativado com sucesso!')
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setChange(!change)
+        }
+    }
+
     //? Dados iniciais ao carregar página
     const getData = async () => {
         try {
@@ -108,6 +142,7 @@ const FormItem = ({
                 .then(response => {
                     console.log('🚀 ~ formType response.data:', response.data)
                     setData(response.data)
+                    console.log('🚀 ~ getData:', response.data)
                     form.reset(response.data) //* Insere os dados no formulário
                 })
         } catch (error) {
@@ -174,7 +209,7 @@ const FormItem = ({
         setTimeout(() => {
             form.trigger()
         }, 300)
-    }, [id])
+    }, [id, change])
 
     useEffect(() => {
         if (newChange) handleSubmit(onSubmit)()
@@ -195,32 +230,29 @@ const FormItem = ({
                             btnClose={btnClose}
                             handleModalClose={handleModalClose}
                             handleSubmit={() => form.handleSubmit(onSubmit)}
-                            btnDelete={type === 'edit' ? true : false}
+                            btnDelete={type === 'edit' && !data.fields.pending ? true : false}
                             onclickDelete={() => setOpen(true)}
                             type={type}
                             outsideID={outsideID}
+                            btnInactivate={
+                                type === 'edit' && data.fields.pending && data.fields.status === 1 ? true : false
+                            }
+                            onClickInactivate={() => setOpenInactivate(true)}
+                            btnActivate={type === 'edit' && data.fields.status === 0 ? true : false}
+                            onClickActivate={() => setOpenActivate(true)}
                         />
                         <Card>
                             <CardContent>
                                 <Grid container spacing={5}>
                                     <Select
                                         xs={12}
-                                        md={11}
+                                        md={12}
                                         title='Formulários'
                                         name='fields.formulario'
                                         value={data?.fields?.formulario}
                                         required
                                         options={data?.fields?.opcoesForm}
                                         disabled={formType !== 'novo' && formType !== 'item'}
-                                        form={form}
-                                    />
-                                    <Check
-                                        xs={1}
-                                        md={1}
-                                        title='Ativo'
-                                        name='fields.status'
-                                        value={data?.fields?.status}
-                                        typePage={type}
                                         form={form}
                                     />
                                     <Input xs={12} md={12} title='Nome' name='fields.nome' required form={form} />
@@ -257,6 +289,8 @@ const FormItem = ({
                         addAnexo={addAnexo}
                         form={form}
                     />
+
+                    <ModelsWithItem data={data.fields.models} />
                 </>
             )}
 
@@ -268,6 +302,27 @@ const FormItem = ({
                 handleSubmit={handleClickDelete}
                 btnCancel
                 btnConfirm
+            />
+
+            <DialogForm
+                text='Tem certeza que deseja inativar?'
+                title={'Inativar ' + title.title}
+                openModal={openInactivate}
+                handleClose={() => setOpenInactivate(false)}
+                handleSubmit={handleClickInactivate}
+                btnCancel
+                btnConfirm
+            />
+
+            <DialogForm
+                text='Tem certeza que deseja ativar?'
+                title={'Ativar ' + title.title}
+                openModal={openActivate}
+                handleClose={() => setOpenActivate(false)}
+                handleSubmit={handleClickActivate}
+                btnCancel
+                btnConfirm
+                btnConfirmColor='primary'
             />
         </>
     )
