@@ -221,7 +221,27 @@ const App = props => {
                                                                         <Toaster
                                                                             position={settings.toastPosition}
                                                                             toastOptions={{
-                                                                                className: 'react-hot-toast'
+                                                                                style: {
+                                                                                    background: '#4A8B57',
+                                                                                    color: 'white',
+                                                                                    padding: '16px',
+                                                                                    borderRadius: '8px'
+                                                                                },
+                                                                                success: {
+                                                                                    style: {
+                                                                                        background: '#4A8B57'
+                                                                                    }
+                                                                                },
+                                                                                error: {
+                                                                                    style: {
+                                                                                        background: '#C94241'
+                                                                                    }
+                                                                                },
+                                                                                warning: {
+                                                                                    style: {
+                                                                                        background: '#FDB528'
+                                                                                    }
+                                                                                }
                                                                             }}
                                                                             style={{ zIndex: 999999 }}
                                                                         />

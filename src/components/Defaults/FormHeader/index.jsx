@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form'
 const FormHeader = ({
     id,
     btnCancel,
+    btnInactivate,
     btnSave,
     btnSend,
     btnNext,
@@ -38,6 +39,7 @@ const FormHeader = ({
     disabledSend,
     handleBtnStatus,
     onclickDelete,
+    onClickInactivate,
     btnDelete,
     btnPrint,
     disabledPrint,
@@ -51,7 +53,9 @@ const FormHeader = ({
     outsideID,
     btnNewModal,
     handleNewModal,
-    actionsNC
+    actionsNC,
+    btnActivate,
+    onClickActivate
 }) => {
     const router = Router
     const { routes, user } = useContext(AuthContext)
@@ -234,6 +238,7 @@ const FormHeader = ({
                         routes={routes}
                         currentUrl={currentUrl}
                         btnCancel={btnCancel}
+                        btnInactivate={btnInactivate}
                         btnDelete={btnDelete}
                         btnStatus={btnStatus}
                         btnClose={btnClose}
@@ -241,9 +246,12 @@ const FormHeader = ({
                         status={status}
                         handleBtnStatus={handleBtnStatus}
                         onclickDelete={onclickDelete}
+                        onClickInactivate={onClickInactivate}
                         setId={setId}
                         router={router}
                         type={type}
+                        btnActivate={btnActivate}
+                        onClickActivate={onClickActivate}
                     />
 
                     {/* 3 pontinhos ao clicar abre opções de seleção */}

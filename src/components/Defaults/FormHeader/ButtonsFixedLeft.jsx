@@ -8,6 +8,7 @@ const ButtonsFixedLeft = ({
     currentUrl,
     btnCancel,
     btnDelete,
+    btnInactivate,
     btnStatus,
     btnClose,
     handleModalClose,
@@ -16,7 +17,10 @@ const ButtonsFixedLeft = ({
     setId,
     router,
     type,
-    onclickDelete
+    onclickDelete,
+    onClickInactivate,
+    btnActivate,
+    onClickActivate
 }) => {
     const { hasPermission } = useContext(AuthContext)
     const completeRoute = `${router.pathname}${router.query.aba ? `?aba=${router.query.aba}` : ''}`
@@ -49,7 +53,7 @@ const ButtonsFixedLeft = ({
             )}
 
             {btnDelete && hasPermission(router.pathname, 'excluir') && (
-                <Tooltip title='Excluir formulário' placement='top'>
+                <Tooltip title='Excluir cadastro' placement='top'>
                     <Button
                         type='button'
                         onClick={onclickDelete}
@@ -59,6 +63,36 @@ const ButtonsFixedLeft = ({
                         sx={{ display: 'flex', gap: 2 }}
                     >
                         <Icon icon='solar:trash-bin-minimalistic-2-outline' />
+                    </Button>
+                </Tooltip>
+            )}
+
+            {btnInactivate && hasPermission(router.pathname, 'excluir') && (
+                <Tooltip title='Inativar cadastro' placement='top'>
+                    <Button
+                        type='button'
+                        onClick={onClickInactivate}
+                        variant='outlined'
+                        color='error'
+                        size='medium'
+                        sx={{ display: 'flex', gap: 2 }}
+                    >
+                        <Icon icon='tabler:ban' />
+                    </Button>
+                </Tooltip>
+            )}
+
+            {btnActivate && hasPermission(router.pathname, 'excluir') && (
+                <Tooltip title='Ativar cadastro' placement='top'>
+                    <Button
+                        type='button'
+                        onClick={onClickActivate}
+                        variant='outlined'
+                        color='primary'
+                        size='medium'
+                        sx={{ display: 'flex', gap: 2 }}
+                    >
+                        <Icon icon='tabler:check' />
                     </Button>
                 </Tooltip>
             )}

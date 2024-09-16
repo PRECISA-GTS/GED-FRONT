@@ -55,7 +55,10 @@ const DialogForm = ({
                 <DialogTitle id='form-dialog-title'>{title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
-                        {text}
+                        {/* Interpretar tags HTML */}
+                        <div dangerouslySetInnerHTML={{ __html: text }} />
+
+                        {/* {text} */}
                         {listErrors && listErrors.status && (
                             <Alert variant='outlined' severity='error' sx={{ mt: 2 }}>
                                 Por favor, verifique os campos abaixo:
