@@ -36,7 +36,9 @@ const ModelsWithItem = ({ data }) => {
                             sx={{ mt: 2, cursor: 'pointer' }}
                         >
                             <div className='flex items-center gap-2'>
-                                {`${model.nome} (ciclo de ${model.ciclo} ${model.ciclo === 1 ? 'dia' : 'dias'})`}
+                                {`${model.nome} (ciclo de ${model.ciclo} ${model.ciclo === 1 ? 'dia' : 'dias'}) (${
+                                    model.status
+                                })`}
                                 <Icon icon='ci:external-link' />
                             </div>
                         </Alert>

@@ -305,8 +305,10 @@ const FormItem = ({
             />
 
             <DialogForm
-                text='Tem certeza que deseja inativar?'
                 title={'Inativar ' + title.title}
+                text={`<span class="text-red-500">Este item está presente em ${data?.fields?.models.length} ${
+                    data?.fields?.models.length === 1 ? 'modelo' : 'modelos'
+                }.</span><br/> Tem certeza que deseja inativar?`}
                 openModal={openInactivate}
                 handleClose={() => setOpenInactivate(false)}
                 handleSubmit={handleClickInactivate}
@@ -315,8 +317,8 @@ const FormItem = ({
             />
 
             <DialogForm
-                text='Tem certeza que deseja ativar?'
                 title={'Ativar ' + title.title}
+                text='Tem certeza que deseja ativar?'
                 openModal={openActivate}
                 handleClose={() => setOpenActivate(false)}
                 handleSubmit={handleClickActivate}
