@@ -173,7 +173,6 @@ const FormItem = ({
                 alternativa: value
             })
             if (response.data) {
-                setChange(!change)
                 form.setValue('fields.opcoes', response.data)
                 setData({ ...data, fields: { ...data.fields, opcoes: response.data } })
             }
