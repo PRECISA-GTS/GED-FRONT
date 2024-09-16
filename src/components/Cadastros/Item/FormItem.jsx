@@ -306,8 +306,8 @@ const FormItem = ({
 
             <DialogForm
                 title={'Inativar ' + title.title}
-                text={`<span class="text-red-500">Este item está presente em ${data?.fields?.models.length} ${
-                    data?.fields?.models.length === 1 ? 'modelo' : 'modelos'
+                text={`<span class="text-red-500">Este item está presente em ${data?.fields?.models?.length} ${
+                    data?.fields?.models?.length === 1 ? 'modelo' : 'modelos'
                 }.</span><br/> Tem certeza que deseja inativar?`}
                 openModal={openInactivate}
                 handleClose={() => setOpenInactivate(false)}
