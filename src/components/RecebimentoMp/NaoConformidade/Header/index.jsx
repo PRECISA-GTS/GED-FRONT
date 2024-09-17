@@ -55,6 +55,7 @@ const Header = ({ form, data, disabled }) => {
                         title='Hora'
                         name={`header.hora`}
                         type='time'
+                        required
                         disabled={disabled}
                         form={form}
                     />

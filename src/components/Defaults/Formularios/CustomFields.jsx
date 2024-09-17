@@ -83,6 +83,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                             disabled={
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
+                            required={field.obrigatorio === 1}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                             form={form}
                         />
@@ -105,6 +106,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                             disabled={
                                 disabled || disabledField(field.nomeColuna) || field.nomeColuna == 'cnpj' ? true : false
                             }
+                            required={field.obrigatorio === 1}
                             alertRequired={field.obrigatorio === 1} //! Apenas pinta o campo de vermelho, não valida
                             form={form}
                         />
