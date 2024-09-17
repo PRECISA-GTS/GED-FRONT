@@ -1,7 +1,6 @@
 import Block from 'src/components/Defaults/Formularios/Block'
 
-const ModelBlocks = ({ form, data, setBlock, status, disabled, handleFileSelect }) => {
-    console.log('🚀 ~ disabled:', disabled)
+const ModelBlocks = ({ form, data, setBlock, status, disabled, handleFileSelect, handleRemoveFile }) => {
     return (
         <>
             {/* Blocos */}
@@ -14,6 +13,7 @@ const ModelBlocks = ({ form, data, setBlock, status, disabled, handleFileSelect 
                         blockKey={`parRecebimentoMpNaoConformidadeModeloBlocoID`}
                         setBlocos={setBlock}
                         handleFileSelect={handleFileSelect}
+                        handleRemoveFile={handleRemoveFile}
                         status={status}
                         blocos={data}
                         disabled={disabled}

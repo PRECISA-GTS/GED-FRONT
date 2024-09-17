@@ -281,7 +281,57 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     }
 
     const handleFileSelect = async (event, item) => {
-        console.log('aguardando google drive...')
+        const selectedFile = event.target.files
+        if (selectedFile && selectedFile.length > 0) {
+            const formData = new FormData()
+            for (let i = 0; i < selectedFile.length; i++) {
+                formData.append('files[]', selectedFile[i])
+            }
+            formData.append(`usuarioID`, user.usuarioID)
+            formData.append(`unidadeID`, loggedUnity.unidadeID)
+            formData.append(
+                `parRecebimentoMpNaoConformidadeModeloBlocoID`,
+                item.parRecebimentoMpNaoConformidadeModeloBlocoID ?? null
+            )
+            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+            await api
+                .post(
+                    `/formularios/recebimento-mp/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
+                    formData
+                )
+                .then(response => {
+                    //* Submete formulário pra atualizar configurações dos itens
+                    const values = form.getValues()
+                    onSubmit(values)
+                })
+                .catch(error => {
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                })
+                .finally(() => {
+                    setChange(!change)
+                })
+        }
+    }
+
+    const handleRemoveFile = async item => {
+        if (item) {
+            await api
+                .delete(
+                    `/formularios/recebimento-mp/nao-conformidade/deleteAnexo/${id}/${item.anexoID}/${loggedUnity.unidadeID}/${user.usuarioID}/item`
+                )
+                .then(response => {
+                    //* Submete formulário pra atualizar configurações dos itens
+                    const values = form.getValues()
+                    onSubmit(values)
+                })
+                .catch(error => {
+                    toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
+                })
+                .finally(() => {
+                    getData()
+                })
+        }
     }
 
     useEffect(() => {
@@ -367,6 +417,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                                 data={block}
                                 setBlock={setBlock}
                                 handleFileSelect={handleFileSelect}
+                                handleRemoveFile={handleRemoveFile}
                                 status={header.status.id}
                                 disabled={
                                     header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
