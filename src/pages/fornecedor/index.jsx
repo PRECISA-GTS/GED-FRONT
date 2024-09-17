@@ -177,7 +177,7 @@ const FornecedorPage = ({ units }) => {
     }
 
     const validateExist = isCpf => {
-        const formatedValue = isCpf ? cpfMask(getValues('cnpj')) : cnpjMask(getValues('cnpj'))
+        const formatedValue = isCpf ? cpfMask(form.getValues('cnpj')) : cnpjMask(form.getValues('cnpj'))
         validationExistCNPJCPF(formatedValue, isCpf)
     }
 
@@ -260,7 +260,9 @@ const FornecedorPage = ({ units }) => {
                                     variant='h6'
                                     sx={{ fontWeight: 600 }}
                                 >{`Bem-vindo Fornecedor`}</TypographyStyled>
-                                <Typography variant='body2'>Digite seu CNPJ ou CPF e senha para começar</Typography>
+                                <Typography variant='body2'>{`Digite seu ${
+                                    isCpf ? 'CPF' : 'CNPJ'
+                                } e senha para começar`}</Typography>
                             </Box>
 
                             <form noValidate autoComplete='off' onSubmit={form.handleSubmit(onSubmit)}>
@@ -307,6 +309,7 @@ const FornecedorPage = ({ units }) => {
                                                 onChange={e => {
                                                     setIsCpf(e.target.checked)
                                                     validateExist(e.target.checked)
+                                                    form.setValue('cnpj', '')
                                                 }}
                                             />
                                         }

@@ -29,14 +29,15 @@ const Card = styled(MuiCard)(({ theme }) => ({
     [theme.breakpoints.up('sm')]: { width: 450 }
 }))
 
-import { useEffect, useState, onChange } from 'react'
+import { useEffect, useState, onChange, useContext } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { cpfMask, cnpjMask } from 'src/configs/masks'
 import { validationCPF, validationCNPJ, validationEmail } from 'src/configs/validations'
 import Router from 'next/router'
 import { toast } from 'react-hot-toast'
 import Logo from 'src/components/Defaults/Logo'
-import { Alert } from '@mui/material'
+import { Alert, Checkbox, FormControlLabel } from '@mui/material'
+import { FornecedorContext } from 'src/context/FornecedorContext'
 
 const EsqueceuSenha = () => {
     // ** Hook
@@ -44,7 +45,7 @@ const EsqueceuSenha = () => {
     const [getData, setGetData] = useState()
     const [campo, setCampo] = useState()
     const router = Router
-
+    const { isCpf, setIsCpf } = useContext(FornecedorContext)
     const emailToShow = getData?.email?.replace(/^(.{3}).*@/, '$1****@')
 
     const form = useForm({})
@@ -55,7 +56,10 @@ const EsqueceuSenha = () => {
             api.post(`esqueceuSenha/validation?type=${type}`, { data: value }).then(response => {
                 setGetData(response.data)
             })
-        } else if (type == 'fornecedor' && value.length == 18 && validationCNPJ(value)) {
+        } else if (
+            (type == 'fornecedor' && !isCpf && value.length == 18 && validationCNPJ(value)) ||
+            (isCpf && value.length == 14 && validationCPF(value))
+        ) {
             console.log('ENVIA PRO BACKEND')
             api.post(`esqueceuSenha/validation?type=${type}`, { data: value }).then(response => {
                 setGetData(response.data)
@@ -97,7 +101,9 @@ const EsqueceuSenha = () => {
                         <Typography variant='body2'>
                             {type === 'login'
                                 ? 'Digite seu CPF e enviaremos instruções para redefinir sua senha'
-                                : 'Digite seu CNPJ e enviaremos instruções para redefinir sua senha'}
+                                : `Digite seu ${
+                                      isCpf ? 'CPF' : 'CNPJ'
+                                  } e enviaremos instruções para redefinir sua senha`}
                         </Typography>
                     </Box>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -126,28 +132,52 @@ const EsqueceuSenha = () => {
                                 />
                             </FormControl>
                         ) : (
-                            <FormControl fullWidth>
-                                <TextField
-                                    label='CNPJ'
-                                    placeholder='CNPJ'
-                                    aria-describedby='validation-schema-nome'
-                                    name='cnpj'
-                                    {...form.register(`cnpj`, {
-                                        required: true,
-                                        validate: value => validationCNPJ(value) || 'CNPJ inválido'
-                                    })}
-                                    error={form.formState?.errors?.cnpj}
-                                    helperText={form.formState?.errors?.cnpj?.message}
-                                    inputProps={{
-                                        maxLength: 18,
-                                        onChange: e => {
-                                            form.setValue('cnpj', cnpjMask(e.target.value))
-                                            OnchangeValue(e.target.value)
-                                            setCampo(e.target.value)
-                                        }
-                                    }}
+                            <div className='flex items-center'>
+                                <FormControl fullWidth>
+                                    <TextField
+                                        label={isCpf ? 'CPF' : 'CNPJ'}
+                                        placeholder={isCpf ? 'CPF' : 'CNPJ'}
+                                        aria-describedby='validation-schema-nome'
+                                        name='cnpj'
+                                        {...form.register(`cnpj`, {
+                                            required: true,
+                                            validate: value =>
+                                                isCpf
+                                                    ? validationCPF(value)
+                                                    : validationCNPJ(value) || isCpf
+                                                    ? 'CPF inválido'
+                                                    : 'CNPJ inválido'
+                                        })}
+                                        error={form.formState?.errors?.cnpj}
+                                        helperText={form.formState?.errors?.cnpj?.message}
+                                        inputProps={{
+                                            maxLength: isCpf ? 14 : 18,
+                                            onChange: e => {
+                                                form.setValue(
+                                                    'cnpj',
+                                                    isCpf ? cpfMask(e.target.value) : cnpjMask(e.target.value)
+                                                )
+                                                OnchangeValue(e.target.value)
+                                                setCampo(e.target.value)
+                                            }
+                                        }}
+                                    />
+                                </FormControl>
+                                <FormControlLabel
+                                    label='CPF'
+                                    labelPlacement='top'
+                                    control={
+                                        <Checkbox
+                                            checked={isCpf}
+                                            onChange={e => {
+                                                setIsCpf(e.target.checked)
+                                                form.setValue('cnpj', '')
+                                            }}
+                                        />
+                                    }
+                                    sx={{ position: 'relative', top: -10 }}
                                 />
-                            </FormControl>
+                            </div>
                         )}
 
                         {getData?.email && validationEmail(getData?.email) && (
