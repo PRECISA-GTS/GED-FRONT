@@ -249,25 +249,6 @@ const Blocos = ({
                         </CardContent>
                     </Card>
                 ))}
-
-            {/* <DialogNewCreate
-                title='Novo item'
-                size='md'
-                openModal={openModal}
-                setOpenModal={setOpenModal}
-                handleConclusion={handleCreateNew}
-            >
-                <Input
-                    className='order-1'
-                    xs={10}
-                    md={1}
-                    title='Teste'
-                    name={'teste'}
-                    required
-                    control={control}
-                    errors={errors?.teste}
-                />
-            </DialogNewCreate> */}
         </>
     )
 }

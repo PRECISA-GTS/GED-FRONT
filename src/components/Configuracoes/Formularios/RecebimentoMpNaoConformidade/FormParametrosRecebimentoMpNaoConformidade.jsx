@@ -61,7 +61,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
 
     const handleConfirmNew = data => {
         setOpenModalNew(false)
-        setValue(`blocks.[${indexNewBloco}].itens.[${indexNewItem}].item`, data)
+        form.setValue(`blocks.[${indexNewBloco}].itens.[${indexNewItem}].item`, data)
     }
 
     const router = Router
@@ -597,7 +597,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                 openModal={openModalSelectedItem}
                 setOpenModal={setOpenModalSelectedItem}
             >
-                <FormItem id={idInfoItem} btnClose handleModalClose={() => setOpenModalSelectedItem(false)} />
+                <FormItem id={idInfoItem} btnClose handleModalClose={() => setOpenModalSelectedItem(false)} modal />
             </DialogNewCreate>
         </>
     )
