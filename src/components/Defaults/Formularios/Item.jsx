@@ -107,6 +107,7 @@ const Item = ({
                             type={null}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
                             form={form}
+                            className='mt-2 mb-4'
                         />
                     )}
 
@@ -124,6 +125,7 @@ const Item = ({
                                 multiline
                                 disabled={disabled}
                                 form={form}
+                                className='py-2'
                             />
                         )}
 
@@ -156,6 +158,7 @@ const Item = ({
                         multiline
                         disabled={disabled}
                         form={form}
+                        className='py-2'
                     />
                 </FormControl>
             )}

@@ -16,7 +16,8 @@ const DateField = ({
     name,
     typeValidation,
     alertRequired,
-    opacity
+    opacity,
+    className
 }) => {
     const theme = useTheme()
     const [dateStatus, setDateStatus] = useState({})
@@ -79,59 +80,61 @@ const DateField = ({
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }}>
-            <FormControl fullWidth>
-                <TextField
-                    type={type ?? 'date'}
-                    size='small'
-                    label={title}
-                    disabled={disabled}
-                    defaultValue={value ? formatDate(value) : ''}
-                    error={hasError || !!inputError}
-                    helperText={inputError}
-                    onChange={handleChange}
-                    variant='outlined'
-                    fullWidth
-                    InputLabelProps={{
-                        shrink: true
-                    }}
-                    inputProps={{
-                        min: typeValidation === 'dataFutura' ? new Date().toISOString().split('T')[0] : undefined,
-                        max:
-                            typeValidation === 'dataPassado'
-                                ? new Date().toISOString().split('T')[0]
-                                : new Date(new Date().setFullYear(new Date().getFullYear() + 50))
-                                      .toISOString()
-                                      .split('T')[0]
-                    }}
-                    sx={{
-                        opacity: opacity ? 0.4 : 1,
-                        '& .MuiInputBase-input': {
-                            padding: '10px 14px' // Ajuste o valor conforme necessário
-                        },
-                        ...((required || alertRequired) &&
-                            (hasError || !!inputError) && {
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: theme.palette.error.main
+            <div className={className}>
+                <FormControl fullWidth sx={{ position: 'relative' }}>
+                    <TextField
+                        type={type ?? 'date'}
+                        size='small'
+                        label={title}
+                        disabled={disabled}
+                        defaultValue={value ? formatDate(value) : ''}
+                        error={hasError || !!inputError}
+                        helperText={inputError}
+                        onChange={handleChange}
+                        variant='outlined'
+                        fullWidth
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                        inputProps={{
+                            min: typeValidation === 'dataFutura' ? new Date().toISOString().split('T')[0] : undefined,
+                            max:
+                                typeValidation === 'dataPassado'
+                                    ? new Date().toISOString().split('T')[0]
+                                    : new Date(new Date().setFullYear(new Date().getFullYear() + 50))
+                                          .toISOString()
+                                          .split('T')[0]
+                        }}
+                        sx={{
+                            opacity: opacity ? 0.4 : 1,
+                            '& .MuiInputBase-input': {
+                                padding: '10px 14px' // Ajuste o valor conforme necessário
+                            },
+                            ...((required || alertRequired) &&
+                                (hasError || !!inputError) && {
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': {
+                                            borderColor: theme.palette.error.main
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: theme.palette.error.main
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: theme.palette.error.main
+                                        }
                                     },
-                                    '&:hover fieldset': {
-                                        borderColor: theme.palette.error.main
+                                    '& .MuiInputLabel-root': {
+                                        color: theme.palette.error.main
                                     },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: theme.palette.error.main
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: theme.palette.error.main
                                     }
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: theme.palette.error.main
-                                },
-                                '& .MuiInputLabel-root.Mui-focused': {
-                                    color: theme.palette.error.main
-                                }
-                            })
-                    }}
-                    {...form.register(name, { required })}
-                />
-            </FormControl>
+                                })
+                        }}
+                        {...form.register(name, { required })}
+                    />
+                </FormControl>
+            </div>
         </Grid>
     )
 }
