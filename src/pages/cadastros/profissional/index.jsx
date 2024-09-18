@@ -30,7 +30,7 @@ const Usuario = () => {
                 setFilteredData(response.data)
                 setData(response.data)
                 setTitle({
-                    icon: 'material-symbols:engineering-outline',
+                    icon: 'material-symbols:person-check-outline',
                     title: 'Profissional',
                     subtitle: {
                         id: id,

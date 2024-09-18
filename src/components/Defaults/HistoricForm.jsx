@@ -83,11 +83,11 @@ const HistoricForm = ({ parFormularioID, id }) => {
                                             )}
                                         </div>
                                         <Typography variant='caption' className='flex items-center gap-2'>
-                                            <Icon icon='material-symbols:engineering-outline' />
+                                            <Icon icon='material-symbols:person-check-outline' />
                                             {row.usuario}
                                         </Typography>
                                         <Typography variant='caption' className='flex items-center gap-2'>
-                                            <Icon icon='mdi:company' />
+                                            <Icon icon='mage:building-tree' />
                                             {row.unidade}
                                         </Typography>
                                     </div>

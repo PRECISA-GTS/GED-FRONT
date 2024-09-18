@@ -240,7 +240,7 @@ const FormSetor = ({ id }) => {
                                 <Grid item xs={12}>
                                     <div className='flex items-center gap-2 pb-1 pt-2'>
                                         <div className=''>
-                                            <Icon icon='material-symbols:engineering-outline' className='text-3xl' />
+                                            <Icon icon='material-symbols:person-check-outline' className='text-3xl' />
                                         </div>
                                         <div className='flex flex-col gap-0'>
                                             <p className='text-xl'>Profissionais</p>

@@ -36,7 +36,7 @@ const Unidade = () => {
                 setFilteredData(response.data)
                 setData(response.data)
                 setTitle({
-                    icon: 'mdi:company',
+                    icon: 'mage:building-tree',
                     title: 'Unidade',
                     subtitle: {
                         id: id,
