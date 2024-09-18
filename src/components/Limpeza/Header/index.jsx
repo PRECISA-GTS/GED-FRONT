@@ -7,7 +7,7 @@ import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import HeaderInfo from './Info'
-import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 
 const HeaderFields = ({ form, limpezaID, modelo, values, fields, disabled }) => {
     const { user } = useContext(AuthContext)
@@ -42,7 +42,7 @@ const HeaderFields = ({ form, limpezaID, modelo, values, fields, disabled }) => 
                         <CardContent>
                             <Grid container spacing={4}>
                                 <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                                    <InfoSetores data={values?.setores ?? []} />
+                                    <InfoDepartamentos data={values?.departamentos ?? []} />
                                 </Grid>
 
                                 {/* Inputs fixos */}

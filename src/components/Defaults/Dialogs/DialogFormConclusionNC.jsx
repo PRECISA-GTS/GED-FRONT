@@ -14,7 +14,7 @@ import { useGlobal } from 'src/hooks/useGlobal'
 import Header from 'src/components/Reports/Header'
 import ContentFornecedor from 'src/pages/relatorio/formularios/fornecedor/Content'
 import Footer from 'src/components/Reports/Footer'
-import InfoSetores from '../Formularios/InfoSetores'
+import InfoDepartamentos from '../Formularios/InfoDepartamentos'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
@@ -41,7 +41,7 @@ const DialogFormConclusionNC = ({
     formularioID,
     modeloID,
     produtos,
-    setores
+    departamentos
 }) => {
     if (!modeloID) return null
 
@@ -92,17 +92,17 @@ const DialogFormConclusionNC = ({
                         </Grid>
                         {user.papelID === 1 && (
                             <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                                <InfoSetores data={setores ?? []} />
+                                <InfoDepartamentos data={departamentos ?? []} />
                             </Grid>
                         )}
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
-                        {!hasSectorPermission(values?.setores ?? []) && (
+                        {!hasSectorPermission(values?.departamentos ?? []) && (
                             <Alert severity='warning' sx={{ mb: 4 }}>
                                 <Typography variant='body2'>
-                                    Seu setor não está habilitado para concluir este formulário!
+                                    Seu departamento não está habilitado para concluir este formulário!
                                 </Typography>
                             </Alert>
                         )}
@@ -204,7 +204,7 @@ const DialogFormConclusionNC = ({
                                         variant='contained'
                                         disabled={
                                             !validParams ||
-                                            !hasSectorPermission(values?.setores ?? []) ||
+                                            !hasSectorPermission(values?.departamentos ?? []) ||
                                             (status < 40 &&
                                                 ((listErrors && listErrors.status) ||
                                                     (user.papelID == 1 && !result.status)))

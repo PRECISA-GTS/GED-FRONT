@@ -44,7 +44,7 @@ const FormParametrosLimpeza = ({ id }) => {
     const [indexNewBloco, setIndexNewBloco] = useState(null)
     const [indexNewItem, setIndexNewItem] = useState(null)
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
-    const [setores, setSetores] = useState([])
+    const [departamentos, setDepartamentos] = useState([])
 
     const createNew = (indexBloco, indexItem) => {
         setOpenModalNew(true)
@@ -224,25 +224,25 @@ const FormParametrosLimpeza = ({ id }) => {
         setBlocks(newBlock)
     }
 
-    const getSetores = async () => {
+    const getDepartamentos = async () => {
         if (!loggedUnity) return
 
         try {
-            const res = await api.post('/cadastros/setor', { unidadeID: loggedUnity.unidadeID })
-            setSetores(res.data)
+            const res = await api.post('/cadastros/departamento', { unidadeID: loggedUnity.unidadeID })
+            setDepartamentos(res.data)
         } catch (err) {
             console.log(err)
         }
     }
 
-    const getSetoresModelo = async model => {
-        const response = await api.post(`/cadastros/setor/getSetoresAssinatura`, {
+    const getDepartamentosModelo = async model => {
+        const response = await api.post(`/cadastros/departamento/getDepartamentosAssinatura`, {
             formularioID: 4, // limpeza
             modeloID: id
         })
         const updatedModel = { ...model }
-        updatedModel.setoresPreenchem = response.data.preenche
-        updatedModel.setoresConcluem = response.data.conclui
+        updatedModel.departamentosPreenchem = response.data.preenche
+        updatedModel.departamentosConcluem = response.data.conclui
         form.reset({
             ...form.getValues(),
             model: updatedModel
@@ -274,7 +274,7 @@ const FormParametrosLimpeza = ({ id }) => {
                     setOrientacoes(response.data.orientations)
                     //* Insere os dados no formulário
                     form.reset(response.data)
-                    getSetoresModelo(response.data.model)
+                    getDepartamentosModelo(response.data.model)
 
                     setTimeout(() => {
                         response.data.blocks &&
@@ -291,7 +291,7 @@ const FormParametrosLimpeza = ({ id }) => {
 
     useEffect(() => {
         getData()
-        getSetores()
+        getDepartamentos()
 
         //? Seta error nos campos obrigatórios
         setTimeout(() => {
@@ -368,32 +368,32 @@ const FormParametrosLimpeza = ({ id }) => {
                                     form={form}
                                 />
 
-                                {/* Setores que preenchem */}
-                                {setores && (
+                                {/* Departamentos que preenchem */}
+                                {departamentos && (
                                     <>
                                         <Select
                                             xs={12}
                                             md={6}
                                             className='order-5'
                                             multiple
-                                            title='Setores que preenchem cabeçalho'
-                                            name={`model.setoresPreenchem`}
-                                            options={setores ?? []}
-                                            value={model?.setoresPreenchem ?? []}
+                                            title='Departamentos que preenchem cabeçalho'
+                                            name={`model.departamentosPreenchem`}
+                                            options={departamentos ?? []}
+                                            value={model?.departamentosPreenchem ?? []}
                                             form={form}
-                                            helpText='Profissionais deste setor terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                            helpText='Profissionais deste departamento terão permissão para preencher o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                         <Select
                                             xs={12}
                                             md={6}
                                             className='order-5'
                                             multiple
-                                            title='Setores que concluem o formulário'
-                                            name={`model.setoresConcluem`}
-                                            options={setores ?? []}
-                                            value={model?.setoresConcluem ?? []}
+                                            title='Departamentos que concluem o formulário'
+                                            name={`model.departamentosConcluem`}
+                                            options={departamentos ?? []}
+                                            value={model?.departamentosConcluem ?? []}
                                             form={form}
-                                            helpText='Profissionais deste setor terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
+                                            helpText='Profissionais deste departamento terão permissão para concluir/aprovar o formulário. Se nenhum profissional for selecionado, o sistema não fará o controle de permissão para este formulário'
                                         />
                                     </>
                                 )}
@@ -500,7 +500,7 @@ const FormParametrosLimpeza = ({ id }) => {
                         createNew={createNew}
                         viewItem={viewItem}
                         key={change}
-                        setores={setores}
+                        departamentos={departamentos}
                     />
                 )}
                 {/* Botão inserir bloco */}

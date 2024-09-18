@@ -4,7 +4,7 @@ import NcType from './NcType'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
-import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 import { useEffect } from 'react'
 
 const Header = ({ form, data, disabled }) => {
@@ -33,7 +33,7 @@ const Header = ({ form, data, disabled }) => {
             <CardContent>
                 <Grid container spacing={6} className='items-center'>
                     <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                        <InfoSetores data={data?.setoresPreenchimento ?? []} />
+                        <InfoDepartamentos data={data?.departamentosPreenchimento ?? []} />
                     </Grid>
 
                     <DateField

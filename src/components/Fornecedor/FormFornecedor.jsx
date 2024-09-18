@@ -339,7 +339,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                         status:
                             user.papelID == response.data.unidade.quemPreenche &&
                             response.data.info.status < 40 &&
-                            (hasSectorPermission(response.data.fieldsHeader?.setores ?? []) ||
+                            (hasSectorPermission(response.data.fieldsHeader?.departamentos ?? []) ||
                                 response.data.unidade.quemPreenche === 2)
                                 ? true
                                 : false,

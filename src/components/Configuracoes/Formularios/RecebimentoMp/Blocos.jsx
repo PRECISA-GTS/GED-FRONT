@@ -19,7 +19,7 @@ const Blocos = ({
     setItemScore,
     createNew,
     viewItem,
-    setores
+    departamentos
 }) => {
     return (
         <>
@@ -56,12 +56,12 @@ const Blocos = ({
                                     md={4}
                                     className='order-5 md:order-3'
                                     multiple
-                                    title='Setores que preenchem'
-                                    name={`blocks.[${index}].dados.setores`}
-                                    options={setores ?? []}
-                                    value={block.dados.setores ?? []}
+                                    title='Departamentos que preenchem'
+                                    name={`blocks.[${index}].dados.departamentos`}
+                                    options={departamentos ?? []}
+                                    value={block.dados.departamentos ?? []}
                                     form={form}
-                                    helpText='Nenhum setor selecionado significa que o sistema não fará o controle de permissão por setores'
+                                    helpText='Nenhum departamento selecionado significa que o sistema não fará o controle de permissão por departamentos'
                                 />
 
                                 <Check

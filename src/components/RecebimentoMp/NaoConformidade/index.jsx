@@ -448,7 +448,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         modeloID={header.modelo.id}
                         produtos={form.getValues('header.produtos')}
                         form={form}
-                        setores={header.setoresConclusao}
+                        departamentos={header.departamentosConclusao}
                     />
 
                     <DialogDelete

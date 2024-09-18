@@ -5,7 +5,7 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import { api } from 'src/configs/api'
 import { getCurrentDate, getCurrentTime } from 'src/configs/defaultConfigs'
-import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 
 const HeaderFields = ({ form, modeloID, values, fields, disabled, getAddressByCep }) => {
     const [profissionaisPreenche, setProfissionaisPreenche] = useState([])
@@ -31,7 +31,7 @@ const HeaderFields = ({ form, modeloID, values, fields, disabled, getAddressByCe
     return (
         <Grid container spacing={4}>
             <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                <InfoSetores data={values?.setores ?? []} />
+                <InfoDepartamentos data={values?.departamentos ?? []} />
             </Grid>
 
             {/* <Input

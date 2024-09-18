@@ -8,7 +8,7 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import RecebimentoMpProdutos from '../Produtos'
 import Icon from 'src/@core/components/icon'
-import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 import { useFieldArray } from 'react-hook-form'
 
 const HeaderFields = ({
@@ -96,7 +96,7 @@ const HeaderFields = ({
                 <CardContent>
                     <Grid container alignItems='stretch' spacing={6}>
                         <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                            <InfoSetores data={values?.setores ?? []} />
+                            <InfoDepartamentos data={values?.departamentos ?? []} />
                         </Grid>
 
                         {/* Data de avaliação */}

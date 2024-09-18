@@ -211,7 +211,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         status:
                             user.papelID == 1 &&
                             response.data.info.status < 40 &&
-                            hasSectorPermission(response.data.fieldsHeader?.setores ?? [])
+                            hasSectorPermission(response.data.fieldsHeader?.departamentos ?? [])
                                 ? true
                                 : false,
                         message:
