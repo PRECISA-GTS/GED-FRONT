@@ -123,7 +123,7 @@ const ResetPassword = () => {
                             Sua nova senha deve ser diferente das senhas usadas anteriormente
                         </Typography>
                     </Box>
-                    <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+                    <form noValidate autoComplete='off' onSubmit={form.handleSubmit(onSubmit)}>
                         <FormControl fullWidth sx={{ mb: 4 }}>
                             <InputLabel
                                 htmlFor='auth-reset-password-new-password'
@@ -168,7 +168,7 @@ const ResetPassword = () => {
                         <FormControl fullWidth sx={{ mb: 4 }}>
                             <InputLabel
                                 htmlFor='input-confirmNewPassword'
-                                color={errors?.confirmNewPassword ? 'error' : ''}
+                                color={form.formState?.errors?.confirmNewPassword ? 'error' : ''}
                             >
                                 Confirme a senha
                             </InputLabel>
@@ -177,13 +177,11 @@ const ResetPassword = () => {
                                 name='confirmNewPassword'
                                 id='auth-reset-password-confirm-password'
                                 type={values.showConfirmNewPassword ? 'text' : 'password'}
-                                {...register(`confirmNewPassword`, {
+                                {...form.register(`confirmNewPassword`, {
                                     required: true,
-                                    // validar senha e confirmação de senha somente se houver valor em senha
-
                                     validate: {
                                         matchesPassword: value =>
-                                            value === watch('newPassword') || 'As senhas não conferem.',
+                                            value === form.watch('newPassword') || 'As senhas não conferem.',
                                         minLength: value =>
                                             value.length >= 4 || 'A senha deve conter no mínimo 4 dígitos.'
                                     }

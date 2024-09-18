@@ -23,7 +23,7 @@ const ToggleButtonLabel = React.memo(({ form, xs, md, name, setIsNotFactory }) =
                     variant={selectedOption === 1 ? 'contained' : 'outlined'}
                 >
                     <div className='flex items-center gap-2 py-2 px-1'>
-                        <Icon icon='mdi:company' />
+                        <Icon icon='mage:building-tree' />
                         <p className='capitalize'>Fábrica</p>
                     </div>
                 </Button>

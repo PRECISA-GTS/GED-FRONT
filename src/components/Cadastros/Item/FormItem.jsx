@@ -27,6 +27,7 @@ const FormItem = ({
     setNewChange,
     newChange,
     outsideID,
+    modal,
     handleConfirmNew,
     manualUrl
 }) => {
@@ -87,7 +88,7 @@ const FormItem = ({
     //? Deleta os dados
     const handleClickDelete = async () => {
         try {
-            await api.delete(`${staticUrl}/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`)
+            await api.delete(`cadastros/item/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`)
             setId(null)
             setOpen(false)
             toast.success(toastMessage.successDelete)
@@ -103,7 +104,7 @@ const FormItem = ({
 
     const handleClickInactivate = async () => {
         try {
-            await api.post(`${staticUrl}/inactivate/${id}`, {
+            await api.post(`cadastros/item/inactivate/${id}`, {
                 usuarioID: user.usuarioID,
                 unidadeID: loggedUnity.unidadeID
             })
@@ -118,7 +119,7 @@ const FormItem = ({
 
     const handleClickActivate = async () => {
         try {
-            await api.post(`${staticUrl}/activate/${id}`, {
+            await api.post(`cadastros/item/activate/${id}`, {
                 usuarioID: user.usuarioID,
                 unidadeID: loggedUnity.unidadeID
             })
@@ -232,6 +233,7 @@ const FormItem = ({
                             btnDelete={type === 'edit' && !data.fields.pending ? true : false}
                             onclickDelete={() => setOpen(true)}
                             type={type}
+                            modal={modal}
                             outsideID={outsideID}
                             btnInactivate={
                                 type === 'edit' && data.fields.pending && data.fields.status === 1 ? true : false

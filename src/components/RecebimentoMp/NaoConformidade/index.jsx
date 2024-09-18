@@ -20,6 +20,7 @@ import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from './NewContent'
 import { Card, CardContent } from '@mui/material'
 import { fractionedToFloat } from 'src/configs/functions'
+import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 
 const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const router = Router
@@ -30,6 +31,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const [block, setBlock] = useState(null)
     const [change, setChange] = useState(false)
     const [openModal, setOpenModal] = useState(false)
+    const [listErrors, setListErrors] = useState({ status: false, errors: [] })
     const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
@@ -89,8 +91,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             setOpenModal(false)
             setChange(!change)
         }
-
-        console.log('🚀 ~ conclude values:', values)
     }
 
     const reOpen = async values => {
@@ -103,7 +103,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ reOpen:', data)
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/reOpen/${id}`, data)
@@ -252,6 +251,87 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     if (user.papelID == 1 && header && header.status.id >= 40) actionsData.push(objReOpenForm)
     if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
 
+    const checkErrors = () => {
+        let objErrors = {
+            status: false,
+            errors: []
+        }
+
+        //? Limpa os erros atuais do formulário
+        form.clearErrors()
+
+        //? Checa os erros estáticos
+        checkErrorStaticHeader(form, 'header.data', 'Data', objErrors)
+        checkErrorStaticHeader(form, 'header.hora', 'Hora', objErrors)
+
+        //? Checa os erros dinâmicos
+        checkErrorsDynamicHeader(form, form.getValues('header.fields'), objErrors)
+        //? Blocos
+        checkErrorsBlocks(form, form.getValues('blocos'), objErrors)
+        //? Verifica se houve mudanças antes de setar no estado
+        const updatedErrors = getErrors(objErrors)
+        //? Se houver erro, atualiza o estado
+        if (listErrors.status !== updatedErrors.status || listErrors.errors.length !== updatedErrors.errors.length) {
+            setListErrors(updatedErrors)
+        }
+    }
+
+    const handleFileSelect = async (event, item) => {
+        const selectedFile = event.target.files
+        if (selectedFile && selectedFile.length > 0) {
+            const formData = new FormData()
+            for (let i = 0; i < selectedFile.length; i++) {
+                formData.append('files[]', selectedFile[i])
+            }
+            formData.append(`usuarioID`, user.usuarioID)
+            formData.append(`unidadeID`, loggedUnity.unidadeID)
+            formData.append(
+                `parRecebimentoMpNaoConformidadeModeloBlocoID`,
+                item.parRecebimentoMpNaoConformidadeModeloBlocoID ?? null
+            )
+            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+            await onSubmit(form.getValues()) //? Atualiza dados do formulário
+
+            await api
+                .post(
+                    `/formularios/recebimento-mp/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
+                    formData
+                )
+                .then(response => {
+                    //* Submete formulário pra atualizar configurações dos itens
+                    // const values = form.getValues()
+                    // onSubmit(values)
+                })
+                .catch(error => {
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                })
+                .finally(() => {
+                    setChange(!change)
+                })
+        }
+    }
+
+    const handleRemoveFile = async item => {
+        if (item) {
+            await api
+                .delete(
+                    `/formularios/recebimento-mp/nao-conformidade/deleteAnexo/${id}/${item.anexoID}/${loggedUnity.unidadeID}/${user.usuarioID}/item`
+                )
+                .then(response => {
+                    //* Submete formulário pra atualizar configurações dos itens
+                    const values = form.getValues()
+                    onSubmit(values)
+                })
+                .catch(error => {
+                    toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
+                })
+                .finally(() => {
+                    getData()
+                })
+        }
+    }
+
     useEffect(() => {
         setTitle({
             icon: 'typcn:warning-outline',
@@ -263,6 +343,11 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             }
         })
         getData()
+
+        //? Seta error nos campos obrigatórios
+        setTimeout(() => {
+            form.trigger()
+        }, 300)
     }, [change, user])
 
     return (
@@ -286,7 +371,10 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         actionsData={actionsData}
                         actions={user.papelID === 1 ? true : false}
                         handleSubmit={() => form.handleSubmit(onSubmit)}
-                        handleSend={() => setOpenModal(true)}
+                        handleSend={() => {
+                            setOpenModal(true)
+                            checkErrors()
+                        }}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
                         title='Não conformidade do Recebimento de MP'
@@ -326,6 +414,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                                 form={form}
                                 data={block}
                                 setBlock={setBlock}
+                                handleFileSelect={handleFileSelect}
+                                handleRemoveFile={handleRemoveFile}
                                 status={header.status.id}
                                 disabled={
                                     header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
@@ -351,11 +441,11 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         conclusionForm={conclude}
                         canApprove={true}
                         type='recebimentoMpNaoConformidade'
+                        listErrors={listErrors}
                         unity={loggedUnity}
                         values={null}
                         formularioID={3}
                         modeloID={header.modelo.id}
-                        // produtos={header.produtos}
                         produtos={form.getValues('header.produtos')}
                         form={form}
                         setores={header.setoresConclusao}

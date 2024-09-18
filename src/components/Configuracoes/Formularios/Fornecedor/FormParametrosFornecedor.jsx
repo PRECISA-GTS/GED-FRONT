@@ -46,6 +46,7 @@ const FormParametrosFornecedor = ({ id }) => {
     const [setores, setSetores] = useState([])
 
     const createNew = (indexBloco, indexItem) => {
+        console.log('🚀 ~ createNew indexBloco, indexItem:', indexBloco, indexItem)
         setOpenModalNew(true)
         setIndexNewBloco(indexBloco)
         setIndexNewItem(indexItem)
@@ -60,7 +61,7 @@ const FormParametrosFornecedor = ({ id }) => {
 
     const handleConfirmNew = data => {
         setOpenModalNew(false)
-        setValue(`blocks.[${indexNewBloco}].itens.[${indexNewItem}].item`, data)
+        form.setValue(`blocks.[${indexNewBloco}].itens.[${indexNewItem}].item`, data)
     }
 
     const router = Router
@@ -605,6 +606,7 @@ const FormParametrosFornecedor = ({ id }) => {
                     outsideID={id}
                     btnClose
                     handleModalClose={() => setOpenModalSelectedItem(false)}
+                    modal
                 />
             </DialogNewCreate>
         </>

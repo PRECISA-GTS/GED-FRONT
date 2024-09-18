@@ -20,23 +20,31 @@ const AnexoList = ({
     error,
     disabled,
     modeTheme,
-    inputRef
+    inputRef,
+    form
 }) => {
     if (!item) return null
 
     return (
         <Grid item xs={12} md={12}>
-            <div
+            {/* <div
                 className={`${
-                    error &&
-                    (error?.[indexBlock]?.produtoAnexosDescricao?.[indexItem] ||
-                        error?.[indexBlock]?.itens?.[indexItem]?.respostaConfig?.anexosSolicitados?.[indexAnexo] ||
-                        error?.grupoAnexo?.[indexBlock]?.itens[indexItem])
+                    form?.formState?.error &&
+                    (form?.formState?.error?.[indexBlock]?.produtoAnexosDescricao?.[indexItem] ||
+                        form?.formState?.error?.[indexBlock]?.itens?.[indexItem]?.respostaConfig?.anexosSolicitados?.[
+                            indexAnexo
+                        ] ||
+                        form?.formState?.error?.grupoAnexo?.[indexBlock]?.itens[indexItem])
                         ? 'border border-red-500'
                         : modeTheme === 'dark'
                         ? 'bg-[#212b36]'
                         : ' bg-[#F6F6F8] '
                 } px-4 py-2 rounded-lg flex flex-col relative z-10`}
+            > */}
+            <div
+                className={`border px-4 py-2 rounded-lg flex flex-col relative z-10 ${
+                    item && item.anexo == 1 && item.obrigatorio == 1 && item.anexos?.length == 0 ? 'border-red-500' : ''
+                }`}
             >
                 <div className=''>
                     <p className='font-medium text-sm '>{item.nome}</p>

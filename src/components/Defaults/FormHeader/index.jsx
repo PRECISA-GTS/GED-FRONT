@@ -55,8 +55,10 @@ const FormHeader = ({
     handleNewModal,
     actionsNC,
     btnActivate,
-    onClickActivate
+    onClickActivate,
+    modal
 }) => {
+    console.log('outside: ', outsideID)
     const router = Router
     const { routes, user } = useContext(AuthContext)
     const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
@@ -228,9 +230,9 @@ const FormHeader = ({
     return (
         <>
             <div
-                className={`sticky ${
-                    outsideID ? '-top-[4.5rem] px-4 bg-transparent' : 'top-[4.5rem]'
-                }  pb-2 mb-2 z-50 ${settings.mode == 'dark' ? 'bg-[#161c24]' : 'bg-[#F7F7F9]'}`}
+                className={`sticky pb-2 mb-2 z-50 ${
+                    outsideID || modal ? '-top-[4.5rem] bg-transparent' : 'top-[4.5rem]'
+                } ${settings.mode === 'dark' ? 'bg-[#161c24]' : 'bg-[#F7F7F9]'}`}
             >
                 <div className={`flex items-center justify-between w-full `} style={{ zIndex: 1000 }}>
                     {/* Div da esquerda */}

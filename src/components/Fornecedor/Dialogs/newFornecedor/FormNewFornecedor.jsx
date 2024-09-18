@@ -213,7 +213,6 @@ const FormNewFornecedor = ({
                                     checked={isCpf}
                                     onChange={e => {
                                         setIsCpf(e.target.checked)
-                                        handleCnpjCpf(form.getValues('fields.cnpj'), e.target.checked)
                                     }}
                                 />
                             }
