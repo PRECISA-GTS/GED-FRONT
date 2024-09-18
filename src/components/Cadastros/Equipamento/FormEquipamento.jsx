@@ -153,6 +153,13 @@ const FormEquipamento = ({
                                     typePage={type}
                                     form={form}
                                 />
+                                <Input
+                                    xs={11}
+                                    md={12}
+                                    title='Tipo de material (inox, metal, plástico, vidro, etc)'
+                                    name='fields.tipo'
+                                    form={form}
+                                />
                             </Grid>
                         </CardContent>
                     </Card>

@@ -1,6 +1,7 @@
 import { Grid, Typography, Box, FormControlLabel, Checkbox } from '@mui/material'
+import HelpText from '../Defaults/HelpText'
 
-const Check = ({ form, xs, md, title, index, name, typePage, value, edit, className }) => {
+const Check = ({ form, xs, md, title, index, name, typePage, value, edit, className, helpText }) => {
     return (
         <Grid item xs={xs} md={md} className={className}>
             <Box height='100%' display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
@@ -19,6 +20,11 @@ const Check = ({ form, xs, md, title, index, name, typePage, value, edit, classN
                     }
                 />
             </Box>
+            {helpText && (
+                <div>
+                    <HelpText text={helpText} position='top' />
+                </div>
+            )}
         </Grid>
     )
 }

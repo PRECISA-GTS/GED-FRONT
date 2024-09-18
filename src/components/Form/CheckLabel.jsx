@@ -27,7 +27,9 @@ const CheckLabel = ({ form, xs, md, title, name, value, disabled, onClick, helpT
                             }
                         }}
                     />
-                    {helpText && <HelpText text={helpText} position={helpTextPosition ?? 'top'} />}
+                    {helpText && (
+                        <HelpText text={helpText} position={helpTextPosition ?? 'top'} className='relative top-[2px]' />
+                    )}
                 </>
             </Box>
         </Grid>

@@ -1,9 +1,10 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { api } from 'src/configs/api'
-import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import Table from 'src/components/Defaults/Table'
-import { ParametersContext } from 'src/context/ParametersContext'
 import { RouteContext } from 'src/context/RouteContext'
+import { ParametersContext } from 'src/context/ParametersContext'
+import { AuthContext } from 'src/context/AuthContext'
+
 import Loading from 'src/components/Loading'
 
 // ** Next
@@ -11,25 +12,25 @@ import { useRouter } from 'next/router'
 
 // ** Configs
 import { configColumns } from 'src/configs/defaultConfigs'
-import { AuthContext } from 'src/context/AuthContext'
 import { useFilter } from 'src/context/FilterContext'
 import Filters from './Filters'
+import FormSetor from 'src/components/Cadastros/Setor/FormSetor'
 
-const Produto = () => {
+const Setor = () => {
     const router = useRouter()
+    const { id } = useContext(RouteContext)
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { loggedUnity } = useContext(AuthContext)
-    const { id } = useContext(RouteContext)
     const { filteredData, setFilteredData, setData, startFilter } = useFilter()
 
     const getList = async () => {
-        await api.get(`${currentLink}/${loggedUnity.unidadeID}`).then(response => {
+        await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
-                icon: 'ph:plant',
-                title: 'Produto',
+                icon: 'fluent-mdl2:map-pin-12',
+                title: 'Setor',
                 subtitle: {
                     id: id,
                     count: response.data.length,
@@ -46,24 +47,19 @@ const Produto = () => {
 
     const arrColumns = [
         {
-            headerName: 'ID',
+            title: 'ID',
             field: 'id',
             size: 0.1
         },
         {
-            headerName: 'Nome',
+            title: 'Nome',
             field: 'nome',
-            size: 0.4
+            size: 0.3
         },
         {
-            headerName: 'Classificação',
-            field: 'classificacao',
-            size: 0.4
-        },
-        {
-            headerName: 'Limpeza',
-            field: 'limpeza',
-            size: 0.2
+            title: 'Equipamentos',
+            field: 'equipamentos',
+            size: 0.5
         },
         {
             headerName: 'Status',
@@ -84,7 +80,7 @@ const Produto = () => {
                 <Loading />
             ) : //? Se tem id, exibe o formulário
             id && id > 0 ? (
-                <FormProduto id={id} />
+                <FormSetor id={id} />
             ) : (
                 //? Lista tabela de resultados da listagem
                 <Table result={filteredData} columns={columns} />
@@ -93,4 +89,4 @@ const Produto = () => {
     )
 }
 
-export default Produto
+export default Setor
