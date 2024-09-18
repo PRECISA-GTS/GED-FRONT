@@ -91,8 +91,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             setOpenModal(false)
             setChange(!change)
         }
-
-        console.log('🚀 ~ conclude values:', values)
     }
 
     const reOpen = async values => {
@@ -105,7 +103,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ reOpen:', data)
 
         try {
             const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/reOpen/${id}`, data)
@@ -266,7 +263,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         //? Checa os erros estáticos
         checkErrorStaticHeader(form, 'header.data', 'Data', objErrors)
         checkErrorStaticHeader(form, 'header.hora', 'Hora', objErrors)
-        checkErrorStaticHeader(form, 'header.prazoSolucao', 'Prazo para a solução (em dias)', objErrors)
 
         //? Checa os erros dinâmicos
         checkErrorsDynamicHeader(form, form.getValues('header.fields'), objErrors)
@@ -295,6 +291,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             )
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
+            await onSubmit(form.getValues()) //? Atualiza dados do formulário
+
             await api
                 .post(
                     `/formularios/recebimento-mp/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
@@ -302,8 +300,8 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                 )
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = form.getValues()
-                    onSubmit(values)
+                    // const values = form.getValues()
+                    // onSubmit(values)
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')

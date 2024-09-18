@@ -65,7 +65,6 @@ const Header = ({ form, data, disabled }) => {
                         title='Prazo para a solução (em dias)'
                         name={`header.prazoSolucao`}
                         disabled={disabled}
-                        required
                         type='number'
                         form={form}
                         helpText='Informe o prazo pra solução da não conformidade. Será gerado um alerta no vencimento do prazo.'

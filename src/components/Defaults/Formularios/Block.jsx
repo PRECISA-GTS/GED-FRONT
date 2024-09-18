@@ -13,7 +13,7 @@ const Block = ({
     blocos,
     disabled,
     handleFileSelect,
-    handleRemoveFile,
+    handleRemoveAnexoItem,
     status,
     isFornecedorLogged
 }) => {
@@ -172,7 +172,7 @@ const Block = ({
                             disabled={!blockPermission}
                             updateResponse={updateResponse}
                             handleFileSelect={handleFileSelect}
-                            handleRemoveAnexoItem={handleRemoveFile}
+                            handleRemoveAnexoItem={handleRemoveAnexoItem}
                         />
                     ))}
                 </Grid>
