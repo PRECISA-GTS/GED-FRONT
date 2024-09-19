@@ -52,15 +52,10 @@ const EsqueceuSenha = () => {
 
     function OnchangeValue(value) {
         setGetData('')
-        if (type == 'login' && value.length == 14 && validationCPF(value)) {
-            api.post(`esqueceuSenha/validation?type=${type}`, { data: value }).then(response => {
-                setGetData(response.data)
-            })
-        } else if (
-            (type == 'fornecedor' && !isCpf && value.length == 18 && validationCNPJ(value)) ||
+        if (
+            (!isCpf && value.length == 18 && validationCNPJ(value)) ||
             (isCpf && value.length == 14 && validationCPF(value))
         ) {
-            console.log('ENVIA PRO BACKEND')
             api.post(`esqueceuSenha/validation?type=${type}`, { data: value }).then(response => {
                 setGetData(response.data)
             })
@@ -189,13 +184,25 @@ const EsqueceuSenha = () => {
                         )}
 
                         {/* Gerar um alerte de erro se o email não existir no banco de dados ou se o email não for validado */}
-                        {!getData && campo?.length == (type == 'login' ? 14 : 18) && (
+                        {/* {!getData && campo?.length == (type == 'login' ? 14 : 18) && ( */}
+                        {!getData && ((isCpf && campo?.length == 14) || (!isCpf && campo?.length == 18)) && (
                             <Alert severity='error' sx={{ mt: 2 }}>
                                 <Typography variant='body2'>
-                                    Esse {type == 'login' ? 'CPF' : 'CNPJ'} não está na nossa base de dados!
+                                    Esse {isCpf ? 'CPF' : 'CNPJ'} não está na nossa base de dados!
                                 </Typography>
                             </Alert>
                         )}
+
+                        {getData &&
+                            !getData?.email &&
+                            ((isCpf && campo?.length == 14) || (!isCpf && campo?.length == 18)) && (
+                                <Alert severity='warning' sx={{ mt: 2 }}>
+                                    <Typography variant='body2'>
+                                        Seu cadastro não possui um e-mail informado! Por favor, entre em contato com o
+                                        suporte.
+                                    </Typography>
+                                </Alert>
+                            )}
 
                         <Button
                             fullWidth
