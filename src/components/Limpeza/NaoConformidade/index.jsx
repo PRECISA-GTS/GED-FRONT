@@ -22,7 +22,7 @@ import { Card, CardContent } from '@mui/material'
 import { fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 
-const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
+const NaoConformidade = ({ id, limpezaID, modelID }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -71,7 +71,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             },
             params: {
                 id,
-                recebimentoMpID: header.recebimento.id,
+                limpezaID: header.recebimento.id,
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID,
@@ -119,7 +119,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
             const values = {
                 id: id ?? 0, //? Novo (id == null)
                 modelID: modelID ?? 0, //? Novo (modelID)
-                recebimentoMpID: recebimentoMpID ?? 0, //? Novo (recebimentoMpID)
+                limpezaID: limpezaID ?? 0, //? Novo (limpezaID)
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID
             }
@@ -335,7 +335,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     useEffect(() => {
         setTitle({
             icon: 'typcn:warning-outline',
-            title: 'Não conformidade do Recebimento de MP',
+            title: 'Não conformidade da Limpeza e Higienização',
             subtitle: {
                 id: id,
                 count: 1,
