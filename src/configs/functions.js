@@ -22,4 +22,18 @@ const floatToFractioned = (value) => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-export { truncateString, fractionedToFloat, floatToFractioned }
+const canConfigForm = (menu, route) => {
+  let canConfig = false
+  menu.map(divisor => {
+    divisor.menu.map(menu_ => {
+      if (menu_.submenu && menu_.submenu.length > 0) {
+        menu_.submenu.map(submenu => {
+          if (submenu.rota == route) canConfig = true
+        })
+      }
+    })
+  })
+  return canConfig
+}
+
+export { truncateString, fractionedToFloat, floatToFractioned, canConfigForm }

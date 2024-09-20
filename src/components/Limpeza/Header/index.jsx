@@ -174,7 +174,6 @@ const Header = ({ form, data, disabled }) => {
                             title='Fornecedor'
                             name={`header.fornecedor`}
                             value={data?.fornecedor}
-                            required
                             options={fornecedores ?? []}
                             form={form}
                         />
@@ -187,7 +186,6 @@ const Header = ({ form, data, disabled }) => {
                                 title='Departamento'
                                 name={`header.departamento`}
                                 value={data?.departamento}
-                                required
                                 options={departamentos ?? []}
                                 form={form}
                             />
@@ -197,7 +195,6 @@ const Header = ({ form, data, disabled }) => {
                                 title='Profissional'
                                 name={`header.profissional`}
                                 value={data?.profissional}
-                                required
                                 options={profissionais ?? []}
                                 form={form}
                             />
@@ -210,6 +207,7 @@ const Header = ({ form, data, disabled }) => {
                         name={`header.setor`}
                         value={data?.setor}
                         required
+                        alertRequired
                         options={setores ?? []}
                         form={form}
                     />

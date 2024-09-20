@@ -19,7 +19,7 @@ import { toastMessage } from 'src/configs/defaultConfigs'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from './NewContent'
 import { Card, CardContent } from '@mui/material'
-import { fractionedToFloat } from 'src/configs/functions'
+import { canConfigForm, fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 
 const NaoConformidade = ({ id, limpezaID, modelID }) => {
@@ -199,20 +199,6 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         router.push(`/configuracoes/formularios/recebimentomp-naoconformidade/`)
     }
 
-    const canConfigForm = () => {
-        let canConfig = false
-        menu.map(divisor => {
-            divisor.menu.map(menu_ => {
-                if (menu_.submenu && menu_.submenu.length > 0) {
-                    menu_.submenu.map(submenu => {
-                        if (submenu.rota == '/configuracoes/formularios') canConfig = true
-                    })
-                }
-            })
-        })
-        return canConfig
-    }
-
     const handleNew = () => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
         const values = form.getValues('new')
@@ -249,7 +235,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         identification: null
     }
     if (user.papelID == 1 && header && header.status.id >= 40) actionsData.push(objReOpenForm)
-    if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
+    if (user.papelID == 1 && canConfigForm(menu, '/configuracoes/formularios')) actionsData.push(objFormConfig)
 
     const checkErrors = () => {
         let objErrors = {

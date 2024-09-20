@@ -18,7 +18,9 @@ const SelectModel = () => {
 
     const getModels = async () => {
         try {
-            const response = await api.get(`${backRoute(router.pathname)}/getModels/${loggedUnity.unidadeID}`)
+            const response = await api.post(`${backRoute(router.pathname)}/getModels`, {
+                unidadeID: loggedUnity.unidadeID
+            })
 
             if (response.data.length === 1) {
                 selectModel(response.data[0].id)

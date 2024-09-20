@@ -9,13 +9,13 @@ import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import Router from 'next/router'
 import toast from 'react-hot-toast'
-import DialogFormConclusionNC from 'src/components/Defaults/Dialogs/DialogFormConclusionNC'
+import DialogFormConclusion from 'src/components/Defaults/Dialogs/DialogFormConclusion'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from 'src/components/Defaults/Dialogs/DialogReOpenForm'
 import { RouteContext } from 'src/context/RouteContext'
 import CustomChip from 'src/@core/components/mui/chip'
 import { toastMessage } from 'src/configs/defaultConfigs'
-import { fractionedToFloat } from 'src/configs/functions'
+import { canConfigForm } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 
 const FormLimpeza = ({ id, modelID }) => {
@@ -28,31 +28,15 @@ const FormLimpeza = ({ id, modelID }) => {
     const [change, setChange] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
-    const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
-    const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
+    const { setId } = useContext(RouteContext)
 
     const form = useForm({ mode: 'onChange' })
-
-    const isValidProductsQuantity = values => {
-        let isValid = true
-        values.forEach(value => {
-            if (value.novaQuantidade && fractionedToFloat(value.novaQuantidade) > fractionedToFloat(value.quantidade))
-                isValid = false
-        })
-        return isValid
-    }
 
     const conclude = async values => {
         const products = form.getValues(`productsConclude`)
 
         if (!id || !header.recebimento.id) return
-
-        //? Valida se nenhuma quantidade nova do produto é maior que a quantidade do recebimento de MP
-        if (!isValidProductsQuantity(products ?? [])) {
-            toast.error('Quantidade não pode ser maior que a quantidade do recebimento de MP!')
-            return
-        }
 
         values = {
             form: {
@@ -77,7 +61,7 @@ const FormLimpeza = ({ id, modelID }) => {
         setHeader(null)
 
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
+            const response = await api.post(`${router.pathname}/conclude`, values)
             await onSubmit(form.getValues()) //? Atualiza dados do formulário
         } catch (e) {
             console.log(e)
@@ -100,7 +84,7 @@ const FormLimpeza = ({ id, modelID }) => {
         }
 
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/reOpen/${id}`, data)
+            const response = await api.post(`${router.pathname}/reOpen/${id}`, data)
             toast.success(toastMessage.successUpdate)
         } catch (error) {
             console.log(error)
@@ -112,10 +96,11 @@ const FormLimpeza = ({ id, modelID }) => {
     const getData = async () => {
         try {
             const values = {
+                id: id ?? 0, //? Novo (id == null)
                 modelID: modelID ?? 0, //? Novo (modelID)
                 unidadeID: loggedUnity.unidadeID
             }
-            const response = await api.post(`/formularios/limpeza/getData/${id}`, values)
+            const response = await api.post(`/formularios/limpeza/getData`, values)
             console.log('🚀 ~ getData: ', response.data)
 
             form.reset(response.data)
@@ -137,24 +122,10 @@ const FormLimpeza = ({ id, modelID }) => {
     const onSubmit = async values => {
         if (!values) return
 
-        if (user.papelID === 1 && !values.header.transporte && !values.header.produto) {
-            toast.error('Selecione o tipo de não conformidade (Transporte ou Produto)!')
-            return
-        }
-
-        const hasSomeCheckedProduct = values.header.produtos.some(item => item.checked_)
-        if (user.papelID === 1 && values.header.produto && !hasSomeCheckedProduct) {
-            toast.error('Selecione pelo menos um produto!')
-            return
-        }
-
-        console.log('🚀 ~ onSubmit values:', values)
-
         const data = {
             form: values,
             auth: {
                 usuarioID: user.usuarioID,
-                profissionalID: user.profissionalID,
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID
             }
@@ -163,13 +134,13 @@ const FormLimpeza = ({ id, modelID }) => {
 
         try {
             if (type === 'new') {
-                const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/insertData`, data)
+                const response = await api.post(`/formularios/limpeza/insertData`, data)
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
                 setId(response.data.id)
-                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+                router.push(`/formularios/limpeza`)
             } else if (type === 'edit') {
-                await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
+                await api.post(`/formularios/limpeza/updateData/${id}`, data)
                 toast.success('Dados atualizados com sucesso!')
             }
         } catch (e) {
@@ -182,29 +153,7 @@ const FormLimpeza = ({ id, modelID }) => {
 
     const goToFormConfig = () => {
         setId(header.modelo.id) //? ID do modelo do formulário
-        router.push(`/configuracoes/formularios/recebimentomp-naoconformidade/`)
-    }
-
-    const canConfigForm = () => {
-        let canConfig = false
-        menu.map(divisor => {
-            divisor.menu.map(menu_ => {
-                if (menu_.submenu && menu_.submenu.length > 0) {
-                    menu_.submenu.map(submenu => {
-                        if (submenu.rota == '/configuracoes/formularios') canConfig = true
-                    })
-                }
-            })
-        })
-        return canConfig
-    }
-
-    const handleNew = () => {
-        //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
-        const values = form.getValues('new')
-        setRecebimentoMpID(header.recebimento.id)
-        setModelID(values.modelo.id)
-        router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
+        router.push(`/configuracoes/formularios/limpeza/`)
     }
 
     //* Actions data
@@ -234,8 +183,8 @@ const FormLimpeza = ({ id, modelID }) => {
         icon: 'bi:gear',
         identification: null
     }
-    if (user.papelID == 1 && header && header.status.id >= 40) actionsData.push(objReOpenForm)
-    if (user.papelID == 1 && canConfigForm()) actionsData.push(objFormConfig)
+    if (header && header.status.id >= 40) actionsData.push(objReOpenForm)
+    if (canConfigForm(menu, '/configuracoes/formularios')) actionsData.push(objFormConfig)
 
     const checkErrors = () => {
         let objErrors = {
@@ -247,8 +196,11 @@ const FormLimpeza = ({ id, modelID }) => {
         form.clearErrors()
 
         //? Checa os erros estáticos
-        checkErrorStaticHeader(form, 'header.data', 'Data', objErrors)
-        checkErrorStaticHeader(form, 'header.hora', 'Hora', objErrors)
+        checkErrorStaticHeader(form, 'header.dataInicio', 'Data Inicial', objErrors)
+        checkErrorStaticHeader(form, 'header.horaInicio', 'Hora Inicial', objErrors)
+        checkErrorStaticHeader(form, 'header.dataFim', 'Data Final', objErrors)
+        checkErrorStaticHeader(form, 'header.horaFim', 'Hora Final', objErrors)
+        checkErrorStaticHeader(form, 'header.setor', 'Setor', objErrors)
 
         //? Checa os erros dinâmicos
         checkErrorsDynamicHeader(form, form.getValues('header.fields'), objErrors)
@@ -341,21 +293,15 @@ const FormLimpeza = ({ id, modelID }) => {
             {header && (
                 <>
                     <FormHeader
-                        btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
-                        handleNewModal={() => setOpenNew(true)}
+                        btnNew={type === 'edit' ? true : false}
                         btnCancel
                         btnSave={header?.status?.id < 40 ? true : false}
-                        btnSend={
-                            (user.papelID === 1 && header?.status?.id >= 30 && header?.status?.id <= 40) ||
-                            (user.papelID === 2 && header?.status?.id === 30)
-                                ? true
-                                : false
-                        }
+                        btnSend={header?.status?.id >= 30 && header?.status?.id <= 40 ? true : false}
                         btnPrint={type == 'edit' ? true : false}
-                        btnDelete={user.papelID === 1 && header?.status?.id < 40 && type === 'edit' ? true : false}
+                        btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
                         onclickDelete={() => setOpenDelete(true)}
                         actionsData={actionsData}
-                        actions={user.papelID === 1 ? true : false}
+                        actions={true}
                         handleSubmit={() => form.handleSubmit(onSubmit)}
                         handleSend={() => {
                             setOpenModal(true)
@@ -363,7 +309,7 @@ const FormLimpeza = ({ id, modelID }) => {
                         }}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
-                        title='Não conformidade do Recebimento de MP'
+                        title='Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
                     />
@@ -397,21 +343,19 @@ const FormLimpeza = ({ id, modelID }) => {
                                 handleFileSelect={handleFileSelect}
                                 handleRemoveFile={handleRemoveFile}
                                 status={header.status.id}
-                                disabled={
-                                    header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
-                                }
+                                disabled={header.status.id >= 40}
                             />
                         )}
 
-                        <HistoricForm key={change} id={id} parFormularioID={3} />
+                        <HistoricForm key={change} id={id} parFormularioID={4} />
                     </div>
 
-                    <DialogFormConclusionNC
+                    {/* <DialogFormConclusion
                         openModal={openModal}
                         handleClose={() => {
                             setOpenModal(false)
                         }}
-                        title='Concluir Não Conformidade do Recebimento de MP'
+                        title='Concluir Limpeza e Higienização'
                         text={`Deseja realmente concluir este formulário?`}
                         status={header.status.id}
                         canChange={true}
@@ -429,6 +373,29 @@ const FormLimpeza = ({ id, modelID }) => {
                         produtos={form.getValues('header.produtos')}
                         form={form}
                         departamentos={header.departamentosConclusao}
+                    /> */}
+                    <DialogFormConclusion
+                        openModal={openModal}
+                        handleClose={() => {
+                            setOpenModal(false), checkErrors()
+                        }}
+                        title='Concluir Limpeza e Higienização'
+                        text={`Deseja realmente concluir este formulário?`}
+                        info={header}
+                        canChange
+                        btnCancel
+                        btnConfirm
+                        btnConfirmColor='primary'
+                        conclusionForm={conclude}
+                        listErrors={listErrors}
+                        canApprove
+                        hasNaoConformidade={true}
+                        type='limpeza'
+                        unity={loggedUnity}
+                        values={null}
+                        formularioID={4} // Limpeza
+                        modeloID={header.modelo.id}
+                        form={form}
                     />
 
                     <DialogDelete
