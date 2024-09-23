@@ -183,7 +183,7 @@ const Header = ({ form, data, disabled }) => {
                             <Select
                                 xs={12}
                                 md={4}
-                                title='Departamento'
+                                title='Departamento responsável pela limpeza'
                                 name={`header.departamento`}
                                 value={data?.departamento}
                                 options={departamentos ?? []}
@@ -192,7 +192,7 @@ const Header = ({ form, data, disabled }) => {
                             <Select
                                 xs={12}
                                 md={4}
-                                title='Profissional'
+                                title='Profissional responsável pela limpeza'
                                 name={`header.profissional`}
                                 value={data?.profissional}
                                 options={profissionais ?? []}

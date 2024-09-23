@@ -36,4 +36,8 @@ const canConfigForm = (menu, route) => {
   return canConfig
 }
 
-export { truncateString, fractionedToFloat, floatToFractioned, canConfigForm }
+const convertNewLinesToBr = (text) => {
+  return text.replace(/\n/g, '<br />')
+}
+
+export { truncateString, fractionedToFloat, floatToFractioned, canConfigForm, convertNewLinesToBr }

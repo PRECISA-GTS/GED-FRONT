@@ -46,11 +46,22 @@ const ListLimpeza = () => {
             size: 0.1
         },
         {
-            headerName: 'Data',
-            field: 'data',
+            headerName: 'Data Inicial',
+            field: 'dataInicio',
             size: 0.1,
             type: 'date',
             variant: 'naoConformidade'
+        },
+        {
+            headerName: 'Data Final',
+            field: 'dataFim',
+            size: 0.1,
+            type: 'date'
+        },
+        {
+            headerName: 'Setor',
+            field: 'setor',
+            size: 0.2
         },
         {
             headerName: 'Modelo',
@@ -58,8 +69,8 @@ const ListLimpeza = () => {
             size: 0.2
         },
         {
-            headerName: 'Setor',
-            field: 'setor',
+            headerName: 'Tipo',
+            field: 'limpezaHigienizacao',
             size: 0.2
         },
         {

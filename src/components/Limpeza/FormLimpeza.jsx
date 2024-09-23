@@ -15,8 +15,9 @@ import DialogReOpenForm from 'src/components/Defaults/Dialogs/DialogReOpenForm'
 import { RouteContext } from 'src/context/RouteContext'
 import CustomChip from 'src/@core/components/mui/chip'
 import { toastMessage } from 'src/configs/defaultConfigs'
-import { canConfigForm } from 'src/configs/functions'
+import { canConfigForm, convertNewLinesToBr } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
+import { Card, CardContent } from '@mui/material'
 
 const FormLimpeza = ({ id, modelID }) => {
     const router = Router
@@ -334,6 +335,18 @@ const FormLimpeza = ({ id, modelID }) => {
                     </div>
 
                     <div className='space-y-4'>
+                        {header.modelo.cabecalho && (
+                            <Card>
+                                <CardContent>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: convertNewLinesToBr(header.modelo.cabecalho)
+                                        }}
+                                    />
+                                </CardContent>
+                            </Card>
+                        )}
+
                         <Header form={form} data={header} disabled={header.status?.id >= 40} />
 
                         {type === 'edit' && (
