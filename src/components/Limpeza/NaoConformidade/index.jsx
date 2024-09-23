@@ -7,7 +7,7 @@ import Header from './Header'
 import ModelBlocks from './ModelBlocks'
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
-import RecebimentoMpInfo from './LimpezaInfo'
+import LimpezaInfo from './LimpezaInfo'
 import Router from 'next/router'
 import toast from 'react-hot-toast'
 import DialogFormConclusionNC from 'src/components/Defaults/Dialogs/DialogFormConclusionNC'
@@ -34,7 +34,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
     const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
-    const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
+    const { setId, setModelID, setLimpezaID } = useContext(RouteContext)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -50,11 +50,11 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
     const conclude = async values => {
         const products = form.getValues(`productsConclude`)
 
-        if (!id || !header.recebimento.id) return
+        if (!id || !header.limpeza.id) return
 
-        //? Valida se nenhuma quantidade nova do produto é maior que a quantidade do recebimento de MP
+        //? Valida se nenhuma quantidade nova do equipamento é maior que a quantidade da limpeza
         if (!isValidProductsQuantity(products ?? [])) {
-            toast.error('Quantidade não pode ser maior que a quantidade do recebimento de MP!')
+            toast.error('Quantidade não pode ser maior que a quantidade da limpeza e higienização!')
             return
         }
 
@@ -71,7 +71,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
             },
             params: {
                 id,
-                limpezaID: header.recebimento.id,
+                limpezaID: header.limpeza.id,
                 usuarioID: user.usuarioID,
                 papelID: user.papelID,
                 unidadeID: loggedUnity.unidadeID,
@@ -82,7 +82,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         setHeader(null)
 
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/conclude`, values)
+            const response = await api.post(`/formularios/limpeza/nao-conformidade/conclude`, values)
             await onSubmit(form.getValues()) //? Atualiza dados do formulário
         } catch (e) {
             console.log(e)
@@ -105,7 +105,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         }
 
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/reOpen/${id}`, data)
+            const response = await api.post(`/formularios/limpeza/nao-conformidade/reOpen/${id}`, data)
             toast.success(toastMessage.successUpdate)
         } catch (error) {
             console.log(error)
@@ -123,12 +123,12 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID
             }
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getData`, values)
+            const response = await api.post(`/formularios/limpeza/nao-conformidade/getData`, values)
 
             if (response.status === 204) {
                 //? Estava no formulário NOVO que passa dados do contexto, se recarregar a página perde os valores do contexto, então redireciona pra listagem
                 setId(null)
-                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+                router.push(`/formularios/limpeza/?aba=nao-conformidade`)
             }
 
             console.log('🚀 ~ getData: ', response.data)
@@ -177,13 +177,13 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
 
         try {
             if (type === 'new') {
-                const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/insertData`, data)
+                const response = await api.post(`/formularios/limpeza/nao-conformidade/insertData`, data)
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
                 setId(response.data.id)
-                router.push(`/formularios/recebimento-mp/?aba=nao-conformidade`)
+                router.push(`/formularios/limpeza/?aba=nao-conformidade`)
             } else if (type === 'edit') {
-                await api.post(`/formularios/recebimento-mp/nao-conformidade/updateData/${id}`, data)
+                await api.post(`/formularios/limpeza/nao-conformidade/updateData/${id}`, data)
                 toast.success('Dados atualizados com sucesso!')
             }
         } catch (e) {
@@ -196,15 +196,15 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
 
     const goToFormConfig = () => {
         setId(header.modelo.id) //? ID do modelo do formulário
-        router.push(`/configuracoes/formularios/recebimentomp-naoconformidade/`)
+        router.push(`/configuracoes/formularios/limpeza-naoconformidade/`)
     }
 
     const handleNew = () => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
         const values = form.getValues('new')
-        setRecebimentoMpID(header.recebimento.id)
+        setLimpezaID(header.limpeza.id)
         setModelID(values.modelo.id)
-        router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
+        router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
     }
 
     //* Actions data
@@ -281,7 +281,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
 
             await api
                 .post(
-                    `/formularios/recebimento-mp/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
+                    `/formularios/limpeza/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
                     formData
                 )
                 .then(response => {
@@ -302,7 +302,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         if (item) {
             await api
                 .delete(
-                    `/formularios/recebimento-mp/nao-conformidade/deleteAnexo/${id}/${item.anexoID}/${loggedUnity.unidadeID}/${user.usuarioID}/item`
+                    `/formularios/limpeza/nao-conformidade/deleteAnexo/${id}/${item.anexoID}/${loggedUnity.unidadeID}/${user.usuarioID}/item`
                 )
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
@@ -389,7 +389,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                     <div className='space-y-4'>
                         <Card>
                             <CardContent className='space-y-2 '>
-                                <RecebimentoMpInfo data={header} />
+                                <LimpezaInfo data={header} />
                             </CardContent>
                         </Card>
 
@@ -417,7 +417,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         handleClose={() => {
                             setOpenModal(false)
                         }}
-                        title='Concluir Não Conformidade do Recebimento de MP'
+                        title='Concluir Não Conformidade da Limpeza e Higienização'
                         text={`Deseja realmente concluir este formulário?`}
                         status={header.status.id}
                         canChange={true}
@@ -426,13 +426,13 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
                         canApprove={true}
-                        type='recebimentoMpNaoConformidade'
+                        type='limpezaNaoConformidade'
                         listErrors={listErrors}
                         unity={loggedUnity}
                         values={null}
                         formularioID={3}
                         modeloID={header.modelo.id}
-                        produtos={form.getValues('header.produtos')}
+                        produtos={form.getValues('header.equipamentos')}
                         form={form}
                         departamentos={header.departamentosConclusao}
                     />
@@ -443,7 +443,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         title='Excluir Formulário'
                         description='Tem certeza que deseja exluir o formulario?'
                         params={{
-                            route: `formularios/recebimento-mp/nao-conformidade/delete/${id}`,
+                            route: `formularios/limpeza/nao-conformidade/delete/${id}`,
                             messageSucceded: 'Formulário excluído com sucesso!',
                             MessageError: 'Dado possui pendência!'
                         }}

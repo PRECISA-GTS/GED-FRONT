@@ -77,6 +77,8 @@ const ListParametrosFormularios = () => {
                     handleRoute('recebimentomp-naoconformidade')
                 ) : id == 4 ? (
                     handleRoute('limpeza')
+                ) : id == 5 ? (
+                    handleRoute('limpeza-naoconformidade')
                 ) : null
             ) : (
                 //? Lista tabela de resultados da listagem
