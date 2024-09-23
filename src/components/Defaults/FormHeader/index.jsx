@@ -69,6 +69,7 @@ const FormHeader = ({
     const { isLoading } = useLoad()
     const { settings } = useContext(SettingsContext)
     const [actionsNCData, setActionsNCData] = useState(null)
+    console.log('🚀 ~ actionsNCData:', actionsNCData)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -197,6 +198,7 @@ const FormHeader = ({
             }
 
             const response = await api.post(params.endpoint, { id })
+            console.log('🚀 ~ actionsNCData response: ', response.data)
             const objNew = {
                 icon: 'icons8:plus',
                 name: 'Nova Não Conformidade',

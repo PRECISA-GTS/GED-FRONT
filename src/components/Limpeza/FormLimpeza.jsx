@@ -167,7 +167,8 @@ const FormLimpeza = ({ id, modelID }) => {
         modal: true,
         size: 'sm',
         icon: 'heroicons:lock-open',
-        identification: null
+        identification: null,
+        ncPending: true //? Campo que desabilita opção se houver NC
     }
     const objFormConfig = {
         id: 2,
@@ -290,6 +291,7 @@ const FormLimpeza = ({ id, modelID }) => {
             {header && (
                 <>
                     <FormHeader
+                        id={id}
                         btnNew={type === 'edit' ? true : false}
                         btnCancel
                         btnSave={header?.status?.id < 40 ? true : false}
@@ -297,7 +299,6 @@ const FormLimpeza = ({ id, modelID }) => {
                         btnPrint={type == 'edit' ? true : false}
                         btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
                         onclickDelete={() => setOpenDelete(true)}
-                        actionsData={actionsData}
                         actions={true}
                         handleSubmit={() => form.handleSubmit(onSubmit)}
                         handleSend={() => {
@@ -309,8 +310,9 @@ const FormLimpeza = ({ id, modelID }) => {
                         title='Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
-                        module='limpeza'
                         actionsNC={header?.naoConformidade && header?.status?.id > 40}
+                        module='limpeza'
+                        actionsData={actionsData}
                     />
 
                     <div className='flex gap-2 mb-2'>

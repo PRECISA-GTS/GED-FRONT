@@ -151,19 +151,6 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
     const onSubmit = async values => {
         if (!values) return
 
-        if (user.papelID === 1 && !values.header.transporte && !values.header.produto) {
-            toast.error('Selecione o tipo de não conformidade (Transporte ou Produto)!')
-            return
-        }
-
-        const hasSomeCheckedProduct = values.header.produtos.some(item => item.checked_)
-        if (user.papelID === 1 && values.header.produto && !hasSomeCheckedProduct) {
-            toast.error('Selecione pelo menos um produto!')
-            return
-        }
-
-        console.log('🚀 ~ onSubmit values:', values)
-
         const data = {
             form: values,
             auth: {
@@ -363,7 +350,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         }}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
-                        title='Não conformidade do Recebimento de MP'
+                        title='Não conformidade da Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
                     />
@@ -403,13 +390,11 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                                 handleFileSelect={handleFileSelect}
                                 handleRemoveFile={handleRemoveFile}
                                 status={header.status.id}
-                                disabled={
-                                    header.status.id >= 40 || (header.fornecedorAcessaRecebimento && user.papelID === 1)
-                                }
+                                disabled={header.status.id >= 40}
                             />
                         )}
 
-                        <HistoricForm key={change} id={id} parFormularioID={3} />
+                        <HistoricForm key={change} id={id} parFormularioID={5} />
                     </div>
 
                     <DialogFormConclusionNC
@@ -430,7 +415,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         listErrors={listErrors}
                         unity={loggedUnity}
                         values={null}
-                        formularioID={3}
+                        formularioID={5}
                         modeloID={header.modelo.id}
                         produtos={form.getValues('header.equipamentos')}
                         form={form}

@@ -1,6 +1,5 @@
 import { Card, CardContent, Grid } from '@mui/material'
-import WhoFills from './WhoFills'
-import NcType from './NcType'
+import Equipment from './Equipment'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
@@ -76,14 +75,7 @@ const Header = ({ form, data, disabled }) => {
                     </Grid>
 
                     <Grid item xs={12} md={12}>
-                        <WhoFills form={form} data={data} disabled={disabled} />
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                        <p>Não Conformidade do Recebimento:</p>
-                        <Grid container item xs={12} md={12}>
-                            <NcType form={form} data={data} disabled={disabled} />
-                        </Grid>
+                        <Equipment form={form} data={data} disabled={disabled} />
                     </Grid>
 
                     {/* Fields dinamicos */}

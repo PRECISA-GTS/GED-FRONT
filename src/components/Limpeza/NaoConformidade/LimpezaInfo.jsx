@@ -51,7 +51,7 @@ const LimpezaInfo = ({ data }) => {
                         sx={{ height: 28, fontSize: '0.75rem' }}
                     />
                     {(user.papelID != 2 || data.fornecedorAcessaRecebimento) && (
-                        <Tooltip title='Acessar Recebimento de MP' placement='top'>
+                        <Tooltip title='Acessar Limpeza e Higienização' placement='top'>
                             <div className='cursor-pointer'>
                                 <Icon icon='ci:external-link' onClick={goToReceive} />
                             </div>
