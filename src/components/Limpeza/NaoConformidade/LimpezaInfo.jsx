@@ -6,7 +6,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { AuthContext } from 'src/context/AuthContext'
 import { RouteContext } from 'src/context/RouteContext'
 
-const RecebimentoMpInfo = ({ data }) => {
+const LimpezaInfo = ({ data }) => {
     if (!data) return
 
     const router = useRouter()
@@ -63,4 +63,4 @@ const RecebimentoMpInfo = ({ data }) => {
     )
 }
 
-export default RecebimentoMpInfo
+export default LimpezaInfo

@@ -34,20 +34,16 @@ const FormLimpeza = ({ id, modelID }) => {
     const form = useForm({ mode: 'onChange' })
 
     const conclude = async values => {
-        const products = form.getValues(`productsConclude`)
+        const naoConformidade = form.getValues(`info.naoConformidade`)
+        const fieldsFooter = form.getValues(`fieldsFooter`)
 
-        if (!id || !header.recebimento.id) return
+        if (!id) return
 
         values = {
             form: {
+                ...fieldsFooter,
                 ...values,
-                products: products,
-                prazo: form.getValues('header.prazoSolucao'),
-                data: form.getValues('header.data'),
-                data_: form.getValues('header.data') && form.getValues('header.data').split('-').reverse().join('/'),
-                hora: form.getValues('header.hora'),
-                transporte: form.getValues('header.transporte'),
-                produto: form.getValues('header.produto')
+                naoConformidade
             },
             params: {
                 id,
@@ -57,6 +53,7 @@ const FormLimpeza = ({ id, modelID }) => {
                 profissionalID: user.profissionalID
             }
         }
+        console.log('🚀 ~ conclude values:', values)
 
         setHeader(null)
 
@@ -312,6 +309,8 @@ const FormLimpeza = ({ id, modelID }) => {
                         title='Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
+                        module='limpeza'
+                        actionsNC={header?.naoConformidade && header?.status?.id > 40}
                     />
 
                     <div className='flex gap-2 mb-2'>
@@ -381,7 +380,9 @@ const FormLimpeza = ({ id, modelID }) => {
                         }}
                         title='Concluir Limpeza e Higienização'
                         text={`Deseja realmente concluir este formulário?`}
-                        info={header}
+                        info={{
+                            status: header.status.id
+                        }}
                         canChange
                         btnCancel
                         btnConfirm
@@ -392,7 +393,7 @@ const FormLimpeza = ({ id, modelID }) => {
                         hasNaoConformidade={true}
                         type='limpeza'
                         unity={loggedUnity}
-                        values={null}
+                        values={header}
                         formularioID={4} // Limpeza
                         modeloID={header.modelo.id}
                         form={form}

@@ -49,7 +49,8 @@ const ListLimpeza = () => {
             headerName: 'Data',
             field: 'data',
             size: 0.1,
-            type: 'date'
+            type: 'date',
+            variant: 'naoConformidade'
         },
         {
             headerName: 'Modelo',

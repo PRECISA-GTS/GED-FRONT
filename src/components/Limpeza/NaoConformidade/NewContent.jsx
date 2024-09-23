@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material'
-import RecebimentoMpInfo from './RecebimentoMpInfo'
+import LimpezaInfo from './LimpezaInfo'
 import { useContext, useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
@@ -8,11 +8,11 @@ import Select from 'src/components/Form/Select'
 const NewContent = ({ form, type, data }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [models, setModels] = useState(null)
-    const [recebimentos, setRecebimentos] = useState(null)
+    const [limpezas, setLimpezas] = useState(null)
 
     const getModels = async () => {
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getModels`, {
+            const response = await api.post(`/formularios/limpeza/nao-conformidade/getModels`, {
                 unidadeID: loggedUnity.unidadeID
             })
 
@@ -22,12 +22,12 @@ const NewContent = ({ form, type, data }) => {
         }
     }
 
-    const getRecebimentoMPNC = async () => {
+    const getLimpezaNC = async () => {
         try {
-            const response = await api.post(`/formularios/recebimento-mp/nao-conformidade/getRecebimentoMPNC`, {
+            const response = await api.post(`/formularios/limpeza/nao-conformidade/getLimpezaNC`, {
                 unidadeID: loggedUnity.unidadeID
             })
-            setRecebimentos(response.data)
+            setLimpezas(response.data)
         } catch (e) {
             console.log(e)
         }
@@ -35,21 +35,21 @@ const NewContent = ({ form, type, data }) => {
 
     useEffect(() => {
         getModels()
-        getRecebimentoMPNC()
+        getLimpezaNC()
     }, [data])
 
     return (
         <div className='flex flex-col gap-8'>
-            {type === 'form' && <RecebimentoMpInfo data={data} />}
+            {type === 'form' && <LimpezaInfo data={data} />}
             <Grid container spacing={4}>
                 {type === 'list' && (
                     <Select
                         xs={12}
                         md={6}
-                        title='Recebimento de MP'
-                        name={`new.recebimento`}
-                        options={recebimentos ?? []}
-                        helpText='Selecione o Recebimento de MP para lançar uma nova não conformidade'
+                        title='Limpeza'
+                        name={`new.limpeza`}
+                        options={limpezas ?? []}
+                        helpText='Selecione a limpeza e higienização para lançar uma nova não conformidade'
                         form={form}
                     />
                 )}

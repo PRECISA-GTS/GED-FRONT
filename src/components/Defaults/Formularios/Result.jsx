@@ -17,8 +17,6 @@ import CheckLabel from 'src/components/Form/CheckLabel'
 import CheckLabelConditional from 'src/components/Form/CheckLabelConditional'
 
 const Result = ({ form, title, name, value, papelID, setResult, options, hasNaoConformidade }) => {
-    console.log('🚀 ~ Result:', name)
-
     return (
         <Grid container spacing={2}>
             {/* Somente fábrica */}
