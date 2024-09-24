@@ -34,6 +34,7 @@ import { ParametersContext } from 'src/context/ParametersContext'
 import Icon from 'src/@core/components/icon'
 import OptionsDots from '../Defaults/FormHeader/DropDownButtons/Actions'
 import { ca } from 'date-fns/locale'
+import { convertNewLinesToBr } from 'src/configs/functions'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -720,7 +721,11 @@ const FormRecebimentoMp = ({ id, model }) => {
                         {info && info.cabecalhoModelo != '' && (
                             <Card>
                                 <CardContent>
-                                    <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: convertNewLinesToBr(info.cabecalhoModelo)
+                                        }}
+                                    />
                                 </CardContent>
                             </Card>
                         )}

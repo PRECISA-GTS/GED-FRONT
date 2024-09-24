@@ -42,6 +42,8 @@ const Select = ({
             setValue(name, newValue)
             onChange && onChange(newValue)
 
+            console.log('🚀 ~ newValue:', newValue)
+
             if (required && (!newValue || (multiple && newValue.length === 0))) {
                 setError(name, {
                     type: 'required',
@@ -89,7 +91,9 @@ const Select = ({
                                         padding: '4px 14px !important'
                                     },
                                     ...((required || alertRequired) &&
-                                        !getValues(name) && {
+                                        (multiple
+                                            ? !getValues(name) || getValues(name)?.length === 0
+                                            : !getValues(name)) && {
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: theme.palette.error.main

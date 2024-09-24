@@ -31,6 +31,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
+import { convertNewLinesToBr } from 'src/configs/functions'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
@@ -74,7 +75,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
-    console.log('🚀 ~ canEdit:', canEdit.status)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -962,7 +962,11 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                             {info && info.cabecalhoModelo != '' && (
                                 <Card>
                                     <CardContent>
-                                        <p>{info.cabecalhoModelo}</p>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: convertNewLinesToBr(info.cabecalhoModelo)
+                                            }}
+                                        />
                                     </CardContent>
                                 </Card>
                             )}
