@@ -200,28 +200,32 @@ const Header = ({ form, data, disabled }) => {
                             />
                         </>
                     )}
+                    <Grid item md={form.watch('header.prestadorServico') ? 8 : 4}></Grid>
                     <Select
                         xs={12}
                         md={4}
-                        title='Setor'
+                        title='Setor que foi limpo'
                         name={`header.setor`}
                         value={data?.setor}
                         required
                         alertRequired
                         options={setores ?? []}
                         form={form}
+                        helpText='Setor que foi limpo pelo profissional responsável pela limpeza'
                     />
                     <Select
                         xs={12}
                         md={4}
-                        title='Equipamento(s)'
+                        title='Equipamento(s) que foram limpos'
                         name={`header.equipamentos`}
                         value={data?.equipamentos}
                         multiple
                         required
                         options={equipamentos ?? []}
                         form={form}
+                        helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'
                     />
+                    <Grid item md={4}></Grid>
                     <Select
                         xs={12}
                         md={4}
@@ -239,6 +243,7 @@ const Header = ({ form, data, disabled }) => {
                         title='Limpeza'
                         name={`header.limpeza`}
                         value={data.limpeza}
+                        checked
                         form={form}
                         disabled
                     />
