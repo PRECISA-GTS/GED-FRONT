@@ -23,6 +23,9 @@ const EventsPerDay = ({ eventDate }) => {
                 ? 'icon-park-outline:receive'
                 : tipo === 'Limpeza'
                 ? 'carbon:clean'
+                : tipo === 'Não Conformidade do Recebimento de MP' ||
+                  tipo === 'Não Conformidade da Limpeza e Higienização'
+                ? 'typcn:warning-outline'
                 : 'ph:bell'
         return icon
     }
@@ -86,7 +89,7 @@ const EventsPerDay = ({ eventDate }) => {
                         <div className='flex items-center gap-2'>
                             <Typography variant='body1'>{event.tipo}</Typography>
                             <CustomAvatar skin='light' variant='rounded' color={event.variant}>
-                                <Icon icon={getIcon(event.tipo)} className='text-base' />
+                                <Icon icon={getIcon(event.tipo)} className='text-xl' />
                             </CustomAvatar>
                         </div>
                     </div>

@@ -146,18 +146,18 @@ const Fornecedor = () => {
                   {
                       headerName: 'ID',
                       field: 'id',
-                      size: 0.2
+                      size: 0.4
                   },
                   {
                       headerName: 'Data da Avaliação',
                       field: 'data',
-                      size: 0.7,
+                      size: 0.4,
                       type: 'date'
                   },
                   {
                       headerName: 'Fornecedor',
                       field: 'fornecedor',
-                      size: 2
+                      size: 1
                   },
                   {
                       headerName: 'Produtos',
@@ -175,7 +175,7 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1,
+                      size: 0.5,
                       type: 'statusSteps'
                   }
               ]
@@ -184,12 +184,12 @@ const Fornecedor = () => {
                   {
                       headerName: 'ID',
                       field: 'id',
-                      size: 1
+                      size: 0.4
                   },
                   {
                       headerName: 'Data da Avaliação',
                       field: 'data',
-                      size: 1,
+                      size: 0.4,
                       type: 'date'
                   },
                   {
@@ -213,7 +213,7 @@ const Fornecedor = () => {
                           name: 'status',
                           cor: 'cor'
                       },
-                      size: 1,
+                      size: 0.5,
                       type: 'statusSteps'
                   }
               ]

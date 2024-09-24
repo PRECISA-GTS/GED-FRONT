@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 //* Default Form Components
 import Block from 'src/components/Defaults/Formularios/Block'
@@ -31,10 +31,7 @@ import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { ParametersContext } from 'src/context/ParametersContext'
-import Icon from 'src/@core/components/icon'
-import OptionsDots from '../Defaults/FormHeader/DropDownButtons/Actions'
-import { ca } from 'date-fns/locale'
-import { convertNewLinesToBr } from 'src/configs/functions'
+import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -717,18 +714,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     </div>
 
                     <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
-                        {/* Cabeçalho do modelo */}
-                        {info && info.cabecalhoModelo != '' && (
-                            <Card>
-                                <CardContent>
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: convertNewLinesToBr(info.cabecalhoModelo)
-                                        }}
-                                    />
-                                </CardContent>
-                            </Card>
-                        )}
+                        <HeaderModelDescription description={info.cabecalhoModelo} />
 
                         {unidade && (
                             <HeaderFields

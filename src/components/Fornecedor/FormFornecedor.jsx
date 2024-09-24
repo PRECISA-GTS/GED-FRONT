@@ -20,7 +20,6 @@ import { AuthContext } from 'src/context/AuthContext'
 import { NotificationContext } from 'src/context/NotificationContext'
 import toast from 'react-hot-toast'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
-import FormNotification from './Dialogs/Notification/FormNotification'
 import NewFornecedor from 'src/components/Fornecedor/Dialogs/NewFornecedor'
 import FormFornecedorProdutos from './FormFornecedorProdutos'
 import HeaderFields from './Header'
@@ -31,7 +30,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import NoModel from './NoModel'
 import { useGlobal } from 'src/hooks/useGlobal'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
-import { convertNewLinesToBr } from 'src/configs/functions'
+import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 
 const FormFornecedor = ({ id, makeFornecedor }) => {
     const { setData, data: dataGlobal } = useGlobal()
@@ -958,18 +957,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                     </div>
                                 </Alert>
                             )}
-                            {/* Cabeçalho do modelo */}
-                            {info && info.cabecalhoModelo != '' && (
-                                <Card>
-                                    <CardContent>
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: convertNewLinesToBr(info.cabecalhoModelo)
-                                            }}
-                                        />
-                                    </CardContent>
-                                </Card>
-                            )}
+
+                            <HeaderModelDescription description={info.cabecalhoModelo} />
 
                             {/* Card Header */}
                             <Card>

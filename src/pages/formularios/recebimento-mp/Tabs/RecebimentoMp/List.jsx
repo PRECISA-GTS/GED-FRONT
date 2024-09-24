@@ -45,14 +45,14 @@ const ListRecebimentoMP = () => {
                   {
                       headerName: 'ID',
                       field: 'id',
-                      size: 0.1
+                      size: 0.1,
+                      variant: 'naoConformidade'
                   },
                   {
                       headerName: 'Data',
                       field: 'data',
                       size: 0.1,
-                      type: 'date',
-                      variant: 'naoConformidade'
+                      type: 'date'
                   },
                   {
                       headerName: 'Fábrica',
@@ -88,24 +88,24 @@ const ListRecebimentoMP = () => {
                   {
                       headerName: 'ID',
                       field: 'id',
-                      size: 0.1
+                      size: 0.4,
+                      variant: 'naoConformidade'
                   },
                   {
                       headerName: 'Data',
                       field: 'data',
-                      size: 0.7,
-                      type: 'date',
-                      variant: 'naoConformidade'
+                      size: 0.4,
+                      type: 'date'
                   },
                   {
                       headerName: 'Fornecedor',
                       field: 'fornecedor',
-                      size: 1
+                      size: 1.5
                   },
                   {
                       headerName: 'NF',
                       field: 'nf',
-                      size: 0.6
+                      size: 1
                   },
                   {
                       headerName: 'Produtos',

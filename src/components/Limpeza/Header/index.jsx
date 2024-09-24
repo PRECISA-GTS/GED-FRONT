@@ -167,7 +167,7 @@ const Header = ({ form, data, disabled }) => {
                         disabled={disabled}
                         helpText='Limpeza realizada por uma empresa terceira'
                     />
-                    {form.watch('header.prestadorServico') && (
+                    {form.getValues('header.prestadorServico') && (
                         <Select
                             xs={12}
                             md={4}
@@ -175,16 +175,18 @@ const Header = ({ form, data, disabled }) => {
                             name={`header.fornecedor`}
                             value={data?.fornecedor}
                             options={fornecedores ?? []}
+                            disabled={disabled}
                             form={form}
                         />
                     )}
-                    {!form.watch('header.prestadorServico') && (
+                    {!form.getValues('header.prestadorServico') && (
                         <>
                             <Select
                                 xs={12}
                                 md={4}
                                 title='Departamento responsável pela limpeza'
                                 name={`header.departamento`}
+                                disabled={disabled}
                                 value={data?.departamento}
                                 options={departamentos ?? []}
                                 form={form}
@@ -194,6 +196,7 @@ const Header = ({ form, data, disabled }) => {
                                 md={4}
                                 title='Profissional responsável pela limpeza'
                                 name={`header.profissional`}
+                                disabled={disabled}
                                 value={data?.profissional}
                                 options={profissionais ?? []}
                                 form={form}
@@ -207,6 +210,7 @@ const Header = ({ form, data, disabled }) => {
                         title='Setor que foi limpo'
                         name={`header.setor`}
                         value={data?.setor}
+                        disabled={disabled}
                         required
                         alertRequired
                         options={setores ?? []}
@@ -219,6 +223,7 @@ const Header = ({ form, data, disabled }) => {
                         title='Equipamento(s) que foram limpos'
                         name={`header.equipamentos`}
                         value={data?.equipamentos}
+                        disabled={disabled}
                         multiple
                         required
                         options={equipamentos ?? []}
@@ -231,6 +236,7 @@ const Header = ({ form, data, disabled }) => {
                         md={4}
                         title='Produtos utilizados'
                         name={`header.produtos`}
+                        disabled={disabled}
                         value={data?.produtos}
                         multiple
                         helpText='Equipamentos que foram utilizados pra realizar a limpeza do setor'
