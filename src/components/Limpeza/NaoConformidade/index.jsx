@@ -259,8 +259,8 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
             formData.append(`usuarioID`, user.usuarioID)
             formData.append(`unidadeID`, loggedUnity.unidadeID)
             formData.append(
-                `parRecebimentoMpNaoConformidadeModeloBlocoID`,
-                item.parRecebimentoMpNaoConformidadeModeloBlocoID ?? null
+                `parLimpezaNaoConformidadeModeloBlocoID`,
+                item.parLimpezaNaoConformidadeModeloBlocoID ?? null
             )
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
@@ -277,7 +277,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                     // onSubmit(values)
                 })
                 .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
                 })
                 .finally(() => {
                     setChange(!change)
@@ -347,6 +347,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         handleSend={() => {
                             setOpenModal(true)
                             checkErrors()
+                            verifyIfCanAproveForm(block)
                         }}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
@@ -410,7 +411,6 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         btnConfirm
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
-                        canApprove={true}
                         type='limpezaNaoConformidade'
                         listErrors={listErrors}
                         unity={loggedUnity}

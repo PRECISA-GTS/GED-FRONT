@@ -18,6 +18,7 @@ import { toastMessage } from 'src/configs/defaultConfigs'
 import { canConfigForm } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 import HeaderModelDescription from '../Defaults/HeaderModelDescription'
+import { ca } from 'date-fns/locale'
 
 const FormLimpeza = ({ id, modelID }) => {
     const router = Router
@@ -27,12 +28,25 @@ const FormLimpeza = ({ id, modelID }) => {
     const [header, setHeader] = useState(null)
     const [block, setBlock] = useState(null)
     const [change, setChange] = useState(false)
+    const [canApprove, setCanApprove] = useState(true)
     const [openModal, setOpenModal] = useState(false)
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
     const [openDelete, setOpenDelete] = useState(false)
     const { setId } = useContext(RouteContext)
 
     const form = useForm({ mode: 'onChange' })
+
+    const verifyIfCanAproveForm = blocos => {
+        let tempCanApprove = true
+        blocos.forEach(block => {
+            block.itens.forEach(item => {
+                if (item.resposta && item.resposta.bloqueiaFormulario == 1) {
+                    tempCanApprove = false
+                }
+            })
+        })
+        setCanApprove(tempCanApprove)
+    }
 
     const conclude = async values => {
         const naoConformidade = form.getValues(`info.naoConformidade`)
@@ -305,6 +319,7 @@ const FormLimpeza = ({ id, modelID }) => {
                         handleSend={() => {
                             setOpenModal(true)
                             checkErrors()
+                            verifyIfCanAproveForm(block)
                         }}
                         iconConclusion={'mdi:check-bold'}
                         titleConclusion={'Concluir'}
@@ -353,30 +368,6 @@ const FormLimpeza = ({ id, modelID }) => {
                         <HistoricForm key={change} id={id} parFormularioID={4} />
                     </div>
 
-                    {/* <DialogFormConclusion
-                        openModal={openModal}
-                        handleClose={() => {
-                            setOpenModal(false)
-                        }}
-                        title='Concluir Limpeza e Higienização'
-                        text={`Deseja realmente concluir este formulário?`}
-                        status={header.status.id}
-                        canChange={true}
-                        btnCancel
-                        btnConfirm
-                        btnConfirmColor='primary'
-                        conclusionForm={conclude}
-                        canApprove={true}
-                        type='recebimentoMpNaoConformidade'
-                        listErrors={listErrors}
-                        unity={loggedUnity}
-                        values={null}
-                        formularioID={3}
-                        modeloID={header.modelo.id}
-                        produtos={form.getValues('header.produtos')}
-                        form={form}
-                        departamentos={header.departamentosConclusao}
-                    /> */}
                     <DialogFormConclusion
                         openModal={openModal}
                         handleClose={() => {
@@ -393,7 +384,7 @@ const FormLimpeza = ({ id, modelID }) => {
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
                         listErrors={listErrors}
-                        canApprove
+                        canApprove={canApprove}
                         hasNaoConformidade={true}
                         type='limpeza'
                         unity={loggedUnity}

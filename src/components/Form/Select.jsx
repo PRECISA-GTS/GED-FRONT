@@ -33,17 +33,31 @@ const Select = ({
     const theme = useTheme()
     const { settings } = useSettings()
 
+    // Include '-- Novo --' option if createNew is true
     const optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
+    // Filter out already selected options for multiple select
+    const filteredOptions = multiple
+        ? optionsWithNovo.filter(option => !getValues(name)?.some(selected => selected.nome === option.nome))
+        : optionsWithNovo
+
     const handleChange = (e, newValue) => {
-        if (newValue && e.target.innerText == '-- Novo --') {
+        if (newValue && e.target.innerText === '-- Novo --') {
             createNew()
         } else {
-            setValue(name, newValue)
-            onChange && onChange(newValue)
+            // Check for duplicates in the new value (for multiple select)
+            if (multiple) {
+                const uniqueValues = Array.from(new Set(newValue.map(item => item.nome))).map(nome =>
+                    newValue.find(item => item.nome === nome)
+                )
+                setValue(name, uniqueValues)
+                onChange && onChange(uniqueValues)
+            } else {
+                setValue(name, newValue)
+                onChange && onChange(newValue)
+            }
 
-            console.log('🚀 ~ newValue:', newValue)
-
+            // Validate if the field is required
             if (required && (!newValue || (multiple && newValue.length === 0))) {
                 setError(name, {
                     type: 'required',
@@ -55,11 +69,11 @@ const Select = ({
         }
     }
 
-    //? Função que verifica se há apenas 1 opção pra seleção, se sim, já seta a opção como selecionada
+    // Automatically select the only option if there's only one available
     const onlyOneOption = () => {
-        if (optionsWithNovo.length === 1) {
-            setValue(name, optionsWithNovo[0])
-            onChange && onChange(optionsWithNovo[0])
+        if (filteredOptions.length === 1) {
+            setValue(name, filteredOptions[0])
+            onChange && onChange(filteredOptions[0])
         }
     }
 
@@ -75,7 +89,7 @@ const Select = ({
                         multiple={multiple}
                         limitTags={limitTags}
                         size='small'
-                        options={optionsWithNovo}
+                        options={filteredOptions} // Use filtered options
                         getOptionLabel={option => option?.nome || ''}
                         value={multiple ? getValues(name) || [] : getValues(name) || null}
                         disabled={disabled}

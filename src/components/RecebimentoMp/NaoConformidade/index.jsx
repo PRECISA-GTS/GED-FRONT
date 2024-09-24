@@ -304,7 +304,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                     // onSubmit(values)
                 })
                 .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
                 })
                 .finally(() => {
                     setChange(!change)
@@ -439,7 +439,6 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         btnConfirm
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
-                        canApprove={true}
                         type='recebimentoMpNaoConformidade'
                         listErrors={listErrors}
                         unity={loggedUnity}

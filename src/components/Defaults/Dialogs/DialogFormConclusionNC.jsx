@@ -32,7 +32,6 @@ const DialogFormConclusionNC = ({
     btnCancel,
     btnConfirm,
     listErrors,
-    canApprove,
     hasNaoConformidade,
     handleSend,
     type,
@@ -130,12 +129,6 @@ const DialogFormConclusionNC = ({
                                     </Alert>
                                 )}
 
-                                {!canApprove && (
-                                    <Alert severity='error' sx={{ mt: 2 }}>
-                                        Este formulário não pode ser aprovado pois possui resposta que gera não
-                                        conformidade
-                                    </Alert>
-                                )}
                                 {user.papelID == 1 && (
                                     <Grid container spacing={4} sx={{ mt: 4 }}>
                                         {/* Resultado */}
@@ -156,8 +149,7 @@ const DialogFormConclusionNC = ({
                                                     {
                                                         value: 80,
                                                         color: 'success',
-                                                        label: 'Aceite',
-                                                        disabled: canApprove ? false : true
+                                                        label: 'Aceite'
                                                     },
                                                     {
                                                         value: 90,

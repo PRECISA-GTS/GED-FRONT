@@ -25,6 +25,7 @@ const Item = ({
     //? Anexos
     const handleFileClick = values => {
         values[blockKey] = item[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
+        console.log('🚀 ~ item[blockKey]:', blockKey, item[blockKey])
         fileInputRef.current.click()
         setSelectedItem(values)
     }

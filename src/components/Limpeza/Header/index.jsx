@@ -85,7 +85,7 @@ const Header = ({ form, data, disabled }) => {
         try {
             if (!loggedUnity) return
 
-            const response = await api.post(`/formularios/fornecedor/getFornecedores`, {
+            const response = await api.post(`/formularios/fornecedor/getFornecedoresPrestadorServico`, {
                 unidadeID: loggedUnity.unidadeID
             })
             setFornecedores(response.data)
@@ -171,12 +171,13 @@ const Header = ({ form, data, disabled }) => {
                         <Select
                             xs={12}
                             md={4}
-                            title='Fornecedor'
+                            title='Fornecedor prestador de serviço'
                             name={`header.fornecedor`}
                             value={data?.fornecedor}
                             options={fornecedores ?? []}
                             disabled={disabled}
                             form={form}
+                            helpText='Todos os fornecedor ativos prestadores de serviço'
                         />
                     )}
                     {!form.getValues('header.prestadorServico') && (

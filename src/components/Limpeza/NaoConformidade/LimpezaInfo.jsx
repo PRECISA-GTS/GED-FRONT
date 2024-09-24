@@ -9,6 +9,8 @@ import { RouteContext } from 'src/context/RouteContext'
 const LimpezaInfo = ({ data }) => {
     if (!data) return
 
+    console.log('🚀 ~ LimpezaInfo:', data)
+
     const router = useRouter()
     const { user } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)
@@ -20,25 +22,25 @@ const LimpezaInfo = ({ data }) => {
 
     return (
         <Grid container spacing={4}>
+            <Grid item xs={12} md={3}>
+                <label className='opacity-60'>Período da limpeza</label>
+                <div className='flex items-center gap-2'>
+                    <Icon icon='tabler:calendar-check' />
+                    <p>{`${data.limpeza.dataInicio} a ${data.limpeza.dataFim}`}</p>
+                </div>
+            </Grid>
             <Grid item xs={12} md={4}>
                 <label className='opacity-60'>Setor</label>
                 <div className='flex items-center gap-2'>
-                    <Icon icon='mdi:truck-fast-outline' />
-                    <p>{data.setor}</p>
+                    <Icon icon='fluent-mdl2:map-pin-12' />
+                    <p>{data.limpeza.setor}</p>
                 </div>
             </Grid>
             <Grid item xs={12} md={3}>
-                <label className='opacity-60'>Data e hora da limpeza</label>
-                <div className='flex items-center gap-2'>
-                    <Icon icon='tabler:calendar-check' />
-                    <p>{`${data.limpeza.dataLimpeza} ${data.limpeza.horaLimpeza}`}</p>
-                </div>
-            </Grid>
-            <Grid item xs={12} md={3}>
-                <label className='opacity-60'>NF</label>
+                <label className='opacity-60'>Modelo</label>
                 <div className='flex items-center gap-2 '>
-                    <Icon icon='ion:document-text-outline' />
-                    <p>{data.limpeza.nfRecebimentoMp ?? '--'}</p>
+                    <Icon icon='clarity:form-line' />
+                    <p>{data.limpeza.modelo}</p>
                 </div>
             </Grid>
             <Grid item xs={12} md={2}>
