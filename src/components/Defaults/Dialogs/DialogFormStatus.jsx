@@ -122,7 +122,7 @@ const DialogFormStatus = ({
                                             id='outlined-multiline-static'
                                             label='Observação'
                                             multiline
-                                            rows={4}
+                                            rows={3}
                                             placeholder='Observação'
                                             variant='outlined'
                                             onChange={e => setObservacao(e.target.value)}

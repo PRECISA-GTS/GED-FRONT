@@ -188,6 +188,7 @@ const Header = ({ form, data, disabled }) => {
                                 title='Departamento responsável pela limpeza'
                                 name={`header.departamento`}
                                 disabled={disabled}
+                                required
                                 value={data?.departamento}
                                 options={departamentos ?? []}
                                 form={form}
@@ -213,7 +214,6 @@ const Header = ({ form, data, disabled }) => {
                         value={data?.setor}
                         disabled={disabled}
                         required
-                        alertRequired
                         options={setores ?? []}
                         form={form}
                         helpText='Setor que foi limpo pelo profissional responsável pela limpeza'
@@ -226,7 +226,6 @@ const Header = ({ form, data, disabled }) => {
                         value={data?.equipamentos}
                         disabled={disabled}
                         multiple
-                        required
                         options={equipamentos ?? []}
                         form={form}
                         helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'

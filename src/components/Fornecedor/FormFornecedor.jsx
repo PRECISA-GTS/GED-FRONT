@@ -1047,7 +1047,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                                                             title='Observação (opcional)'
                                                             name='info.obs'
                                                             multiline
-                                                            rows={4}
+                                                            rows={3}
                                                             value={info.obs}
                                                             disabled={!canEdit.status || hasFormPending}
                                                             form={form}

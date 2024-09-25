@@ -239,7 +239,7 @@ const FormParametrosLimpezaNaoConformidade = ({ id }) => {
 
     const getDepartamentosModelo = async model => {
         const response = await api.post(`/cadastros/departamento/getDepartamentosAssinatura`, {
-            formularioID: 3, // Não conformidade do recebimento MP
+            formularioID: 5, // Não conformidade da Limpeza
             modeloID: id
         })
         const updatedModel = { ...model }
@@ -252,7 +252,6 @@ const FormParametrosLimpezaNaoConformidade = ({ id }) => {
     }
 
     const getData = () => {
-        console.log('buscar dados no backend....')
         try {
             if (type === 'new') {
                 setModel({
@@ -399,7 +398,7 @@ const FormParametrosLimpezaNaoConformidade = ({ id }) => {
                                     required={false}
                                     value={model.cabecalho}
                                     multiline
-                                    rows={4}
+                                    rows={3}
                                     form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
@@ -558,7 +557,7 @@ const FormParametrosLimpezaNaoConformidade = ({ id }) => {
                                     required={false}
                                     value={orientacoes?.obs}
                                     multiline
-                                    rows={4}
+                                    rows={3}
                                     form={form}
                                 />
                             </Grid>

@@ -1,5 +1,5 @@
 import { Grid, Checkbox, FormControlLabel } from '@mui/material'
-import EquipmentInfo from './EquipmentInfo'
+import Input from 'src/components/Form/Input'
 
 const Equipments = ({ form, index, value, handleCheck, disabled, change }) => {
     return (
@@ -36,7 +36,15 @@ const Equipments = ({ form, index, value, handleCheck, disabled, change }) => {
             {/* Conteúdo */}
             {value.checked_ && (
                 <Grid container spacing={4} sx={{ py: 2 }}>
-                    <EquipmentInfo value={value} form={form} />
+                    <Input
+                        xs={12}
+                        md={12}
+                        title='Descrição da Não Conformidade do equipamento'
+                        name={`header.equipamentos[${index}].descricao`}
+                        form={form}
+                        multiline
+                        rows={3}
+                    />
                 </Grid>
             )}
         </Grid>

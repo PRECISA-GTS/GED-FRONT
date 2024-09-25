@@ -784,7 +784,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                                         title='Observação (opcional)'
                                                         name='info.obs'
                                                         multiline
-                                                        rows={4}
+                                                        rows={3}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
                                                         form={form}

@@ -80,7 +80,7 @@ const Result = ({ form, title, name, value, papelID, setResult, options, hasNaoC
                         placeholder='Observação de conclusão (opcional)'
                         defaultValue={value.obsConclusao}
                         multiline
-                        rows={4}
+                        rows={3}
                         onChange={(e, newValue) => {
                             setResult({
                                 ...value,

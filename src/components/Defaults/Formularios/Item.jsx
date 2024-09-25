@@ -154,7 +154,7 @@ const Item = ({
                         md={12}
                         title='Descreva a resposta'
                         name={`blocos[${index}].itens[${indexItem}].resposta`}
-                        rows={6}
+                        rows={3}
                         value={item.resposta}
                         multiline
                         disabled={disabled}

@@ -213,7 +213,8 @@ const FormLimpeza = ({ id, modelID }) => {
         checkErrorStaticHeader(form, 'header.horaInicio', 'Hora Inicial', objErrors)
         checkErrorStaticHeader(form, 'header.dataFim', 'Data Final', objErrors)
         checkErrorStaticHeader(form, 'header.horaFim', 'Hora Final', objErrors)
-        checkErrorStaticHeader(form, 'header.setor', 'Setor', objErrors)
+        checkErrorStaticHeader(form, 'header.departamento.id', 'Departamento responsável pela limpeza', objErrors)
+        checkErrorStaticHeader(form, 'header.setor.id', 'Setor que foi limpo', objErrors)
 
         //? Checa os erros dinâmicos
         checkErrorsDynamicHeader(form, form.getValues('header.fields'), objErrors)

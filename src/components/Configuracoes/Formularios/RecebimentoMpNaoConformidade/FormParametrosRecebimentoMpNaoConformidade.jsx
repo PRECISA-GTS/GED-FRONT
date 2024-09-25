@@ -403,7 +403,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     required={false}
                                     value={model.cabecalho}
                                     multiline
-                                    rows={4}
+                                    rows={3}
                                     form={form}
                                     helpText='Texto que será exibido no cabeçalho do formulário. Adicione aqui instruções e orientações para auxiliar o preenchimento do formulário.'
                                 />
@@ -562,7 +562,7 @@ const FormParametrosRecebimentoMpNaoConformidade = ({ id }) => {
                                     required={false}
                                     value={orientacoes?.obs}
                                     multiline
-                                    rows={4}
+                                    rows={3}
                                     form={form}
                                 />
                             </Grid>

@@ -33,6 +33,7 @@ const Select = ({
     const theme = useTheme()
     const { settings } = useSettings()
 
+    // Include '-- Novo --' option if createNew is true
     const optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
     // Filter out already selected options for multiple select
@@ -68,17 +69,17 @@ const Select = ({
         }
     }
 
-    //? Função que verifica se há apenas 1 opção pra seleção, se sim, já seta a opção como selecionada
+    // Automatically select the only option if there's only one available
     const onlyOneOption = () => {
-        if (optionsWithNovo.length === 1) {
-            setValue(name, optionsWithNovo[0])
-            onChange && onChange(optionsWithNovo[0])
+        if (filteredOptions.length === 1) {
+            setValue(name, filteredOptions[0])
+            onChange && onChange(filteredOptions[0])
         }
     }
 
     useEffect(() => {
         onlyOneOption()
-    }, [])
+    }, [filteredOptions])
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
@@ -88,12 +89,12 @@ const Select = ({
                         multiple={multiple}
                         limitTags={limitTags}
                         size='small'
-                        options={filteredOptions}
+                        options={filteredOptions} // Use filtered options
                         getOptionLabel={option => option?.nome || ''}
                         value={
                             multiple
                                 ? getValues(name) || []
-                                : !createNew && filteredOptions.length === 1
+                                : filteredOptions.length === 1
                                 ? filteredOptions[0]
                                 : getValues(name) || null
                         }

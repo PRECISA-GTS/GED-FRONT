@@ -264,17 +264,13 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
             )
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
-            await onSubmit(form.getValues()) //? Atualiza dados do formulário
-
             await api
                 .post(
                     `/formularios/limpeza/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
                     formData
                 )
                 .then(response => {
-                    //* Submete formulário pra atualizar configurações dos itens
-                    // const values = form.getValues()
-                    // onSubmit(values)
+                    onSubmit(form.getValues()) //? Atualiza dados do formulário
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')

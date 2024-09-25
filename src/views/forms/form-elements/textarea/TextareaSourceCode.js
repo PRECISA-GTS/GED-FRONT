@@ -25,7 +25,7 @@ const TextareaVariant = () => {
           id='textarea-outlined-controlled'
         />
         <TextField multiline id='textarea-outlined' placeholder='Placeholder' label='Multiline Placeholder' />
-        <TextField rows={4} multiline label='Multiline' defaultValue='Default Value' id='textarea-outlined-static' />
+        <TextField rows={3} multiline label='Multiline' defaultValue='Default Value' id='textarea-outlined-static' />
       </Box>
       <Box className='demo-space-x' sx={{ mb: 4 }}>
         <TextField
@@ -45,7 +45,7 @@ const TextareaVariant = () => {
           label='Multiline Placeholder'
         />
         <TextField
-          rows={4}
+          rows={3}
           multiline
           variant='filled'
           label='Multiline'
@@ -71,7 +71,7 @@ const TextareaVariant = () => {
           label='Multiline Placeholder'
         />
         <TextField
-          rows={4}
+          rows={3}
           multiline
           label='Multiline'
           variant='standard'
@@ -84,7 +84,7 @@ const TextareaVariant = () => {
 }
 
 export default TextareaVariant
-`}</code></pre>) 
+`}</code></pre>)
 
 export const TextareaBasicJSXCode = (<pre className='language-jsx'><code className='language-jsx'>{`// ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -118,5 +118,5 @@ const TextareaBasic = () => {
 }
 
 export default TextareaBasic
-`}</code></pre>) 
+`}</code></pre>)
 
