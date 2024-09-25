@@ -48,6 +48,7 @@ const NewContent = ({ form, type, data }) => {
                         md={6}
                         title='Limpeza'
                         name={`new.limpeza`}
+                        required
                         options={limpezas ?? []}
                         helpText='Selecione a limpeza e higienização para lançar uma nova não conformidade'
                         form={form}
@@ -59,6 +60,7 @@ const NewContent = ({ form, type, data }) => {
                         md={type === 'form' ? 12 : 6}
                         title='Modelo de formulário'
                         name={`new.modelo`}
+                        required
                         options={models ?? []}
                         value={
                             data?.modelo || models?.length === 1 ? models[0] : { nome: '' } //? Apenas 1 opção, traz selecionado

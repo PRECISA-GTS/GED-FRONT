@@ -1,19 +1,31 @@
 import { Divider, Grid, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import Equipments from './Equipments'
 import Icon from 'src/@core/components/icon'
+import { useFieldArray } from 'react-hook-form'
 
 const Equipment = ({ form, data, disabled }) => {
     if (!data) return
 
     const [equipment, setEquipment] = useState(data.equipamentos)
 
+    // const handleCheck = (e, index) => {
+    //     const { checked } = e.target
+    //     form.setValue(`header.equipamentos[${index}].checked_`, checked)
+    //     const updatedRows = equipment.map((row, i) => (i === index ? { ...row, checked_: checked } : row))
+    //     setEquipment(updatedRows)
+    //     form.setValue('header.equipamentos', updatedRows)
+    // }
+
+    const { fields: equipmentFields, update: updateEquipment } = useFieldArray({
+        control: form.control,
+        name: 'header.equipamentos'
+    })
+
     const handleCheck = (e, index) => {
         const { checked } = e.target
         form.setValue(`header.equipamentos[${index}].checked_`, checked)
-        const updatedRows = equipment.map((row, i) => (i === index ? { ...row, checked_: checked } : row))
-        setEquipment(updatedRows)
-        form.setValue('header.equipamentos', updatedRows)
+        updateEquipment(index, { ...equipmentFields[index], checked_: checked })
     }
 
     return (
@@ -32,9 +44,9 @@ const Equipment = ({ form, data, disabled }) => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    {equipment &&
-                        equipment.map((row, index) => (
-                            <>
+                    {equipmentFields &&
+                        equipmentFields.map((row, index) => (
+                            <Fragment key={row.id}>
                                 <Equipments
                                     key={index}
                                     index={index}
@@ -44,8 +56,8 @@ const Equipment = ({ form, data, disabled }) => {
                                     disabled={disabled}
                                     form={form}
                                 />
-                                {index < equipment.length - 1 && <Divider />}
-                            </>
+                                {index < equipmentFields.length - 1 && <Divider />}
+                            </Fragment>
                         ))}
                 </Grid>
             </Grid>
