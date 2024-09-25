@@ -269,7 +269,7 @@ const Header = ({ form, data, disabled }) => {
                         disabled={disabled}
                         value={data?.produtos}
                         multiple
-                        helpText='Equipamentos que foram utilizados pra realizar a limpeza do setor'
+                        helpText='Produtos que foram utilizados pra realizar a limpeza do setor'
                         options={produtos ?? []}
                         form={form}
                     />
