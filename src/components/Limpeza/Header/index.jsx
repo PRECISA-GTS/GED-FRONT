@@ -13,8 +13,10 @@ const Header = ({ form, data, disabled }) => {
     const { loggedUnity } = useContext(AuthContext)
     const [departamentos, setDepartamentos] = useState([])
     const [profissionais, setProfissionais] = useState([])
+    const [profissionaisFiltrados, setProfissionaisFiltrados] = useState([])
     const [setores, setSetores] = useState([])
     const [equipamentos, setEquipamentos] = useState([])
+    const [equipamentosFiltrados, setEquipamentosFiltrados] = useState([])
     const [produtos, setProdutos] = useState([])
     const [fornecedores, setFornecedores] = useState([])
 
@@ -39,6 +41,7 @@ const Header = ({ form, data, disabled }) => {
                 unidadeID: loggedUnity.unidadeID
             })
             setProfissionais(response.data)
+            filterProfessionals(data?.departamento, response.data, false)
         } catch (err) {
             console.log(err)
         }
@@ -63,6 +66,7 @@ const Header = ({ form, data, disabled }) => {
                 unidadeID: loggedUnity.unidadeID
             })
             setEquipamentos(response.data)
+            filterEquipments(data?.setor, response.data, false)
         } catch (err) {
             console.log(err)
         }
@@ -92,6 +96,30 @@ const Header = ({ form, data, disabled }) => {
         } catch (err) {
             console.log(err)
         }
+    }
+
+    const filterProfessionals = (value, profissionais, clear) => {
+        const filteredProfessionals = profissionais.filter(p => {
+            if (p.departamentos) {
+                const departamentosArray = p.departamentos.split(',').map(Number)
+                return departamentosArray.includes(value?.id)
+            }
+            return false
+        })
+        setProfissionaisFiltrados(filteredProfessionals)
+        if (clear) form.setValue('header.profissional', null)
+    }
+
+    const filterEquipments = (value, equipamentos, clear) => {
+        const filteredEquipments = equipamentos.filter(e => {
+            if (e.setores) {
+                const setoresArray = e.setores.split(',').map(Number)
+                return setoresArray.includes(value?.id)
+            }
+            return false
+        })
+        setEquipamentosFiltrados(filteredEquipments)
+        if (clear) form.setValue('header.equipamentos', [])
     }
 
     useEffect(() => {
@@ -187,6 +215,7 @@ const Header = ({ form, data, disabled }) => {
                                 md={4}
                                 title='Departamento responsável pela limpeza'
                                 name={`header.departamento`}
+                                onChange={value => filterProfessionals(value, profissionais, true)}
                                 disabled={disabled}
                                 required
                                 value={data?.departamento}
@@ -200,7 +229,7 @@ const Header = ({ form, data, disabled }) => {
                                 name={`header.profissional`}
                                 disabled={disabled}
                                 value={data?.profissional}
-                                options={profissionais ?? []}
+                                options={profissionaisFiltrados ?? []}
                                 form={form}
                             />
                         </>
@@ -213,6 +242,7 @@ const Header = ({ form, data, disabled }) => {
                         name={`header.setor`}
                         value={data?.setor}
                         disabled={disabled}
+                        onChange={value => filterEquipments(value, equipamentos, true)}
                         required
                         options={setores ?? []}
                         form={form}
@@ -226,7 +256,7 @@ const Header = ({ form, data, disabled }) => {
                         value={data?.equipamentos}
                         disabled={disabled}
                         multiple
-                        options={equipamentos ?? []}
+                        options={equipamentosFiltrados ?? []}
                         form={form}
                         helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'
                     />
