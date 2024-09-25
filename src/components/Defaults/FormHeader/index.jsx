@@ -15,7 +15,8 @@ import useLoad from 'src/hooks/useLoad'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import ActionsNC from './DropDownButtons/ActionsNC'
 import { api } from 'src/configs/api'
-import NewContent from 'src/components/RecebimentoMp/NaoConformidade/NewContent'
+import NewContentRecebimentoMp from 'src/components/RecebimentoMp/NaoConformidade/NewContent'
+import NewContentLimpeza from 'src/components/Limpeza/NaoConformidade/NewContent'
 import { useForm } from 'react-hook-form'
 
 const FormHeader = ({
@@ -61,13 +62,14 @@ const FormHeader = ({
     console.log('outside: ', outsideID)
     const router = Router
     const { routes, user } = useContext(AuthContext)
-    const { setId, setModelID, setRecebimentoMpID } = useContext(RouteContext)
+    const { setId, setModelID, setRecebimentoMpID, setLimpezaID } = useContext(RouteContext)
     const [isVisible, setIsVisible] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [anchorElNC, setAnchorElNC] = useState(null)
     const { isLoading } = useLoad()
     const { settings } = useContext(SettingsContext)
     const [actionsNCData, setActionsNCData] = useState(null)
+    console.log('🚀 ~ actionsNCData:', actionsNCData)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -152,12 +154,17 @@ const FormHeader = ({
 
     //! Não Conformidades
     const handleNewNC = () => {
+        let values = form.getValues('new')
         switch (module) {
             case 'recebimentoMp':
-                const values = form.getValues('new')
                 setRecebimentoMpID(id)
                 setModelID(values.modelo.id)
                 router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
+                break
+            case 'limpeza':
+                setLimpezaID(id)
+                setModelID(values.modelo.id)
+                router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
                 break
             default:
                 break
@@ -175,7 +182,14 @@ const FormHeader = ({
                     params = {
                         endpoint: 'formularios/recebimento-mp/nao-conformidade/getNCRecebimentoMp',
                         route: '/formularios/recebimento-mp/?aba=nao-conformidade',
-                        componentNewNC: <NewContent type='form' data={null} form={form} />
+                        componentNewNC: <NewContentRecebimentoMp type='form' data={null} form={form} />
+                    }
+                    break
+                case 'limpeza':
+                    params = {
+                        endpoint: 'formularios/limpeza/nao-conformidade/getNCLimpeza',
+                        route: '/formularios/limpeza/?aba=nao-conformidade',
+                        componentNewNC: <NewContentLimpeza type='form' data={null} form={form} />
                     }
                     break
 
@@ -184,6 +198,7 @@ const FormHeader = ({
             }
 
             const response = await api.post(params.endpoint, { id })
+            console.log('🚀 ~ actionsNCData response: ', response.data)
             const objNew = {
                 icon: 'icons8:plus',
                 name: 'Nova Não Conformidade',

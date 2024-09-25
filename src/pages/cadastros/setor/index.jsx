@@ -29,7 +29,7 @@ const Setor = () => {
             setFilteredData(response.data)
             setData(response.data)
             setTitle({
-                icon: 'material-symbols:work-outline',
+                icon: 'fluent-mdl2:map-pin-12',
                 title: 'Setor',
                 subtitle: {
                     id: id,
@@ -57,8 +57,8 @@ const Setor = () => {
             size: 0.3
         },
         {
-            title: 'Profissionais',
-            field: 'profissionais',
+            title: 'Equipamentos',
+            field: 'equipamentos',
             size: 0.5
         },
         {

@@ -20,6 +20,7 @@ import AnexosList from './AnexosList'
 import useLoad from 'src/hooks/useLoad'
 import FormClassificacaoProduto from '../ClassificacaoProduto/FormClassificacaoProduto'
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
+import CheckLabel from 'src/components/Form/CheckLabel'
 
 const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChange, manualUrl, outsideID }) => {
     const [open, setOpen] = useState(false)
@@ -185,7 +186,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     <Card>
                         <CardContent>
                             <Grid container spacing={5}>
-                                <Input xs={11} md={5} title='Nome' name='fields.nome' required={true} form={form} />
+                                <Input xs={11} md={4} title='Nome' name='fields.nome' required={true} form={form} />
                                 <Select
                                     xs={12}
                                     md={3}
@@ -208,14 +209,14 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     createNew={createNewClassification}
                                     form={form}
                                 />
-                                <Check
-                                    xs={1}
-                                    md={1}
-                                    title='Ativo'
-                                    name='fields.status'
-                                    value={data.fields.status}
-                                    typePage={type}
+                                <CheckLabel
+                                    xs='12'
+                                    md='2'
+                                    title='Limpeza'
+                                    name={`fields.limpeza`}
+                                    value={data.fields.limpeza}
                                     form={form}
+                                    helpText='Este produto será listado nos formulários do POP2 de Limpeza e Higienização'
                                 />
                             </Grid>
                         </CardContent>

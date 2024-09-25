@@ -1,7 +1,15 @@
 import { Grid, Box, FormControlLabel, Checkbox } from '@mui/material'
 import HelpText from '../Defaults/HelpText'
+import { useEffect } from 'react'
 
 const CheckLabel = ({ form, xs, md, title, name, value, disabled, onClick, helpText, helpTextPosition }) => {
+    // Define o valor do checkbox no form, mesmo quando desabilitado
+    useEffect(() => {
+        if (disabled) {
+            form.setValue(name, value)
+        }
+    }, [disabled, value, form, name])
+
     return (
         <Grid item xs={xs ?? '12'} md={md ?? '12'}>
             <Box display='flex' alignItems='center' justifyContent='start' sx={{ gap: 0 }}>
@@ -27,7 +35,9 @@ const CheckLabel = ({ form, xs, md, title, name, value, disabled, onClick, helpT
                             }
                         }}
                     />
-                    {helpText && <HelpText text={helpText} position={helpTextPosition ?? 'top'} />}
+                    {helpText && (
+                        <HelpText text={helpText} position={helpTextPosition ?? 'top'} className='relative top-[2px]' />
+                    )}
                 </>
             </Box>
         </Grid>

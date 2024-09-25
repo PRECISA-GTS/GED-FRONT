@@ -17,8 +17,6 @@ import CheckLabel from 'src/components/Form/CheckLabel'
 import CheckLabelConditional from 'src/components/Form/CheckLabelConditional'
 
 const Result = ({ form, title, name, value, papelID, setResult, options, hasNaoConformidade }) => {
-    console.log('🚀 ~ Result:', name)
-
     return (
         <Grid container spacing={2}>
             {/* Somente fábrica */}
@@ -82,7 +80,7 @@ const Result = ({ form, title, name, value, papelID, setResult, options, hasNaoC
                         placeholder='Observação de conclusão (opcional)'
                         defaultValue={value.obsConclusao}
                         multiline
-                        rows={4}
+                        rows={3}
                         onChange={(e, newValue) => {
                             setResult({
                                 ...value,

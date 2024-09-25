@@ -10,6 +10,7 @@ import FormProduto from 'src/components/Cadastros/Produto/FormProduto'
 import ToggleButtonLabel from 'src/components/Form/ToggleButtonLabel'
 import { validationCNPJ, validationCPF } from 'src/configs/validations'
 import { FornecedorContext } from 'src/context/FornecedorContext'
+import CheckLabel from 'src/components/Form/CheckLabel'
 
 const FormNewFornecedor = ({
     form,
@@ -316,6 +317,16 @@ const FormNewFornecedor = ({
                     control={control}
                     errors={errors?.fields?.gruposAnexo}
                 /> */}
+
+                <CheckLabel
+                    title='Prestador de serviço terceirizado'
+                    name={`fields.prestadorServico`}
+                    value={fields?.prestadorServico}
+                    form={form}
+                    disabled={!validCnpj}
+                    helpText='Fornecedor é um prestador de serviços terceirizado (produto é opcional)'
+                />
+
                 <Select
                     xs={12}
                     md={12}
@@ -325,7 +336,8 @@ const FormNewFornecedor = ({
                     disabled={!validCnpj}
                     multiple
                     createNew={() => createNew('produtos')}
-                    required={params?.obrigatorioProdutoFornecedor}
+                    required={params?.obrigatorioProdutoFornecedor && !form.watch('fields.prestadorServico')}
+                    alertRequired={params?.obrigatorioProdutoFornecedor && !form.watch('fields.prestadorServico')}
                     options={products ?? []}
                     form={form}
                 />

@@ -18,7 +18,7 @@ import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
 import { ParametersContext } from 'src/context/ParametersContext'
 import useLoad from 'src/hooks/useLoad'
 import Select from 'src/components/Form/Select'
-import Setor from './Setor'
+import Departamento from './Departamento'
 
 const FormProfissional = ({ id }) => {
     const fileInputRef = useRef(null)
@@ -82,7 +82,7 @@ const FormProfissional = ({ id }) => {
         // return
 
         if (!validateUniqueEntry(values)) {
-            toast.error('Não é permitido repetir setor ativo em um profissional!')
+            toast.error('Não é permitido repetir departamento ativo em um profissional!')
             return
         }
 
@@ -109,15 +109,15 @@ const FormProfissional = ({ id }) => {
         }
     }
 
-    //?  Não pode repetir os setores
+    //?  Não pode repetir os departamentos
     const validateUniqueEntry = data => {
         let unique = true
 
-        if (data.fields.setores && data.fields.setores.length > 1) {
-            data.fields.setores.map((row1, index1) => {
-                data.fields.setores.map((row2, index2) => {
+        if (data.fields.departamentos && data.fields.departamentos.length > 1) {
+            data.fields.departamentos.map((row1, index1) => {
+                data.fields.departamentos.map((row2, index2) => {
                     if (index1 !== index2) {
-                        if (row1.setor.id === row2.setor.id && !row1.dataFim && !row2.dataFim) {
+                        if (row1.departamento.id === row2.departamento.id && !row1.dataFim && !row2.dataFim) {
                             unique = false
                         }
                     }
@@ -142,18 +142,20 @@ const FormProfissional = ({ id }) => {
             setPhotoProfile(response.data.imagem)
             setData(response.data)
 
-            //? Atualiza setores ativos no contexto e localstorage
+            //? Atualiza departamentos ativos no contexto e localstorage
             if (id === user.profissionalID) {
-                const activeSectors = response.data.fields.setores.filter(row => row.status === 1).map(row => row.setor)
+                const activeSectors = response.data.fields.departamentos
+                    .filter(row => row.status === 1)
+                    .map(row => row.departamento)
                 setUser({
                     ...user,
-                    setores: activeSectors
+                    departamentos: activeSectors
                 })
                 localStorage.setItem(
                     'userData',
                     JSON.stringify({
                         ...user,
-                        setores: activeSectors
+                        departamentos: activeSectors
                     })
                 )
             }
@@ -179,9 +181,9 @@ const FormProfissional = ({ id }) => {
         }
     }
 
-    const addSetor = () => {
+    const addDepartamento = () => {
         const newValue = {
-            setor: null,
+            departamento: null,
             dataInicio: today,
             dataFim: '',
             status: true
@@ -321,10 +323,10 @@ const FormProfissional = ({ id }) => {
         }
     }, [data])
 
-    //? Gerencia o array de setores
+    //? Gerencia o array de departamentos
     const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: 'fields.setores'
+        name: 'fields.departamentos'
     })
 
     //? Gerencia o array de cargos
@@ -455,12 +457,12 @@ const FormProfissional = ({ id }) => {
                     </Card>
 
                     <Card>
-                        <CardHeader title='Setores' />
+                        <CardHeader title='Departamentos' />
                         <CardContent>
                             <Grid container spacing={5}>
                                 {fields &&
                                     fields.map((item, index) => (
-                                        <Setor
+                                        <Departamento
                                             form={form}
                                             key={item.id}
                                             item={item}
@@ -473,10 +475,10 @@ const FormProfissional = ({ id }) => {
                                     <Button
                                         variant='outlined'
                                         color='primary'
-                                        onClick={addSetor}
+                                        onClick={addDepartamento}
                                         startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
                                     >
-                                        Inserir Setor
+                                        Inserir Departamento
                                     </Button>
                                 </Grid>
                             </Grid>

@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles'
 import Icon from 'src/@core/components/icon'
 import { Typography } from '@mui/material'
 
-const HelpText = ({ text, position }) => {
+const HelpText = ({ text, position, className }) => {
     const HtmlTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} arrow />
     ))(({ theme }) => ({
@@ -22,7 +22,7 @@ const HelpText = ({ text, position }) => {
             }
             placement={position || 'top'}
         >
-            <p>
+            <p className={className}>
                 <Icon icon='clarity:help-solid' className='cursor-pointer text-base' />
             </p>
         </HtmlTooltip>

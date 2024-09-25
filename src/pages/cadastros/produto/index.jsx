@@ -61,8 +61,8 @@ const Produto = () => {
             size: 0.4
         },
         {
-            headerName: 'Unidade de medida',
-            field: 'unidadeMedida',
+            headerName: 'Limpeza',
+            field: 'limpeza',
             size: 0.2
         },
         {

@@ -45,6 +45,7 @@ const FormItem = ({
     const { startLoading, stopLoading } = useLoad()
     const formType = router.pathname.split('/')[3] ?? 'item' //? novo, item, fornecedor, recebimento-mp, limpeza, ...
 
+    console.log('🚀 ~ formType:', formType)
     const form = useForm({ mode: 'onChange' })
 
     //? Envia dados para a api
@@ -272,7 +273,7 @@ const FormItem = ({
                                         xs={12}
                                         md={12}
                                         multiline
-                                        rows={4}
+                                        rows={3}
                                         title='Ajuda do item (mostrado em (?))'
                                         name='fields.ajuda'
                                         form={form}

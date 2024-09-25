@@ -52,7 +52,7 @@ const Fields = ({
 
     // Verifica se os campos cpf e email estão preenchidos
     const onChangeField = () => {
-        const cpf = getValues('fields').cpf
+        const cpf = form.getValues('fields').cpf
 
         if (cpf && cpf.length < 14) {
             form.setValue('isUsuario', false)

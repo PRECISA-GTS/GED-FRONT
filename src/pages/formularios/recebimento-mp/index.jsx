@@ -7,7 +7,8 @@ import FormRecebimentoMp from 'src/components/RecebimentoMp/FormRecebimentoMp'
 import ListNaoConformidade from './Tabs/NaoConformidade/List'
 import { useRouter } from 'next/router'
 import Icon from 'src/@core/components/icon'
-import RecebimentoMpNaoConformidade from 'src/components/RecebimentoMp/NaoConformidade'
+import NaoConformidade from 'src/components/RecebimentoMp/NaoConformidade'
+import { tabChange } from 'src/configs/tabs'
 
 const RecebimentoMp = () => {
     const router = useRouter()
@@ -16,14 +17,7 @@ const RecebimentoMp = () => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
-        router.push(
-            {
-                pathname: router.pathname,
-                query: { ...router.query, aba: newValue }
-            },
-            undefined,
-            { shallow: true }
-        )
+        tabChange(newValue, router)
     }
 
     const getTabFromURL = () => {
@@ -39,7 +33,7 @@ const RecebimentoMp = () => {
             {!id ? (
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <TabList onChange={handleChange} aria-label='lab API tabs example'>
+                        <TabList onChange={handleChange}>
                             <Tab
                                 label={
                                     <div className='flex items-center gap-1'>
@@ -74,7 +68,7 @@ const RecebimentoMp = () => {
                     {/* Aba 1 (recebimento de mp)  */}
                     {getTabFromURL() === 'recebimento' && <FormRecebimentoMp id={id} model={null} />}
                     {/* Aba 2 (nao conformidade) */}
-                    {getTabFromURL() === 'nao-conformidade' && <RecebimentoMpNaoConformidade id={id} />}
+                    {getTabFromURL() === 'nao-conformidade' && <NaoConformidade id={id} />}
                 </>
             )}
         </>

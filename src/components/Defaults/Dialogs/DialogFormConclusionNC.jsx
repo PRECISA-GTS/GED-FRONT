@@ -14,7 +14,7 @@ import { useGlobal } from 'src/hooks/useGlobal'
 import Header from 'src/components/Reports/Header'
 import ContentFornecedor from 'src/pages/relatorio/formularios/fornecedor/Content'
 import Footer from 'src/components/Reports/Footer'
-import InfoSetores from '../Formularios/InfoSetores'
+import InfoDepartamentos from '../Formularios/InfoDepartamentos'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
 import Select from 'src/components/Form/Select'
@@ -32,7 +32,6 @@ const DialogFormConclusionNC = ({
     btnCancel,
     btnConfirm,
     listErrors,
-    canApprove,
     hasNaoConformidade,
     handleSend,
     type,
@@ -41,7 +40,7 @@ const DialogFormConclusionNC = ({
     formularioID,
     modeloID,
     produtos,
-    setores
+    departamentos
 }) => {
     if (!modeloID) return null
 
@@ -92,17 +91,17 @@ const DialogFormConclusionNC = ({
                         </Grid>
                         {user.papelID === 1 && (
                             <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                                <InfoSetores data={setores ?? []} />
+                                <InfoDepartamentos data={departamentos ?? []} />
                             </Grid>
                         )}
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 3 }}>
-                        {!hasSectorPermission(values?.setores ?? []) && (
+                        {!hasSectorPermission(values?.departamentos ?? []) && (
                             <Alert severity='warning' sx={{ mb: 4 }}>
                                 <Typography variant='body2'>
-                                    Seu setor não está habilitado para concluir este formulário!
+                                    Seu departamento não está habilitado para concluir este formulário!
                                 </Typography>
                             </Alert>
                         )}
@@ -130,12 +129,6 @@ const DialogFormConclusionNC = ({
                                     </Alert>
                                 )}
 
-                                {!canApprove && (
-                                    <Alert severity='error' sx={{ mt: 2 }}>
-                                        Este formulário não pode ser aprovado pois possui resposta que gera não
-                                        conformidade
-                                    </Alert>
-                                )}
                                 {user.papelID == 1 && (
                                     <Grid container spacing={4} sx={{ mt: 4 }}>
                                         {/* Resultado */}
@@ -156,8 +149,7 @@ const DialogFormConclusionNC = ({
                                                     {
                                                         value: 80,
                                                         color: 'success',
-                                                        label: 'Aceite',
-                                                        disabled: canApprove ? false : true
+                                                        label: 'Aceite'
                                                     },
                                                     {
                                                         value: 90,
@@ -204,7 +196,7 @@ const DialogFormConclusionNC = ({
                                         variant='contained'
                                         disabled={
                                             !validParams ||
-                                            !hasSectorPermission(values?.setores ?? []) ||
+                                            !hasSectorPermission(values?.departamentos ?? []) ||
                                             (status < 40 &&
                                                 ((listErrors && listErrors.status) ||
                                                     (user.papelID == 1 && !result.status)))

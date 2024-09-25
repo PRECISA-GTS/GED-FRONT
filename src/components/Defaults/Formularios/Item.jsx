@@ -25,6 +25,7 @@ const Item = ({
     //? Anexos
     const handleFileClick = values => {
         values[blockKey] = item[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
+        console.log('🚀 ~ item[blockKey]:', blockKey, item[blockKey])
         fileInputRef.current.click()
         setSelectedItem(values)
     }
@@ -153,7 +154,7 @@ const Item = ({
                         md={12}
                         title='Descreva a resposta'
                         name={`blocos[${index}].itens[${indexItem}].resposta`}
-                        rows={6}
+                        rows={3}
                         value={item.resposta}
                         multiline
                         disabled={disabled}

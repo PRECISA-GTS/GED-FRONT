@@ -1,7 +1,7 @@
 import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import Item from './Item'
-import InfoSetores from './InfoSetores'
+import InfoDepartamentos from './InfoDepartamentos'
 import { AuthContext } from 'src/context/AuthContext'
 
 const Block = ({
@@ -77,7 +77,7 @@ const Block = ({
     }
 
     const validateBlockPermission = () => {
-        //? É formulário de fornecedor e é um fornecedor logado acessando (não possui controle por setor)
+        //? É formulário de fornecedor e é um fornecedor logado acessando (não possui controle por departamento)
         if (isFornecedorLogged) {
             setBlockPermission(true)
             return
@@ -88,14 +88,14 @@ const Block = ({
             return
         }
 
-        //? Sem setor pro bloco, todos acessam
-        if (!disabled && (user.admin === 1 || bloco.setores.length === 0)) {
+        //? Sem departamento pro bloco, todos acessam
+        if (!disabled && (user.admin === 1 || bloco.departamentos.length === 0)) {
             setBlockPermission(true)
             return
         }
 
-        //? Se bloco conter pelo menos 1 setor do profissional
-        if (!disabled && hasSectorPermission(bloco?.setores ?? [])) {
+        //? Se bloco conter pelo menos 1 departamento do profissional
+        if (!disabled && hasSectorPermission(bloco?.departamentos ?? [])) {
             setBlockPermission(true)
             return
         }
@@ -116,7 +116,7 @@ const Block = ({
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
-                        <InfoSetores data={bloco?.setores ?? []} />
+                        <InfoDepartamentos data={bloco?.departamentos ?? []} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>

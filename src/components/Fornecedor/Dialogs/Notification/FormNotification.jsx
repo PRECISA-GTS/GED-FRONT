@@ -13,7 +13,7 @@ const FormNotification = ({ form, data, control, setValue, register, errors }) =
                 <Input name='emailDestinatario' type='email' title='E-mail do destinatário' required form={form} />
             )}
             <Input name='assunto' title='Assunto' required={true} defaultValue='' form={form} />
-            <Input name='descricao' title='Descrição' multiline rows={4} required defaultValue='' form={form} />
+            <Input name='descricao' title='Descrição' multiline rows={3} required defaultValue='' form={form} />
             <FormGroup row>
                 <SwitchLabel
                     name='email'

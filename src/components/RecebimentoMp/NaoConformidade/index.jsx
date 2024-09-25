@@ -22,7 +22,7 @@ import { Card, CardContent } from '@mui/material'
 import { fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 
-const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
+const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -304,7 +304,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                     // onSubmit(values)
                 })
                 .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
                 })
                 .finally(() => {
                     setChange(!change)
@@ -439,7 +439,6 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         btnConfirm
                         btnConfirmColor='primary'
                         conclusionForm={conclude}
-                        canApprove={true}
                         type='recebimentoMpNaoConformidade'
                         listErrors={listErrors}
                         unity={loggedUnity}
@@ -448,7 +447,7 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         modeloID={header.modelo.id}
                         produtos={form.getValues('header.produtos')}
                         form={form}
-                        setores={header.setoresConclusao}
+                        departamentos={header.departamentosConclusao}
                     />
 
                     <DialogDelete
@@ -478,4 +477,4 @@ const RecebimentoMpNaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     )
 }
 
-export default RecebimentoMpNaoConformidade
+export default NaoConformidade

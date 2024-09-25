@@ -2,7 +2,7 @@ import { ParametersContext } from 'src/context/ParametersContext'
 import { useContext, useEffect } from 'react'
 import FormSetor from 'src/components/Cadastros/Setor/FormSetor'
 
-const VersaoNovo = () => {
+const SetorNovo = () => {
     const { setTitle } = useContext(ParametersContext)
 
     useEffect(() => {
@@ -19,4 +19,4 @@ const VersaoNovo = () => {
     return <FormSetor />
 }
 
-export default VersaoNovo
+export default SetorNovo

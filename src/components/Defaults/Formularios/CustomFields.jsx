@@ -96,7 +96,7 @@ const CustomFields = ({ form, fields, disabled, getAddressByCep }) => {
                             xs={12}
                             md={12}
                             multiline
-                            rows={6}
+                            rows={3}
                             title={field.nomeCampo}
                             name={`header.fields[${index}].${field.nomeColuna}`}
                             value={field?.[field.nomeColuna] ?? ''}

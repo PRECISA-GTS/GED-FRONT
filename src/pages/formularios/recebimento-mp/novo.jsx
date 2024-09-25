@@ -1,9 +1,9 @@
-import SelectModel from 'src/components/RecebimentoMp/SelectModel'
 import { ParametersContext } from 'src/context/ParametersContext'
 import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import RecebimentoMpNaoConformidade from 'src/components/RecebimentoMp/NaoConformidade'
+import NaoConformidade from 'src/components/RecebimentoMp/NaoConformidade'
 import { RouteContext } from 'src/context/RouteContext'
+import SelectModel from 'src/components/RecebimentoMp/SelectModel'
 
 const RecebimentoMpNovo = () => {
     const { setTitle } = useContext(ParametersContext)
@@ -25,7 +25,7 @@ const RecebimentoMpNovo = () => {
     }, [router])
 
     return router.query?.aba == 'nao-conformidade' ? (
-        <RecebimentoMpNaoConformidade id={null} recebimentoMpID={recebimentoMpID} modelID={modelID} />
+        <NaoConformidade id={null} recebimentoMpID={recebimentoMpID} modelID={modelID} />
     ) : (
         <SelectModel />
     )

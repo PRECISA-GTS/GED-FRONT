@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState, useEffect, useContext } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 //* Default Form Components
 import Block from 'src/components/Defaults/Formularios/Block'
@@ -31,9 +31,7 @@ import FormTipoVeiculo from '../Cadastros/TipoVeiculo/FormTipoVeiculo'
 import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { ParametersContext } from 'src/context/ParametersContext'
-import Icon from 'src/@core/components/icon'
-import OptionsDots from '../Defaults/FormHeader/DropDownButtons/Actions'
-import { ca } from 'date-fns/locale'
+import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -211,7 +209,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                         status:
                             user.papelID == 1 &&
                             response.data.info.status < 40 &&
-                            hasSectorPermission(response.data.fieldsHeader?.setores ?? [])
+                            hasSectorPermission(response.data.fieldsHeader?.departamentos ?? [])
                                 ? true
                                 : false,
                         message:
@@ -267,23 +265,6 @@ const FormRecebimentoMp = ({ id, model }) => {
                 setFormError(fieldName, field?.nomeCampo)
             }
         })
-
-        //? Produtos
-        // if (produtos && produtos.length > 0) {
-        //     produtos.forEach((produto, indexProduto) => {
-        //         produto.produtoAnexosDescricao &&
-        //             produto.produtoAnexosDescricao.forEach((anexo, indexAnexo) => {
-        //                 if (anexo.obrigatorio === 1 && anexo.anexos.length == 0) {
-        //                     form.setError(`produtos[${indexProduto}].produtoAnexosDescricao[${indexAnexo}].anexos`, {
-        //                         type: 'manual',
-        //                         message: 'Campo obrigatório'
-        //                     })
-        //                     arrErrors.push(`Anexo: ${produto?.nome} / ${anexo?.nome}`)
-        //                     hasErrors = true
-        //                 }
-        //             })
-        //     })
-        // }
 
         //? Blocos
         blocos.forEach((block, indexBlock) => {
@@ -733,14 +714,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     </div>
 
                     <Box display='flex' flexDirection='column' sx={{ gap: 6 }}>
-                        {/* Cabeçalho do modelo */}
-                        {info && info.cabecalhoModelo != '' && (
-                            <Card>
-                                <CardContent>
-                                    <Typography variant='subtitle1'>{info.cabecalhoModelo}</Typography>
-                                </CardContent>
-                            </Card>
-                        )}
+                        <HeaderModelDescription description={info.cabecalhoModelo} />
 
                         {unidade && (
                             <HeaderFields
@@ -810,7 +784,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                                         title='Observação (opcional)'
                                                         name='info.obs'
                                                         multiline
-                                                        rows={4}
+                                                        rows={3}
                                                         value={info.obs}
                                                         disabled={!canEdit.status}
                                                         form={form}

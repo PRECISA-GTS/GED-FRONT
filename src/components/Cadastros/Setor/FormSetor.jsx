@@ -29,61 +29,10 @@ const FormSetor = ({ id }) => {
     const { title } = useContext(ParametersContext)
     const { loggedUnity, user, setUser } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
-    const [profissionais, setProfissionais] = useState([])
+    const [equipamentos, setEquipamentos] = useState([])
     const today = new Date().toISOString().substring(0, 10)
 
     const form = useForm({ mode: 'onChange' })
-
-    const updateProfessionalSector = values => {
-        //? Atualiza setores ativos no contexto e localstorage
-        const profissionalLogadoAtivoSetor = values.fields.profissionais.find(
-            row =>
-                row.profissional.id === user.profissionalID &&
-                (!row.dataFim || row.dataFim == '' || row.dataFim == null || row.dataFim == '0000-00-00')
-        )
-            ? true
-            : false
-
-        const contextHasSector = user.setores.find(row => row.id === id) ? true : false
-
-        if (profissionalLogadoAtivoSetor && !contextHasSector) {
-            setUser({
-                ...user,
-                setores: [
-                    ...user.setores,
-                    {
-                        id: values.fields.setorID,
-                        nome: values.fields.nome
-                    }
-                ]
-            })
-            localStorage.setItem(
-                'userData',
-                JSON.stringify({
-                    ...user,
-                    setores: [
-                        ...user.setores,
-                        {
-                            id: values.fields.setorID,
-                            nome: values.fields.nome
-                        }
-                    ]
-                })
-            )
-        } else if (!profissionalLogadoAtivoSetor && contextHasSector) {
-            setUser({
-                ...user,
-                setores: user.setores.filter(row => row.id !== id)
-            })
-            localStorage.setItem(
-                'userData',
-                JSON.stringify({
-                    ...user,
-                    setores: user.setores.filter(row => row.id !== id)
-                })
-            )
-        }
-    }
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -94,11 +43,9 @@ const FormSetor = ({ id }) => {
         }
 
         if (!validateUniqueEntry(data)) {
-            toast.error('Não é permitido repetir profissional ativo em um setor!')
+            toast.error('Não é permitido repetir equipamento ativo em um setor!')
             return
         }
-
-        updateProfessionalSector(values)
 
         try {
             if (type === 'new') {
@@ -126,11 +73,11 @@ const FormSetor = ({ id }) => {
     const validateUniqueEntry = data => {
         let unique = true
 
-        if (data.fields.profissionais.length > 1) {
-            data.fields.profissionais.map((row1, index1) => {
-                data.fields.profissionais.map((row2, index2) => {
+        if (data.fields.equipamentos.length > 1) {
+            data.fields.equipamentos.map((row1, index1) => {
+                data.fields.equipamentos.map((row2, index2) => {
                     if (index1 !== index2) {
-                        if (row1.profissional.id === row2.profissional.id && !row1.dataFim && !row2.dataFim) {
+                        if (row1.equipamento.id === row2.equipamento.id && !row1.dataFim && !row2.dataFim) {
                             unique = false
                         }
                     }
@@ -170,7 +117,7 @@ const FormSetor = ({ id }) => {
                     fields: {
                         nome: '',
                         status: 1,
-                        profissionais: []
+                        equipamentos: []
                     }
                 })
                 // Setar data de hoje no campo de data
@@ -186,27 +133,27 @@ const FormSetor = ({ id }) => {
         }
     }
 
-    const getProfissionais = async () => {
-        const result = await api.get(
-            `/cadastros/profissional?unidadeID=${loggedUnity.unidadeID}&papelID=${loggedUnity.papelID}`
-        )
-        const profissionaisAtivos = result.data.filter(row => row.statusID === 1)
-        setProfissionais(profissionaisAtivos)
+    const getEquipamentos = async () => {
+        const response = await api.post(`/cadastros/equipamento/getEquipamentos`, {
+            unidadeID: loggedUnity.unidadeID
+        })
+
+        setEquipamentos(response.data)
     }
 
     useEffect(() => {
         getData()
-        getProfissionais()
+        getEquipamentos()
 
         setTimeout(() => {
             form.trigger()
         }, 300)
     }, [id])
 
-    //? Gerencia o array de profissionais
+    //? Gerencia o array de equipamentos
     const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: 'fields.profissionais'
+        name: 'fields.equipamentos'
     })
 
     return (
@@ -240,10 +187,10 @@ const FormSetor = ({ id }) => {
                                 <Grid item xs={12}>
                                     <div className='flex items-center gap-2 pb-1 pt-2'>
                                         <div className=''>
-                                            <Icon icon='material-symbols:person-check-outline' className='text-3xl' />
+                                            <Icon icon='game-icons:manual-meat-grinder' className='text-3xl' />
                                         </div>
                                         <div className='flex flex-col gap-0'>
-                                            <p className='text-xl'>Profissionais</p>
+                                            <p className='text-xl'>Equipamentos</p>
                                         </div>
                                     </div>
                                 </Grid>
@@ -252,41 +199,20 @@ const FormSetor = ({ id }) => {
                                     <Fragment key={item.id}>
                                         <input
                                             type='hidden'
-                                            name={`fields.profissionais[${index}].id`}
+                                            name={`fields.equipamentos[${index}].id`}
                                             value={item.id}
                                         />
 
                                         <Select
                                             xs={12}
-                                            md={7}
-                                            title='Profissional'
-                                            name={`fields.profissionais[${index}].profissional`}
-                                            value={data?.fields?.profissionais?.[index]?.profissional}
+                                            md={11}
+                                            title='Equipamento'
+                                            name={`fields.equipamentos[${index}].equipamento`}
+                                            value={data?.fields?.equipamentos?.[index]?.equipamento}
                                             required
-                                            options={profissionais ?? []}
+                                            options={equipamentos ?? []}
                                             form={form}
                                             opacity={item.status === 0 ? true : false}
-                                        />
-
-                                        <DateField
-                                            xs={12}
-                                            md={2}
-                                            title='Data Início'
-                                            name={`fields.profissionais[${index}].dataInicio`}
-                                            value={data?.fields?.profissionais?.[index]?.dataInicio ?? today}
-                                            required
-                                            opacity={item.status === 0 ? true : false}
-                                            form={form}
-                                        />
-
-                                        <DateField
-                                            xs={12}
-                                            md={2}
-                                            title='Data Fim'
-                                            name={`fields.profissionais[${index}].dataFim`}
-                                            value={data?.fields?.profissionais?.[index]?.dataFim}
-                                            opacity={item.status === 0 ? true : false}
-                                            form={form}
                                         />
 
                                         <Grid item xs={12} md={1} className='flex items-center'>
@@ -310,7 +236,7 @@ const FormSetor = ({ id }) => {
                                         }}
                                         startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
                                     >
-                                        Inserir Profissional
+                                        Inserir Equipamento
                                     </Button>
                                 </Grid>
                             </Grid>

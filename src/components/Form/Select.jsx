@@ -35,13 +35,28 @@ const Select = ({
 
     const optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
+    // Filter out already selected options for multiple select
+    const filteredOptions = multiple
+        ? optionsWithNovo.filter(option => !getValues(name)?.some(selected => selected.nome === option.nome))
+        : optionsWithNovo
+
     const handleChange = (e, newValue) => {
-        if (newValue && e.target.innerText == '-- Novo --') {
+        if (newValue && e.target.innerText === '-- Novo --') {
             createNew()
         } else {
-            setValue(name, newValue)
-            onChange && onChange(newValue)
+            // Check for duplicates in the new value (for multiple select)
+            if (multiple) {
+                const uniqueValues = Array.from(new Set(newValue.map(item => item.nome))).map(nome =>
+                    newValue.find(item => item.nome === nome)
+                )
+                setValue(name, uniqueValues)
+                onChange && onChange(uniqueValues)
+            } else {
+                setValue(name, newValue)
+                onChange && onChange(newValue)
+            }
 
+            // Validate if the field is required
             if (required && (!newValue || (multiple && newValue.length === 0))) {
                 setError(name, {
                     type: 'required',
@@ -73,9 +88,15 @@ const Select = ({
                         multiple={multiple}
                         limitTags={limitTags}
                         size='small'
-                        options={optionsWithNovo}
+                        options={filteredOptions}
                         getOptionLabel={option => option?.nome || ''}
-                        value={multiple ? getValues(name) || [] : getValues(name) || null}
+                        value={
+                            multiple
+                                ? getValues(name) || []
+                                : !createNew && filteredOptions.length === 1
+                                ? filteredOptions[0]
+                                : getValues(name) || null
+                        }
                         disabled={disabled}
                         onChange={handleChange}
                         renderInput={params => (
@@ -89,7 +110,9 @@ const Select = ({
                                         padding: '4px 14px !important'
                                     },
                                     ...((required || alertRequired) &&
-                                        !getValues(name) && {
+                                        (multiple
+                                            ? !getValues(name)?.id || getValues(name)?.length === 0
+                                            : !getValues(name)?.id) && {
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: theme.palette.error.main

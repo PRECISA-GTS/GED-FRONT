@@ -20,6 +20,12 @@ const initialValues = {
     dataRecebimentoMP: [],
     setDataRecebimentoMP: () => {},
 
+    // Limpeza
+    filteredDataLimpeza: [],
+    setFilteredDataLimpeza: () => {},
+    dataLimpeza: [],
+    setDataLimpeza: () => {},
+
     //
     filteredData: [],
     setFilteredData: () => {},
@@ -61,6 +67,10 @@ const FilterProvider = ({ children }) => {
     const [filteredDataRecebimentoMP, setFilteredDataRecebimentoMP] = useState(initialValues.filteredDataRecebimentoMP)
     const [dataRecebimentoMP, setDataRecebimentoMP] = useState(initialValues.dataRecebimentoMP)
 
+    // Limpeza
+    const [filteredDataLimpeza, setFilteredDataLimpeza] = useState(initialValues.filteredDataLimpeza)
+    const [dataLimpeza, setDataLimpeza] = useState(initialValues.dataLimpeza)
+
     const [filteredData, setFilteredData] = useState(initialValues.filteredData)
     const [searchText, setSearchText] = useState(initialValues.searchText)
     const [data, setData] = useState(initialValues.data)
@@ -85,6 +95,12 @@ const FilterProvider = ({ children }) => {
         if (pathName === '/formularios/recebimento-mp') {
             setFilteredDataRecebimentoMP(filteredDataRecebimentoMP)
             setDataRecebimentoMP(dataRecebimentoMP)
+        }
+
+        // Limpeza
+        if (pathName === '/formularios/limpeza') {
+            setFilteredDataLimpeza(filteredDataLimpeza)
+            setDataLimpeza(dataLimpeza)
         }
 
         //
@@ -119,6 +135,7 @@ const FilterProvider = ({ children }) => {
         setFilteredData(data)
         setFilteredDataSupplier(dataSupplier)
         setFilteredDataRecebimentoMP(dataRecebimentoMP)
+        setFilteredDataLimpeza(dataLimpeza)
     }
 
     //* Função para limpar todos os filtros
@@ -131,6 +148,7 @@ const FilterProvider = ({ children }) => {
         setFilteredData(data)
         setFilteredDataSupplier(dataSupplier)
         setFilteredDataRecebimentoMP(dataRecebimentoMP)
+        setFilteredDataLimpeza(dataLimpeza)
     }
 
     //* Função para setar os valores dos filtros
@@ -209,6 +227,12 @@ const FilterProvider = ({ children }) => {
         setFilteredDataRecebimentoMP,
         dataRecebimentoMP,
         setDataRecebimentoMP,
+
+        // Limpeza
+        filteredDataLimpeza,
+        setFilteredDataLimpeza,
+        dataLimpeza,
+        setDataLimpeza,
 
         filteredData,
         setFilteredData,

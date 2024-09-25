@@ -117,7 +117,7 @@ const Fields = ({
                             xs={12}
                             md={12}
                             multiline
-                            rows={6}
+                            rows={3}
                             title={field.nomeCampo}
                             name={`fields[${index}].${field.nomeColuna}`}
                             value={field?.[field.nomeColuna] ?? ''}

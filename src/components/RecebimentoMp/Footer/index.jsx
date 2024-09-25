@@ -6,14 +6,14 @@ import DateField from 'src/components/Form/DateField'
 import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import { unix } from 'moment'
-import InfoSetores from 'src/components/Defaults/Formularios/InfoSetores'
+import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 
 const RecebimentoMpFooterFields = ({ modeloID, values, disabled, register, errors, setValue, control }) => {
     const { user, loggedUnity } = useContext(AuthContext)
     const [profissionaisAprova, setProfissionaisAprova] = useState([])
 
-    const getProfissionaisSetores = async () => {
-        const response = await api.post(`/cadastros/setor/getProfissionaisSetoresAssinatura`, {
+    const getProfissionaisDepartamentos = async () => {
+        const response = await api.post(`/cadastros/departamento/getProfissionaisDepartamentosAssinatura`, {
             formularioID: 2, // recebimento de mp
             modeloID: modeloID,
             unidadeID: loggedUnity.unidadeID
@@ -29,7 +29,7 @@ const RecebimentoMpFooterFields = ({ modeloID, values, disabled, register, error
     }
 
     useEffect(() => {
-        getProfissionaisSetores()
+        getProfissionaisDepartamentos()
     }, [])
 
     return (
@@ -37,7 +37,7 @@ const RecebimentoMpFooterFields = ({ modeloID, values, disabled, register, error
             <CardContent>
                 <Grid container spacing={4}>
                     <Grid item xs={12} sx={{ textAlign: 'right' }}>
-                        <InfoSetores data={values?.setores ?? []} />
+                        <InfoDepartamentos data={values?.departamentos ?? []} />
                     </Grid>
 
                     {/* Data de abertura */}
