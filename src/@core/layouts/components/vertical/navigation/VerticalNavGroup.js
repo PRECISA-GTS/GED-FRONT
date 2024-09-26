@@ -109,7 +109,7 @@ const VerticalNavGroup = props => {
   const scrollBottom = () => {
     const div = document.querySelector('.scrollbar-container');
     const scrollHeight = div.scrollHeight;
-    const duration = 1000; // Tempo em milissegundos
+    const duration = 400; // Tempo em milissegundos
     const startTime = performance.now();
     const animateScroll = (timestamp) => {
       const elapsed = timestamp - startTime;

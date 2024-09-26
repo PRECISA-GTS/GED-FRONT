@@ -5,7 +5,7 @@ import ListHeader from 'src/components/Defaults/ListHeader'
 import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import Router from 'next/router'
-import { Button } from '@mui/material'
+import { Button, Input } from '@mui/material'
 import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
@@ -87,6 +87,10 @@ const QuickSearchToolbar = (props) => {
               width: {
                 xs: 1,
                 sm: 'auto'
+              },
+              "& .MuiInput-underline:after": {
+                borderBottom: "none", // Remove a borda inferior após o foco
+                transition: "none", // Remove a animação
               },
               '& .MuiInputBase-root > svg': {
                 mr: 2

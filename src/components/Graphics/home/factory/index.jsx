@@ -77,6 +77,7 @@ const Factory = () => {
                                     <SupplierNonCompliance data={dataSupplierNonCompliance} />
                                 </Grid>
                                 <Grid item xs={6}>
+                                    {/* ERRO  */}
                                     <CrmWeeklyOverview data={dataRecebimentoNC} />
                                 </Grid>
                                 <Grid item xs={6}>
