@@ -31,7 +31,7 @@ const Limpeza = () => {
     return (
         <>
             {!id ? (
-                <CustomTabs tabs={tabs} />
+                <CustomTabs tabs={tabs} defaultTab='limpeza' />
             ) : (
                 <>
                     {currentTab === 'limpeza' && <FormLimpeza id={id} modelID={null} />}

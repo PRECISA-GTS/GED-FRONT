@@ -1,74 +1,41 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Tab } from '@mui/material'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
-import ListRecebimentoMP from './Tabs/RecebimentoMp/List'
-import FormRecebimentoMp from 'src/components/RecebimentoMp/FormRecebimentoMp'
 import ListNaoConformidade from './Tabs/NaoConformidade/List'
 import { useRouter } from 'next/router'
 import Icon from 'src/@core/components/icon'
 import NaoConformidade from 'src/components/RecebimentoMp/NaoConformidade'
-import { tabChange } from 'src/configs/tabs'
+import CustomTabs from 'src/components/Defaults/Tabs/CustomTabs'
+import ListRecebimentoMP from './Tabs/RecebimentoMp/List'
+import FormRecebimentoMp from 'src/components/RecebimentoMp/FormRecebimentoMp'
 
 const RecebimentoMp = () => {
     const router = useRouter()
     const { id } = useContext(RouteContext)
-    const [value, setValue] = useState('recebimento')
+    const currentTab = router.query.aba || 'recebimento-mp'
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue)
-        tabChange(newValue, router)
-    }
-
-    const getTabFromURL = () => {
-        return router.query.aba || 'recebimento'
-    }
-
-    useEffect(() => {
-        setValue(getTabFromURL())
-    }, [router.query.aba])
+    const tabs = [
+        {
+            value: 'recebimento-mp',
+            title: 'Recebimento de MP',
+            icon: () => <Icon icon='icon-park-outline:receive' />,
+            content: <ListRecebimentoMP />
+        },
+        {
+            value: 'nao-conformidade',
+            title: 'Não Conformidade',
+            icon: () => <Icon icon='typcn:warning-outline' />,
+            content: <ListNaoConformidade />
+        }
+    ]
 
     return (
         <>
             {!id ? (
-                <TabContext value={value}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <TabList onChange={handleChange}>
-                            <Tab
-                                label={
-                                    <div className='flex items-center gap-1'>
-                                        <Icon icon='icon-park-outline:receive' />
-                                        <p>Recebimento de MP</p>
-                                    </div>
-                                }
-                                value='recebimento'
-                                sx={{ textTransform: 'none', fontSize: '1rem' }}
-                            />
-                            <Tab
-                                label={
-                                    <div className='flex items-center gap-1'>
-                                        <Icon icon='typcn:warning-outline' />
-                                        <p>Não Conformidade</p>
-                                    </div>
-                                }
-                                value='nao-conformidade'
-                                sx={{ textTransform: 'none', fontSize: '1rem' }}
-                            />
-                        </TabList>
-                    </Box>
-                    <TabPanel value='recebimento'>
-                        <ListRecebimentoMP />
-                    </TabPanel>
-                    <TabPanel value='nao-conformidade'>
-                        <ListNaoConformidade />
-                    </TabPanel>
-                </TabContext>
+                <CustomTabs tabs={tabs} defaultTab='recebimento-mp' />
             ) : (
                 <>
-                    {/* Aba 1 (recebimento de mp)  */}
-                    {getTabFromURL() === 'recebimento' && <FormRecebimentoMp id={id} model={null} />}
-                    {/* Aba 2 (nao conformidade) */}
-                    {getTabFromURL() === 'nao-conformidade' && <NaoConformidade id={id} />}
+                    {currentTab === 'recebimento' && <FormRecebimentoMp id={id} model={null} />}
+                    {currentTab === 'nao-conformidade' && <NaoConformidade id={id} />}
                 </>
             )}
         </>

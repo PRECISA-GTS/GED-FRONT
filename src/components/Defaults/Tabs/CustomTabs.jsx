@@ -2,10 +2,10 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { tabChange } from 'src/configs/tabs'
 
-const CustomTabs = ({ tabs }) => {
+const CustomTabs = ({ tabs, defaultTab }) => {
     const router = useRouter()
-    const [value, setValue] = useState('limpeza')
-    const currentTab = router.query.aba || 'limpeza'
+    const [value, setValue] = useState(defaultTab)
+    const currentTab = router.query.aba || defaultTab
 
     const handleChange = newValue => {
         setValue(newValue)
@@ -18,16 +18,22 @@ const CustomTabs = ({ tabs }) => {
 
     return (
         <div className='flex flex-col w-full'>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 mb-2'>
                 {tabs.map(tab => (
                     <button
                         key={tab.value}
-                        className={`py-5 px-20 ${value === tab.value ? 'border-b-2 border-blue-500' : ''}`}
+                        className={`py-4 px-20 border-b-2 ${
+                            value === tab.value ? ' border-[#4A8B57]' : 'border-transparent'
+                        }`}
                         onClick={() => handleChange(tab.value)}
                     >
-                        <div className='flex items-center gap-1'>
-                            {tab.icon && <tab.icon />}
-                            <p>{tab.title}</p>
+                        <div className='flex items-center gap-1 '>
+                            {tab.icon && (
+                                <div className={value === tab.value ? 'text-[#4A8B57]' : ''}>
+                                    <tab.icon />
+                                </div>
+                            )}
+                            <p className='text-[14px]'>{tab.title}</p>
                         </div>
                     </button>
                 ))}
