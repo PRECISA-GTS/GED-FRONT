@@ -16,7 +16,8 @@ const Limpeza = () => {
     const [value, setValue] = useState('limpeza')
     const [activeTab, setActiveTab] = useState('limpeza')
 
-    const handleChange = (event, newValue) => {
+    const handleChange = newValue => {
+        console.log('🚀 ~ newValue:', newValue)
         setValue(newValue)
         tabChange(newValue, router)
     }
@@ -33,68 +34,35 @@ const Limpeza = () => {
         <>
             {!id ? (
                 <>
-                    <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={handleChange}>
-                                <Tab
-                                    label={
-                                        <div className='flex items-center gap-1'>
-                                            <Icon icon='carbon:clean' />
-                                            <p>Limpeza e Higienização</p>
-                                        </div>
-                                    }
-                                    value='limpeza'
-                                    sx={{ textTransform: 'none', fontSize: '1rem' }}
-                                />
-                                <Tab
-                                    label={
-                                        <div className='flex items-center gap-1'>
-                                            <Icon icon='typcn:warning-outline' />
-                                            <p>Não Conformidade</p>
-                                        </div>
-                                    }
-                                    value='nao-conformidade'
-                                    sx={{ textTransform: 'none', fontSize: '1rem' }}
-                                />
-                            </TabList>
-                        </Box>
-                        <TabPanel value='limpeza'>
-                            <ListLimpeza />
-                        </TabPanel>
-                        <TabPanel value='nao-conformidade'>
-                            <ListNaoConformidade />
-                        </TabPanel>
-                    </TabContext>
-
                     <div className='flex flex-col w-full'>
                         <div className='flex gap-2'>
                             <button
-                                className={`py-5 px-20  ${activeTab === 'limpeza' ? 'active border-b-2' : ''}`}
-                                onClick={() => setActiveTab('limpeza')}
+                                className={`py-5 px-20  ${value === 'limpeza' ? 'active border-b-2' : ''}`}
+                                onClick={() => handleChange('limpeza')}
                             >
                                 <div className='flex items-center gap-1'>
-                                    <span>🧹</span> {/* Ícone alternativo */}
+                                    <Icon icon='carbon:clean' />
                                     <p>Limpeza e Higienização</p>
                                 </div>
                             </button>
                             <button
-                                className={`py-5 px-20  ${activeTab === 'nao-conformidade' ? 'active border-b-2' : ''}`}
-                                onClick={() => setActiveTab('nao-conformidade')}
+                                className={`py-5 px-20  ${value === 'nao-conformidade' ? 'active border-b-2' : ''}`}
+                                onClick={() => handleChange('nao-conformidade')}
                             >
                                 <div className='flex items-center gap-1'>
-                                    <span>⚠️</span> {/* Ícone alternativo */}
+                                    <Icon icon='typcn:warning-outline' />
                                     <p>Não Conformidade</p>
                                 </div>
                             </button>
                         </div>
 
                         <div className='tab-content'>
-                            {activeTab === 'limpeza' && (
+                            {value === 'limpeza' && (
                                 <div className='tab-panel'>
                                     <ListLimpeza />
                                 </div>
                             )}
-                            {activeTab === 'nao-conformidade' && (
+                            {value === 'nao-conformidade' && (
                                 <div className='tab-panel'>
                                     <ListNaoConformidade />
                                 </div>
