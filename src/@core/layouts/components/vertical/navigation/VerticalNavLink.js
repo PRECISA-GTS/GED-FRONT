@@ -105,7 +105,7 @@ const VerticalNavLink = ({
   }
 
   const isNavLinkActive = () => {
-    if (router.pathname === item.path || handleURLQueries(router, item.path)) {
+    if (router.pathname === item.path || router.pathname === item.path + '/novo' || handleURLQueries(router, item.path)) {
       return true
     } else {
       return false

@@ -8,12 +8,15 @@ import Router from 'next/router'
 import CardList from 'src/components/Defaults/Cards/CardList'
 import FormLimpeza from '../FormLimpeza'
 import { backRoute } from 'src/configs/defaultConfigs'
+import EmptyForms from 'src/pages/configuracoes/formularios/EmptyForms'
+import EmptyModels from 'src/components/Defaults/EmptyModels'
 
 const SelectModel = () => {
     const { loggedUnity } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)
     const [model, setModel] = useState(null)
-    const [models, setModels] = useState([])
+    console.log('🚀 ~ model:', model)
+    const [models, setModels] = useState(null)
     const router = Router
 
     const getModels = async () => {
@@ -71,6 +74,7 @@ const SelectModel = () => {
                         </Button>
                     </div>
 
+                    {models && models.length === 0 && <EmptyModels />}
                     <Grid container spacing={4}>
                         {models &&
                             models.length > 1 &&
