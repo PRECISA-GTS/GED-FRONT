@@ -168,8 +168,8 @@ const Fields = ({
                                 size='small'
                                 type={values.showPassword ? 'text' : 'password'}
                                 name='senha'
-                                error={!!errors.senha}
-                                helperText={errors.senha && errors.senha.message}
+                                error={!!form?.formState?.errors.senha}
+                                helperText={form?.formState?.errors.senha && form?.formState?.errors.senha.message}
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position='end'>
@@ -187,7 +187,7 @@ const Fields = ({
                                         </InputAdornment>
                                     )
                                 }}
-                                {...register('senha', {
+                                {...form.register('senha', {
                                     minLength: {
                                         value: 4,
                                         message: 'Senha deve ter pelo menos 4 caracteres'
@@ -230,8 +230,8 @@ const Fields = ({
                                 onChange={e => {
                                     setLenghtPassword(e.target.value)
                                 }}
-                                {...register('confirmaSenha', {
-                                    validate: value => value === watch('senha') || 'As senhas não coincidem'
+                                {...form.register('confirmaSenha', {
+                                    validate: value => value === form.watch('senha') || 'As senhas não coincidem'
                                 })}
                             />
                         </Grid>

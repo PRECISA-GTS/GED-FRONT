@@ -129,7 +129,7 @@ const DialogNewPasswordProfessional = ({ handleClose, openModal, setOpenModalNew
                                 setLenghtPassword(e.target.value)
                             }}
                             {...form.register('confirmaSenha', {
-                                validate: value => value === watch('senha') || 'As senhas não coincidem'
+                                validate: value => value === form.watch('senha') || 'As senhas não coincidem'
                             })}
                         />
                     </form>
