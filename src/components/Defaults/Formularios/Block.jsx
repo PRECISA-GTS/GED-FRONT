@@ -21,6 +21,7 @@ const Block = ({
 
     const { user, hasSectorPermission } = useContext(AuthContext)
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
+    console.log('🚀 ~ selectedColumn:', selectedColumn)
     const [blockPermission, setBlockPermission] = useState(false)
 
     const updateResponse = ({ e, item, index, indexItem }) => {
@@ -29,6 +30,8 @@ const Block = ({
         newBlocos[index].itens[indexItem].resposta = newResponse
         setBlocos(newBlocos)
         form.setValue(`blocos[${index}].itens[${indexItem}].resposta`, newResponse)
+        //? Desmarca o checkbox "Todos"
+        if (selectedColumn[0] !== null) setSelectedColumn([null])
     }
 
     const changeAllOptions = (bloco, blockIndex, colIndex) => {
