@@ -32,6 +32,7 @@ import HistoricForm from '../Defaults/HistoricForm'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { ParametersContext } from 'src/context/ParametersContext'
 import HeaderModelDescription from '../Defaults/HeaderModelDescription'
+import ButtonOpenForm from '../Defaults/Buttons/ButtonOpenForm'
 
 const FormRecebimentoMp = ({ id, model }) => {
     const { menu, user, hasPermission, loggedUnity, hasSectorPermission } = useContext(AuthContext)
@@ -444,7 +445,13 @@ const FormRecebimentoMp = ({ id, model }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ onSubmit:', data)
+
+        //? Verifica se há pelo menos 1 produto marcado
+        const hasSomeProductChecked = data.form.produtos.some(product => product.checked_ === true)
+        if (!hasSomeProductChecked) {
+            toast.error('É necessário selecionar pelo menos um produto!')
+            return
+        }
 
         if (id == true) return
         setOpenModal(false)
@@ -736,8 +743,12 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 form={form}
                             />
                         )}
+
+                        {type === 'new' && <ButtonOpenForm />}
+
                         {/* Blocos */}
                         {blocos &&
+                            type === 'edit' &&
                             blocos.map((bloco, index) => (
                                 <Block
                                     form={form}
@@ -770,7 +781,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                                 />
                             ))}
                         {/* Observação do formulário */}
-                        {info && (
+                        {info && type === 'edit' && (
                             <>
                                 <Card>
                                     <CardContent>

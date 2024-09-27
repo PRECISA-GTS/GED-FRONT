@@ -31,7 +31,11 @@ const Block = ({
         setBlocos(newBlocos)
         form.setValue(`blocos[${index}].itens[${indexItem}].resposta`, newResponse)
         //? Desmarca o checkbox "Todos"
-        if (selectedColumn[0] !== null) setSelectedColumn([null])
+        if (selectedColumn[index] !== null) {
+            const copySelectedColumn = [...selectedColumn]
+            copySelectedColumn[index] = null
+            setSelectedColumn(copySelectedColumn)
+        }
     }
 
     const changeAllOptions = (bloco, blockIndex, colIndex) => {

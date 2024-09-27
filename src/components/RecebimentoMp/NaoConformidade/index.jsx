@@ -21,6 +21,7 @@ import NewContent from './NewContent'
 import { Card, CardContent } from '@mui/material'
 import { fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
+import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
 
 const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const router = Router
@@ -408,6 +409,8 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         </Card>
 
                         <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
+
+                        {type === 'new' && <ButtonOpenForm />}
 
                         {type === 'edit' && (
                             <ModelBlocks

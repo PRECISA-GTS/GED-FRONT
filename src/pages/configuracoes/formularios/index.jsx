@@ -14,17 +14,19 @@ import { configColumns } from 'src/configs/defaultConfigs'
 import { Box, Grid, Typography } from '@mui/material'
 import CardList from 'src/components/Defaults/Cards/CardList'
 import CardListHorizontal from 'src/components/Defaults/Cards/CardListHorizontal'
+import { AuthContext } from 'src/context/AuthContext'
 
 const ListParametrosFormularios = () => {
     const [result, setResult] = useState(null)
     const router = useRouter()
     const currentLink = router.pathname
+    const { loggedUnity } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const { id, setId } = useContext(RouteContext)
 
     useEffect(() => {
         const getList = async () => {
-            await api.get(currentLink).then(response => {
+            await api.post(currentLink, { unidadeID: loggedUnity.unidadeID }).then(response => {
                 console.log('🚀 ~ response.data:', response.data)
                 setResult(response.data)
                 setTitle({

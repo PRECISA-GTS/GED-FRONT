@@ -19,6 +19,7 @@ import { canConfigForm } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 import { ca } from 'date-fns/locale'
+import ButtonOpenForm from '../Defaults/Buttons/ButtonOpenForm'
 
 const FormLimpeza = ({ id, modelID }) => {
     const router = Router
@@ -353,6 +354,8 @@ const FormLimpeza = ({ id, modelID }) => {
                     <div className='space-y-4'>
                         <HeaderModelDescription description={header.modelo.cabecalho} />
                         <Header form={form} data={header} disabled={header.status?.id >= 40} />
+
+                        {type === 'new' && <ButtonOpenForm />}
 
                         {type === 'edit' && (
                             <ModelBlocks
