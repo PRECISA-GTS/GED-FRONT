@@ -10,6 +10,7 @@ import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
 import DropDownFilter from './DropDownFilter'
+import CheckLabel from 'src/components/Form/CheckLabel'
 
 const QuickSearchToolbar = (props) => {
   const router = Router
@@ -61,7 +62,7 @@ const QuickSearchToolbar = (props) => {
               setSearchText(e.target.value)
             }}
             placeholder='Buscar…'
-            className='!w-[70vw] md:!w-[30vw] relative'
+            className='!w-[70vw] md:!w-[20vw] relative'
             autoComplete='off'
             variant='standard'
             InputProps={{
@@ -107,6 +108,17 @@ const QuickSearchToolbar = (props) => {
             </div>
           </Button>
         )}
+
+        {/* <CheckLabel
+          title='Todos'
+          name={`fields.tudao`}
+          value={false}
+          form={form}
+        /> */}
+
+        {/* <Button size='medium' variant='outlined'>Tudo</Button>
+        <Button size='medium' variant='contained'>Em aberto</Button> */}
+
       </Box>
 
       <ListHeader
