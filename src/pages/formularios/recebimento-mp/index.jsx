@@ -34,7 +34,7 @@ const RecebimentoMp = () => {
                 <CustomTabs tabs={tabs} defaultTab='recebimento-mp' />
             ) : (
                 <>
-                    {currentTab === 'recebimento' && <FormRecebimentoMp id={id} model={null} />}
+                    {currentTab === 'recebimento-mp' && <FormRecebimentoMp id={id} model={null} />}
                     {currentTab === 'nao-conformidade' && <NaoConformidade id={id} />}
                 </>
             )}
