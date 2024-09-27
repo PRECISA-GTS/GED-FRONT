@@ -112,7 +112,7 @@ const DefaultPalette = (mode, skin) => {
     },
     action: {
       active: `rgba(${mainColor}, 0.14)`,
-      hover: mode === 'light' ? '#f5f5f5' : '#1c2d3f',
+      hover: mode === 'light' ? '#f7f7f9' : '#1c2d3f',
       hoverOpacity: 0.05,
       selected: `rgba(${mainColor}, 0.08)`,
       disabled: `rgba(${mainColor}, 0.26)`,
