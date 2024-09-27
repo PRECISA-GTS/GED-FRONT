@@ -10,7 +10,9 @@ const Table = ({
     openModal,
     modalLog,
     btnNewModal,
-    handleNewModal
+    handleNewModal,
+    status,
+    setStatus
 }) => {
     return (
         <Card>
@@ -26,7 +28,10 @@ const Table = ({
                         openModal: openModal,
 
                         btnNewModal: btnNewModal,
-                        handleNewModal: handleNewModal
+                        handleNewModal: handleNewModal,
+
+                        status: status,
+                        setStatus: setStatus
                     }}
                 />
             </CardContent>

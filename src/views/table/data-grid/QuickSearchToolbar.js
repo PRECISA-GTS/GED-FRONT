@@ -11,6 +11,7 @@ import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
 import DropDownFilter from './DropDownFilter'
 import CheckLabel from 'src/components/Form/CheckLabel'
+import FixedFilters from './FixedFilters/Index'
 
 const QuickSearchToolbar = (props) => {
   const router = Router
@@ -59,6 +60,12 @@ const QuickSearchToolbar = (props) => {
             size='medium'
             value={searchText}
             onChange={(e) => {
+              if (props.buttonsHeader.status.type !== 'all') {
+                props.buttonsHeader.setStatus({
+                  ...props.buttonsHeader.status,
+                  type: 'all'
+                })
+              }
               setSearchText(e.target.value)
             }}
             placeholder='Buscar…'
@@ -109,15 +116,10 @@ const QuickSearchToolbar = (props) => {
           </Button>
         )}
 
-        {/* <CheckLabel
-          title='Todos'
-          name={`fields.tudao`}
-          value={false}
-          form={form}
-        /> */}
-
-        {/* <Button size='medium' variant='outlined'>Tudo</Button>
-        <Button size='medium' variant='contained'>Em aberto</Button> */}
+        <FixedFilters
+          status={props.buttonsHeader.status}
+          setStatus={props.buttonsHeader.setStatus}
+        />
 
       </Box>
 

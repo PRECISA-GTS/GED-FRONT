@@ -33,6 +33,10 @@ const Fornecedor = () => {
     const [responseConclusion, setResponseConclusion] = useState(null)
     const [isNotFactory, setIsNotFactory] = useState(false)
     const { isCpf, setIsCpf } = useContext(FornecedorContext)
+    const [status, setStatus] = useState({
+        module: 'fornecedor',
+        type: 'open'
+    })
 
     const {
         form,
@@ -52,12 +56,12 @@ const Fornecedor = () => {
     }
 
     const getList = async () => {
-        console.log('getList')
         try {
             const response = await api.post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
-                cnpj: user.cnpj ? user.cnpj : null
+                cnpj: user.cnpj ? user.cnpj : null,
+                status
             })
 
             if (!response.data) return
@@ -138,7 +142,7 @@ const Fornecedor = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />)
-    }, [id, router.query])
+    }, [id, router.query, status])
 
     const arrColumns =
         user.papelID == 1
@@ -237,6 +241,8 @@ const Fornecedor = () => {
                     columns={columns}
                     openModal={user.papelID == 1 ? openModal : null}
                     btnNew={user.papelID == 1 ? true : false}
+                    status={status}
+                    setStatus={setStatus}
                 />
             )}
 
