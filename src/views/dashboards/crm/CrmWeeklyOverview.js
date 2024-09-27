@@ -94,27 +94,9 @@ const CrmWeeklyOverview = ({ data }) => {
 
   const updatedSeries = [
     {
-      name: 'MP',
+      name: 'Recebimento de MP',
       type: 'column',
       data: last13MonthsData?.map((item) => item.mp),
-      // data: last13MonthsData.map((item) => ({
-      //     x: item.month,
-      //     y: item.mp,
-      //     fillColor: {
-      //         colors: [
-      //             {
-      //                 opacity: 1,
-      //             },
-      //             {
-      //                 opacity: 0.5,
-      //             },
-      //         ],
-      //     },
-
-
-
-      // })),
-
     },
     {
       name: 'Não Conformidade',

@@ -33,7 +33,7 @@ const CustomTabs = ({ tabs, defaultTab }) => {
                                     <tab.icon />
                                 </div>
                             )}
-                            <p className='text-[14px]'>{tab.title}</p>
+                            <p className={`text-[14px] ${value === tab.value ? 'text-[#4A8B57]' : ''} `}>{tab.title}</p>
                         </div>
                     </button>
                 ))}
