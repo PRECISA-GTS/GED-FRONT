@@ -55,6 +55,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
   };
 
   return (
+
     <>
       <DataGrid
         localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
@@ -77,7 +78,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
             rows: rows,
           }
         }}
-        className='min-h-[85vh]'
+      // className='min-h-[85vh]'
       />
       {/* Modal que abre com informações do log */}
       <DialogLog

@@ -15,8 +15,8 @@ const Table = ({
     setStatus
 }) => {
     return (
-        <Card>
-            <CardContent sx={{ pt: '0' }}>
+        <Card className='h-full'>
+            <CardContent sx={{ pt: '0', height: '100%' }}>
                 <TableFilter
                     rows={result}
                     columns={columns}
