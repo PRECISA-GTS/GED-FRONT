@@ -31,16 +31,6 @@ const CrmWeeklyOverview = ({ data }) => {
         columnWidth: '35%',
         endingShape: 'rounded',
         startingShape: 'rounded',
-        colors: {
-          ranges: [
-            {
-              to: 50,
-              from: 40,
-              color: hexToRGBA(theme.palette.primary.main, 1),
-            },
-
-          ],
-        },
       },
     },
     markers: {
@@ -57,7 +47,7 @@ const CrmWeeklyOverview = ({ data }) => {
     },
     legend: { show: false },
     dataLabels: { enabled: false },
-    colors: [hexToRGBA(theme.palette.customColors.trackBg, 1)],
+    colors: [hexToRGBA(theme.palette.primary.main, 1)], /* Cor da barra */
     grid: {
       strokeDashArray: 7,
       borderColor: theme.palette.divider,

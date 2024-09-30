@@ -237,25 +237,20 @@ const DialogFormConclusion = ({
                             </Button>
                         )}
                         {btnConfirm && canChange && (
-                            <BlobProvider document={<DocumentPdf />}>
-                                {({ blob, url, loading, error }) => (
-                                    <Button
-                                        variant='contained'
-                                        disabled={
-                                            !hasSectorPermission(values?.departamentos ?? []) ||
-                                            (info.status < 40 &&
-                                                ((listErrors && listErrors.status) ||
-                                                    (user.papelID == 1 && !result.status)))
-                                        }
-                                        color='primary'
-                                        onClick={() => {
-                                            conclusionForm(result, blob)
-                                        }}
-                                    >
-                                        Concluir
-                                    </Button>
-                                )}
-                            </BlobProvider>
+                            <Button
+                                variant='contained'
+                                disabled={
+                                    !hasSectorPermission(values?.departamentos ?? []) ||
+                                    (info.status < 40 &&
+                                        ((listErrors && listErrors.status) || (user.papelID == 1 && !result.status)))
+                                }
+                                color='primary'
+                                onClick={() => {
+                                    conclusionForm(result)
+                                }}
+                            >
+                                Concluir
+                            </Button>
                         )}
                     </div>
                 </DialogActions>

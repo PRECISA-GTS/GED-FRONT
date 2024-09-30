@@ -61,7 +61,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
     const [dataCopiedMyData, setDataCopiedMyData] = useState([])
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
     const [blobSaveReport, setBlobSaveReport] = useState(null) // Salva o blob do relatório que sera salvo no back
-    const { sendPdfToServer } = useFormContext()
     const { isLoading, startLoading, stopLoading } = useLoad()
 
     const [canEdit, setCanEdit] = useState({
@@ -532,10 +531,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         setCanApprove(tempCanApprove)
     }
 
-    const conclusionForm = async (values, blob) => {
-        if (loggedUnity.papelID === 1) {
-            sendPdfToServer(id, blob, 'fornecedor')
-        }
+    const conclusionForm = async values => {
         values['conclusion'] = true
         await form.handleSubmit(onSubmit)(values)
     }

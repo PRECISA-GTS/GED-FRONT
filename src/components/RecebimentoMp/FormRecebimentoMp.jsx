@@ -65,7 +65,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     const { setId } = useContext(RouteContext)
     const { isLoading, startLoading, stopLoading } = useLoad()
     const [openModalDeleted, setOpenModalDeleted] = useState(false)
-    const { setReportParameters, sendPdfToServer } = useFormContext()
+    const { setReportParameters } = useFormContext()
     const [newChange, setNewChange] = useState(false)
     const [openModalNew, setOpenModalNew] = useState(false)
     const [columnSelected, setColumnSelected] = useState(null)
