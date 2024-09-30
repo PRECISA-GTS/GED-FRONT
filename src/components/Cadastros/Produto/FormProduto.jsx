@@ -21,6 +21,7 @@ import useLoad from 'src/hooks/useLoad'
 import FormClassificacaoProduto from '../ClassificacaoProduto/FormClassificacaoProduto'
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import CheckLabel from 'src/components/Form/CheckLabel'
+import Analise from './Analise/Index'
 
 const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChange, manualUrl, outsideID }) => {
     const [open, setOpen] = useState(false)
@@ -50,7 +51,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
             usuarioID: user.usuarioID,
             removedItems
         }
-        console.log(values)
+        console.log('onSubmit: ', values)
 
         try {
             if (type === 'new') {
@@ -103,6 +104,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     ? `cadastros/produto/new/getData/${loggedUnity.unidadeID}`
                     : `${staticUrl}/getData/${id}/${loggedUnity.unidadeID}`
             await api.post(route).then(response => {
+                console.log('🚀 ~ getData:', response.data)
                 setData(response.data)
                 form.reset(response.data)
             })
@@ -218,10 +220,23 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     form={form}
                                     helpText='Este produto será listado nos formulários do POP2 de Limpeza e Higienização'
                                 />
+                                <CheckLabel
+                                    xs='12'
+                                    md='2'
+                                    title='Usa Laboratório'
+                                    name={`fields.usaLaboratorio`}
+                                    value={data.fields.usaLaboratorio}
+                                    form={form}
+                                    helpText='Habilita o uso do laboratório com a inserção de itens de análise'
+                                />
                             </Grid>
                         </CardContent>
                     </Card>
-                    <Card>
+
+                    {/* Análise */}
+                    <Analise form={form} data={data.analises} />
+
+                    {/* <Card>
                         <CardHeader title='Anexos' />
                         <CardContent>
                             <Grid container spacing={5}>
@@ -241,7 +256,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </form>
             )}
 
