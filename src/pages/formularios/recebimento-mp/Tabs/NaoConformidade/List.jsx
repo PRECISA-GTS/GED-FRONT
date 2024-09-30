@@ -21,6 +21,10 @@ const ListNaoConformidade = () => {
     const { setTitle } = useContext(ParametersContext)
     const { startFilter, setFilteredDataRecebimentoMP, filteredDataRecebimentoMP, setDataRecebimentoMP } = useFilter()
     const [openNew, setOpenNew] = useState(false)
+    const [status, setStatus] = useState({
+        module: 'recebimento-mp-nao-conformidade',
+        type: 'open'
+    })
 
     const form = useForm({ mode: 'onChange' })
 
@@ -29,7 +33,8 @@ const ListNaoConformidade = () => {
             .post(`/formularios/recebimento-mp/nao-conformidade/getList`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
-                usuarioID: user.usuarioID
+                usuarioID: user.usuarioID,
+                status
             })
             .then(response => {
                 setFilteredDataRecebimentoMP(response.data)
@@ -57,7 +62,7 @@ const ListNaoConformidade = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />, false)
-    }, [router.query])
+    }, [router.query, status])
 
     const arrColumns = [
         {
@@ -111,6 +116,8 @@ const ListNaoConformidade = () => {
                     btnNew={false}
                     btnNewModal={user.papelID === 1 ? true : false}
                     handleNewModal={() => setOpenNew(true)}
+                    status={status}
+                    setStatus={setStatus}
                 />
             )}
 

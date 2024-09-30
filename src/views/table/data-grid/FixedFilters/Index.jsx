@@ -9,7 +9,11 @@ const FixedFilters = ({ status, setStatus }) => {
 
     return (
         <div className='flex items-center gap-2'>
-            {(status.module === 'fornecedor' || status.module === 'recebimento-mp') && (
+            {(status.module === 'fornecedor' ||
+                status.module === 'recebimento-mp' ||
+                status.module === 'recebimento-mp-nao-conformidade' ||
+                status.module === 'limpeza' ||
+                status.module === 'limpeza-nao-conformidade') && (
                 <>
                     <Button
                         size='medium'

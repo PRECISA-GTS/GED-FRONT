@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { api } from 'src/configs/api'
 import Table from 'src/components/Defaults/Table'
 import { ParametersContext } from 'src/context/ParametersContext'
@@ -15,10 +15,19 @@ const ListLimpeza = () => {
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { startFilter, setFilteredDataRecebimentoMP, filteredDataRecebimentoMP, setDataRecebimentoMP } = useFilter()
+    const [status, setStatus] = useState({
+        module: 'limpeza',
+        type: 'open'
+    })
 
     const getList = async () => {
         await api
-            .get(`${currentLink}/getList/${loggedUnity.unidadeID}/${user.papelID}/${user.usuarioID}`)
+            .post(`${currentLink}/getList`, {
+                unidadeID: loggedUnity.unidadeID,
+                papelID: user.papelID,
+                usuarioID: user.usuarioID,
+                status
+            })
             .then(response => {
                 setFilteredDataRecebimentoMP(response.data)
                 setDataRecebimentoMP(response.data)
@@ -37,7 +46,7 @@ const ListLimpeza = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />, false)
-    }, [router.query])
+    }, [router.query, status])
 
     const arrColumns = [
         {
@@ -92,7 +101,13 @@ const ListLimpeza = () => {
             {!filteredDataRecebimentoMP ? (
                 <Loading show />
             ) : (
-                <Table key={filteredDataRecebimentoMP} result={filteredDataRecebimentoMP} columns={columns} />
+                <Table
+                    key={filteredDataRecebimentoMP}
+                    result={filteredDataRecebimentoMP}
+                    columns={columns}
+                    status={status}
+                    setStatus={setStatus}
+                />
             )}
         </>
     )

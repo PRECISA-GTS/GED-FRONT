@@ -10,7 +10,6 @@ import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
 import DropDownFilter from './DropDownFilter'
-import CheckLabel from 'src/components/Form/CheckLabel'
 import FixedFilters from './FixedFilters/Index'
 
 const QuickSearchToolbar = (props) => {
@@ -60,12 +59,6 @@ const QuickSearchToolbar = (props) => {
             size='medium'
             value={searchText}
             onChange={(e) => {
-              if (props.buttonsHeader.status.type !== 'all') {
-                props.buttonsHeader.setStatus({
-                  ...props.buttonsHeader.status,
-                  type: 'all'
-                })
-              }
               setSearchText(e.target.value)
             }}
             placeholder='Buscar…'
