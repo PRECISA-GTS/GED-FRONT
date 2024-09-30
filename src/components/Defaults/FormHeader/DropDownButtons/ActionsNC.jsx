@@ -2,21 +2,13 @@ import { Button, Menu, MenuItem } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import DialogActs from '../../Dialogs/DialogActs'
 import { useContext, useState } from 'react'
-import { api_url } from 'src/configs/api'
 
 const ActionsNC = ({ anchorEl, open, handleClose, handleClick, actionsData }) => {
     const [openModal, setOpenModal] = useState(false)
     const [item, setItem] = useState(null)
 
     const handleOpenReport = item => {
-        if (item.status >= 50) {
-            //? Já concluído, abre PDF já salvo no servidor
-            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-${item.module}.pdf`
-            window.open(url, '_blank')
-        } else {
-            //? Não concluído, gera o relatório
-            window.open(`/relatorio/${item.route}`, '_blank')
-        }
+        window.open(`/relatorio/${item.route}`, '_blank')
     }
 
     return (

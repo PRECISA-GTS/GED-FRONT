@@ -10,11 +10,13 @@ const Table = ({
     openModal,
     modalLog,
     btnNewModal,
-    handleNewModal
+    handleNewModal,
+    status,
+    setStatus
 }) => {
     return (
-        <Card>
-            <CardContent sx={{ pt: '0' }}>
+        <Card className='h-full'>
+            <CardContent sx={{ pt: '0', height: '100%' }}>
                 <TableFilter
                     rows={result}
                     columns={columns}
@@ -26,7 +28,10 @@ const Table = ({
                         openModal: openModal,
 
                         btnNewModal: btnNewModal,
-                        handleNewModal: handleNewModal
+                        handleNewModal: handleNewModal,
+
+                        status: status,
+                        setStatus: setStatus
                     }}
                 />
             </CardContent>

@@ -69,7 +69,7 @@ const EventsPerDay = ({ eventDate }) => {
                         className={`flex justify-between py-6 px-5 rounded-lg border ${
                             theme.palette.mode === 'dark'
                                 ? 'border-[#2f363f] hover:bg-[#2f363f]'
-                                : 'border-[##F5F5F5] hover:bg-[#F5F5F5]'
+                                : 'border-[#F5F5F5] hover:bg-[#F5F5F5]'
                         }  ${event.origemID > 0 ? 'cursor-pointer' : ''}`}
                         onClick={() => handleClick(event)}
                     >

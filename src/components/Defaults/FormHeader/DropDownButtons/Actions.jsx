@@ -9,14 +9,7 @@ const Actions = ({ anchorEl, open, handleClose, handleClick, actionsData, action
     const [item, setItem] = useState(null)
 
     const handleOpenReport = item => {
-        if (item.status >= 50) {
-            //? Já concluído, abre PDF já salvo no servidor
-            const url = `${api_url}uploads/${item.unidadeID}/${item.module}/relatorio/original/${item.usuarioID}-${item.id}-${item.module}.pdf`
-            window.open(url, '_blank')
-        } else {
-            //? Não concluído, gera o relatório
-            window.open(`/relatorio/${item.route}`, '_blank')
-        }
+        window.open(`/relatorio/${item.route}`, '_blank')
     }
 
     //? Tem NC vinculada ao formulário, não pode realizar ação

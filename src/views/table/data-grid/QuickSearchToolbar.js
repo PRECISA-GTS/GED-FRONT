@@ -5,11 +5,12 @@ import ListHeader from 'src/components/Defaults/ListHeader'
 import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import Router from 'next/router'
-import { Button } from '@mui/material'
+import { Button, Input } from '@mui/material'
 import { backRoute } from 'src/configs/defaultConfigs'
 import Icon from 'src/@core/components/icon'
 import { useFilter } from 'src/context/FilterContext'
 import DropDownFilter from './DropDownFilter'
+import FixedFilters from './FixedFilters/Index'
 
 const QuickSearchToolbar = (props) => {
   const router = Router
@@ -61,7 +62,7 @@ const QuickSearchToolbar = (props) => {
               setSearchText(e.target.value)
             }}
             placeholder='Buscar…'
-            className='!w-[70vw] md:!w-[30vw] relative'
+            className='!w-[70vw] md:!w-[20vw] relative'
             autoComplete='off'
             variant='standard'
             InputProps={{
@@ -88,6 +89,10 @@ const QuickSearchToolbar = (props) => {
                 xs: 1,
                 sm: 'auto'
               },
+              "& .MuiInput-underline:after": {
+                borderBottom: "none", // Remove a borda inferior após o foco
+                transition: "none", // Remove a animação
+              },
               '& .MuiInputBase-root > svg': {
                 mr: 2
               }
@@ -103,6 +108,12 @@ const QuickSearchToolbar = (props) => {
             </div>
           </Button>
         )}
+
+        <FixedFilters
+          status={props.buttonsHeader.status}
+          setStatus={props.buttonsHeader.setStatus}
+        />
+
       </Box>
 
       <ListHeader

@@ -85,7 +85,7 @@ const VerticalLayout = props => {
           />
         )}
         <MainContentWrapper
-          className={`layout-content-wrapper pt-0 ${settings.mode == 'dark' ? 'bg-[#161c24]' : 'bg-[#f5f5f5]'}`}
+          className={`layout-content-wrapper pt-0 ${settings.mode == 'dark' ? 'bg-[#161c24]' : 'bg-[#f7f7f9]'}`}
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
           <AppBar

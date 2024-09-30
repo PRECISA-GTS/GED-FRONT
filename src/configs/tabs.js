@@ -1,6 +1,6 @@
-const getTabFromURL = (defaultTab, router) => {
-  return router?.query.aba || defaultTab
-}
+// const getTabFromURL = (defaultTab, router) => {
+//   return router?.query.aba || defaultTab
+// }
 
 const tabChange = (value, router) => {
   router.push(
@@ -13,4 +13,4 @@ const tabChange = (value, router) => {
   )
 }
 
-export { getTabFromURL, tabChange }
+export { tabChange }
