@@ -69,7 +69,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
         }}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         sx={{
-          '& .MuiDataGrid-cell': { cursor: 'pointer', overflow: 'scroll' }
+          '& .MuiDataGrid-cell': { cursor: 'pointer', overflow: 'scroll' },
         }}
         componentsProps={{
           toolbar: {
