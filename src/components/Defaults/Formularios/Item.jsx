@@ -48,7 +48,7 @@ const Item = ({
             />
 
             {/* Descrição do item */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
                 <Typography
                     variant='subtitle1'
                     sx={{
@@ -65,8 +65,8 @@ const Item = ({
                 </Typography>
             </Grid>
 
-            <Grid item xs={12} md={6}>
-                <Grid container spacing={2}>
+            <Grid item xs={12} md={7}>
+                <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
                     {/* Tipo de alternativa  */}
                     <input
                         type='hidden'
@@ -80,7 +80,7 @@ const Item = ({
                         <RadioLabel
                             key={`${index}-${indexItem}`}
                             xs={12}
-                            md={12}
+                            md={6}
                             blockIndex={index}
                             index={indexItem}
                             defaultValue={item?.resposta?.id}
@@ -102,14 +102,15 @@ const Item = ({
                     {item && item.alternativas && item.alternativas.length <= 1 && item.alternativa == 'Data' && (
                         <DateField
                             xs={12}
-                            md={12}
+                            md={6}
                             title='Data da avaliação'
                             disabled={disabled}
                             value={item.resposta}
                             type={null}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
                             form={form}
-                            className='mt-2 mb-4'
+                            multiline
+                            // className='py-2'
                         />
                     )}
 
@@ -137,7 +138,7 @@ const Item = ({
                             (item.alternativa == 'Data' && item?.alternativas[0]?.observacao == 1)) && (
                             <Input
                                 xs={12}
-                                md={12}
+                                md={6}
                                 title='Observação'
                                 name={`blocos[${index}].itens[${indexItem}].observacao`}
                                 value={item?.observacao}

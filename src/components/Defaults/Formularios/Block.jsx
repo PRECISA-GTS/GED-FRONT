@@ -125,7 +125,7 @@ const Block = ({
                     <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
                         <InfoDepartamentos data={bloco?.departamentos ?? []} />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={5}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>
                             Itens
                         </Typography>
@@ -133,39 +133,41 @@ const Block = ({
 
                     {/* Marcar todos se houver +1 item com checkbox para selecionar */}
                     {getTotalCheckItems(bloco) > 1 && (
-                        <Grid item xs={12} md={6}>
-                            <RadioGroup
-                                row
-                                value={selectedColumn[index]} // Vincula o valor selecionado aqui
-                            >
-                                {[...Array(getTotalColumns(bloco))].map((item, indexCol) => (
-                                    <Grid item xs={12} md={3} key={indexCol}>
-                                        <FormControlLabel
-                                            value={indexCol}
-                                            control={
-                                                <Radio
-                                                    disabled={!blockPermission}
-                                                    error={form?.formState?.errors ? true : false}
-                                                />
-                                            }
-                                            onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
-                                            label='Todos'
-                                            fullWidth
-                                            sx={{
-                                                '& .MuiFormControlLabel-label': {
-                                                    color: 'text.secondary',
-                                                    fontWeight: 600
-                                                },
-                                                '&:hover': {
-                                                    '& .MuiFormControlLabel-label': {
-                                                        color: 'primary.main'
-                                                    }
+                        <Grid item xs={12} md={7}>
+                            <Grid item xs={12} md={6}>
+                                <RadioGroup
+                                    row
+                                    value={selectedColumn[index]} // Vincula o valor selecionado aqui
+                                >
+                                    {[...Array(getTotalColumns(bloco))].map((item, indexCol) => (
+                                        <Grid item xs={12} md={4} key={indexCol}>
+                                            <FormControlLabel
+                                                value={indexCol}
+                                                control={
+                                                    <Radio
+                                                        disabled={!blockPermission}
+                                                        error={form?.formState?.errors ? true : false}
+                                                    />
                                                 }
-                                            }}
-                                        />
-                                    </Grid>
-                                ))}
-                            </RadioGroup>
+                                                onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
+                                                label='Todos'
+                                                fullWidth
+                                                sx={{
+                                                    '& .MuiFormControlLabel-label': {
+                                                        color: 'text.secondary',
+                                                        fontWeight: 600
+                                                    },
+                                                    '&:hover': {
+                                                        '& .MuiFormControlLabel-label': {
+                                                            color: 'primary.main'
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </Grid>
+                                    ))}
+                                </RadioGroup>
+                            </Grid>
                         </Grid>
                     )}
 
