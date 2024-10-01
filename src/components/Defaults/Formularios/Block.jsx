@@ -1,4 +1,4 @@
-import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
+import { Card, CardContent, Divider, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import Item from './Item'
 import InfoDepartamentos from './InfoDepartamentos'
@@ -172,17 +172,24 @@ const Block = ({
                     )}
 
                     {bloco.itens.map((item, indexItem) => (
-                        <Item
-                            form={form}
-                            blockKey={blockKey}
-                            index={index}
-                            indexItem={indexItem}
-                            item={item}
-                            disabled={!blockPermission}
-                            updateResponse={updateResponse}
-                            handleFileSelect={handleFileSelect}
-                            handleRemoveAnexoItem={handleRemoveAnexoItem}
-                        />
+                        <>
+                            <Item
+                                form={form}
+                                blockKey={blockKey}
+                                index={index}
+                                indexItem={indexItem}
+                                item={item}
+                                disabled={!blockPermission}
+                                updateResponse={updateResponse}
+                                handleFileSelect={handleFileSelect}
+                                handleRemoveAnexoItem={handleRemoveAnexoItem}
+                            />
+                            {/* <Grid container>
+                                <Grid item xs={12} md={12}>
+                                    <Divider sx={{ py: 6 }} />
+                                </Grid>
+                            </Grid> */}
+                        </>
                     ))}
                 </Grid>
             </CardContent>

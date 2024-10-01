@@ -5,6 +5,7 @@ import IconAttach from '../IconAttach'
 import Remove from 'src/components/Form/Remove'
 import LoadingFile from 'src/components/LoadingFile'
 import HelpText from 'src/components/Defaults/HelpText'
+import { limitString } from 'src/configs/functions'
 
 const AnexoList = ({
     key,
@@ -26,43 +27,47 @@ const AnexoList = ({
     if (!item) return null
 
     return (
-        <Grid item xs={12} md={12}>
-            <div
-                className={`border px-4 py-2 rounded-lg flex flex-col relative z-10 ${
-                    item && item.anexo == 1 && item.obrigatorio == 1 && item.anexos?.length == 0 ? 'border-red-500' : ''
-                }`}
-            >
-                <div className=''>
-                    <p className='font-medium text-sm '>{item.nome}</p>
-                </div>
+        <div>
+            <div className='flex items-center gap-1'>
+                <Icon icon='fluent:attach-32-filled' fontSize={20} />
+                <p className='font-medium text-sm'>{item.nome}</p>
+            </div>
 
+            <Grid container spacing={4} sx={{ pt: 2 }}>
                 {/* Área de adicionar arquivos (pontilhado) */}
-                <div
-                    className={`rounded-lg border-2 p-3 cursor-pointer border-dashed hover:border-[#4A8B57] transition-colors ${
-                        modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
-                    }`}
-                    onClick={() => (!disabled ? handleFileClick(item) : null)}
-                >
-                    <div className='flex flex-col gap-2'>
-                        <div className='flex items-center gap-2'>
-                            <IconCloudUpload className='w-8 h-8 fill-current' />
+                <Grid item xs={12} md={3}>
+                    <div
+                        className={`rounded-xl px-3 py-4 cursor-pointer ${
+                            modeTheme === 'dark'
+                                ? ' bg-[#303A46] hover:bg-[#384350] transition-all'
+                                : 'bg-[#EBEBEB] hover:bg-[#dad9d9] transition-all'
+                        } ${
+                            item && item.anexo == 1 && item.obrigatorio == 1 && item.anexos?.length == 0
+                                ? 'border border-red-500'
+                                : ''
+                        }`}
+                        onClick={() => (!disabled ? handleFileClick(item) : null)}
+                    >
+                        <div className='flex flex-col gap-2'>
+                            <div className='flex items-center gap-1'>
+                                <Icon icon='ic:outline-plus' fontSize={30} />
 
-                            <div className='flex items-center gap-2'>
-                                <h6 className='text-sm font-semibold opacity-80'>Adicione um ou mais arquivos</h6>
-                                {item.descricao && <HelpText text={item.descricao} />}
+                                <div className='flex items-center gap-2'>
+                                    <h6 className='text-sm font-semibold opacity-80'>Adicione um ou mais arquivos</h6>
+                                    {item.descricao && <HelpText text={item.descricao} />}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </Grid>
 
-                {/* Listagem dos anexos inseridos */}
-                <div className='flex flex-col'>
-                    {item &&
-                        item?.anexos?.length > 0 &&
-                        item.anexos.map((anexo, index) => (
+                {item &&
+                    item?.anexos?.length > 0 &&
+                    item.anexos.map((anexo, index) => (
+                        <Grid item xs={12} md={3}>
                             <div
-                                className={`flex items-center justify-between gap-2 border rounded-lg p-3 hover:border-[#4A8B57] transition-colors ${
-                                    modeTheme === 'dark' ? ' border-[#212b36]' : 'rgba(76, 78, 100, 0.12)'
+                                className={`flex items-center justify-between gap-2 px-3 py-4 rounded-xl ${
+                                    modeTheme === 'dark' ? ' bg-[#303A46]' : 'bg-[#EBEBEB]'
                                 }`}
                             >
                                 {/* Bloco esquerda */}
@@ -73,56 +78,40 @@ const AnexoList = ({
                                     }}
                                 >
                                     <IconAttach data={anexo} />
-                                    <p className='text-sm font-semibold opacity-80'>{anexo.nome}</p>
-                                    <p className='text-sm opacity-80'>
-                                        <span className='text-xs opacity-50'>{`(${(anexo.size / 1024 / 1024).toFixed(
-                                            2
-                                        )}MB)`}</span>
-                                    </p>
-                                    <p className='text-xs opacity-50 pt-1'>
-                                        {'Enviado em: ' +
-                                            new Date(anexo.time).toLocaleString('pt-BR', {
-                                                day: '2-digit',
-                                                month: '2-digit',
-                                                year: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            })}
-                                    </p>
+                                    <p className='text-sm font-semibold opacity-80'>{limitString(anexo.nome, 35)}</p>
                                 </div>
                                 {/* Bloco direita (remover) */}
-                                <div className=''>
-                                    <Remove
-                                        xs={12}
-                                        md={1}
-                                        icon='ep:close'
-                                        color='secondary'
-                                        title={''}
-                                        index={index}
-                                        removeItem={() => handleRemove(anexo)}
-                                        item={anexo}
-                                        pending={!anexo?.exist || disabled}
-                                        textSuccess='Remover este anexo'
-                                        textError={
-                                            disabled
-                                                ? 'Você não ter permissões para remover este anexo'
-                                                : 'Este anexo não pode mais ser removido pois o formulário já foi concluído!'
-                                        }
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                </div>
 
-                <input
-                    type='file'
-                    multiple
-                    ref={inputRef}
-                    style={{ display: 'none' }}
-                    onChange={e => handleFileSelect(e, selectedItem)}
-                />
-            </div>
-        </Grid>
+                                <Remove
+                                    xs={12}
+                                    md={1}
+                                    icon='ep:close'
+                                    color='secondary'
+                                    title={''}
+                                    index={index}
+                                    removeItem={() => handleRemove(anexo)}
+                                    item={anexo}
+                                    pending={!anexo?.exist || disabled}
+                                    textSuccess='Remover este anexo'
+                                    textError={
+                                        disabled
+                                            ? 'Você não ter permissões para remover este anexo'
+                                            : 'Este anexo não pode mais ser removido pois o formulário já foi concluído!'
+                                    }
+                                />
+                            </div>
+                        </Grid>
+                    ))}
+            </Grid>
+
+            <input
+                type='file'
+                multiple
+                ref={inputRef}
+                style={{ display: 'none' }}
+                onChange={e => handleFileSelect(e, selectedItem)}
+            />
+        </div>
     )
 }
 
