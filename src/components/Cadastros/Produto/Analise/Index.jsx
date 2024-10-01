@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Grid, IconButton } from '@mui/material'
+import { Button, Card, CardContent, Grid, IconButton, Tooltip } from '@mui/material'
 import Check from 'src/components/Form/Check'
 import Input from 'src/components/Form/Input'
 import Icon from 'src/@core/components/icon'
@@ -15,6 +15,10 @@ const Analise = ({ form, data }) => {
         minimo: form.watch(`fields.analises[${index}].minimo`),
         maximo: form.watch(`fields.analises[${index}].maximo`)
     })
+
+    const handleStatus = index => {
+        form.setValue(`fields.analises[${index}].status`, form.watch(`fields.analises[${index}].status`) === 1 ? 0 : 1)
+    }
 
     return (
         form.watch('fields.usaLaboratorio') && (
@@ -34,7 +38,6 @@ const Analise = ({ form, data }) => {
 
                         {fields.map((item, index) => {
                             const { minimo, maximo } = watchFields(index)
-                            console.log('🚀 ~ minimo, maximo:', minimo, maximo)
 
                             return (
                                 <Fragment key={item.id}>
@@ -47,6 +50,7 @@ const Analise = ({ form, data }) => {
                                         name={`fields.analises[${index}].nome`}
                                         required
                                         form={form}
+                                        opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
                                     />
                                     <Input
                                         xs={12}
@@ -56,6 +60,7 @@ const Analise = ({ form, data }) => {
                                         required
                                         form={form}
                                         helpText='%, UI/g'
+                                        opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
                                     />
                                     <Input
                                         xs={12}
@@ -65,12 +70,11 @@ const Analise = ({ form, data }) => {
                                         required={!form.watch(`fields.analises[${index}].maximo`) ? true : false}
                                         form={form}
                                         errorText={
-                                            minimo &&
-                                            maximo &&
                                             parseFloat(form.watch(`fields.analises[${index}].minimo`)) >=
                                                 parseFloat(form.watch(`fields.analises[${index}].maximo`)) &&
                                             'O mínimo deve ser menor que o máximo'
                                         }
+                                        opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
                                     />
                                     <Input
                                         xs={12}
@@ -80,12 +84,11 @@ const Analise = ({ form, data }) => {
                                         required={!form.watch(`fields.analises[${index}].minimo`) ? true : false}
                                         form={form}
                                         errorText={
-                                            minimo &&
-                                            maximo &&
                                             parseFloat(form.watch(`fields.analises[${index}].minimo`)) >=
                                                 parseFloat(form.watch(`fields.analises[${index}].maximo`)) &&
                                             'O máximo deve ser maior que o mínimo'
                                         }
+                                        opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
                                     />
                                     <Input
                                         xs={12}
@@ -93,20 +96,41 @@ const Analise = ({ form, data }) => {
                                         title='Ajuda/Dica/Método'
                                         name={`fields.analises[${index}].ajuda`}
                                         form={form}
+                                        opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
                                     />
 
                                     <Grid item xs={12} md={1} className='flex items-center'>
-                                        <IconButton color='error' size='small' title='Inativar'>
-                                            <Icon icon='heroicons-outline:ban' />
-                                        </IconButton>
-                                        <IconButton
-                                            color='error'
-                                            size='small'
-                                            onClick={() => remove(index)}
-                                            title='Remover'
+                                        <Tooltip
+                                            title={
+                                                form.getValues(`fields.analises[${index}].status`) === 1
+                                                    ? 'Desativar item'
+                                                    : 'Ativar item'
+                                            }
+                                            placement='top'
                                         >
-                                            <Icon icon={'tabler:trash-filled'} />
-                                        </IconButton>
+                                            <IconButton
+                                                color={
+                                                    form.getValues(`fields.analises[${index}].status`) === 1
+                                                        ? 'error'
+                                                        : 'primary'
+                                                }
+                                                size='small'
+                                                onClick={() => handleStatus(index)}
+                                            >
+                                                <Icon
+                                                    icon={
+                                                        form.getValues(`fields.analises[${index}].status`) === 1
+                                                            ? 'heroicons-outline:ban'
+                                                            : 'tabler:check'
+                                                    }
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title='Remover item' placement='top'>
+                                            <IconButton color='error' size='small' onClick={() => remove(index)}>
+                                                <Icon icon={'tabler:trash-filled'} />
+                                            </IconButton>
+                                        </Tooltip>
                                     </Grid>
                                 </Fragment>
                             )
