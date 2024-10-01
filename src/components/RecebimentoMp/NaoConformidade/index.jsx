@@ -214,11 +214,10 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         return canConfig
     }
 
-    const handleNew = () => {
+    const handleNew = values => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
-        const values = form.getValues('new')
         setRecebimentoMpID(header.recebimento.id)
-        setModelID(values.modelo.id)
+        setModelID(values.new.modelo.id)
         router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
     }
 
@@ -471,6 +470,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         size='lg'
                         setOpenModal={setOpenNew}
                         openModal={openNew}
+                        form={form}
                     >
                         <NewContent type='form' data={header} form={form} />
                     </DialogActs>

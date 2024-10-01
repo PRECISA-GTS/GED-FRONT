@@ -12,6 +12,8 @@ import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from 'src/components/RecebimentoMp/NaoConformidade/NewContent'
 import { useForm } from 'react-hook-form'
 import { RouteContext } from 'src/context/RouteContext'
+import Input from 'src/components/Form/Input'
+import Select from 'src/components/Form/Select'
 
 const ListNaoConformidade = () => {
     const { user, loggedUnity } = useContext(AuthContext)
@@ -51,11 +53,10 @@ const ListNaoConformidade = () => {
             })
     }
 
-    const handleNew = () => {
+    const handleNew = values => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
-        const values = form.getValues('new')
-        setRecebimentoMpID(values.recebimento.id)
-        setModelID(values.modelo.id)
+        setRecebimentoMpID(values.new.recebimento.id)
+        setModelID(values.new.modelo.id)
         router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
     }
 
@@ -128,6 +129,7 @@ const ListNaoConformidade = () => {
                 size='lg'
                 setOpenModal={setOpenNew}
                 openModal={openNew}
+                form={form}
             >
                 <NewContent form={form} type='list' data={null} />
             </DialogActs>

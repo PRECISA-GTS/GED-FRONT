@@ -255,6 +255,7 @@ const Fornecedor = () => {
                 size='lg'
                 fullHeight
                 clone
+                form={form}
             >
                 <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>
@@ -266,6 +267,7 @@ const Fornecedor = () => {
                 handleCopyLink={copyLink}
                 setOpenModal={setOpenModalConclusion}
                 openModal={openModalConclusion}
+                form={form}
             >
                 <div>
                     <FormFornecedorConclusion values={responseConclusion} />

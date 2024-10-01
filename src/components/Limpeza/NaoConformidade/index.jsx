@@ -187,11 +187,10 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         router.push(`/configuracoes/formularios/limpeza-naoconformidade/`)
     }
 
-    const handleNew = () => {
+    const handleNew = values => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
-        const values = form.getValues('new')
         setLimpezaID(header.limpeza.id)
-        setModelID(values.modelo.id)
+        setModelID(values.new.modelo.id)
         router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
     }
 
@@ -439,6 +438,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         size='lg'
                         setOpenModal={setOpenNew}
                         openModal={openNew}
+                        form={form}
                     >
                         <NewContent type='form' data={header} form={form} />
                     </DialogActs>

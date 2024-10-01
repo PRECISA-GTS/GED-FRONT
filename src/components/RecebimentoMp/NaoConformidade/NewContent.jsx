@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import Select from 'src/components/Form/Select'
+import Input from 'src/components/Form/Input'
 
 const NewContent = ({ form, type, data }) => {
     const { loggedUnity } = useContext(AuthContext)
@@ -41,6 +42,7 @@ const NewContent = ({ form, type, data }) => {
     return (
         <div className='flex flex-col gap-8'>
             {type === 'form' && <RecebimentoMpInfo data={data} />}
+
             <Grid container spacing={4}>
                 {type === 'list' && (
                     <Select
@@ -51,6 +53,7 @@ const NewContent = ({ form, type, data }) => {
                         options={recebimentos ?? []}
                         helpText='Selecione o Recebimento de MP para lançar uma nova não conformidade'
                         form={form}
+                        required
                     />
                 )}
                 {models && (
@@ -65,6 +68,7 @@ const NewContent = ({ form, type, data }) => {
                         }
                         helpText='Selecione um modelo de formulário para o preenchimento desta não conformidade para este Recebimento de MP'
                         form={form}
+                        required
                     />
                 )}
             </Grid>

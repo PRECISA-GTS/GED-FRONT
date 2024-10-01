@@ -76,8 +76,20 @@ const Select = ({
         }
     }
 
+    const validateRequired = () => {
+        if (required && !getValues(name)) {
+            setError(name, {
+                type: 'required',
+                message: `${title} é obrigatório`
+            })
+        } else {
+            clearErrors(name)
+        }
+    }
+
     useEffect(() => {
         onlyOneOption()
+        validateRequired()
     }, [])
 
     return (
