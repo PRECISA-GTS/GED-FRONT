@@ -6,19 +6,22 @@ import {
     DialogActions,
     FormControl,
     TextField,
-    DialogContentText
+    DialogContentText,
+    Alert
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
 const DialogSelectUnit = ({ handleClose, openModal, handleSubmit, unidades, setSelectedUnit }) => {
     return (
         <>
-            <Dialog open={openModal} onClose={handleClose} aria-labelledby='form-dialog-title'>
-                <DialogTitle id='form-dialog-title'>Selecione a Unidade</DialogTitle>
+            <Dialog open={openModal} onClose={handleClose} aria-labelledby='form-dialog-title' fullWidth>
+                <DialogTitle id='form-dialog-title' sx={{ pb: 2 }}>
+                    Selecione a Unidade
+                </DialogTitle>
                 <DialogContent>
-                    <DialogContentText sx={{ mb: 3 }}>
-                        Selecione uma unidade e clique em Confirmar para continuar.
-                    </DialogContentText>
+                    <Alert severity='info' sx={{ mb: 8 }}>
+                        Selecione uma unidade para fazer o login no sistema
+                    </Alert>
                     <FormControl fullWidth>
                         <Autocomplete
                             options={unidades}
