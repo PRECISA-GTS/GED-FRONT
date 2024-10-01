@@ -42,7 +42,7 @@ const DropDownFilter = () => {
     return (
         <>
             <IconButton
-                className={` ${names.length > 0 ? 'block order-2' : 'invisible'}`}
+                className={`${names.length > 0 ? 'order-2' : 'order-1'}`}
                 size='medium'
                 color='secondary'
                 title='Clear'
