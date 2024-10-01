@@ -19,6 +19,7 @@ import { AuthContext } from 'src/context/AuthContext'
 import ListOptions from './ListOptions'
 import useLoad from 'src/hooks/useLoad'
 import ModelsWithItem from './ModelsWithItem'
+import ListOptionsAnexo from './ListOptionsAnexo'
 
 const FormItem = ({
     id,
@@ -142,7 +143,7 @@ const FormItem = ({
                     type: formType
                 })
                 .then(response => {
-                    console.log('🚀 ~ formType response.data:', response.data)
+                    console.log('🚀 ~ getData:', response.data)
                     setData(response.data)
                     console.log('🚀 ~ getData:', response.data)
                     form.reset(response.data) //* Insere os dados no formulário
@@ -274,7 +275,7 @@ const FormItem = ({
                                         md={12}
                                         multiline
                                         rows={3}
-                                        title='Ajuda do item (mostrado em (?))'
+                                        title='Ajuda do item (mostrado em [?])'
                                         name='fields.ajuda'
                                         form={form}
                                     />
@@ -283,6 +284,16 @@ const FormItem = ({
                             </CardContent>
                         </Card>
                     </form>
+
+                    {/* TEMP */}
+                    {/* <ListOptionsAnexo
+                        key={change}
+                        index={0}
+                        indexAnexo={0}
+                        data={{ obrigatorio: false }}
+                        handleRemoveAnexo={handleRemoveAnexo}
+                        form={form}
+                    /> */}
 
                     <ListOptions
                         key={change}

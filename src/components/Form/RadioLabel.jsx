@@ -8,7 +8,7 @@ import Icon from 'src/@core/components/icon'
 
 const RadioLabel = ({ form, xs, md, values, defaultValue, name, disabled, handleChange, blockForm }) => {
     return (
-        <Grid item xs={xs} md={md}>
+        <Grid item xs={xs} md={md} sx={{ backgroundColor: 'red' }}>
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>
                 {values &&
                     values.map((item, indexCol) => (

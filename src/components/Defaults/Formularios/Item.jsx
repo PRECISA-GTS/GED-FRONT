@@ -17,6 +17,7 @@ const Item = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
+    console.log('🚀 ~ item:', item)
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)
@@ -98,10 +99,10 @@ const Item = ({
                     )}
 
                     {/* Data */}
-                    {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Data' && (
+                    {item && item.alternativas && item.alternativas.length <= 1 && item.alternativa == 'Data' && (
                         <DateField
                             xs={12}
-                            md={6}
+                            md={12}
                             title='Data da avaliação'
                             disabled={disabled}
                             value={item.resposta}
@@ -115,11 +116,11 @@ const Item = ({
                     {/* Dissertativa */}
                     {item &&
                         item.alternativas &&
-                        item.alternativas.length == 0 &&
+                        item.alternativas.length <= 1 &&
                         item.alternativa == 'Dissertativa' && (
                             <Input
                                 xs={12}
-                                md={6}
+                                md={12}
                                 title='Descreva a resposta'
                                 name={`blocos[${index}].itens[${indexItem}].resposta`}
                                 value={item.resposta}
@@ -131,23 +132,25 @@ const Item = ({
                         )}
 
                     {/* Obs */}
-                    {item && item?.resposta?.observacao == 1 && (
-                        <Input
-                            xs={12}
-                            md={12}
-                            title='Observação'
-                            name={`blocos[${index}].itens[${indexItem}].observacao`}
-                            value={item?.observacao}
-                            multiline
-                            disabled={disabled}
-                            form={form}
-                        />
-                    )}
+                    {item &&
+                        (item?.resposta?.observacao == 1 ||
+                            (item.alternativa == 'Data' && item?.alternativas[0]?.observacao == 1)) && (
+                            <Input
+                                xs={12}
+                                md={12}
+                                title='Observação'
+                                name={`blocos[${index}].itens[${indexItem}].observacao`}
+                                value={item?.observacao}
+                                multiline
+                                disabled={disabled}
+                                form={form}
+                            />
+                        )}
                 </Grid>
             </Grid>
 
             {/* Texto longo (linha inteira) */}
-            {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Dissertativa longa' && (
+            {item && item.alternativas && item.alternativas.length <= 1 && item.alternativa == 'Dissertativa longa' && (
                 <FormControl fullWidth>
                     <Input
                         xs={12}
@@ -164,7 +167,40 @@ const Item = ({
                 </FormControl>
             )}
 
-            {/* Configs da resposta (se houver) */}
+            {/* Perguntas dissertativas (solicita anexos antes de descrever a resposta) */}
+            {item &&
+                (item?.alternativaID == 5 || item?.alternativaID == 6 || item?.alternativaID == 7) &&
+                item?.alternativas &&
+                item?.alternativas[0]?.anexosSolicitados?.length > 0 &&
+                item?.alternativas[0]?.anexosSolicitados.map((anexo, indexAnexo) => (
+                    <Grid item xs={12} md={12} sx={{ mb: 5 }}>
+                        <AnexoListMultiple
+                            modeTheme={modeTheme}
+                            key={anexo}
+                            handleFileClick={() =>
+                                handleFileClick({
+                                    ...anexo,
+                                    itemOpcaoAnexoID: anexo.itemOpcaoAnexoID
+                                })
+                            }
+                            selectedItem={selectedItem}
+                            inputRef={fileInputRef}
+                            item={anexo}
+                            loadingFile={null}
+                            indexBlock={index}
+                            indexItem={indexItem}
+                            indexAnexo={indexAnexo}
+                            handleFileSelect={handleFileSelect}
+                            folder='item'
+                            handleRemove={handleRemoveAnexoItem}
+                            error={form.formState?.errors}
+                            disabled={disabled}
+                            form={form}
+                        />
+                    </Grid>
+                ))}
+
+            {/* Perguntas com seleção de resposta (solicita anexos ao marcar resposta) */}
             {item &&
                 item?.resposta?.anexo == 1 &&
                 item?.resposta?.anexosSolicitados &&
