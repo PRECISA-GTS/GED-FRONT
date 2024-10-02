@@ -315,7 +315,7 @@ const FormLimpeza = ({ id, modelID }) => {
                             checkErrors()
                             verifyIfCanAproveForm(block)
                         }}
-                        iconConclusion={'mdi:check-bold'}
+                        iconConclusion={'solar:check-read-linear'}
                         titleConclusion={'Concluir'}
                         title='Limpeza e Higienização'
                         type={type}

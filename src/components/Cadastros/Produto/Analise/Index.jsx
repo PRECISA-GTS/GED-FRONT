@@ -1,11 +1,11 @@
 import { Button, Card, CardContent, Grid, IconButton, Tooltip } from '@mui/material'
-import Check from 'src/components/Form/Check'
 import Input from 'src/components/Form/Input'
 import Icon from 'src/@core/components/icon'
 import { Fragment } from 'react'
 import { useFieldArray } from 'react-hook-form'
+import { fractionedToFloat } from 'src/configs/functions'
 
-const Analise = ({ form, data }) => {
+const Analise = ({ form, data, type }) => {
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: 'fields.analises'
@@ -69,9 +69,10 @@ const Analise = ({ form, data }) => {
                                         name={`fields.analises[${index}].minimo`}
                                         required={!form.watch(`fields.analises[${index}].maximo`) ? true : false}
                                         form={form}
+                                        mask='fractioned3'
                                         errorText={
-                                            parseFloat(form.watch(`fields.analises[${index}].minimo`)) >=
-                                                parseFloat(form.watch(`fields.analises[${index}].maximo`)) &&
+                                            fractionedToFloat(form.watch(`fields.analises[${index}].minimo`)) >=
+                                                fractionedToFloat(form.watch(`fields.analises[${index}].maximo`)) &&
                                             'O mínimo deve ser menor que o máximo'
                                         }
                                         opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
@@ -83,9 +84,10 @@ const Analise = ({ form, data }) => {
                                         name={`fields.analises[${index}].maximo`}
                                         required={!form.watch(`fields.analises[${index}].minimo`) ? true : false}
                                         form={form}
+                                        mask='fractioned3'
                                         errorText={
-                                            parseFloat(form.watch(`fields.analises[${index}].minimo`)) >=
-                                                parseFloat(form.watch(`fields.analises[${index}].maximo`)) &&
+                                            fractionedToFloat(form.watch(`fields.analises[${index}].minimo`)) >=
+                                                fractionedToFloat(form.watch(`fields.analises[${index}].maximo`)) &&
                                             'O máximo deve ser maior que o mínimo'
                                         }
                                         opacity={form.getValues('fields.analises')[index].status === 0 ? true : false}
@@ -100,32 +102,34 @@ const Analise = ({ form, data }) => {
                                     />
 
                                     <Grid item xs={12} md={1} className='flex items-center'>
-                                        <Tooltip
-                                            title={
-                                                form.getValues(`fields.analises[${index}].status`) === 1
-                                                    ? 'Desativar item'
-                                                    : 'Ativar item'
-                                            }
-                                            placement='top'
-                                        >
-                                            <IconButton
-                                                color={
+                                        {type === 'edit' && (
+                                            <Tooltip
+                                                title={
                                                     form.getValues(`fields.analises[${index}].status`) === 1
-                                                        ? 'error'
-                                                        : 'primary'
+                                                        ? 'Desativar item'
+                                                        : 'Ativar item'
                                                 }
-                                                size='small'
-                                                onClick={() => handleStatus(index)}
+                                                placement='top'
                                             >
-                                                <Icon
-                                                    icon={
+                                                <IconButton
+                                                    color={
                                                         form.getValues(`fields.analises[${index}].status`) === 1
-                                                            ? 'heroicons-outline:ban'
-                                                            : 'tabler:check'
+                                                            ? 'error'
+                                                            : 'primary'
                                                     }
-                                                />
-                                            </IconButton>
-                                        </Tooltip>
+                                                    size='small'
+                                                    onClick={() => handleStatus(index)}
+                                                >
+                                                    <Icon
+                                                        icon={
+                                                            form.getValues(`fields.analises[${index}].status`) === 1
+                                                                ? 'heroicons-outline:ban'
+                                                                : 'tabler:check'
+                                                        }
+                                                    />
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
                                         <Tooltip title='Remover item' placement='top'>
                                             <IconButton color='error' size='small' onClick={() => remove(index)}>
                                                 <Icon icon={'tabler:trash-filled'} />

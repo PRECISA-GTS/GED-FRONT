@@ -346,7 +346,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                             checkErrors()
                             verifyIfCanAproveForm(block)
                         }}
-                        iconConclusion={'mdi:check-bold'}
+                        iconConclusion={'solar:check-read-linear'}
                         titleConclusion={'Concluir'}
                         title='Não conformidade da Limpeza e Higienização'
                         type={type}

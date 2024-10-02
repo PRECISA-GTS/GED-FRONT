@@ -39,7 +39,7 @@ const Block = ({
 
     const changeAllOptions = (bloco, blockIndex, colIndex) => {
         bloco.itens.forEach((item, indexItem) => {
-            if (item.alternativas.length > 0) {
+            if (item.alternativas.length > 1) {
                 //? ignora data e dissertativa
                 form.setValue(`blocos[${blockIndex}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
             }
@@ -48,7 +48,7 @@ const Block = ({
         setBlocos(prevBlocos => {
             const newBlocos = [...prevBlocos]
             newBlocos[blockIndex]?.itens.forEach((item, indexItem) => {
-                if (item.alternativas.length > 0) {
+                if (item.alternativas.length > 1) {
                     //? ignora data e dissertativa
                     item.resposta = item.alternativas[colIndex]
                 }
@@ -77,7 +77,7 @@ const Block = ({
         if (!bloco.itens) return 0
         let total = 0
         bloco.itens.map(item => {
-            if (item.alternativas.length > 0) total++
+            if (item.alternativas.length > 1) total++
         })
         return total
     }
@@ -129,8 +129,8 @@ const Block = ({
                         </Typography>
                     </Grid>
 
-                    {/* Marcar todos se houver +1 item com checkbox para selecionar */}
-                    {getTotalCheckItems(bloco) > 1 && (
+                    {/* Marcar todos se houver +2 itens com checkbox para selecionar */}
+                    {getTotalCheckItems(bloco) > 2 && (
                         <Grid item xs={12} md={7}>
                             <Grid item xs={12} md={6}>
                                 <RadioGroup

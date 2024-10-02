@@ -17,7 +17,6 @@ const Item = ({
     handleFileSelect,
     handleRemoveAnexoItem
 }) => {
-    console.log('🚀 ~ item:', item)
     const { settings } = useContext(SettingsContext)
     const modeTheme = settings.mode
     const [selectedItem, setSelectedItem] = useState(null)

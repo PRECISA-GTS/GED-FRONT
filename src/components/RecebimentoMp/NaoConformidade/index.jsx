@@ -376,7 +376,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             setOpenModal(true)
                             checkErrors()
                         }}
-                        iconConclusion={'mdi:check-bold'}
+                        iconConclusion={'solar:check-read-linear'}
                         titleConclusion={'Concluir'}
                         title='Não conformidade do Recebimento de MP'
                         type={type}

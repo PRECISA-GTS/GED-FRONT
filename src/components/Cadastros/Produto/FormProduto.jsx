@@ -22,6 +22,7 @@ import FormClassificacaoProduto from '../ClassificacaoProduto/FormClassificacaoP
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import CheckLabel from 'src/components/Form/CheckLabel'
 import Analise from './Analise/Index'
+import { fractionedToFloat } from 'src/configs/functions'
 
 const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChange, manualUrl, outsideID }) => {
     const [open, setOpen] = useState(false)
@@ -42,16 +43,33 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
 
     const form = useForm({ mode: 'onChange' })
 
+    //? Verifica se há analise e se há alguma com minimo > maximo
+    const checkAnalysis = values => {
+        let status = true
+        if (values.analises && values.analises.length > 0) {
+            values.analises.map((item, index) => {
+                if (fractionedToFloat(item.minimo) >= fractionedToFloat(item.maximo)) {
+                    toast.error('O valor mínimo da análise deve ser menor que o valor máximo!')
+                    status = false
+                }
+            })
+        }
+        return status
+    }
+
     // Envia dados para a API
     const onSubmit = async data => {
-        startLoading()
         const values = {
             ...data,
             unidadeID: loggedUnity.unidadeID,
             usuarioID: user.usuarioID,
             removedItems
         }
+
+        if (!checkAnalysis(values.fields)) return
+
         console.log('onSubmit: ', values)
+        startLoading()
 
         try {
             if (type === 'new') {
@@ -234,7 +252,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     </Card>
 
                     {/* Análise */}
-                    <Analise form={form} data={data.analises} />
+                    <Analise form={form} data={data.analises} type={type} />
 
                     {/* <Card>
                         <CardHeader title='Anexos' />

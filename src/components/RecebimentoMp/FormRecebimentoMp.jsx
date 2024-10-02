@@ -683,7 +683,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     onclickDelete={() => setOpenModalDeleted(true)}
                     handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
-                    iconConclusion={'mdi:check-bold'}
+                    iconConclusion={'solar:check-read-linear'}
                     titleConclusion={'Concluir'}
                     title='Recebimento de MP'
                     btnStatus={user.papelID == 1 && type == 'edit' ? true : false}
