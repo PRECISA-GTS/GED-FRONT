@@ -79,10 +79,8 @@ const Input = ({
                 break
         }
 
-        if (onChange) {
-            form.setValue(name, value) // Atualiza o valor mascarado no form
-            onChange(value) // Chama o onChange se fornecido
-        }
+        if (mask) form.setValue(name, value)
+        if (onChange) onChange(value)
     }
 
     return (
