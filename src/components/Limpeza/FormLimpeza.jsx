@@ -297,7 +297,7 @@ const FormLimpeza = ({ id, modelID }) => {
         setTimeout(() => {
             form.trigger()
         }, 300)
-    }, [change, user])
+    }, [id, change])
 
     return (
         <form onSubmit={e => customSubmit(e)}>
