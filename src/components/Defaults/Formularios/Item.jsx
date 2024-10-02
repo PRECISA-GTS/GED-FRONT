@@ -1,4 +1,4 @@
-import { FormControl, Grid, Typography } from '@mui/material'
+import { FormControl, Grid, TextField, Typography } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import AnexoListMultiple from 'src/components/Anexos/ModeView/AnexoListMultiple'
@@ -35,6 +35,8 @@ const Item = ({
         }
     }, [handleFileSelect])
 
+    console.log('reenderiza...', form.watch(`blocos[${index}].itens[${indexItem}].resposta`))
+
     return (
         <Grid container key={indexItem} spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
             {/* Hidden do itemID */}
@@ -51,12 +53,7 @@ const Item = ({
                     variant='subtitle1'
                     sx={{
                         fontWeight: 400,
-                        color:
-                            item.obrigatorio &&
-                            !item.resposta &&
-                            !form.watch(`blocos[${index}].itens[${indexItem}].resposta`)
-                                ? 'error.main'
-                                : 'text.primary'
+                        color: item.obrigatorio && !item.resposta ? 'error.main' : 'text.primary'
                     }}
                 >
                     {item.nome ? `${item.ordem} - ${item.nome}` : ``}
@@ -127,6 +124,8 @@ const Item = ({
                                 disabled={disabled}
                                 form={form}
                                 className='py-2'
+                                required
+                                dynamic
                             />
                         )}
 
