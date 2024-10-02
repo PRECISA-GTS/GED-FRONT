@@ -109,7 +109,6 @@ const Block = ({
     }
 
     useEffect(() => {
-        console.log('🚀 ~ renderiza bloco useeffect:')
         validateBlockPermission()
     }, [user, bloco, disabled])
 
@@ -172,24 +171,18 @@ const Block = ({
                     )}
 
                     {bloco.itens.map((item, indexItem) => (
-                        <>
-                            <Item
-                                form={form}
-                                blockKey={blockKey}
-                                index={index}
-                                indexItem={indexItem}
-                                item={item}
-                                disabled={!blockPermission}
-                                updateResponse={updateResponse}
-                                handleFileSelect={handleFileSelect}
-                                handleRemoveAnexoItem={handleRemoveAnexoItem}
-                            />
-                            {/* <Grid container>
-                                <Grid item xs={12} md={12}>
-                                    <Divider sx={{ py: 6 }} />
-                                </Grid>
-                            </Grid> */}
-                        </>
+                        <Item
+                            key={indexItem}
+                            form={form}
+                            blockKey={blockKey}
+                            index={index}
+                            indexItem={indexItem}
+                            item={item}
+                            disabled={!blockPermission}
+                            updateResponse={updateResponse}
+                            handleFileSelect={handleFileSelect}
+                            handleRemoveAnexoItem={handleRemoveAnexoItem}
+                        />
                     ))}
                 </Grid>
             </CardContent>

@@ -26,7 +26,6 @@ const Item = ({
     //? Anexos
     const handleFileClick = values => {
         values[blockKey] = item[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
-        console.log('🚀 ~ item[blockKey]:', blockKey, item[blockKey])
         fileInputRef.current.click()
         setSelectedItem(values)
     }
@@ -56,7 +55,7 @@ const Item = ({
                         color:
                             item.obrigatorio &&
                             !item.resposta &&
-                            !form.getValues(`blocos[${index}].itens[${indexItem}].resposta`)
+                            !form.watch(`blocos[${index}].itens[${indexItem}].resposta`)
                                 ? 'error.main'
                                 : 'text.primary'
                     }}
