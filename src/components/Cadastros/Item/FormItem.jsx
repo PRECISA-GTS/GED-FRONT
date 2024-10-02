@@ -227,7 +227,6 @@ const FormItem = ({
                             btnCancel
                             btnNew
                             btnSave
-                            disabled={data.fields.pending}
                             manualUrl={manualUrl}
                             btnClose={btnClose}
                             handleModalClose={handleModalClose}
@@ -255,10 +254,18 @@ const FormItem = ({
                                         value={data?.fields?.formulario}
                                         required
                                         options={data?.fields?.opcoesForm}
-                                        disabled={formType !== 'novo' && formType !== 'item'}
+                                        disabled={(formType !== 'novo' && formType !== 'item') || data.fields.pending}
                                         form={form}
                                     />
-                                    <Input xs={12} md={12} title='Nome' name='fields.nome' required form={form} />
+                                    <Input
+                                        xs={12}
+                                        md={12}
+                                        title='Nome'
+                                        name='fields.nome'
+                                        required
+                                        disabled={data.fields.pending}
+                                        form={form}
+                                    />
                                     <Select
                                         xs={12}
                                         md={12}
@@ -268,6 +275,7 @@ const FormItem = ({
                                         onChange={refreshAlternatives}
                                         required
                                         options={data?.fields?.alternativa?.opcoes}
+                                        disabled={data.fields.pending}
                                         form={form}
                                     />
                                     <Input
@@ -284,16 +292,6 @@ const FormItem = ({
                             </CardContent>
                         </Card>
                     </form>
-
-                    {/* TEMP */}
-                    {/* <ListOptionsAnexo
-                        key={change}
-                        index={0}
-                        indexAnexo={0}
-                        data={{ obrigatorio: false }}
-                        handleRemoveAnexo={handleRemoveAnexo}
-                        form={form}
-                    /> */}
 
                     <ListOptions
                         key={change}

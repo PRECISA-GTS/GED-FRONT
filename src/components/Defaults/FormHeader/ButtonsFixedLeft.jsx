@@ -52,6 +52,19 @@ const ButtonsFixedLeft = ({
                 </Tooltip>
             )}
 
+            {btnClose && (
+                <Button
+                    type='button'
+                    onClick={handleModalClose}
+                    variant='outlined'
+                    color='primary'
+                    size='medium'
+                    sx={{ display: 'flex', gap: 2 }}
+                >
+                    <span className='hidden sm:block'>Fechar</span>
+                </Button>
+            )}
+
             {btnDelete && hasPermission(router.pathname, 'excluir') && (
                 <Tooltip title='Excluir cadastro' placement='top'>
                     <Button
@@ -95,19 +108,6 @@ const ButtonsFixedLeft = ({
                         <Icon icon='tabler:check' />
                     </Button>
                 </Tooltip>
-            )}
-
-            {btnClose && (
-                <Button
-                    type='button'
-                    onClick={handleModalClose}
-                    variant='outlined'
-                    color='primary'
-                    size='medium'
-                    sx={{ display: 'flex', gap: 2 }}
-                >
-                    <span className='hidden sm:block'>Fechar</span>
-                </Button>
             )}
         </div>
     )
