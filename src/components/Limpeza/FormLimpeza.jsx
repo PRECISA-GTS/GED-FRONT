@@ -4,7 +4,7 @@ import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { ParametersContext } from 'src/context/ParametersContext'
 import Header from './Header'
-import ModelBlocks from './ModelBlocks'
+
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import Router from 'next/router'
@@ -20,6 +20,7 @@ import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, ge
 import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 import { ca } from 'date-fns/locale'
 import ButtonOpenForm from '../Defaults/Buttons/ButtonOpenForm'
+import ModelBlocks from '../Form/ModelBlocks'
 
 const FormLimpeza = ({ id, modelID }) => {
     const router = Router
@@ -230,6 +231,7 @@ const FormLimpeza = ({ id, modelID }) => {
     }
 
     const handleFileSelect = async (event, item) => {
+        console.log('🚀 ~ event, item:', item)
         const selectedFile = event.target.files
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
@@ -238,26 +240,20 @@ const FormLimpeza = ({ id, modelID }) => {
             }
             formData.append(`usuarioID`, user.usuarioID)
             formData.append(`unidadeID`, loggedUnity.unidadeID)
-            formData.append(
-                `parRecebimentoMpNaoConformidadeModeloBlocoID`,
-                item.parRecebimentoMpNaoConformidadeModeloBlocoID ?? null
-            )
+            formData.append(`parLimpezaModeloBlocoID`, item.parLimpezaModeloBlocoID ?? null)
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
             await onSubmit(form.getValues()) //? Atualiza dados do formulário
 
             await api
-                .post(
-                    `/formularios/recebimento-mp/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
-                    formData
-                )
+                .post(`/formularios/limpeza/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
                     // const values = form.getValues()
                     // onSubmit(values)
                 })
                 .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!')
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
                 })
                 .finally(() => {
                     setChange(!change)
@@ -361,6 +357,7 @@ const FormLimpeza = ({ id, modelID }) => {
                             <ModelBlocks
                                 form={form}
                                 data={block}
+                                blockKeyName='parLimpezaModeloBlocoID'
                                 setBlock={setBlock}
                                 handleFileSelect={handleFileSelect}
                                 handleRemoveFile={handleRemoveFile}

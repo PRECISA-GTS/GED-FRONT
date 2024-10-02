@@ -4,7 +4,7 @@ import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { ParametersContext } from 'src/context/ParametersContext'
 import Header from './Header'
-import ModelBlocks from './ModelBlocks'
+
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import LimpezaInfo from './LimpezaInfo'
@@ -22,6 +22,7 @@ import { Card, CardContent } from '@mui/material'
 import { canConfigForm, fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
+import ModelBlocks from 'src/components/Form/ModelBlocks'
 
 const NaoConformidade = ({ id, limpezaID, modelID }) => {
     const router = Router
@@ -385,6 +386,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                             <ModelBlocks
                                 form={form}
                                 data={block}
+                                blockKeyName='parLimpezaNaoConformidadeModeloBlocoID'
                                 setBlock={setBlock}
                                 handleFileSelect={handleFileSelect}
                                 handleRemoveFile={handleRemoveFile}
