@@ -21,7 +21,6 @@ const Block = ({
 
     const { user, hasSectorPermission } = useContext(AuthContext)
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
-    console.log('🚀 ~ selectedColumn:', selectedColumn)
     const [blockPermission, setBlockPermission] = useState(false)
 
     const updateResponse = ({ e, item, index, indexItem }) => {

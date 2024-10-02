@@ -559,8 +559,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = form.getValues()
-                    onSubmit(values)
+                    onSubmit(form.getValues())
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')

@@ -231,7 +231,6 @@ const FormLimpeza = ({ id, modelID }) => {
     }
 
     const handleFileSelect = async (event, item) => {
-        console.log('🚀 ~ event, item:', item)
         const selectedFile = event.target.files
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
@@ -243,14 +242,11 @@ const FormLimpeza = ({ id, modelID }) => {
             formData.append(`parLimpezaModeloBlocoID`, item.parLimpezaModeloBlocoID ?? null)
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
-            await onSubmit(form.getValues()) //? Atualiza dados do formulário
-
             await api
                 .post(`/formularios/limpeza/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    // const values = form.getValues()
-                    // onSubmit(values)
+                    onSubmit(form.getValues())
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
