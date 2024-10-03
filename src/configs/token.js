@@ -2,7 +2,7 @@ import authConfig from 'src/configs/auth'
 
 // Função para verificar a expiração do token e atualizar se necessário
 export const checkAndRefreshToken = () => {
-  const tokenExpirationTime = 3 //? minutes
+  const tokenExpirationTime = 240 //? minutes
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName);
   console.log("🚀 ~ token storedToken:", storedToken);
 
