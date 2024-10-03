@@ -16,6 +16,8 @@ import { NotificationContext } from './NotificationContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { useGlobal } from 'src/hooks/useGlobal'
 
+import { checkAndRefreshToken } from 'src/configs/token'
+
 // ** Defaults
 const defaultProvider = {
   user: null,
@@ -86,6 +88,7 @@ const AuthProvider = ({ children }) => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
 
       if (storedToken) {
+
         setLoading(true)
         const data = JSON.parse(window.localStorage.getItem('userData'))
 

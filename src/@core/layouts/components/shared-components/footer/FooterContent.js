@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import ListVersions from 'src/components/Configuracoes/Versao/ListVersions'
+import { getTokenExpiration } from 'src/configs/token'
+
 
 const FooterContent = () => {
   // ** Var
@@ -14,9 +16,11 @@ const FooterContent = () => {
     setOpen(true)
   }
 
+  const tokenExpiration = getTokenExpiration()
+
   return (
     <>
-      <div className='flex justify-between sm:justify-end items-center '>
+      <div className='flex justify-between items-center'>
         {/* Versão Mobile */}
         <span
           onClick={handleOpenVersions}
@@ -26,6 +30,8 @@ const FooterContent = () => {
         >
           v {latestVersionState ?? '1.0.0'}
         </span>
+
+        <p className='text-sm opacity-50'>Sessão expira em {tokenExpiration}</p>
 
         <div>
           <p className='text-sm pr-2 md:text-sm flex items-center gap-1'>
