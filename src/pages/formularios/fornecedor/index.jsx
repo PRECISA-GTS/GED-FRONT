@@ -96,7 +96,6 @@ const Fornecedor = () => {
                 fornecedorCategoriaRiscoID: values.fields?.risco?.fornecedorCategoriaRiscoID,
                 isCpf
             }
-            console.log('🚀 ~ onSubmit:', data)
 
             setOpen(false)
             const response = await api.post(`/formularios/fornecedor/makeFornecedor`, data)
@@ -255,7 +254,6 @@ const Fornecedor = () => {
                 size='lg'
                 fullHeight
                 clone
-                form={form}
             >
                 <NewFornecedor setIsNotFactory={setIsNotFactory} isNotFactory={isNotFactory} />
             </DialogActs>

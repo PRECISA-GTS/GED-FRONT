@@ -344,7 +344,6 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         handleSend={() => {
                             setOpenModal(true)
                             checkErrors()
-                            verifyIfCanAproveForm(block)
                         }}
                         iconConclusion={'solar:check-read-linear'}
                         titleConclusion={'Concluir'}
