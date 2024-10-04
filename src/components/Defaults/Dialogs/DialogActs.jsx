@@ -22,7 +22,7 @@ const DialogActs = ({
     form
 }) => {
     if (!form) {
-        form = useForm({ mode: 'onChange' })
+        form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
     }
 
     const validateForm = values => {
