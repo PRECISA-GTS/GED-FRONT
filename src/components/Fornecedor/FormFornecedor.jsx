@@ -906,7 +906,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     actions
                     handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={handleSendForm}
-                    iconConclusion={'mdi:check-bold'}
+                    iconConclusion={'solar:check-read-linear'}
                     titleConclusion={'Concluir'}
                     title='Fornecedor'
                     btnStatus={type == 'edit' ? true : false}

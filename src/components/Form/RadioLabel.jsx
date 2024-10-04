@@ -12,7 +12,7 @@ const RadioLabel = ({ form, xs, md, values, defaultValue, name, disabled, handle
             <RadioGroup row name={name} defaultValue={defaultValue} onChange={handleChange}>
                 {values &&
                     values.map((item, indexCol) => (
-                        <Grid key={indexCol} item xs={12} md={3}>
+                        <Grid key={indexCol} item xs={12} md={4}>
                             <Box display='flex' alignItems='center' sx={{ gap: 2 }}>
                                 <FormControlLabel
                                     key={indexCol}

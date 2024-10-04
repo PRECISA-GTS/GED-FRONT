@@ -4,7 +4,7 @@ import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { ParametersContext } from 'src/context/ParametersContext'
 import Header from './Header'
-import ModelBlocks from './ModelBlocks'
+
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import RecebimentoMpInfo from './RecebimentoMpInfo'
@@ -22,6 +22,7 @@ import { Card, CardContent } from '@mui/material'
 import { fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
+import ModelBlocks from 'src/components/Form/ModelBlocks'
 
 const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
     const router = Router
@@ -214,11 +215,10 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
         return canConfig
     }
 
-    const handleNew = () => {
+    const handleNew = values => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
-        const values = form.getValues('new')
         setRecebimentoMpID(header.recebimento.id)
-        setModelID(values.modelo.id)
+        setModelID(values.new.modelo.id)
         router.push(`/formularios/recebimento-mp/novo/?aba=nao-conformidade`)
     }
 
@@ -376,7 +376,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                             setOpenModal(true)
                             checkErrors()
                         }}
-                        iconConclusion={'mdi:check-bold'}
+                        iconConclusion={'solar:check-read-linear'}
                         titleConclusion={'Concluir'}
                         title='Não conformidade do Recebimento de MP'
                         type={type}
@@ -417,6 +417,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                                 form={form}
                                 data={block}
                                 setBlock={setBlock}
+                                blockKeyName='parRecebimentoMpNaoConformidadeModeloBlocoID'
                                 handleFileSelect={handleFileSelect}
                                 handleRemoveFile={handleRemoveFile}
                                 status={header.status.id}
@@ -471,6 +472,7 @@ const NaoConformidade = ({ id, recebimentoMpID, modelID }) => {
                         size='lg'
                         setOpenModal={setOpenNew}
                         openModal={openNew}
+                        form={form}
                     >
                         <NewContent type='form' data={header} form={form} />
                     </DialogActs>

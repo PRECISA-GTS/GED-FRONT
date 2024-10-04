@@ -21,6 +21,8 @@ import useLoad from 'src/hooks/useLoad'
 import FormClassificacaoProduto from '../ClassificacaoProduto/FormClassificacaoProduto'
 import DialogNewCreate from 'src/components/Defaults/Dialogs/DialogNewCreate'
 import CheckLabel from 'src/components/Form/CheckLabel'
+import Analise from './Analise/Index'
+import { fractionedToFloat } from 'src/configs/functions'
 
 const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChange, manualUrl, outsideID }) => {
     const [open, setOpen] = useState(false)
@@ -41,16 +43,33 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
 
     const form = useForm({ mode: 'onChange' })
 
+    //? Verifica se há analise e se há alguma com minimo > maximo
+    const checkAnalysis = values => {
+        let status = true
+        if (values.analises && values.analises.length > 0) {
+            values.analises.map((item, index) => {
+                if (fractionedToFloat(item.minimo) >= fractionedToFloat(item.maximo)) {
+                    toast.error('O valor mínimo da análise deve ser menor que o valor máximo!')
+                    status = false
+                }
+            })
+        }
+        return status
+    }
+
     // Envia dados para a API
     const onSubmit = async data => {
-        startLoading()
         const values = {
             ...data,
             unidadeID: loggedUnity.unidadeID,
             usuarioID: user.usuarioID,
             removedItems
         }
-        console.log(values)
+
+        if (!checkAnalysis(values.fields)) return
+
+        console.log('onSubmit: ', values)
+        startLoading()
 
         try {
             if (type === 'new') {
@@ -103,6 +122,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                     ? `cadastros/produto/new/getData/${loggedUnity.unidadeID}`
                     : `${staticUrl}/getData/${id}/${loggedUnity.unidadeID}`
             await api.post(route).then(response => {
+                console.log('🚀 ~ getData:', response.data)
                 setData(response.data)
                 form.reset(response.data)
             })
@@ -218,10 +238,23 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                     form={form}
                                     helpText='Este produto será listado nos formulários do POP2 de Limpeza e Higienização'
                                 />
+                                <CheckLabel
+                                    xs='12'
+                                    md='4'
+                                    title='Usa análise do produto (Laboratório)'
+                                    name={`fields.analiseProduto`}
+                                    value={data.fields.analiseProduto}
+                                    form={form}
+                                    helpText='Habilita o uso do laboratório com a inserção de itens de análise'
+                                />
                             </Grid>
                         </CardContent>
                     </Card>
-                    <Card>
+
+                    {/* Análise */}
+                    <Analise form={form} data={data.analises} type={type} />
+
+                    {/* <Card>
                         <CardHeader title='Anexos' />
                         <CardContent>
                             <Grid container spacing={5}>
@@ -241,7 +274,7 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </form>
             )}
 

@@ -1,4 +1,4 @@
-import { Card, CardContent, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
+import { Card, CardContent, Divider, FormControlLabel, Grid, Radio, RadioGroup, Typography } from '@mui/material'
 import { useContext, useEffect, useState } from 'react'
 import Item from './Item'
 import InfoDepartamentos from './InfoDepartamentos'
@@ -21,7 +21,6 @@ const Block = ({
 
     const { user, hasSectorPermission } = useContext(AuthContext)
     const [selectedColumn, setSelectedColumn] = useState(Array(blocos.length).fill(null))
-    console.log('🚀 ~ selectedColumn:', selectedColumn)
     const [blockPermission, setBlockPermission] = useState(false)
 
     const updateResponse = ({ e, item, index, indexItem }) => {
@@ -40,7 +39,7 @@ const Block = ({
 
     const changeAllOptions = (bloco, blockIndex, colIndex) => {
         bloco.itens.forEach((item, indexItem) => {
-            if (item.alternativas.length > 0) {
+            if (item.alternativas.length > 1) {
                 //? ignora data e dissertativa
                 form.setValue(`blocos[${blockIndex}].itens[${indexItem}].resposta`, item.alternativas[colIndex])
             }
@@ -49,7 +48,7 @@ const Block = ({
         setBlocos(prevBlocos => {
             const newBlocos = [...prevBlocos]
             newBlocos[blockIndex]?.itens.forEach((item, indexItem) => {
-                if (item.alternativas.length > 0) {
+                if (item.alternativas.length > 1) {
                     //? ignora data e dissertativa
                     item.resposta = item.alternativas[colIndex]
                 }
@@ -78,7 +77,7 @@ const Block = ({
         if (!bloco.itens) return 0
         let total = 0
         bloco.itens.map(item => {
-            if (item.alternativas.length > 0) total++
+            if (item.alternativas.length > 1) total++
         })
         return total
     }
@@ -109,7 +108,6 @@ const Block = ({
     }
 
     useEffect(() => {
-        console.log('🚀 ~ renderiza bloco useeffect:')
         validateBlockPermission()
     }, [user, bloco, disabled])
 
@@ -125,52 +123,55 @@ const Block = ({
                     <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
                         <InfoDepartamentos data={bloco?.departamentos ?? []} />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={5}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 700, mb: 6 }}>
                             Itens
                         </Typography>
                     </Grid>
 
-                    {/* Marcar todos se houver +1 item com checkbox para selecionar */}
-                    {getTotalCheckItems(bloco) > 1 && (
-                        <Grid item xs={12} md={6}>
-                            <RadioGroup
-                                row
-                                value={selectedColumn[index]} // Vincula o valor selecionado aqui
-                            >
-                                {[...Array(getTotalColumns(bloco))].map((item, indexCol) => (
-                                    <Grid item xs={12} md={3} key={indexCol}>
-                                        <FormControlLabel
-                                            value={indexCol}
-                                            control={
-                                                <Radio
-                                                    disabled={!blockPermission}
-                                                    error={form?.formState?.errors ? true : false}
-                                                />
-                                            }
-                                            onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
-                                            label='Todos'
-                                            fullWidth
-                                            sx={{
-                                                '& .MuiFormControlLabel-label': {
-                                                    color: 'text.secondary',
-                                                    fontWeight: 600
-                                                },
-                                                '&:hover': {
-                                                    '& .MuiFormControlLabel-label': {
-                                                        color: 'primary.main'
-                                                    }
+                    {/* Marcar todos se houver +2 itens com checkbox para selecionar */}
+                    {getTotalCheckItems(bloco) > 2 && (
+                        <Grid item xs={12} md={7}>
+                            <Grid item xs={12} md={6}>
+                                <RadioGroup
+                                    row
+                                    value={selectedColumn[index]} // Vincula o valor selecionado aqui
+                                >
+                                    {[...Array(getTotalColumns(bloco))].map((item, indexCol) => (
+                                        <Grid item xs={12} md={4} key={indexCol}>
+                                            <FormControlLabel
+                                                value={indexCol}
+                                                control={
+                                                    <Radio
+                                                        disabled={!blockPermission}
+                                                        error={form?.formState?.errors ? true : false}
+                                                    />
                                                 }
-                                            }}
-                                        />
-                                    </Grid>
-                                ))}
-                            </RadioGroup>
+                                                onChange={() => changeAllOptions(bloco, index, indexCol)} // Passa o índice do bloco
+                                                label='Todos'
+                                                fullWidth
+                                                sx={{
+                                                    '& .MuiFormControlLabel-label': {
+                                                        color: 'text.secondary',
+                                                        fontWeight: 600
+                                                    },
+                                                    '&:hover': {
+                                                        '& .MuiFormControlLabel-label': {
+                                                            color: 'primary.main'
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </Grid>
+                                    ))}
+                                </RadioGroup>
+                            </Grid>
                         </Grid>
                     )}
 
                     {bloco.itens.map((item, indexItem) => (
                         <Item
+                            key={indexItem}
                             form={form}
                             blockKey={blockKey}
                             index={index}

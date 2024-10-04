@@ -37,6 +37,7 @@ const Input = ({
     opacity,
     errorText,
     error,
+    dynamic,
     ...props
 }) => {
     const theme = useTheme()
@@ -78,10 +79,8 @@ const Input = ({
                 break
         }
 
-        form.setValue(name, value) // Atualiza o valor mascarado no form
-        if (onChange) {
-            onChange(value) // Chama o onChange se fornecido
-        }
+        if (mask) form.setValue(name, value)
+        if (onChange) onChange(value)
     }
 
     return (
@@ -90,8 +89,7 @@ const Input = ({
                 <FormControl fullWidth sx={{ position: 'relative' }}>
                     <TextField
                         {...form.register(name, {
-                            required: required,
-                            onChange: handleMaskedChange
+                            required: required
                         })}
                         multiline={multiline}
                         label={title}
@@ -103,6 +101,7 @@ const Input = ({
                         aria-describedby='validation-schema-nome'
                         defaultValue={defaultValue}
                         error={hasError}
+                        onChange={handleMaskedChange}
                         InputLabelProps={{
                             shrink: true
                         }}

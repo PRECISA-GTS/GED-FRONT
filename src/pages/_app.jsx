@@ -65,6 +65,7 @@ import { CommonDataProvider } from 'src/context/CommonDataContext'
 import { api } from 'src/configs/api'
 import { useEffect } from 'react'
 import { LocalizationProvider } from '@mui/x-date-pickers'
+import { checkAndRefreshToken } from 'src/configs/tokenJWT'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -162,6 +163,7 @@ const App = props => {
     useEffect(() => {
         const handleRouteChange = () => {
             handleVersion()
+            checkAndRefreshToken()
         }
         Router.events.on('routeChangeComplete', handleRouteChange)
         return () => {

@@ -87,7 +87,7 @@ const ButtonsFixedRight = ({
                     disabled={disabled || disabledSubmit}
                     sx={{ display: 'flex', gap: 2 }}
                 >
-                    <Icon icon='mdi:check-bold' />
+                    <Icon icon='heroicons-outline:check' />
                     <span className='hidden sm:block'>Salvar</span>
                 </Button>
             )}

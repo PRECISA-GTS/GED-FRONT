@@ -14,6 +14,7 @@ const DateField = ({
     type,
     value,
     name,
+    multiline,
     typeValidation,
     alertRequired,
     opacity,
@@ -108,7 +109,7 @@ const DateField = ({
                         sx={{
                             opacity: opacity ? 0.4 : 1,
                             '& .MuiInputBase-input': {
-                                padding: '10px 14px' // Ajuste o valor conforme necessário
+                                padding: multiline ? '18px 14px' : '10px 14px' // Ajuste o valor conforme necessário
                             },
                             ...((required || alertRequired) &&
                                 (hasError || !!inputError) && {

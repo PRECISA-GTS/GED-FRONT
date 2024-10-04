@@ -18,12 +18,14 @@ const DialogActs = ({
     handleLink,
     size,
     clone,
-    fullHeight = false
+    fullHeight = false,
+    form
 }) => {
-    const form = useForm({ mode: 'onChange', defaultValues: { cnpj: '' } })
+    if (!form) {
+        form = useForm({ mode: 'onChange' })
+    }
 
     const validateForm = values => {
-        console.log('🚀 ~ validateForm:', values)
         form.handleSubmit(onSubmit)(values)
     }
 
@@ -55,7 +57,7 @@ const DialogActs = ({
                                 py: 2
                             }}
                         >
-                            {React.cloneElement(children, clone ? { form: form } : null)}
+                            {React.cloneElement(children, clone ? { form } : null)}
                         </DialogContentText>
                     </DialogContent>
 

@@ -1,4 +1,4 @@
-import { FormControl, Grid, Typography } from '@mui/material'
+import { FormControl, Grid, TextField, Typography } from '@mui/material'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { SettingsContext } from 'src/@core/context/settingsContext'
 import AnexoListMultiple from 'src/components/Anexos/ModeView/AnexoListMultiple'
@@ -25,7 +25,6 @@ const Item = ({
     //? Anexos
     const handleFileClick = values => {
         values[blockKey] = item[blockKey] ?? 0 //? blockKey: parFornecedorModeloBlocoID, parRecebimentoMpModeloBlocoID, etc
-        console.log('🚀 ~ item[blockKey]:', blockKey, item[blockKey])
         fileInputRef.current.click()
         setSelectedItem(values)
     }
@@ -35,6 +34,8 @@ const Item = ({
             fileInputRef.current.value = ''
         }
     }, [handleFileSelect])
+
+    console.log('reenderiza...', form.watch(`blocos[${index}].itens[${indexItem}].resposta`))
 
     return (
         <Grid container key={indexItem} spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
@@ -47,25 +48,20 @@ const Item = ({
             />
 
             {/* Descrição do item */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
                 <Typography
                     variant='subtitle1'
                     sx={{
                         fontWeight: 400,
-                        color:
-                            item.obrigatorio &&
-                            !item.resposta &&
-                            !form.getValues(`blocos[${index}].itens[${indexItem}].resposta`)
-                                ? 'error.main'
-                                : 'text.primary'
+                        color: item.obrigatorio && !item.resposta ? 'error.main' : 'text.primary'
                     }}
                 >
                     {item.nome ? `${item.ordem} - ${item.nome}` : ``}
                 </Typography>
             </Grid>
 
-            <Grid item xs={12} md={6}>
-                <Grid container spacing={2}>
+            <Grid item xs={12} md={7}>
+                <Grid container spacing={2} sx={{ display: 'flex', alignItems: 'center' }}>
                     {/* Tipo de alternativa  */}
                     <input
                         type='hidden'
@@ -79,7 +75,7 @@ const Item = ({
                         <RadioLabel
                             key={`${index}-${indexItem}`}
                             xs={12}
-                            md={12}
+                            md={6}
                             blockIndex={index}
                             index={indexItem}
                             defaultValue={item?.resposta?.id}
@@ -98,7 +94,7 @@ const Item = ({
                     )}
 
                     {/* Data */}
-                    {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Data' && (
+                    {item && item.alternativas && item.alternativas.length <= 1 && item.alternativa == 'Data' && (
                         <DateField
                             xs={12}
                             md={6}
@@ -108,18 +104,19 @@ const Item = ({
                             type={null}
                             name={`blocos[${index}].itens[${indexItem}].resposta`}
                             form={form}
-                            className='mt-2 mb-4'
+                            multiline
+                            // className='py-2'
                         />
                     )}
 
                     {/* Dissertativa */}
                     {item &&
                         item.alternativas &&
-                        item.alternativas.length == 0 &&
+                        item.alternativas.length <= 1 &&
                         item.alternativa == 'Dissertativa' && (
                             <Input
                                 xs={12}
-                                md={6}
+                                md={12}
                                 title='Descreva a resposta'
                                 name={`blocos[${index}].itens[${indexItem}].resposta`}
                                 value={item.resposta}
@@ -127,27 +124,31 @@ const Item = ({
                                 disabled={disabled}
                                 form={form}
                                 className='py-2'
+                                required
+                                dynamic
                             />
                         )}
 
                     {/* Obs */}
-                    {item && item?.resposta?.observacao == 1 && (
-                        <Input
-                            xs={12}
-                            md={12}
-                            title='Observação'
-                            name={`blocos[${index}].itens[${indexItem}].observacao`}
-                            value={item?.observacao}
-                            multiline
-                            disabled={disabled}
-                            form={form}
-                        />
-                    )}
+                    {item &&
+                        (item?.resposta?.observacao == 1 ||
+                            (item.alternativa == 'Data' && item?.alternativas[0]?.observacao == 1)) && (
+                            <Input
+                                xs={12}
+                                md={6}
+                                title='Observação'
+                                name={`blocos[${index}].itens[${indexItem}].observacao`}
+                                value={item?.observacao}
+                                multiline
+                                disabled={disabled}
+                                form={form}
+                            />
+                        )}
                 </Grid>
             </Grid>
 
             {/* Texto longo (linha inteira) */}
-            {item && item.alternativas && item.alternativas.length == 0 && item.alternativa == 'Dissertativa longa' && (
+            {item && item.alternativas && item.alternativas.length <= 1 && item.alternativa == 'Dissertativa longa' && (
                 <FormControl fullWidth>
                     <Input
                         xs={12}
@@ -164,7 +165,40 @@ const Item = ({
                 </FormControl>
             )}
 
-            {/* Configs da resposta (se houver) */}
+            {/* Perguntas dissertativas (solicita anexos antes de descrever a resposta) */}
+            {item &&
+                (item?.alternativaID == 5 || item?.alternativaID == 6 || item?.alternativaID == 7) &&
+                item?.alternativas &&
+                item?.alternativas[0]?.anexosSolicitados?.length > 0 &&
+                item?.alternativas[0]?.anexosSolicitados.map((anexo, indexAnexo) => (
+                    <Grid item xs={12} md={12} sx={{ mb: 5 }}>
+                        <AnexoListMultiple
+                            modeTheme={modeTheme}
+                            key={anexo}
+                            handleFileClick={() =>
+                                handleFileClick({
+                                    ...anexo,
+                                    itemOpcaoAnexoID: anexo.itemOpcaoAnexoID
+                                })
+                            }
+                            selectedItem={selectedItem}
+                            inputRef={fileInputRef}
+                            item={anexo}
+                            loadingFile={null}
+                            indexBlock={index}
+                            indexItem={indexItem}
+                            indexAnexo={indexAnexo}
+                            handleFileSelect={handleFileSelect}
+                            folder='item'
+                            handleRemove={handleRemoveAnexoItem}
+                            error={form.formState?.errors}
+                            disabled={disabled}
+                            form={form}
+                        />
+                    </Grid>
+                ))}
+
+            {/* Perguntas com seleção de resposta (solicita anexos ao marcar resposta) */}
             {item &&
                 item?.resposta?.anexo == 1 &&
                 item?.resposta?.anexosSolicitados &&

@@ -576,7 +576,7 @@ const FormUnidade = ({ id }) => {
                                         <Grid container spacing={4}>
                                             <Input
                                                 xs={12}
-                                                md={12}
+                                                md={9}
                                                 title='Título do relatório'
                                                 name='fields.tituloRelatorio'
                                                 required={false}
@@ -584,20 +584,9 @@ const FormUnidade = ({ id }) => {
                                                 helpText='Título que aparecerá no cabeçalho dos relatórios'
                                             />
 
-                                            <Select
-                                                xs={12}
-                                                md={8}
-                                                multiple
-                                                title='Extensões de Arquivos Permitidas'
-                                                name={`fields.extensoes`}
-                                                options={data.fields.allExtensions}
-                                                value={data.fields.extensoes}
-                                                form={form}
-                                            />
-
                                             <Input
                                                 xs={12}
-                                                md={4}
+                                                md={3}
                                                 title='Tamanho máximo dos anexos (MB)'
                                                 name='fields.anexosTamanhoMaximo'
                                                 required={true}
