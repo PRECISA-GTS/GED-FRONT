@@ -65,7 +65,7 @@ import { CommonDataProvider } from 'src/context/CommonDataContext'
 import { api } from 'src/configs/api'
 import { useEffect } from 'react'
 import { LocalizationProvider } from '@mui/x-date-pickers'
-import { checkAndRefreshToken } from 'src/configs/token'
+import { checkAndRefreshToken } from 'src/configs/tokenJWT'
 
 const clientSideEmotionCache = createEmotionCache()
 

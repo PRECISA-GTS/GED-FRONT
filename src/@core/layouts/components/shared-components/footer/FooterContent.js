@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Tooltip } from '@mui/material'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import ListVersions from 'src/components/Configuracoes/Versao/ListVersions'
-import { getTokenExpiration } from 'src/configs/token'
+import { getTokenExpiration } from 'src/configs/tokenJWT'
 
 
 const FooterContent = () => {

@@ -240,10 +240,10 @@ const FormProduto = ({ id, btnClose, handleConfirmNew, handleModalClose, newChan
                                 />
                                 <CheckLabel
                                     xs='12'
-                                    md='2'
-                                    title='Usa Laboratório'
-                                    name={`fields.usaLaboratorio`}
-                                    value={data.fields.usaLaboratorio}
+                                    md='4'
+                                    title='Usa análise do produto (Laboratório)'
+                                    name={`fields.analiseProduto`}
+                                    value={data.fields.analiseProduto}
                                     form={form}
                                     helpText='Habilita o uso do laboratório com a inserção de itens de análise'
                                 />

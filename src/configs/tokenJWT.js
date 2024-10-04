@@ -4,7 +4,6 @@ import authConfig from 'src/configs/auth'
 export const checkAndRefreshToken = () => {
   const tokenExpirationTime = 240 //? minutes
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName);
-  console.log("🚀 ~ token storedToken:", storedToken);
 
   if (storedToken) {
     // Decodifica o payload do token JWT
@@ -20,7 +19,7 @@ export const checkAndRefreshToken = () => {
     const { exp } = payload;
 
     if (Date.now() >= exp * 1000) {
-      console.log('expired token');
+      console.log('Expired token!');
       handleLogout(); // Chama a função de logout se o token estiver expirado
     } else {
       // Atualiza o token para expirar em 30 minutos a partir de agora
@@ -29,7 +28,6 @@ export const checkAndRefreshToken = () => {
         ...payload,
         exp: newExp
       };
-      console.log('refresh token ', new Date(newToken.exp * 1000));
       const newTokenString = `${tokenParts[0]}.${btoa(JSON.stringify(newToken))}.${tokenParts[2]}`; // Mantém a parte do header e signature
       window.localStorage.setItem(authConfig.storageTokenKeyName, newTokenString); // Atualiza o token no localStorage
     }
@@ -41,7 +39,7 @@ export const getTokenExpiration = () => {
   if (storedToken) {
     const tokenParts = storedToken.split('.');
     if (tokenParts.length !== 3) {
-      console.error('Invalid JWT format');
+      console.error('Invalid JWT format!');
       return;
     }
     // Decodifica a parte do payload (o segundo segmento do JWT)

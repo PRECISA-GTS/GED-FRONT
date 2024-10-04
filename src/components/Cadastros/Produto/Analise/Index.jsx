@@ -21,7 +21,7 @@ const Analise = ({ form, data, type }) => {
     }
 
     return (
-        form.watch('fields.usaLaboratorio') && (
+        form.watch('fields.analiseProduto') && (
             <Card>
                 <CardContent>
                     <Grid container spacing={5}>

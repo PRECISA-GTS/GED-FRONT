@@ -16,8 +16,6 @@ import { NotificationContext } from './NotificationContext'
 import { RouteContext } from 'src/context/RouteContext'
 import { useGlobal } from 'src/hooks/useGlobal'
 
-import { checkAndRefreshToken } from 'src/configs/token'
-
 // ** Defaults
 const defaultProvider = {
   user: null,
