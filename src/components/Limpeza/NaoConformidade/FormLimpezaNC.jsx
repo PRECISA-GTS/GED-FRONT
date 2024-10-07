@@ -7,7 +7,7 @@ import { useContext } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
 import { api } from 'src/configs/api'
-import Header from 'src/components/RecebimentoMp/NaoConformidade/Header'
+import Header from './Header'
 
 const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
     console.log('🚀 ~ FormLimpezaNC ~ id:', id)
