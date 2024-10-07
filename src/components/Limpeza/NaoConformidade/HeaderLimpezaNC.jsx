@@ -38,7 +38,7 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
     const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
-    const { setId, setModelID, setLimpezaID } = useContext(RouteContext)
+    const { setId, setIdNc, setModelID, setLimpezaID } = useContext(RouteContext)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -191,6 +191,7 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
     }
 
     const handleNew = values => {
+        console.log('handleNew: ', header.limpeza.id, values.new.modelo.id)
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
         setLimpezaID(header.limpeza.id)
         setModelID(values.new.modelo.id)
@@ -278,6 +279,7 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                         btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
                         handleNewModal={() => setOpenNew(true)}
                         btnCancel
+                        setIdNc={setIdNc}
                         btnSave={header?.status?.id < 40 ? true : false}
                         btnSend={
                             (user.papelID === 1 && header?.status?.id >= 30 && header?.status?.id <= 40) ||

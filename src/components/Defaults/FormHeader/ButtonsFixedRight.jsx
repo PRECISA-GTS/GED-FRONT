@@ -6,6 +6,7 @@ import useLoad from 'src/hooks/useLoad'
 import { useGlobal } from 'src/hooks/useGlobal'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
+import { RouteContext } from 'src/context/RouteContext'
 
 const ButtonsFixedRight = ({
     btnSend,
@@ -26,6 +27,7 @@ const ButtonsFixedRight = ({
     const { isLoading } = useLoad()
     const { data } = useGlobal()
     const { hasPermission } = useContext(AuthContext)
+    const { setId } = useContext(RouteContext)
 
     return (
         <div className='flex items-center gap-2'>
@@ -38,6 +40,7 @@ const ButtonsFixedRight = ({
                         color='primary'
                         size='medium'
                         sx={{ display: 'flex', gap: 2 }}
+                        onClick={() => setId(null)}
                     >
                         <Icon icon='ic:outline-plus' />
                         <span className='hidden sm:block'>Novo</span>

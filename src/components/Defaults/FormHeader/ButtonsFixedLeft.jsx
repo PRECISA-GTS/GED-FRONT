@@ -7,6 +7,7 @@ const ButtonsFixedLeft = ({
     routes,
     currentUrl,
     btnCancel,
+    setIdNc,
     btnDelete,
     btnInactivate,
     btnStatus,
@@ -39,7 +40,7 @@ const ButtonsFixedLeft = ({
                 <Tooltip title='Voltar página' placement='top'>
                     <Button
                         onClick={() => {
-                            setId(null)
+                            setIdNc ? setIdNc(null) : setId(null)
                             router.push(removeRouteNew(completeRoute))
                         }}
                         type='button'

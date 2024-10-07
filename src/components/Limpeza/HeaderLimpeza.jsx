@@ -14,12 +14,15 @@ import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import { ParametersContext } from 'src/context/ParametersContext'
+import { getCurrentTab } from 'src/configs/tabs'
+import NewContent from './NaoConformidade/NewContent'
+import DialogActs from '../Defaults/Dialogs/DialogActs'
 
 const HeaderLimpeza = ({ modelID }) => {
     console.log('HeaderLimpeza')
 
     const router = useRouter()
-    const { id, setId } = useContext(RouteContext)
+    const { id, setId, idNc, setModelID, setLimpezaID } = useContext(RouteContext)
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const [header, setHeader] = useState(null)
@@ -31,6 +34,8 @@ const HeaderLimpeza = ({ modelID }) => {
     const [openModal, setOpenModal] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [listErrors, setListErrors] = useState({ status: false, errors: [] })
+    const [openNew, setOpenNew] = useState(false)
+    const currentTab = getCurrentTab('limpeza', router)
 
     const getData = async () => {
         try {
@@ -190,6 +195,14 @@ const HeaderLimpeza = ({ modelID }) => {
         router.push(`/configuracoes/formularios/limpeza/`)
     }
 
+    const handleNewNC = values => {
+        //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
+        console.log('🚀 ~ handleNewNC: ', header.limpeza.id, values.new.modelo.id)
+        setLimpezaID(header.limpeza.id)
+        setModelID(values.new.modelo.id)
+        router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
+    }
+
     //* Actions data
     const actionsData = []
     const objReOpenForm = {
@@ -230,19 +243,22 @@ const HeaderLimpeza = ({ modelID }) => {
         }, 300)
     }, [id, loggedUnity, change])
 
+    console.log('currenttab: ', currentTab)
     return (
         <>
             <form onSubmit={e => customSubmit(e)}>
                 <FormHeader
                     id={id}
-                    btnNew={type === 'edit' ? true : false}
+                    btnNew={type === 'edit' && currentTab == 'limpeza' ? true : false}
+                    btnNewModal={user.papelID === 1 && type === 'edit' && currentTab != 'limpeza' ? true : false}
+                    handleNewModal={() => setOpenNew(true)}
                     btnCancel
                     btnSave={header?.status?.id < 40 ? true : false}
                     btnSend={header?.status?.id >= 30 && header?.status?.id <= 40 ? true : false}
                     btnPrint={type == 'edit' ? true : false}
                     btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
                     onclickDelete={() => setOpenDelete(true)}
-                    actions={true}
+                    actions={currentTab == 'limpeza' ? true : false}
                     handleSubmit={() => form.handleSubmit(onSubmit)}
                     handleSend={() => {
                         setOpenModal(true)
@@ -254,7 +270,7 @@ const HeaderLimpeza = ({ modelID }) => {
                     title='Limpeza e Higienização'
                     type={type}
                     status={header?.status?.id}
-                    actionsNC={header?.naoConformidade && header?.status?.id > 40}
+                    // actionsNC={header?.naoConformidade && header?.status?.id > 40}
                     module='limpeza'
                     actionsData={actionsData}
                 />
@@ -309,6 +325,17 @@ const HeaderLimpeza = ({ modelID }) => {
                             MessageError: 'Dado possui pendência!'
                         }}
                     />
+
+                    <DialogActs
+                        title='Nova Não Conformidade'
+                        handleConclusion={handleNewNC}
+                        size='lg'
+                        setOpenModal={setOpenNew}
+                        openModal={openNew}
+                        form={form}
+                    >
+                        <NewContent type='form' data={header} form={form} />
+                    </DialogActs>
                 </>
             )}
         </>

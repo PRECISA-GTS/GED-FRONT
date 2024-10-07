@@ -19,17 +19,21 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
             icon: () => <Icon icon='carbon:clean' />,
             content: (
                 <FormLimpeza id={id} modelID={null} form={form} header={header} block={block} setBlock={setBlock} />
-            )
+            ),
+            disabled: false
         },
         {
             value: 'nao-conformidade',
-            title: `Não Conformidade (${header?.totalNc})`,
+            title: `Não Conformidade ${header?.totalNc > 0 ? `(${header?.totalNc})` : ''}`,
             icon: () => <Icon icon='typcn:warning-outline' />,
-            content: <Controller form={form} header={header} block={block} setBlock={setBlock} change={change} />
+            content: <Controller form={form} header={header} block={block} setBlock={setBlock} change={change} />,
+            disabled: !id || !header?.naoConformidade ? true : false
         }
     ]
 
     const HeaderInfo = () => {
+        if (!id) return
+
         return (
             <Card>
                 <CardContent className='space-y-2 '>

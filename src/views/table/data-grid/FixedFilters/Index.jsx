@@ -12,8 +12,7 @@ const FixedFilters = ({ status, setStatus }) => {
             {(status.module === 'fornecedor' ||
                 status.module === 'recebimento-mp' ||
                 status.module === 'recebimento-mp-nao-conformidade' ||
-                status.module === 'limpeza' ||
-                status.module === 'limpeza-nao-conformidade') && (
+                status.module === 'limpeza') && (
                 <>
                     <Button
                         size='medium'
@@ -28,6 +27,13 @@ const FixedFilters = ({ status, setStatus }) => {
                         onClick={() => handleFilter('open')}
                     >
                         Em aberto
+                    </Button>
+                    <Button
+                        size='medium'
+                        variant={status.type === 'nc' ? 'contained' : 'outlined'}
+                        onClick={() => handleFilter('nc')}
+                    >
+                        NC
                     </Button>
                 </>
             )}

@@ -35,8 +35,13 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
                         key={tab.value}
                         className={`py-3 px-12 border-b-2 ${
                             value === tab.value ? 'border-[#4A8B57]' : 'border-transparent'
-                        }`}
+                        }
+                        ${tab.disabled ? 'cursor-not-allowed opacity-20' : 'cursor-pointer'}
+
+                        `}
                         onClick={() => {
+                            if (tab.disabled) return
+
                             handleChange(tab.value)
                             setIdNc(null) // Atualiza o estado do contexto
                         }}

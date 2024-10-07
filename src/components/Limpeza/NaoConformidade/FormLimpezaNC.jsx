@@ -68,46 +68,26 @@ const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
     }
 
     return (
-        <>
-            {/* <div className='flex gap-2 mb-2'>
-                <CustomChip
-                    size='small'
-                    HeaderFiel
-                    skin='light'
-                    color={header.status.color}
-                    label={header.status.label}
-                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+        <div className='space-y-4'>
+            <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
+
+            {type === 'new' && <ButtonOpenForm />}
+
+            {type === 'edit' && (
+                <ModelBlocks
+                    form={form}
+                    data={block}
+                    blockKeyName='parLimpezaNaoConformidadeModeloBlocoID'
+                    setBlock={setBlock}
+                    handleFileSelect={handleFileSelect}
+                    handleRemoveFile={handleRemoveFile}
+                    status={header.status.id}
+                    disabled={header.status.id >= 40}
                 />
-                <CustomChip
-                    size='small'
-                    HeaderFiel
-                    skin='light'
-                    label={header.modelo.nome}
-                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                />
-            </div> */}
+            )}
 
-            <div className='space-y-4'>
-                <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
-
-                {type === 'new' && <ButtonOpenForm />}
-
-                {type === 'edit' && (
-                    <ModelBlocks
-                        form={form}
-                        data={block}
-                        blockKeyName='parLimpezaNaoConformidadeModeloBlocoID'
-                        setBlock={setBlock}
-                        handleFileSelect={handleFileSelect}
-                        handleRemoveFile={handleRemoveFile}
-                        status={header.status.id}
-                        disabled={header.status.id >= 40}
-                    />
-                )}
-
-                <HistoricForm key={change} id={id} parFormularioID={5} />
-            </div>
-        </>
+            <HistoricForm key={change} id={id} parFormularioID={5} />
+        </div>
     )
 }
 

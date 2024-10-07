@@ -1,24 +1,9 @@
-import { Grid, Tooltip } from '@mui/material'
-import { useRouter } from 'next/router'
-import { useContext } from 'react'
+import { Grid } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import CustomChip from 'src/@core/components/mui/chip'
-import { AuthContext } from 'src/context/AuthContext'
-import { RouteContext } from 'src/context/RouteContext'
 
 const LimpezaInfo = ({ data }) => {
     if (!data) return
-
-    console.log('🚀 ~ LimpezaInfo:', data)
-
-    const router = useRouter()
-    const { user } = useContext(AuthContext)
-    const { setId } = useContext(RouteContext)
-
-    const goToReceive = () => {
-        setId(data.limpeza.id)
-        router.push(`/formularios/limpeza/`)
-    }
 
     return (
         <Grid container spacing={4}>
@@ -52,13 +37,6 @@ const LimpezaInfo = ({ data }) => {
                         color={data.limpeza.status?.color}
                         sx={{ height: 28, fontSize: '0.75rem' }}
                     />
-                    {(user.papelID != 2 || data.fornecedorAcessaRecebimento) && (
-                        <Tooltip title='Acessar Limpeza e Higienização' placement='top'>
-                            <div className='cursor-pointer'>
-                                <Icon icon='ci:external-link' onClick={goToReceive} />
-                            </div>
-                        </Tooltip>
-                    )}
                 </div>
             </Grid>
         </Grid>

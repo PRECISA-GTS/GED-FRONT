@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form'
 const FormHeader = ({
     id,
     btnCancel,
+    setIdNc,
     btnInactivate,
     btnSave,
     btnSend,
@@ -255,6 +256,7 @@ const FormHeader = ({
                         routes={routes}
                         currentUrl={currentUrl}
                         btnCancel={btnCancel}
+                        setIdNc={setIdNc}
                         btnInactivate={btnInactivate}
                         btnDelete={btnDelete}
                         btnStatus={btnStatus}
