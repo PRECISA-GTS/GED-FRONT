@@ -11,7 +11,7 @@ import { Card, CardContent } from '@mui/material'
 import LimpezaInfo from './NaoConformidade/LimpezaInfo'
 
 const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change }) => {
-    console.log('🚀 ~ id nc:', id, idNc)
+    console.log('🚀 ~ id nc:', header?.naoConformidade)
     const tabs = [
         {
             value: 'limpeza',
@@ -27,7 +27,7 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
             title: `Não Conformidade ${header?.totalNc > 0 ? `(${header?.totalNc})` : ''}`,
             icon: () => <Icon icon='typcn:warning-outline' />,
             content: <Controller form={form} header={header} block={block} setBlock={setBlock} change={change} />,
-            disabled: !id || !header?.naoConformidade ? true : false
+            disabled: !id || (!idNc && !header?.naoConformidade) ? true : false
         }
     ]
 
