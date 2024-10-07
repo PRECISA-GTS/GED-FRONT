@@ -48,8 +48,8 @@ const LimpezaInfo = ({ data }) => {
                 <div className='flex items-center gap-2'>
                     <CustomChip
                         skin='light'
-                        label={data.limpeza.status.label}
-                        color={data.limpeza.status.color}
+                        label={data.limpeza.status?.label}
+                        color={data.limpeza.status?.color}
                         sx={{ height: 28, fontSize: '0.75rem' }}
                     />
                     {(user.papelID != 2 || data.fornecedorAcessaRecebimento) && (

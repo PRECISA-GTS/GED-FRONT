@@ -7,6 +7,8 @@ import FormNaoConformidade from 'src/components/Limpeza/NaoConformidade/HeaderLi
 import { useRouter } from 'next/router'
 import ListNaoConformidade from 'src/pages/formularios/limpeza/Tabs/NaoConformidade/List'
 import Controller from './NaoConformidade/Controller'
+import { Card, CardContent } from '@mui/material'
+import LimpezaInfo from './NaoConformidade/LimpezaInfo'
 
 const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change }) => {
     console.log('🚀 ~ id nc:', id, idNc)
@@ -21,13 +23,23 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
         },
         {
             value: 'nao-conformidade',
-            title: 'Não Conformidade',
+            title: `Não Conformidade (${header?.totalNc})`,
             icon: () => <Icon icon='typcn:warning-outline' />,
             content: <Controller form={form} header={header} block={block} setBlock={setBlock} change={change} />
         }
     ]
 
-    return <CustomTabs tabs={tabs} defaultTab={defaultTab} />
+    const HeaderInfo = () => {
+        return (
+            <Card>
+                <CardContent className='space-y-2 '>
+                    <LimpezaInfo data={header} />
+                </CardContent>
+            </Card>
+        )
+    }
+
+    return <CustomTabs tabs={tabs} headerInfoComponent={<HeaderInfo />} defaultTab={defaultTab} />
 }
 
 export default Tabs

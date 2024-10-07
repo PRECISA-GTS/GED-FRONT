@@ -13,7 +13,9 @@ import NewContent from 'src/components/Limpeza/NaoConformidade/NewContent'
 import { useForm } from 'react-hook-form'
 import { RouteContext } from 'src/context/RouteContext'
 
-const ListNaoConformidade = () => {
+const ListNaoConformidade = ({ limpezaID }) => {
+    console.log('🚀 ~ limpezaID:', limpezaID)
+
     const { user, loggedUnity } = useContext(AuthContext)
     const router = useRouter()
     const { setModelID, setLimpezaID, setIdNc } = useContext(RouteContext)
@@ -21,20 +23,18 @@ const ListNaoConformidade = () => {
     const { setTitle } = useContext(ParametersContext)
     const { startFilter, setFilteredDataLimpeza, filteredDataLimpeza, setDataLimpeza } = useFilter()
     const [openNew, setOpenNew] = useState(false)
-    const [status, setStatus] = useState({
-        module: 'limpeza-nao-conformidade',
-        type: 'open'
-    })
 
     const form = useForm({ mode: 'onChange' })
 
     const getList = async () => {
+        if (!limpezaID) return
+
         await api
             .post(`/formularios/limpeza/nao-conformidade/getList`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
                 usuarioID: user.usuarioID,
-                status
+                limpezaID: limpezaID
             })
             .then(response => {
                 setFilteredDataLimpeza(response.data)
@@ -61,7 +61,7 @@ const ListNaoConformidade = () => {
     useEffect(() => {
         getList()
         startFilter(<Filters />, false)
-    }, [router.query, status])
+    }, [router.query])
 
     const arrColumns = [
         {
@@ -110,9 +110,8 @@ const ListNaoConformidade = () => {
                     btnNew={false}
                     btnNewModal={user.papelID === 1 ? true : false}
                     handleNewModal={() => setOpenNew(true)}
-                    status={status}
-                    setStatus={setStatus}
                     setCustomId={setIdNc}
+                    filters={false}
                 />
             )}
 

@@ -5,6 +5,7 @@ import FormLimpezaNC from './FormLimpezaNC'
 
 const Controller = ({ form, header, block, setBlock, change }) => {
     const { idNc, id } = useContext(RouteContext)
+    console.log('🚀 ~ idNc:', idNc)
 
     return idNc ? (
         <FormLimpezaNC
@@ -18,7 +19,7 @@ const Controller = ({ form, header, block, setBlock, change }) => {
             change={change}
         />
     ) : (
-        <ListNaoConformidade />
+        <ListNaoConformidade limpezaID={id} />
     )
 }
 

@@ -5,6 +5,7 @@ import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
 import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
 import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
+import CustomChip from 'src/@core/components/mui/chip'
 import { useEffect } from 'react'
 
 const Header = ({ form, data, disabled }) => {
@@ -32,7 +33,27 @@ const Header = ({ form, data, disabled }) => {
         <Card>
             <CardContent>
                 <Grid container spacing={6} className='items-center'>
-                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                    <Grid item xs={12} md={6}>
+                        <div className='flex items-center gap-2'>
+                            <CustomChip
+                                size='small'
+                                HeaderFiel
+                                skin='light'
+                                color={data.status.color}
+                                label={data.status.label}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                            <CustomChip
+                                size='small'
+                                HeaderFiel
+                                skin='light'
+                                label={data.modelo.nome}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                        </div>
+                    </Grid>
+
+                    <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
                         <InfoDepartamentos data={data?.departamentosPreenchimento ?? []} />
                     </Grid>
 

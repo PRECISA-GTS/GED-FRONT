@@ -13,7 +13,8 @@ const Table = ({
     handleNewModal,
     status,
     setStatus,
-    setCustomId
+    setCustomId,
+    filters = true
 }) => {
     return (
         <Card className='h-full'>
@@ -22,6 +23,7 @@ const Table = ({
                     rows={result}
                     columns={columns}
                     modalLog={modalLog}
+                    filters={filters}
                     buttonsHeader={{
                         btnNew: btnNew,
                         btnPrint: btnPrint,

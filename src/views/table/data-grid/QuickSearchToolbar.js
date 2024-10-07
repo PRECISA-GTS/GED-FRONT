@@ -13,6 +13,8 @@ import DropDownFilter from './DropDownFilter'
 import FixedFilters from './FixedFilters/Index'
 
 const QuickSearchToolbar = (props) => {
+  console.log("🚀 ~ props:", props.filters)
+
   const router = Router
   const { setId } = useContext(RouteContext)
   const { clearSearch, searchText, filteredData, handleClear, form, setSearchText, names } = useFilter()
@@ -37,97 +39,101 @@ const QuickSearchToolbar = (props) => {
         p: theme => theme.spacing(8, 0, 0, 0),
       }}
     >
-      <Box className='w-full flex items-center gap-2'>
-        {
-          props.buttonsHeader.btnBack && (
-            <Button
-              onClick={() => {
-                router.push(backRoute(router.pathname))
-                setId(null)
-              }}
-              type='button'
-              variant='outlined'
-              color='primary'
-              size='small'
-            >
-              <Icon icon='material-symbols:arrow-back-rounded' />
-            </Button>
-          )
-        }
-        <div>
-          <TextField
-            size='medium'
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value)
-            }}
-            placeholder='Buscar…'
-            className='!w-[70vw] md:!w-[20vw] relative'
-            autoComplete='off'
-            variant='standard'
-            InputProps={{
-              startAdornment: (
-                <Box sx={{ mr: 2, display: 'flex' }}>
-                  <Icon icon='mdi:magnify' fontSize={20} />
-                </Box>
-              ),
-              endAdornment: (
-                <div className='flex items-center gap-1'>
-                  {
-                    searchText && (
-                      <IconButton className={` ${names.length > 0 ? 'order-2' : 'order-1'}`} size='medium' title='Clear' color='secondary' aria-label='Clear' onClick={clearSearch}>
-                        <Icon icon='mdi:close' fontSize={20} />
-                      </IconButton>
-                    )
-                  }
-                  <DropDownFilter />
-                </div>
+      {props.filters && (
+        <>
+          <Box className='w-full flex items-center gap-2'>
+            {
+              props.buttonsHeader.btnBack && (
+                <Button
+                  onClick={() => {
+                    router.push(backRoute(router.pathname))
+                    setId(null)
+                  }}
+                  type='button'
+                  variant='outlined'
+                  color='primary'
+                  size='small'
+                >
+                  <Icon icon='material-symbols:arrow-back-rounded' />
+                </Button>
               )
-            }}
-            sx={{
-              width: {
-                xs: 1,
-                sm: 'auto'
-              },
-              "& .MuiInput-underline:after": {
-                borderBottom: "none", // Remove a borda inferior após o foco
-                transition: "none", // Remove a animação
-              },
-              '& .MuiInputBase-root > svg': {
-                mr: 2
-              }
-            }}
-            autoFocus={true}
-          />
-        </div>
-        {((searchText && searchText.length > 0) || filledFields > 0) && (
-          <Button size='medium' title='Clear' color='secondary' variant='outlined' aria-label='Clear' onClick={handleClear} className='hidden sm:block !capitalize'>
-            <div className='flex items-center gap-1'>
-              <span>Filtro: {props.rows.length}</span>
-              <Icon icon='mdi:close' fontSize={20} className='text-red-500' />
+            }
+            <div>
+              <TextField
+                size='medium'
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value)
+                }}
+                placeholder='Buscar…'
+                className='!w-[70vw] md:!w-[20vw] relative'
+                autoComplete='off'
+                variant='standard'
+                InputProps={{
+                  startAdornment: (
+                    <Box sx={{ mr: 2, display: 'flex' }}>
+                      <Icon icon='mdi:magnify' fontSize={20} />
+                    </Box>
+                  ),
+                  endAdornment: (
+                    <div className='flex items-center gap-1'>
+                      {
+                        searchText && (
+                          <IconButton className={` ${names.length > 0 ? 'order-2' : 'order-1'}`} size='medium' title='Clear' color='secondary' aria-label='Clear' onClick={clearSearch}>
+                            <Icon icon='mdi:close' fontSize={20} />
+                          </IconButton>
+                        )
+                      }
+                      <DropDownFilter />
+                    </div>
+                  )
+                }}
+                sx={{
+                  width: {
+                    xs: 1,
+                    sm: 'auto'
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottom: "none", // Remove a borda inferior após o foco
+                    transition: "none", // Remove a animação
+                  },
+                  '& .MuiInputBase-root > svg': {
+                    mr: 2
+                  }
+                }}
+                autoFocus={true}
+              />
             </div>
-          </Button>
-        )}
+            {((searchText && searchText.length > 0) || filledFields > 0) && (
+              <Button size='medium' title='Clear' color='secondary' variant='outlined' aria-label='Clear' onClick={handleClear} className='hidden sm:block !capitalize'>
+                <div className='flex items-center gap-1'>
+                  <span>Filtro: {props.rows.length}</span>
+                  <Icon icon='mdi:close' fontSize={20} className='text-red-500' />
+                </div>
+              </Button>
+            )}
 
-        <FixedFilters
-          status={props.buttonsHeader.status}
-          setStatus={props.buttonsHeader.setStatus}
-        />
+            <FixedFilters
+              status={props.buttonsHeader.status}
+              setStatus={props.buttonsHeader.setStatus}
+            />
 
-      </Box>
+          </Box>
 
-      <ListHeader
-        btnNew={props.buttonsHeader.btnNew}
-        btnPrint={props.buttonsHeader.btnPrint}
-        btnBack={props.buttonsHeader.btnBack}
-        btnSave={props.buttonsHeader.btnSave}
-        handleSave={props.buttonsHeader.handleSave}
-        hasListChange={props.hasChange}
-        openModal={props.buttonsHeader.openModal}
+          <ListHeader
+            btnNew={props.buttonsHeader.btnNew}
+            btnPrint={props.buttonsHeader.btnPrint}
+            btnBack={props.buttonsHeader.btnBack}
+            btnSave={props.buttonsHeader.btnSave}
+            handleSave={props.buttonsHeader.handleSave}
+            hasListChange={props.hasChange}
+            openModal={props.buttonsHeader.openModal}
 
-        btnNewModal={props.buttonsHeader.btnNewModal}
-        handleNewModal={props.buttonsHeader.handleNewModal}
-      />
+            btnNewModal={props.buttonsHeader.btnNewModal}
+            handleNewModal={props.buttonsHeader.handleNewModal}
+          />
+        </>
+      )}
     </Box>
   )
 }

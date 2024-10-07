@@ -6,7 +6,8 @@ import DialogLog from 'src/components/Defaults/Dialogs/DialogLog';
 import { useFilter } from 'src/context/FilterContext';
 import { useRouter } from 'next/router';
 
-const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
+const TableFilter = ({ rows, columns, filters, buttonsHeader, modalLog }) => {
+
   const {
     pageSize,
     setPageSize,
@@ -77,6 +78,7 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
           toolbar: {
             buttonsHeader: buttonsHeader,
             rows: rows,
+            filters: filters,
           }
         }}
       // className='min-h-[85vh]'

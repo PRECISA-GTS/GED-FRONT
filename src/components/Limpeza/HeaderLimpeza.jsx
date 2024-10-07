@@ -16,6 +16,8 @@ import { toastMessage } from 'src/configs/defaultConfigs'
 import { ParametersContext } from 'src/context/ParametersContext'
 
 const HeaderLimpeza = ({ modelID }) => {
+    console.log('HeaderLimpeza')
+
     const router = useRouter()
     const { id, setId } = useContext(RouteContext)
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -38,6 +40,7 @@ const HeaderLimpeza = ({ modelID }) => {
                 unidadeID: loggedUnity.unidadeID
             }
             const response = await api.post(`/formularios/limpeza/getData`, values)
+            console.log('🚀 ~ getData:', response.data)
             form.reset(response.data)
             setHeader(response.data.header)
             setBlock(response.data.blocos)

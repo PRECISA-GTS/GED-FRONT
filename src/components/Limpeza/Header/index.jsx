@@ -137,7 +137,7 @@ const Header = ({ form, data, disabled }) => {
             <CardContent>
                 <Grid container spacing={6} className='items-center'>
                     <Grid item xs={12} md={6}>
-                        <div className='flex gap-2 mb-2'>
+                        <div className='flex gap-2'>
                             <CustomChip
                                 size='small'
                                 HeaderFiel

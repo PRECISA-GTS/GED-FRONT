@@ -1,15 +1,17 @@
 import { Card, CardContent } from '@mui/material'
 import CustomChip from 'src/@core/components/mui/chip'
 import LimpezaInfo from './LimpezaInfo'
-import Header from '../Header'
 import ModelBlocks from 'src/components/Form/ModelBlocks'
 import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { useContext } from 'react'
 import { AuthContext } from 'src/context/AuthContext'
 import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
 import { api } from 'src/configs/api'
+import Header from 'src/components/RecebimentoMp/NaoConformidade/Header'
 
 const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
+    console.log('🚀 ~ FormLimpezaNC ~ id:', id)
+
     const type = id && id > 0 ? 'edit' : 'new'
     const { user } = useContext(AuthContext)
 
@@ -67,7 +69,7 @@ const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
 
     return (
         <>
-            <div className='flex gap-2 mb-2'>
+            {/* <div className='flex gap-2 mb-2'>
                 <CustomChip
                     size='small'
                     HeaderFiel
@@ -83,15 +85,9 @@ const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
                     label={header.modelo.nome}
                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 />
-            </div>
+            </div> */}
 
             <div className='space-y-4'>
-                <Card>
-                    <CardContent className='space-y-2 '>
-                        <LimpezaInfo data={header} />
-                    </CardContent>
-                </Card>
-
                 <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
 
                 {type === 'new' && <ButtonOpenForm />}

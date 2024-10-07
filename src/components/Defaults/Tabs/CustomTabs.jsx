@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from 'react'
 import { tabChange } from 'src/configs/tabs'
 import { RouteContext } from 'src/context/RouteContext'
 
-const CustomTabs = ({ tabs, defaultTab }) => {
+const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
     const router = useRouter()
     const currentTab = router.query.aba || defaultTab
-    console.log('renderiza...', currentTab, defaultTab)
+    console.log('renderiza...', tabs)
 
     const { setIdNc } = useContext(RouteContext)
 
@@ -24,12 +24,11 @@ const CustomTabs = ({ tabs, defaultTab }) => {
             console.log('atualiza...')
             tabChange(newValue, router)
             setValue(newValue)
-            // setIdNc(null) // Atualiza o estado do contexto
         }
     }
 
     return (
-        <div className='flex flex-col w-full'>
+        <div className='flex flex-col gap-2 w-full'>
             <div className='flex gap-2 mb-3'>
                 {tabs.map(tab => (
                     <button
@@ -37,7 +36,10 @@ const CustomTabs = ({ tabs, defaultTab }) => {
                         className={`py-3 px-12 border-b-2 ${
                             value === tab.value ? 'border-[#4A8B57]' : 'border-transparent'
                         }`}
-                        onClick={() => handleChange(tab.value)}
+                        onClick={() => {
+                            handleChange(tab.value)
+                            setIdNc(null) // Atualiza o estado do contexto
+                        }}
                     >
                         <div className='flex items-center gap-1 '>
                             {tab.icon && (
@@ -50,6 +52,8 @@ const CustomTabs = ({ tabs, defaultTab }) => {
                     </button>
                 ))}
             </div>
+
+            {headerInfoComponent}
 
             <div className='tab-content'>
                 {tabs.map(tab => (
