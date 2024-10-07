@@ -15,7 +15,7 @@ import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import { ParametersContext } from 'src/context/ParametersContext'
 
-const TopBar = ({ modelID }) => {
+const HeaderLimpeza = ({ modelID }) => {
     const router = useRouter()
     const { id, setId } = useContext(RouteContext)
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -257,7 +257,15 @@ const TopBar = ({ modelID }) => {
                 />
             </form>
 
-            <Tabs id={id} modelID={modelID} form={form} header={header} block={block} setBlock={setBlock} />
+            <Tabs
+                id={id}
+                modelID={modelID}
+                form={form}
+                header={header}
+                block={block}
+                setBlock={setBlock}
+                defaultTab='limpeza'
+            />
 
             {header && (
                 <>
@@ -304,4 +312,4 @@ const TopBar = ({ modelID }) => {
     )
 }
 
-export default TopBar
+export default HeaderLimpeza

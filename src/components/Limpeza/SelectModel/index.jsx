@@ -8,7 +8,7 @@ import Router from 'next/router'
 import CardList from 'src/components/Defaults/Cards/CardList'
 import { backRoute } from 'src/configs/defaultConfigs'
 import EmptyModels from 'src/components/Defaults/EmptyModels'
-import TopBar from '../TopBar'
+import TopBar from '../HeaderLimpeza'
 
 const SelectModel = () => {
     const { loggedUnity } = useContext(AuthContext)

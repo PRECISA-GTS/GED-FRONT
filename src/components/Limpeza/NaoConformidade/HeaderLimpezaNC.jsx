@@ -23,8 +23,10 @@ import { canConfigForm, fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
 import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
 import ModelBlocks from 'src/components/Form/ModelBlocks'
+import Tabs from '../Tabs'
 
-const NaoConformidade = ({ id, limpezaID, modelID }) => {
+const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
+    console.log('🚀 ~ HeaderLimpezaNC:', id, limpezaID, modelID)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -250,58 +252,6 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         }
     }
 
-    const handleFileSelect = async (event, item) => {
-        const selectedFile = event.target.files
-        if (selectedFile && selectedFile.length > 0) {
-            const formData = new FormData()
-            for (let i = 0; i < selectedFile.length; i++) {
-                formData.append('files[]', selectedFile[i])
-            }
-            formData.append(`usuarioID`, user.usuarioID)
-            formData.append(`unidadeID`, loggedUnity.unidadeID)
-            formData.append(
-                `parLimpezaNaoConformidadeModeloBlocoID`,
-                item.parLimpezaNaoConformidadeModeloBlocoID ?? null
-            )
-            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
-
-            await api
-                .post(
-                    `/formularios/limpeza/nao-conformidade/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
-                    formData
-                )
-                .then(response => {
-                    onSubmit(form.getValues()) //? Atualiza dados do formulário
-                })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
-                })
-                .finally(() => {
-                    setChange(!change)
-                })
-        }
-    }
-
-    const handleRemoveFile = async item => {
-        if (item) {
-            await api
-                .delete(
-                    `/formularios/limpeza/nao-conformidade/deleteAnexo/${id}/${item.anexoID}/${loggedUnity.unidadeID}/${user.usuarioID}/item`
-                )
-                .then(response => {
-                    //* Submete formulário pra atualizar configurações dos itens
-                    const values = form.getValues()
-                    onSubmit(values)
-                })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
-                })
-                .finally(() => {
-                    getData()
-                })
-        }
-    }
-
     useEffect(() => {
         setTitle({
             icon: 'typcn:warning-outline',
@@ -318,13 +268,13 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         setTimeout(() => {
             form.trigger()
         }, 300)
-    }, [change, user])
+    }, [id, change, user])
 
     return (
-        <form onSubmit={e => customSubmit(e)}>
-            {header && (
-                <>
-                    {/* <FormHeader
+        header && (
+            <>
+                <form onSubmit={e => customSubmit(e)}>
+                    <FormHeader
                         btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
                         handleNewModal={() => setOpenNew(true)}
                         btnCancel
@@ -350,103 +300,70 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         title='Não conformidade da Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
-                    /> */}
-
-                    <div className='flex gap-2 mb-2'>
-                        <CustomChip
-                            size='small'
-                            HeaderFiel
-                            skin='light'
-                            color={header.status.color}
-                            label={header.status.label}
-                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                        />
-                        <CustomChip
-                            size='small'
-                            HeaderFiel
-                            skin='light'
-                            label={header.modelo.nome}
-                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                        />
-                    </div>
-
-                    <div className='space-y-4'>
-                        <Card>
-                            <CardContent className='space-y-2 '>
-                                <LimpezaInfo data={header} />
-                            </CardContent>
-                        </Card>
-
-                        <Header form={form} data={header} disabled={header.status?.id >= 40 || user.papelID != 1} />
-
-                        {type === 'new' && <ButtonOpenForm />}
-
-                        {type === 'edit' && (
-                            <ModelBlocks
-                                form={form}
-                                data={block}
-                                blockKeyName='parLimpezaNaoConformidadeModeloBlocoID'
-                                setBlock={setBlock}
-                                handleFileSelect={handleFileSelect}
-                                handleRemoveFile={handleRemoveFile}
-                                status={header.status.id}
-                                disabled={header.status.id >= 40}
-                            />
-                        )}
-
-                        <HistoricForm key={change} id={id} parFormularioID={5} />
-                    </div>
-
-                    <DialogFormConclusionNC
-                        openModal={openModal}
-                        handleClose={() => {
-                            setOpenModal(false)
-                        }}
-                        title='Concluir Não Conformidade da Limpeza e Higienização'
-                        text={`Deseja realmente concluir este formulário?`}
-                        status={header.status.id}
-                        canChange={true}
-                        btnCancel
-                        btnConfirm
-                        btnConfirmColor='primary'
-                        conclusionForm={conclude}
-                        type='limpezaNaoConformidade'
-                        listErrors={listErrors}
-                        unity={loggedUnity}
-                        values={null}
-                        formularioID={5}
-                        modeloID={header.modelo.id}
-                        produtos={form.getValues('header.equipamentos')}
-                        form={form}
-                        departamentos={header.departamentosConclusao}
                     />
+                </form>
 
-                    <DialogDelete
-                        open={openDelete}
-                        handleClose={() => setOpenDelete(false)}
-                        title='Excluir Formulário'
-                        description='Tem certeza que deseja exluir o formulario?'
-                        params={{
-                            route: `formularios/limpeza/nao-conformidade/delete/${id}`,
-                            messageSucceded: 'Formulário excluído com sucesso!',
-                            MessageError: 'Dado possui pendência!'
-                        }}
-                    />
+                <Tabs
+                    idNc={id}
+                    id={limpezaID}
+                    modelID={modelID}
+                    form={form}
+                    header={header}
+                    block={block}
+                    setBlock={setBlock}
+                    defaultTab='nao-conformidade'
+                    change={change}
+                />
 
-                    <DialogActs
-                        title='Nova Não Conformidade'
-                        handleConclusion={handleNew}
-                        size='lg'
-                        setOpenModal={setOpenNew}
-                        openModal={openNew}
-                        form={form}
-                    >
-                        <NewContent type='form' data={header} form={form} />
-                    </DialogActs>
-                </>
-            )}
-        </form>
+                <DialogFormConclusionNC
+                    openModal={openModal}
+                    handleClose={() => {
+                        setOpenModal(false)
+                    }}
+                    title='Concluir Não Conformidade da Limpeza e Higienização'
+                    text={`Deseja realmente concluir este formulário?`}
+                    status={header.status.id}
+                    canChange={true}
+                    btnCancel
+                    btnConfirm
+                    btnConfirmColor='primary'
+                    conclusionForm={conclude}
+                    type='limpezaNaoConformidade'
+                    listErrors={listErrors}
+                    unity={loggedUnity}
+                    values={null}
+                    formularioID={5}
+                    modeloID={header.modelo.id}
+                    produtos={form.getValues('header.equipamentos')}
+                    form={form}
+                    departamentos={header.departamentosConclusao}
+                />
+
+                <DialogDelete
+                    open={openDelete}
+                    handleClose={() => setOpenDelete(false)}
+                    title='Excluir Formulário'
+                    description='Tem certeza que deseja exluir o formulario?'
+                    params={{
+                        route: `formularios/limpeza/nao-conformidade/delete/${id}`,
+                        messageSucceded: 'Formulário excluído com sucesso!',
+                        MessageError: 'Dado possui pendência!'
+                    }}
+                />
+
+                <DialogActs
+                    title='Nova Não Conformidade'
+                    handleConclusion={handleNew}
+                    size='lg'
+                    setOpenModal={setOpenNew}
+                    openModal={openNew}
+                    form={form}
+                >
+                    <NewContent type='form' data={header} form={form} />
+                </DialogActs>
+            </>
+        )
     )
 }
 
-export default NaoConformidade
+export default HeaderLimpezaNC

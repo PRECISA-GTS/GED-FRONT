@@ -1,20 +1,32 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { tabChange } from 'src/configs/tabs'
+import { RouteContext } from 'src/context/RouteContext'
 
 const CustomTabs = ({ tabs, defaultTab }) => {
     const router = useRouter()
-    const [value, setValue] = useState(defaultTab)
     const currentTab = router.query.aba || defaultTab
+    console.log('renderiza...', currentTab, defaultTab)
 
-    const handleChange = newValue => {
-        setValue(newValue)
-        tabChange(newValue, router)
-    }
+    const { setIdNc } = useContext(RouteContext)
+
+    const [value, setValue] = useState(currentTab)
 
     useEffect(() => {
-        setValue(currentTab)
-    }, [router.query.aba])
+        // Atualiza o estado se a aba atual mudar pela rota
+        if (currentTab !== value) {
+            setValue(currentTab)
+        }
+    }, [currentTab])
+
+    const handleChange = newValue => {
+        if (newValue !== value) {
+            console.log('atualiza...')
+            tabChange(newValue, router)
+            setValue(newValue)
+            // setIdNc(null) // Atualiza o estado do contexto
+        }
+    }
 
     return (
         <div className='flex flex-col w-full'>
@@ -23,7 +35,7 @@ const CustomTabs = ({ tabs, defaultTab }) => {
                     <button
                         key={tab.value}
                         className={`py-3 px-12 border-b-2 ${
-                            value === tab.value ? ' border-[#4A8B57]' : 'border-transparent'
+                            value === tab.value ? 'border-[#4A8B57]' : 'border-transparent'
                         }`}
                         onClick={() => handleChange(tab.value)}
                     >
@@ -33,7 +45,7 @@ const CustomTabs = ({ tabs, defaultTab }) => {
                                     <tab.icon />
                                 </div>
                             )}
-                            <p className={`text-[14px] ${value === tab.value ? 'text-[#4A8B57]' : ''} `}>{tab.title}</p>
+                            <p className={`text-[14px] ${value === tab.value ? 'text-[#4A8B57]' : ''}`}>{tab.title}</p>
                         </div>
                     </button>
                 ))}

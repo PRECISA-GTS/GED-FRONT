@@ -1,7 +1,7 @@
 import { ParametersContext } from 'src/context/ParametersContext'
 import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import NaoConformidade from 'src/components/Limpeza/NaoConformidade'
+import NaoConformidade from 'src/components/Limpeza/NaoConformidade/HeaderLimpezaNC'
 import { RouteContext } from 'src/context/RouteContext'
 import SelectModel from 'src/components/Limpeza/SelectModel'
 

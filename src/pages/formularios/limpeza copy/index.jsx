@@ -5,7 +5,7 @@ import FormLimpeza from 'src/components/Limpeza/FormLimpeza'
 import ListNaoConformidade from './Tabs/NaoConformidade/List'
 import { useRouter } from 'next/router'
 import Icon from 'src/@core/components/icon'
-import FormNaoConformidade from 'src/components/Limpeza/NaoConformidade'
+import FormNaoConformidade from 'src/components/Limpeza/NaoConformidade/HeaderLimpezaNC'
 import CustomTabs from 'src/components/Defaults/Tabs/CustomTabs'
 
 const Limpeza = () => {
