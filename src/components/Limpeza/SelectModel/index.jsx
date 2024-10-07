@@ -6,16 +6,14 @@ import { useEffect, useContext, useState } from 'react'
 import { api } from 'src/configs/api'
 import Router from 'next/router'
 import CardList from 'src/components/Defaults/Cards/CardList'
-import FormLimpeza from '../FormLimpeza'
 import { backRoute } from 'src/configs/defaultConfigs'
-import EmptyForms from 'src/pages/configuracoes/formularios/EmptyForms'
 import EmptyModels from 'src/components/Defaults/EmptyModels'
+import TopBar from '../TopBar'
 
 const SelectModel = () => {
     const { loggedUnity } = useContext(AuthContext)
     const { setId } = useContext(RouteContext)
     const [model, setModel] = useState(null)
-    console.log('🚀 ~ model:', model)
     const [models, setModels] = useState(null)
     const router = Router
 
@@ -55,7 +53,7 @@ const SelectModel = () => {
 
     return (
         <>
-            {model && <FormLimpeza id={null} modelID={model} />}
+            {model && <TopBar modelID={model} />}
             {!model && (
                 <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
                     {/* Botão voltar */}

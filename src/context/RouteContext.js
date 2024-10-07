@@ -3,6 +3,7 @@ const RouteContext = createContext({})
 
 const RouteProvider = ({ children }) => {
   const [id, setId] = useState(null)
+  const [idNc, setIdNc] = useState(null)
   const [modelID, setModelID] = useState(null)
   const [recebimentoMpID, setRecebimentoMpID] = useState(null)
   const [limpezaID, setLimpezaID] = useState(null)
@@ -10,6 +11,8 @@ const RouteProvider = ({ children }) => {
   const values = {
     id,
     setId,
+    idNc,
+    setIdNc,
     isLoading,
     setIsLoading,
     modelID,

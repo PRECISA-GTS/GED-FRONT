@@ -7,36 +7,21 @@ import { useRouter } from 'next/router'
 import Icon from 'src/@core/components/icon'
 import FormNaoConformidade from 'src/components/Limpeza/NaoConformidade'
 import CustomTabs from 'src/components/Defaults/Tabs/CustomTabs'
+import TopBar from 'src/components/Limpeza/TopBar'
 
 const Limpeza = () => {
     const router = useRouter()
-    const { id } = useContext(RouteContext)
-    const currentTab = router.query.aba || 'limpeza'
-
-    const tabs = [
-        {
-            value: 'limpeza',
-            title: 'Limpeza e Higienização',
-            icon: () => <Icon icon='carbon:clean' />,
-            content: <ListLimpeza />
-        },
-        {
-            value: 'nao-conformidade',
-            title: 'Não Conformidade',
-            icon: () => <Icon icon='typcn:warning-outline' />,
-            content: <ListNaoConformidade />
-        }
-    ]
+    const { id, idNc } = useContext(RouteContext)
+    console.log('🚀 ~ id:', id, idNc)
 
     return (
         <>
-            {!id ? (
-                <CustomTabs tabs={tabs} defaultTab='limpeza' />
+            {id && idNc ? (
+                <FormNaoConformidade id={idNc} limpezaID={id} modelID={null} />
+            ) : id && !idNc ? (
+                <TopBar />
             ) : (
-                <>
-                    {currentTab === 'limpeza' && <FormLimpeza id={id} modelID={null} />}
-                    {currentTab === 'nao-conformidade' && <FormNaoConformidade id={id} />}
-                </>
+                <ListLimpeza />
             )}
         </>
     )

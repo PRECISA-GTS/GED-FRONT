@@ -67,7 +67,7 @@ const VerticalNavLink = ({
 }) => {
 
   //* ID do contexto
-  const { setId } = useContext(RouteContext)
+  const { setId, setIdNc } = useContext(RouteContext)
 
   // ** Hooks
   const theme = useTheme()
@@ -141,6 +141,7 @@ const VerticalNavLink = ({
             }
             //* Limpa ID do contexto
             setId(null)
+            setIdNc(null)
           }}
           sx={{
             py: 3.5,

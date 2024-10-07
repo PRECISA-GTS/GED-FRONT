@@ -34,6 +34,7 @@ const AuthContext = createContext(defaultProvider)
 
 const AuthProvider = ({ children }) => {
   const { setId } = useContext(RouteContext)
+
   // ** States
   const [user, setUser] = useState(defaultProvider.user)
   const [loading, setLoading] = useState(defaultProvider.loading)

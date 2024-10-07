@@ -50,7 +50,8 @@ const TableFilter = ({ rows, columns, buttonsHeader, modalLog }) => {
       setRowSelected(row)
       setOpenModalLog(true)
     } else {
-      setId(row.id);
+      console.log('aqui: ', row.id)
+      buttonsHeader.setCustomId ? buttonsHeader.setCustomId(row.id) : setId(row.id);
     }
   };
 

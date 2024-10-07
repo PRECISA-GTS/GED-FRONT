@@ -12,7 +12,8 @@ const Table = ({
     btnNewModal,
     handleNewModal,
     status,
-    setStatus
+    setStatus,
+    setCustomId
 }) => {
     return (
         <Card className='h-full'>
@@ -31,7 +32,9 @@ const Table = ({
                         handleNewModal: handleNewModal,
 
                         status: status,
-                        setStatus: setStatus
+                        setStatus: setStatus,
+
+                        setCustomId: setCustomId
                     }}
                 />
             </CardContent>

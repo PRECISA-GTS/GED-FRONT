@@ -16,7 +16,7 @@ import { RouteContext } from 'src/context/RouteContext'
 const ListNaoConformidade = () => {
     const { user, loggedUnity } = useContext(AuthContext)
     const router = useRouter()
-    const { setModelID, setLimpezaID } = useContext(RouteContext)
+    const { setModelID, setLimpezaID, setIdNc } = useContext(RouteContext)
     const currentLink = router.pathname
     const { setTitle } = useContext(ParametersContext)
     const { startFilter, setFilteredDataLimpeza, filteredDataLimpeza, setDataLimpeza } = useFilter()
@@ -112,6 +112,7 @@ const ListNaoConformidade = () => {
                     handleNewModal={() => setOpenNew(true)}
                     status={status}
                     setStatus={setStatus}
+                    setCustomId={setIdNc}
                 />
             )}
 

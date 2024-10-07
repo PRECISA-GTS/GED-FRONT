@@ -18,11 +18,11 @@ const CustomTabs = ({ tabs, defaultTab }) => {
 
     return (
         <div className='flex flex-col w-full'>
-            <div className='flex gap-2 mb-2'>
+            <div className='flex gap-2 mb-3'>
                 {tabs.map(tab => (
                     <button
                         key={tab.value}
-                        className={`py-4 px-20 border-b-2 ${
+                        className={`py-3 px-12 border-b-2 ${
                             value === tab.value ? ' border-[#4A8B57]' : 'border-transparent'
                         }`}
                         onClick={() => handleChange(tab.value)}

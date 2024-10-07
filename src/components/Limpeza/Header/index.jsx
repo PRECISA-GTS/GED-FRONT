@@ -8,6 +8,7 @@ import Select from 'src/components/Form/Select'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import CheckLabel from 'src/components/Form/CheckLabel'
+import CustomChip from 'src/@core/components/mui/chip'
 
 const Header = ({ form, data, disabled }) => {
     const { loggedUnity } = useContext(AuthContext)
@@ -135,7 +136,26 @@ const Header = ({ form, data, disabled }) => {
         <Card>
             <CardContent>
                 <Grid container spacing={6} className='items-center'>
-                    <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                    <Grid item xs={12} md={6}>
+                        <div className='flex gap-2 mb-2'>
+                            <CustomChip
+                                size='small'
+                                HeaderFiel
+                                skin='light'
+                                color={data.status.color}
+                                label={data.status.label}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                            <CustomChip
+                                size='small'
+                                HeaderFiel
+                                skin='light'
+                                label={data.modelo.nome}
+                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                            />
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
                         <InfoDepartamentos data={data?.departamentosPreenchimento ?? []} />
                     </Grid>
 

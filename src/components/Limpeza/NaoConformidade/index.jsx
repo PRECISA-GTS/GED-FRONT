@@ -324,7 +324,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
         <form onSubmit={e => customSubmit(e)}>
             {header && (
                 <>
-                    <FormHeader
+                    {/* <FormHeader
                         btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
                         handleNewModal={() => setOpenNew(true)}
                         btnCancel
@@ -350,7 +350,7 @@ const NaoConformidade = ({ id, limpezaID, modelID }) => {
                         title='Não conformidade da Limpeza e Higienização'
                         type={type}
                         status={header?.status?.id}
-                    />
+                    /> */}
 
                     <div className='flex gap-2 mb-2'>
                         <CustomChip
