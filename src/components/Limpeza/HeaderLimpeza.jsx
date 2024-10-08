@@ -241,101 +241,99 @@ const HeaderLimpeza = ({ modelID }) => {
     }, [id, loggedUnity, change])
 
     return (
-        <>
-            <form onSubmit={e => customSubmit(e)}>
-                <FormHeader
-                    id={id}
-                    btnNew={type === 'edit' && currentTab == 'limpeza' ? true : false}
-                    btnNewModal={user.papelID === 1 && type === 'edit' && currentTab != 'limpeza' ? true : false}
-                    handleNewModal={() => setOpenNew(true)}
-                    btnCancel
-                    btnSave={header?.status?.id < 40 ? true : false}
-                    btnSend={header?.status?.id >= 30 && header?.status?.id <= 40 ? true : false}
-                    btnPrint={type == 'edit' ? true : false}
-                    btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
-                    onclickDelete={() => setOpenDelete(true)}
-                    actions={currentTab == 'limpeza' ? true : false}
-                    handleSubmit={() => form.handleSubmit(onSubmit)}
-                    handleSend={() => {
-                        setOpenModal(true)
-                        checkErrors()
-                        verifyIfCanAproveForm(block)
-                    }}
-                    iconConclusion={'solar:check-read-linear'}
-                    titleConclusion={'Concluir'}
-                    title='Limpeza e Higienização'
-                    type={type}
-                    status={header?.status?.id}
-                    // actionsNC={header?.naoConformidade && header?.status?.id > 40}
-                    module='limpeza'
-                    actionsData={actionsData}
-                />
+        <form onSubmit={e => customSubmit(e)}>
+            <FormHeader
+                id={id}
+                btnNew={type === 'edit' && currentTab == 'limpeza' ? true : false}
+                btnNewModal={user.papelID === 1 && type === 'edit' && currentTab != 'limpeza' ? true : false}
+                handleNewModal={() => setOpenNew(true)}
+                btnCancel
+                btnSave={header?.status?.id < 40 ? true : false}
+                btnSend={header?.status?.id >= 30 && header?.status?.id <= 40 ? true : false}
+                btnPrint={type == 'edit' ? true : false}
+                btnDelete={header?.status?.id < 40 && type === 'edit' ? true : false}
+                onclickDelete={() => setOpenDelete(true)}
+                actions={currentTab == 'limpeza' ? true : false}
+                handleSubmit={() => form.handleSubmit(onSubmit)}
+                handleSend={() => {
+                    setOpenModal(true)
+                    checkErrors()
+                    verifyIfCanAproveForm(block)
+                }}
+                iconConclusion={'solar:check-read-linear'}
+                titleConclusion={'Concluir'}
+                title='Limpeza e Higienização'
+                type={type}
+                status={header?.status?.id}
+                // actionsNC={header?.naoConformidade && header?.status?.id > 40}
+                module='limpeza'
+                actionsData={actionsData}
+            />
 
-                <Tabs
-                    id={id}
-                    modelID={modelID}
-                    form={form}
-                    header={header}
-                    block={block}
-                    setBlock={setBlock}
-                    defaultTab='limpeza'
-                    onSubmit={onSubmit}
-                />
+            <Tabs
+                id={id}
+                modelID={modelID}
+                form={form}
+                header={header}
+                block={block}
+                setBlock={setBlock}
+                defaultTab='limpeza'
+                onSubmit={onSubmit}
+            />
 
-                <DialogActs
-                    title='Nova Não Conformidade'
-                    handleConclusion={handleNewNC}
-                    size='lg'
-                    setOpenModal={setOpenNew}
-                    openModal={openNew}
-                    form={form}
-                >
-                    <NewContent type='form' data={header} form={form} />
-                </DialogActs>
+            <DialogActs
+                title='Nova Não Conformidade'
+                handleConclusion={handleNewNC}
+                size='lg'
+                setOpenModal={setOpenNew}
+                openModal={openNew}
+                form={form}
+            >
+                <NewContent type='form' data={header} form={form} />
+            </DialogActs>
 
-                {header && (
-                    <>
-                        <DialogFormConclusion
-                            openModal={openModal}
-                            handleClose={() => {
-                                setOpenModal(false), checkErrors()
-                            }}
-                            title='Concluir Limpeza e Higienização'
-                            text={`Deseja realmente concluir este formulário?`}
-                            info={{
-                                status: header.status.id
-                            }}
-                            canChange
-                            btnCancel
-                            btnConfirm
-                            btnConfirmColor='primary'
-                            conclusionForm={conclude}
-                            listErrors={listErrors}
-                            canApprove={canApprove}
-                            hasNaoConformidade={true}
-                            type='limpeza'
-                            unity={loggedUnity}
-                            values={header}
-                            formularioID={4} // Limpeza
-                            modeloID={header.modelo.id}
-                            form={form}
-                        />
+            {header && (
+                <>
+                    <DialogFormConclusion
+                        openModal={openModal}
+                        handleClose={() => {
+                            setOpenModal(false), checkErrors()
+                        }}
+                        title='Concluir Limpeza e Higienização'
+                        text={`Deseja realmente concluir este formulário?`}
+                        info={{
+                            status: header.status.id
+                        }}
+                        canChange
+                        btnCancel
+                        btnConfirm
+                        btnConfirmColor='primary'
+                        conclusionForm={conclude}
+                        listErrors={listErrors}
+                        canApprove={canApprove}
+                        hasNaoConformidade={true}
+                        type='limpeza'
+                        unity={loggedUnity}
+                        values={header}
+                        formularioID={4} // Limpeza
+                        modeloID={header.modelo.id}
+                        form={form}
+                    />
 
-                        <DialogDelete
-                            open={openDelete}
-                            handleClose={() => setOpenDelete(false)}
-                            title='Excluir Formulário'
-                            description='Tem certeza que deseja exluir o formulario?'
-                            params={{
-                                route: `formularios/recebimento-mp/nao-conformidade/delete/${id}`,
-                                messageSucceded: 'Formulário excluído com sucesso!',
-                                MessageError: 'Dado possui pendência!'
-                            }}
-                        />
-                    </>
-                )}
-            </form>
-        </>
+                    <DialogDelete
+                        open={openDelete}
+                        handleClose={() => setOpenDelete(false)}
+                        title='Excluir Formulário'
+                        description='Tem certeza que deseja exluir o formulario?'
+                        params={{
+                            route: `formularios/recebimento-mp/nao-conformidade/delete/${id}`,
+                            messageSucceded: 'Formulário excluído com sucesso!',
+                            MessageError: 'Dado possui pendência!'
+                        }}
+                    />
+                </>
+            )}
+        </form>
     )
 }
 

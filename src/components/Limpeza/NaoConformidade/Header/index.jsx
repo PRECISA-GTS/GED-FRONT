@@ -66,6 +66,10 @@ const Header = ({ form, data, disabled }) => {
                         disabled={disabled}
                         type='number'
                         form={form}
+                        onChange={value => {
+                            form.setValue('header.prazoSolucao', value)
+                            calculateValidDate()
+                        }}
                         helpText='Informe o prazo pra solução da não conformidade. Será gerado um alerta no vencimento do prazo.'
                     />
 

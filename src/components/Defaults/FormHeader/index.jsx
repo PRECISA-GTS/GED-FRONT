@@ -112,42 +112,6 @@ const FormHeader = ({
         currentUrl += `?${new URLSearchParams(router.query).toString()}`
     }
 
-    const dataButtons = [
-        {
-            id: 1,
-            title: 'Salvar',
-            color: isLoading ? 'secondary' : 'primary',
-            size: 'large',
-            type: 'submit',
-            variant: 'contained',
-            disabled: disabled || disabledSubmit || isLoading,
-            icon: <Icon icon='material-symbols:save' />,
-            function: handleSubmit
-        },
-        {
-            id: 2,
-            title: 'Voltar ao topo',
-            color: 'default',
-            size: 'large',
-            type: 'button',
-            variant: 'outlined',
-            disabled: false,
-            icon: <Icon icon='ion:arrow-up' />,
-            function: backToTop
-        },
-        {
-            id: 3,
-            title: 'Voltar para a página anterior',
-            color: 'default',
-            size: 'large',
-            type: 'button',
-            variant: 'outlined',
-            disabled: false,
-            icon: <Icon icon='material-symbols:arrow-back-rounded' />,
-            function: previousPage
-        }
-    ]
-
     //! Não Conformidades
     const handleNewNC = () => {
         let values = form.getValues('new')
@@ -241,9 +205,9 @@ const FormHeader = ({
     return (
         <>
             <div
-                className={`sticky pb-2 mb-2 z-50 ${
-                    outsideID || modal ? '-top-[4.5rem] bg-transparent' : 'top-[4.5rem]'
-                } ${settings.mode === 'dark' ? 'bg-[#161c24]' : 'bg-[#F7F7F9]'}`}
+                className={`sticky pb-4 z-50 ${outsideID || modal ? '-top-[4.5rem] bg-transparent' : 'top-[4.5rem]'} ${
+                    settings.mode === 'dark' ? 'bg-[#161c24]' : 'bg-[#F7F7F9]'
+                }`}
             >
                 <div className={`flex items-center justify-between w-full `} style={{ zIndex: 1000 }}>
                     {/* Div da esquerda */}

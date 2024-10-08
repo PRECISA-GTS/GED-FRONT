@@ -307,6 +307,7 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                 >
                     <NewContent type='form' data={header} form={form} />
                 </DialogActs>
+
                 <Tabs
                     idNc={id}
                     id={limpezaID}
@@ -317,7 +318,9 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                     setBlock={setBlock}
                     defaultTab='nao-conformidade'
                     change={change}
+                    onSubmit={onSubmit}
                 />
+
                 <DialogFormConclusionNC
                     openModal={openModal}
                     handleClose={() => {
@@ -346,12 +349,13 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                     open={openDelete}
                     handleClose={() => setOpenDelete(false)}
                     title='Excluir Formulário'
-                    description='Tem certeza que deseja exluir o formulario?'
+                    description='Tem certeza que deseja exluir o formulário?'
                     params={{
                         route: `formularios/limpeza/nao-conformidade/delete/${id}`,
                         messageSucceded: 'Formulário excluído com sucesso!',
                         MessageError: 'Dado possui pendência!'
                     }}
+                    setIdNc={setIdNc}
                 />
             </form>
         )

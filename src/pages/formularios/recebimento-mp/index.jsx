@@ -31,7 +31,7 @@ const RecebimentoMp = () => {
     return (
         <>
             {!id ? (
-                <CustomTabs tabs={tabs} defaultTab='recebimento-mp' />
+                <CustomTabs tabs={tabs} defaultTab='recebimento-mp' type='list' />
             ) : (
                 <>
                     {currentTab === 'recebimento-mp' && <FormRecebimentoMp id={id} model={null} />}

@@ -1,62 +1,66 @@
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
+import { SettingsContext } from 'src/@core/context/settingsContext'
 import { tabChange } from 'src/configs/tabs'
 import { RouteContext } from 'src/context/RouteContext'
 
-const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
+const CustomTabs = ({ tabs, headerInfoComponent, defaultTab, type }) => {
+    const { settings } = useContext(SettingsContext)
     const router = useRouter()
     const currentTab = router.query.aba || defaultTab
-    console.log('renderiza...', tabs)
-
     const { setIdNc } = useContext(RouteContext)
-
     const [value, setValue] = useState(currentTab)
 
     const handleChange = newValue => {
         if (newValue !== value) {
-            console.log('atualiza...')
             tabChange(newValue, router)
             setValue(newValue)
         }
     }
 
     useEffect(() => {
-        // Atualiza o estado se a aba atual mudar pela rota
         if (currentTab !== value) {
-            console.log('no useeffect...')
             setValue(currentTab)
         }
     }, [currentTab])
 
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <div className='flex gap-2 mb-1'>
-                {tabs.map(tab => (
-                    <button
-                        key={tab.value}
-                        className={`py-3 px-12 border-b-2 ${
-                            value === tab.value ? 'border-[#4A8B57]' : 'border-transparent'
-                        }
+            <div
+                className={`${type !== 'list' ? 'sticky top-[7.8rem] z-50' : ''} ${
+                    settings.mode === 'dark' ? 'bg-[#161c24]' : 'bg-[#F7F7F9]'
+                }`}
+            >
+                <div className='flex gap-2'>
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.value}
+                            className={`py-3 px-12 border-b-2 ${
+                                value === tab.value ? 'border-[#4A8B57]' : 'border-transparent'
+                            }
                         ${tab.disabled ? 'cursor-not-allowed opacity-20' : 'cursor-pointer'}
 
                         `}
-                        onClick={event => {
-                            event.preventDefault()
-                            if (tab.disabled) return
-                            handleChange(tab.value)
-                            setIdNc(null)
-                        }}
-                    >
-                        <div className='flex items-center gap-1 '>
-                            {tab.icon && (
-                                <div className={value === tab.value ? 'text-[#4A8B57]' : ''}>
-                                    <tab.icon />
-                                </div>
-                            )}
-                            <p className={`text-[14px] ${value === tab.value ? 'text-[#4A8B57]' : ''}`}>{tab.title}</p>
-                        </div>
-                    </button>
-                ))}
+                            onClick={event => {
+                                event.preventDefault()
+                                if (tab.disabled) return
+                                handleChange(tab.value)
+                                setIdNc(null)
+                            }}
+                        >
+                            <div className='flex items-center gap-1 '>
+                                {tab.icon && (
+                                    <div className={value === tab.value ? 'text-[#4A8B57]' : ''}>
+                                        <tab.icon />
+                                    </div>
+                                )}
+                                <p className={`text-[14px] ${value === tab.value ? 'text-[#4A8B57]' : ''}`}>
+                                    {tab.title}
+                                </p>
+                            </div>
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {headerInfoComponent}

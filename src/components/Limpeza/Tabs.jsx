@@ -31,7 +31,16 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
             value: 'nao-conformidade',
             title: `Não Conformidade ${header?.totalNc > 0 ? `(${header?.totalNc})` : ''}`,
             icon: () => <Icon icon='typcn:warning-outline' />,
-            content: <Controller form={form} header={header} block={block} setBlock={setBlock} change={change} />,
+            content: (
+                <Controller
+                    form={form}
+                    header={header}
+                    block={block}
+                    setBlock={setBlock}
+                    change={change}
+                    onSubmit={onSubmit}
+                />
+            ),
             disabled: !id || (!idNc && !header?.naoConformidade && !isNew) ? true : false
         }
     ]

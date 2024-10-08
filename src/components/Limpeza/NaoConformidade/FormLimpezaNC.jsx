@@ -6,11 +6,9 @@ import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
 import { api } from 'src/configs/api'
 import Header from './Header'
 
-const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
-    console.log('🚀 ~ FormLimpezaNC ~ id:', id)
-
+const FormLimpezaNC = ({ id, header, block, setBlock, form, change, onSubmit }) => {
     const type = id && id > 0 ? 'edit' : 'new'
-    const { user } = useContext(AuthContext)
+    const { user, loggedUnity } = useContext(AuthContext)
 
     const handleFileSelect = async (event, item) => {
         const selectedFile = event.target.files
@@ -38,9 +36,6 @@ const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
                 })
-                .finally(() => {
-                    setChange(!change)
-                })
         }
     }
 
@@ -57,9 +52,6 @@ const FormLimpezaNC = ({ id, header, block, setBlock, form, change }) => {
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao remover anexo, tente novamente!')
-                })
-                .finally(() => {
-                    getData()
                 })
         }
     }

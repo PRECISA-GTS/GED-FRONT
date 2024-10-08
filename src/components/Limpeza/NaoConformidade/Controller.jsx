@@ -4,7 +4,7 @@ import FormLimpezaNC from './FormLimpezaNC'
 import { useRouter } from 'next/router'
 import ListNaoConformidade from 'src/pages/formularios/limpeza/NaoConformidade/List'
 
-const Controller = ({ form, header, block, setBlock, change }) => {
+const Controller = ({ form, header, block, setBlock, change, onSubmit }) => {
     const router = useRouter()
     const { idNc, id } = useContext(RouteContext)
     const isNew = router.asPath.includes('/novo')
@@ -20,6 +20,7 @@ const Controller = ({ form, header, block, setBlock, change }) => {
             block={block}
             setBlock={setBlock}
             change={change}
+            onSubmit={onSubmit}
         />
     ) : (
         <ListNaoConformidade limpezaID={id} />
