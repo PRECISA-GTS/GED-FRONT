@@ -75,7 +75,7 @@ const FormLimpeza = ({ id, form, header, block, setBlock, onSubmit }) => {
                 new: false
             }
         })
-    }, [router.query?.aba])
+    }, [id, loggedUnity, router.query?.aba])
 
     return (
         header && (
