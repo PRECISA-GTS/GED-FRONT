@@ -9,11 +9,7 @@ import { AuthContext } from 'src/context/AuthContext'
 import { Alert, Grid, Typography } from '@mui/material'
 import { useState, useContext } from 'react'
 import Result from 'src/components/Defaults/Formularios/Result'
-import { BlobProvider, Document, Page } from '@react-pdf/renderer'
 import { useGlobal } from 'src/hooks/useGlobal'
-import Header from 'src/components/Reports/Header'
-import ContentFornecedor from 'src/pages/relatorio/formularios/fornecedor/Content'
-import Footer from 'src/components/Reports/Footer'
 import InfoDepartamentos from '../Formularios/InfoDepartamentos'
 import DateField from 'src/components/Form/DateField'
 import Input from 'src/components/Form/Input'
@@ -45,7 +41,7 @@ const DialogFormConclusion = ({
 }) => {
     if (!modeloID) return null
 
-    const { user, loggedUnity, hasSectorPermission } = useContext(AuthContext)
+    const { user, hasSectorPermission } = useContext(AuthContext)
     const [result, setResult] = useState({})
     const { data } = useGlobal()
     const router = Router
@@ -57,26 +53,6 @@ const DialogFormConclusion = ({
         const hour = date.getHours()
         const minute = date.getMinutes()
         return `${hour}:${minute}`
-    }
-    const [profissionaisAprova, setProfissionaisAprova] = useState([])
-
-    const DocumentPdf = () => {
-        return (
-            <Document>
-                <Page
-                    size='A4'
-                    style={{
-                        paddingHorizontal: 25
-                    }}
-                >
-                    <>
-                        <Header data={data} />
-                        {module === 'fornecedor' && <ContentFornecedor values={data} key={data} />}
-                        <Footer />
-                    </>
-                </Page>
-            </Document>
-        )
     }
 
     return (

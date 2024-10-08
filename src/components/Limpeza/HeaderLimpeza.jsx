@@ -137,8 +137,6 @@ const HeaderLimpeza = ({ modelID }) => {
                 profissionalID: user.profissionalID
             }
         }
-        console.log('🚀 ~ conclude values:', values)
-
         setHeader(null)
 
         try {
@@ -150,6 +148,9 @@ const HeaderLimpeza = ({ modelID }) => {
         } finally {
             setOpenModal(false)
             setChange(!change)
+
+            //? Concluiu com NC, abre modal pra cadastrar nova NC
+            if (naoConformidade) setOpenNew(true)
         }
     }
 

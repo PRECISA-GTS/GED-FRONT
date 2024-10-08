@@ -297,17 +297,6 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                     status={header?.status?.id}
                 />
 
-                <DialogActs
-                    title='Nova Não Conformidade'
-                    handleConclusion={handleNew}
-                    size='lg'
-                    setOpenModal={setOpenNew}
-                    openModal={openNew}
-                    form={form}
-                >
-                    <NewContent type='form' data={header} form={form} />
-                </DialogActs>
-
                 <Tabs
                     idNc={id}
                     id={limpezaID}
@@ -320,6 +309,17 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                     change={change}
                     onSubmit={onSubmit}
                 />
+
+                <DialogActs
+                    title='Nova Não Conformidade'
+                    handleConclusion={handleNew}
+                    size='lg'
+                    setOpenModal={setOpenNew}
+                    openModal={openNew}
+                    form={form}
+                >
+                    <NewContent type='form' data={header} form={form} />
+                </DialogActs>
 
                 <DialogFormConclusionNC
                     openModal={openModal}
