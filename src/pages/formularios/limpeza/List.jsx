@@ -7,7 +7,7 @@ import Loading from 'src/components/Loading'
 import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { useFilter } from 'src/context/FilterContext'
-import Filters from '../../Filters'
+import Filters from './Filters'
 
 const ListLimpeza = () => {
     const { user, loggedUnity } = useContext(AuthContext)

@@ -1,13 +1,16 @@
 import { useContext } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
-import ListNaoConformidade from 'src/pages/formularios/limpeza/Tabs/NaoConformidade/List'
 import FormLimpezaNC from './FormLimpezaNC'
+import { useRouter } from 'next/router'
+import ListNaoConformidade from 'src/pages/formularios/limpeza/NaoConformidade/List'
 
 const Controller = ({ form, header, block, setBlock, change }) => {
+    const router = useRouter()
     const { idNc, id } = useContext(RouteContext)
-    console.log('🚀 ~ idNc:', idNc)
+    const isNew = router.asPath.includes('/novo')
+    console.log('🚀 ~ Controller idNc:', isNew)
 
-    return idNc ? (
+    return idNc || isNew ? (
         <FormLimpezaNC
             id={idNc}
             limpezaID={id}

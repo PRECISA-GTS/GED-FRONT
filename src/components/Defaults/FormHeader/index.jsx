@@ -60,7 +60,6 @@ const FormHeader = ({
     onClickActivate,
     modal
 }) => {
-    console.log('outside: ', outsideID)
     const router = Router
     const { routes, user } = useContext(AuthContext)
     const { setId, setModelID, setRecebimentoMpID, setLimpezaID } = useContext(RouteContext)
@@ -70,12 +69,8 @@ const FormHeader = ({
     const { isLoading } = useLoad()
     const { settings } = useContext(SettingsContext)
     const [actionsNCData, setActionsNCData] = useState(null)
-    console.log('🚀 ~ actionsNCData:', actionsNCData)
-
     const form = useForm({ mode: 'onChange' })
-
     const matches = useMediaQuery('(min-width:640px)')
-
     const open = Boolean(anchorEl)
     const openNC = Boolean(anchorElNC)
     const handleClick = event => {

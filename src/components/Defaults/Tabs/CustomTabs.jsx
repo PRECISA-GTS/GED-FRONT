@@ -12,14 +12,8 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
 
     const [value, setValue] = useState(currentTab)
 
-    useEffect(() => {
-        // Atualiza o estado se a aba atual mudar pela rota
-        if (currentTab !== value) {
-            setValue(currentTab)
-        }
-    }, [currentTab])
-
-    const handleChange = newValue => {
+    const handleChange = (event, newValue) => {
+        event.preventDefault()
         if (newValue !== value) {
             console.log('atualiza...')
             tabChange(newValue, router)
@@ -27,9 +21,17 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
         }
     }
 
+    useEffect(() => {
+        // Atualiza o estado se a aba atual mudar pela rota
+        if (currentTab !== value) {
+            console.log('no useeffect...')
+            setValue(currentTab)
+        }
+    }, [currentTab])
+
     return (
         <div className='flex flex-col gap-2 w-full'>
-            <div className='flex gap-2 mb-3'>
+            <div className='flex gap-2 mb-1'>
                 {tabs.map(tab => (
                     <button
                         key={tab.value}
@@ -39,11 +41,11 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
                         ${tab.disabled ? 'cursor-not-allowed opacity-20' : 'cursor-pointer'}
 
                         `}
-                        onClick={() => {
+                        onClick={event => {
                             if (tab.disabled) return
 
-                            handleChange(tab.value)
-                            setIdNc(null) // Atualiza o estado do contexto
+                            handleChange(event, tab.value)
+                            setIdNc(null)
                         }}
                     >
                         <div className='flex items-center gap-1 '>

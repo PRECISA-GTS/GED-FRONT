@@ -883,8 +883,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         checkErrors()
     }, [isLoading])
 
-    console.log('🚀 ~~~ hasFormPending:', hasFormPending)
-
     return (
         <>
             <form onSubmit={e => customSubmit(e)}>

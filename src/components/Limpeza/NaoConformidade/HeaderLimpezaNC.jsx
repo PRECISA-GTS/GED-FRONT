@@ -1,32 +1,24 @@
 import { useContext, useEffect, useState } from 'react'
 import FormHeader from 'src/components/Defaults/FormHeader'
-import HistoricForm from 'src/components/Defaults/HistoricForm'
 import { AuthContext } from 'src/context/AuthContext'
 import { ParametersContext } from 'src/context/ParametersContext'
-import Header from './Header'
-
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
-import LimpezaInfo from './LimpezaInfo'
 import Router from 'next/router'
 import toast from 'react-hot-toast'
 import DialogFormConclusionNC from 'src/components/Defaults/Dialogs/DialogFormConclusionNC'
 import DialogDelete from 'src/components/Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from 'src/components/Defaults/Dialogs/DialogReOpenForm'
 import { RouteContext } from 'src/context/RouteContext'
-import CustomChip from 'src/@core/components/mui/chip'
 import { toastMessage } from 'src/configs/defaultConfigs'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from './NewContent'
-import { Card, CardContent } from '@mui/material'
 import { canConfigForm, fractionedToFloat } from 'src/configs/functions'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
-import ButtonOpenForm from 'src/components/Defaults/Buttons/ButtonOpenForm'
-import ModelBlocks from 'src/components/Form/ModelBlocks'
 import Tabs from '../Tabs'
 
 const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
-    console.log('🚀 ~ HeaderLimpezaNC:', id, limpezaID, modelID)
+    console.log('🚀 ~~ Limpeza HeaderLimpezaNC:', limpezaID, id)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
@@ -165,13 +157,14 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
             }
         }
         console.log('🚀 ~ onSubmit:', data)
+        // return
 
         try {
             if (type === 'new') {
                 const response = await api.post(`/formularios/limpeza/nao-conformidade/insertData`, data)
                 toast.success('Dados cadastrados com sucesso!')
                 //? Redireciona pro ID criado
-                setId(response.data.id)
+                setIdNc(response.data.id)
                 router.push(`/formularios/limpeza/?aba=nao-conformidade`)
             } else if (type === 'edit') {
                 await api.post(`/formularios/limpeza/nao-conformidade/updateData/${id}`, data)
@@ -186,13 +179,14 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
     }
 
     const goToFormConfig = () => {
-        setId(header.modelo.id) //? ID do modelo do formulário
+        setIdNc(header.modelo.id) //? ID do modelo do formulário
         router.push(`/configuracoes/formularios/limpeza-naoconformidade/`)
     }
 
     const handleNew = values => {
         console.log('handleNew: ', header.limpeza.id, values.new.modelo.id)
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
+        setId(header.limpeza.id)
         setLimpezaID(header.limpeza.id)
         setModelID(values.new.modelo.id)
         router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
@@ -273,38 +267,46 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
 
     return (
         header && (
-            <>
-                <form onSubmit={e => customSubmit(e)}>
-                    <FormHeader
-                        btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
-                        handleNewModal={() => setOpenNew(true)}
-                        btnCancel
-                        setIdNc={setIdNc}
-                        btnSave={header?.status?.id < 40 ? true : false}
-                        btnSend={
-                            (user.papelID === 1 && header?.status?.id >= 30 && header?.status?.id <= 40) ||
-                            (user.papelID === 2 && header?.status?.id === 30)
-                                ? true
-                                : false
-                        }
-                        btnPrint={type == 'edit' ? true : false}
-                        btnDelete={user.papelID === 1 && header?.status?.id < 40 && type === 'edit' ? true : false}
-                        onclickDelete={() => setOpenDelete(true)}
-                        actionsData={actionsData}
-                        actions={user.papelID === 1 ? true : false}
-                        handleSubmit={() => form.handleSubmit(onSubmit)}
-                        handleSend={() => {
-                            setOpenModal(true)
-                            checkErrors()
-                        }}
-                        iconConclusion={'solar:check-read-linear'}
-                        titleConclusion={'Concluir'}
-                        title='Não conformidade da Limpeza e Higienização'
-                        type={type}
-                        status={header?.status?.id}
-                    />
-                </form>
+            <form onSubmit={e => customSubmit(e)}>
+                <FormHeader
+                    btnNewModal={user.papelID === 1 && type === 'edit' ? true : false}
+                    handleNewModal={() => setOpenNew(true)}
+                    btnCancel
+                    setIdNc={setIdNc}
+                    btnSave={header?.status?.id < 40 ? true : false}
+                    btnSend={
+                        (user.papelID === 1 && header?.status?.id >= 30 && header?.status?.id <= 40) ||
+                        (user.papelID === 2 && header?.status?.id === 30)
+                            ? true
+                            : false
+                    }
+                    btnPrint={type == 'edit' ? true : false}
+                    btnDelete={user.papelID === 1 && header?.status?.id < 40 && type === 'edit' ? true : false}
+                    onclickDelete={() => setOpenDelete(true)}
+                    actionsData={actionsData}
+                    actions={user.papelID === 1 ? true : false}
+                    handleSubmit={() => form.handleSubmit(onSubmit)}
+                    handleSend={() => {
+                        setOpenModal(true)
+                        checkErrors()
+                    }}
+                    iconConclusion={'solar:check-read-linear'}
+                    titleConclusion={'Concluir'}
+                    title='Não conformidade da Limpeza e Higienização'
+                    type={type}
+                    status={header?.status?.id}
+                />
 
+                <DialogActs
+                    title='Nova Não Conformidade'
+                    handleConclusion={handleNew}
+                    size='lg'
+                    setOpenModal={setOpenNew}
+                    openModal={openNew}
+                    form={form}
+                >
+                    <NewContent type='form' data={header} form={form} />
+                </DialogActs>
                 <Tabs
                     idNc={id}
                     id={limpezaID}
@@ -316,7 +318,6 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                     defaultTab='nao-conformidade'
                     change={change}
                 />
-
                 <DialogFormConclusionNC
                     openModal={openModal}
                     handleClose={() => {
@@ -352,18 +353,7 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                         MessageError: 'Dado possui pendência!'
                     }}
                 />
-
-                <DialogActs
-                    title='Nova Não Conformidade'
-                    handleConclusion={handleNew}
-                    size='lg'
-                    setOpenModal={setOpenNew}
-                    openModal={openNew}
-                    form={form}
-                >
-                    <NewContent type='form' data={header} form={form} />
-                </DialogActs>
-            </>
+            </form>
         )
     )
 }

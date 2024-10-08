@@ -1,9 +1,9 @@
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import { useForm } from 'react-hook-form'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
-import FormHeader from '../Defaults/FormHeader'
+import FormHeader from 'src/components/Defaults/FormHeader'
 import Tabs from './Tabs'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
@@ -13,18 +13,14 @@ import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
 import { toastMessage } from 'src/configs/defaultConfigs'
-import { ParametersContext } from 'src/context/ParametersContext'
 import { getCurrentTab } from 'src/configs/tabs'
 import NewContent from './NaoConformidade/NewContent'
 import DialogActs from '../Defaults/Dialogs/DialogActs'
 
 const HeaderLimpeza = ({ modelID }) => {
-    console.log('HeaderLimpeza')
-
     const router = useRouter()
     const { id, setId, idNc, setModelID, setLimpezaID } = useContext(RouteContext)
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
-    const { setTitle } = useContext(ParametersContext)
     const [header, setHeader] = useState(null)
     const [block, setBlock] = useState(null)
     const type = id && id > 0 ? 'edit' : 'new'
@@ -198,6 +194,7 @@ const HeaderLimpeza = ({ modelID }) => {
     const handleNewNC = values => {
         //? Seta Recebimento e Modelo (contexto) selecionados pra enviar pra NOVO
         console.log('🚀 ~ handleNewNC: ', header.limpeza.id, values.new.modelo.id)
+        setId(header.limpeza.id)
         setLimpezaID(header.limpeza.id)
         setModelID(values.new.modelo.id)
         router.push(`/formularios/limpeza/novo/?aba=nao-conformidade`)
@@ -243,7 +240,6 @@ const HeaderLimpeza = ({ modelID }) => {
         }, 300)
     }, [id, loggedUnity, change])
 
-    console.log('currenttab: ', currentTab)
     return (
         <>
             <form onSubmit={e => customSubmit(e)}>
@@ -274,70 +270,70 @@ const HeaderLimpeza = ({ modelID }) => {
                     module='limpeza'
                     actionsData={actionsData}
                 />
+
+                <Tabs
+                    id={id}
+                    modelID={modelID}
+                    form={form}
+                    header={header}
+                    block={block}
+                    setBlock={setBlock}
+                    defaultTab='limpeza'
+                />
+
+                <DialogActs
+                    title='Nova Não Conformidade'
+                    handleConclusion={handleNewNC}
+                    size='lg'
+                    setOpenModal={setOpenNew}
+                    openModal={openNew}
+                    form={form}
+                >
+                    <NewContent type='form' data={header} form={form} />
+                </DialogActs>
+
+                {header && (
+                    <>
+                        <DialogFormConclusion
+                            openModal={openModal}
+                            handleClose={() => {
+                                setOpenModal(false), checkErrors()
+                            }}
+                            title='Concluir Limpeza e Higienização'
+                            text={`Deseja realmente concluir este formulário?`}
+                            info={{
+                                status: header.status.id
+                            }}
+                            canChange
+                            btnCancel
+                            btnConfirm
+                            btnConfirmColor='primary'
+                            conclusionForm={conclude}
+                            listErrors={listErrors}
+                            canApprove={canApprove}
+                            hasNaoConformidade={true}
+                            type='limpeza'
+                            unity={loggedUnity}
+                            values={header}
+                            formularioID={4} // Limpeza
+                            modeloID={header.modelo.id}
+                            form={form}
+                        />
+
+                        <DialogDelete
+                            open={openDelete}
+                            handleClose={() => setOpenDelete(false)}
+                            title='Excluir Formulário'
+                            description='Tem certeza que deseja exluir o formulario?'
+                            params={{
+                                route: `formularios/recebimento-mp/nao-conformidade/delete/${id}`,
+                                messageSucceded: 'Formulário excluído com sucesso!',
+                                MessageError: 'Dado possui pendência!'
+                            }}
+                        />
+                    </>
+                )}
             </form>
-
-            <Tabs
-                id={id}
-                modelID={modelID}
-                form={form}
-                header={header}
-                block={block}
-                setBlock={setBlock}
-                defaultTab='limpeza'
-            />
-
-            {header && (
-                <>
-                    <DialogFormConclusion
-                        openModal={openModal}
-                        handleClose={() => {
-                            setOpenModal(false), checkErrors()
-                        }}
-                        title='Concluir Limpeza e Higienização'
-                        text={`Deseja realmente concluir este formulário?`}
-                        info={{
-                            status: header.status.id
-                        }}
-                        canChange
-                        btnCancel
-                        btnConfirm
-                        btnConfirmColor='primary'
-                        conclusionForm={conclude}
-                        listErrors={listErrors}
-                        canApprove={canApprove}
-                        hasNaoConformidade={true}
-                        type='limpeza'
-                        unity={loggedUnity}
-                        values={header}
-                        formularioID={4} // Limpeza
-                        modeloID={header.modelo.id}
-                        form={form}
-                    />
-
-                    <DialogDelete
-                        open={openDelete}
-                        handleClose={() => setOpenDelete(false)}
-                        title='Excluir Formulário'
-                        description='Tem certeza que deseja exluir o formulario?'
-                        params={{
-                            route: `formularios/recebimento-mp/nao-conformidade/delete/${id}`,
-                            messageSucceded: 'Formulário excluído com sucesso!',
-                            MessageError: 'Dado possui pendência!'
-                        }}
-                    />
-
-                    <DialogActs
-                        title='Nova Não Conformidade'
-                        handleConclusion={handleNewNC}
-                        size='lg'
-                        setOpenModal={setOpenNew}
-                        openModal={openNew}
-                        form={form}
-                    >
-                        <NewContent type='form' data={header} form={form} />
-                    </DialogActs>
-                </>
-            )}
         </>
     )
 }

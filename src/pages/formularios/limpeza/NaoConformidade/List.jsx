@@ -7,11 +7,11 @@ import Loading from 'src/components/Loading'
 import { useRouter } from 'next/router'
 import { configColumns } from 'src/configs/defaultConfigs'
 import { useFilter } from 'src/context/FilterContext'
-import Filters from '../../Filters'
 import DialogActs from 'src/components/Defaults/Dialogs/DialogActs'
 import NewContent from 'src/components/Limpeza/NaoConformidade/NewContent'
 import { useForm } from 'react-hook-form'
 import { RouteContext } from 'src/context/RouteContext'
+import Filters from '../Filters'
 
 const ListNaoConformidade = ({ limpezaID }) => {
     console.log('🚀 ~ limpezaID:', limpezaID)
