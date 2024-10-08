@@ -12,8 +12,7 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
 
     const [value, setValue] = useState(currentTab)
 
-    const handleChange = (event, newValue) => {
-        event.preventDefault()
+    const handleChange = newValue => {
         if (newValue !== value) {
             console.log('atualiza...')
             tabChange(newValue, router)
@@ -42,9 +41,9 @@ const CustomTabs = ({ tabs, headerInfoComponent, defaultTab }) => {
 
                         `}
                         onClick={event => {
+                            event.preventDefault()
                             if (tab.disabled) return
-
-                            handleChange(event, tab.value)
+                            handleChange(tab.value)
                             setIdNc(null)
                         }}
                     >

@@ -279,6 +279,7 @@ const HeaderLimpeza = ({ modelID }) => {
                     block={block}
                     setBlock={setBlock}
                     defaultTab='limpeza'
+                    onSubmit={onSubmit}
                 />
 
                 <DialogActs

@@ -6,7 +6,7 @@ import Controller from './NaoConformidade/Controller'
 import { Card, CardContent } from '@mui/material'
 import LimpezaInfo from './NaoConformidade/LimpezaInfo'
 
-const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change }) => {
+const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change, onSubmit }) => {
     const router = useRouter()
     const isNew = router.asPath.includes('/novo')
 
@@ -16,7 +16,14 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
             title: 'Limpeza e Higienização',
             icon: () => <Icon icon='carbon:clean' />,
             content: (
-                <FormLimpeza id={id} modelID={null} form={form} header={header} block={block} setBlock={setBlock} />
+                <FormLimpeza
+                    id={id}
+                    form={form}
+                    header={header}
+                    block={block}
+                    setBlock={setBlock}
+                    onSubmit={onSubmit}
+                />
             ),
             disabled: false
         },
