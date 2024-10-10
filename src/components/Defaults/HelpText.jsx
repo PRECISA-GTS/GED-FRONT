@@ -23,7 +23,7 @@ const HelpText = ({ text, position, className }) => {
             placement={position || 'top'}
         >
             <p className={className}>
-                <Icon icon='clarity:help-solid' className='cursor-pointer text-base' />
+                <Icon icon='akar-icons:question' className='cursor-pointer text-base' fontSize={16} />
             </p>
         </HtmlTooltip>
     )

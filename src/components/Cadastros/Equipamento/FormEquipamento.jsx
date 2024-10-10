@@ -243,6 +243,7 @@ const FormEquipamento = ({
                                                 value={data?.fields?.setor}
                                                 options={setores ?? []}
                                                 form={form}
+                                                link='/cadastros/setor'
                                             />
                                             <Grid item xs={12} md={8}>
                                                 <p>ANEXOS</p>

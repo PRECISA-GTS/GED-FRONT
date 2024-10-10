@@ -1,8 +1,8 @@
 import Router from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
-import { Card, CardContent, Grid, IconButton, Button } from '@mui/material'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { Card, CardContent, Grid } from '@mui/material'
+import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
 import FormHeader from '../../Defaults/FormHeader'
@@ -13,11 +13,9 @@ import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
 import Input from 'src/components/Form/Input'
-import DateField from 'src/components/Form/DateField'
 import useLoad from 'src/hooks/useLoad'
-import Icon from 'src/@core/components/icon'
 import Check from 'src/components/Form/Check'
-import Select from 'src/components/Form/Select'
+import Equipamentos from './Equipamentos'
 
 const FormSetor = ({ id }) => {
     const [open, setOpen] = useState(false)
@@ -27,10 +25,8 @@ const FormSetor = ({ id }) => {
     const type = id && id > 0 ? 'edit' : 'new'
     const staticUrl = router.pathname
     const { title } = useContext(ParametersContext)
-    const { loggedUnity, user, setUser } = useContext(AuthContext)
+    const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
-    const [equipamentos, setEquipamentos] = useState([])
-    const today = new Date().toISOString().substring(0, 10)
 
     const form = useForm({ mode: 'onChange' })
 
@@ -133,28 +129,13 @@ const FormSetor = ({ id }) => {
         }
     }
 
-    const getEquipamentos = async () => {
-        const response = await api.post(`/cadastros/equipamento/getEquipamentos`, {
-            unidadeID: loggedUnity.unidadeID
-        })
-
-        setEquipamentos(response.data)
-    }
-
     useEffect(() => {
         getData()
-        getEquipamentos()
 
         setTimeout(() => {
             form.trigger()
         }, 300)
     }, [id])
-
-    //? Gerencia o array de equipamentos
-    const { fields, append, remove } = useFieldArray({
-        control: form.control,
-        name: 'fields.equipamentos'
-    })
 
     return (
         <>
@@ -169,81 +150,86 @@ const FormSetor = ({ id }) => {
                         onclickDelete={() => setOpen(true)}
                         type={type}
                     />
-                    <Card>
-                        <CardContent>
-                            <Grid container spacing={5}>
-                                <Input xs={12} md={11} title='Nome' name='fields.nome' required={true} form={form} />
 
-                                <Check
-                                    xs={1}
-                                    md={1}
-                                    title='Ativo'
-                                    name='fields.status'
-                                    value={data?.fields?.status}
-                                    typePage={type}
-                                    form={form}
-                                />
-
-                                <Grid item xs={12}>
-                                    <div className='flex items-center gap-2 pb-1 pt-2'>
-                                        <div className=''>
-                                            <Icon icon='game-icons:manual-meat-grinder' className='text-3xl' />
-                                        </div>
-                                        <div className='flex flex-col gap-0'>
-                                            <p className='text-xl'>Equipamentos</p>
-                                        </div>
-                                    </div>
+                    <div className='flex flex-col gap-3'>
+                        <Card>
+                            <CardContent>
+                                <Grid container spacing={5}>
+                                    <Input
+                                        xs={12}
+                                        md={11}
+                                        title='Nome'
+                                        name='fields.nome'
+                                        required={true}
+                                        form={form}
+                                    />
+                                    <Check
+                                        xs={1}
+                                        md={1}
+                                        title='Ativo'
+                                        name='fields.status'
+                                        value={data?.fields?.status}
+                                        typePage={type}
+                                        form={form}
+                                    />
+                                    <Input
+                                        xs={12}
+                                        md={4}
+                                        title='Localização'
+                                        name='fields.localizacao'
+                                        form={form}
+                                        helpText='Localização física do setor'
+                                    />
+                                    <Input
+                                        xs={12}
+                                        md={4}
+                                        title='Função do setor'
+                                        name='fields.funcao'
+                                        form={form}
+                                        helpText='Função do setor na fábrica'
+                                    />
+                                    <Input
+                                        xs={12}
+                                        md={4}
+                                        title='Número de funcionários'
+                                        name='fields.numeroFuncionarios'
+                                        type='number'
+                                        form={form}
+                                    />
+                                    <Input
+                                        xs={12}
+                                        md={12}
+                                        title='Observações'
+                                        name='fields.observacao'
+                                        multiline
+                                        rows={3}
+                                        form={form}
+                                    />
+                                    <Input
+                                        xs={12}
+                                        md={12}
+                                        title='Orientações de Limpeza'
+                                        name='fields.orientacoesLimpeza'
+                                        multiline
+                                        rows={3}
+                                        form={form}
+                                        helpText='Texto de orientação de limpeza do setor. Ficará no cabeçalho do formulário de Limpeza e Higienização.'
+                                    />
                                 </Grid>
+                            </CardContent>
+                        </Card>
 
-                                {fields.map((item, index) => (
-                                    <Fragment key={item.id}>
-                                        <input
-                                            type='hidden'
-                                            name={`fields.equipamentos[${index}].id`}
-                                            value={item.id}
-                                        />
-
-                                        <Select
-                                            xs={12}
-                                            md={11}
-                                            title='Equipamento'
-                                            name={`fields.equipamentos[${index}].equipamento`}
-                                            value={data?.fields?.equipamentos?.[index]?.equipamento}
-                                            required
-                                            options={equipamentos ?? []}
-                                            form={form}
-                                            opacity={item.status === 0 ? true : false}
-                                        />
-
-                                        <Grid item xs={12} md={1} className='flex items-center'>
-                                            <IconButton color='error' size='small' onClick={() => remove(index)}>
-                                                <Icon icon={'tabler:trash-filled'} />
-                                            </IconButton>
-                                        </Grid>
-                                    </Fragment>
-                                ))}
-
-                                <Grid item xs={12}>
-                                    <Button
-                                        variant='outlined'
-                                        color='primary'
-                                        onClick={() => {
-                                            append({
-                                                id: null,
-                                                dataInicio: new Date()
-                                            })
-                                            form.trigger()
-                                        }}
-                                        startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
-                                    >
-                                        Inserir Equipamento
-                                    </Button>
+                        <Card>
+                            <CardContent>
+                                <Grid container spacing={5}>
+                                    <Equipamentos form={form} />
                                 </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </form>
             )}
+
             <DialogForm
                 text='Tem certeza que deseja excluir?'
                 title={'Excluir ' + title.title}

@@ -1,8 +1,21 @@
-import { Grid, FormControl, Autocomplete, TextField, Paper } from '@mui/material'
+import {
+    Grid,
+    FormControl,
+    Autocomplete,
+    TextField,
+    Paper,
+    IconButton,
+    Tooltip,
+    InputAdornment,
+    Box
+} from '@mui/material'
 import HelpText from '../Defaults/HelpText'
 import { useTheme } from '@mui/material/styles'
 import { useSettings } from 'src/@core/hooks/useSettings'
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import Icon from 'src/@core/components/icon'
+import { RouteContext } from 'src/context/RouteContext'
+import { useRouter } from 'next/router'
 
 const Select = ({
     xs,
@@ -21,6 +34,7 @@ const Select = ({
     alertRequired,
     helpTextPosition,
     opacity,
+    link,
     form
 }) => {
     const {
@@ -32,6 +46,9 @@ const Select = ({
     } = form
     const theme = useTheme()
     const { settings } = useSettings()
+    const { setId } = useContext(RouteContext)
+    const router = useRouter()
+    const [inputValue, setInputValue] = useState('')
 
     const optionsWithNovo = createNew ? [{ nome: '-- Novo --' }, ...(options ?? [])] : options
 
@@ -87,6 +104,14 @@ const Select = ({
         }
     }
 
+    const handleGoToLink = () => {
+        // Obter ID do item selecionado e redirecionar para a rota correspondente (link)
+        if (link) {
+            setId(getValues(name)?.id)
+            router.push(link)
+        }
+    }
+
     useEffect(() => {
         onlyOneOption()
         validateRequired()
@@ -94,82 +119,108 @@ const Select = ({
 
     return (
         <Grid item xs={xs} md={md} sx={{ my: 1 }} className={className}>
-            <div className='relative'>
-                <FormControl fullWidth>
-                    <Autocomplete
-                        multiple={multiple}
-                        limitTags={limitTags}
-                        size='small'
-                        options={filteredOptions}
-                        getOptionLabel={option => option?.nome || ''}
-                        value={
-                            multiple
-                                ? getValues(name) || []
-                                : !createNew && filteredOptions.length === 1
-                                ? filteredOptions[0]
-                                : getValues(name) || null
-                        }
-                        disabled={disabled}
-                        onChange={handleChange}
-                        renderInput={params => (
-                            <TextField
-                                {...params}
-                                label={title}
-                                placeholder={title}
-                                sx={{
-                                    opacity: opacity ? 0.4 : 1,
-                                    '& .MuiInputBase-input': {
-                                        padding: '4px 14px !important'
-                                    },
-                                    ...((required || alertRequired) &&
-                                        (multiple
-                                            ? !getValues(name)?.id || getValues(name)?.length === 0
-                                            : !getValues(name)?.id) && {
-                                            '& .MuiOutlinedInput-root': {
-                                                '& fieldset': {
-                                                    borderColor: theme.palette.error.main
-                                                },
-                                                '&:hover fieldset': {
-                                                    borderColor: theme.palette.error.main
-                                                },
-                                                '&.Mui-focused fieldset': {
-                                                    borderColor: theme.palette.error.main
-                                                }
+            <FormControl fullWidth>
+                <Autocomplete
+                    multiple={multiple}
+                    limitTags={limitTags}
+                    size='small'
+                    options={filteredOptions}
+                    getOptionLabel={option => option?.nome || ''}
+                    value={
+                        multiple
+                            ? getValues(name) || []
+                            : !createNew && filteredOptions.length === 1
+                            ? filteredOptions[0]
+                            : getValues(name) || null
+                    }
+                    inputValue={inputValue}
+                    onInputChange={(event, newInputValue) => {
+                        setInputValue(newInputValue)
+                    }}
+                    disabled={disabled}
+                    onChange={handleChange}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label={title}
+                            placeholder={title}
+                            sx={{
+                                opacity: opacity ? 0.4 : 1,
+                                '& .MuiInputBase-input': {
+                                    padding: '4px 14px !important'
+                                },
+                                ...((required || alertRequired) &&
+                                    (multiple
+                                        ? !getValues(name)?.id || getValues(name)?.length === 0
+                                        : !getValues(name)?.id) && {
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: theme.palette.error.main
                                             },
-                                            '& .MuiInputLabel-root': {
-                                                color: theme.palette.error.main
+                                            '&:hover fieldset': {
+                                                borderColor: theme.palette.error.main
                                             },
-                                            '& .MuiInputLabel-root.Mui-focused': {
-                                                color: theme.palette.error.main
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: theme.palette.error.main
                                             }
-                                        })
-                                }}
-                            />
-                        )}
-                        PaperComponent={({ children }) => (
-                            <Paper
-                                sx={{
-                                    '& ul': {
-                                        border:
-                                            settings.mode === 'dark'
-                                                ? `1px solid rgba(${theme.palette.customColors.main}, 0.32)`
-                                                : `null`,
-                                        borderRadius: '8px'
-                                    }
-                                }}
-                            >
-                                {children}
-                            </Paper>
-                        )}
-                        noOptionsText='Sem opções'
-                    />
-                </FormControl>
-                {helpText && (
-                    <div className='absolute right-[60px] top-[12px]'>
-                        <HelpText text={helpText} position={helpTextPosition ?? 'top'} />
-                    </div>
-                )}
-            </div>
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: theme.palette.error.main
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: theme.palette.error.main
+                                        }
+                                    })
+                            }}
+                            InputProps={{
+                                ...params.InputProps,
+                                endAdornment: (
+                                    <>
+                                        {params.InputProps.endAdornment}
+                                        <InputAdornment position='end'>
+                                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                                {helpText && (
+                                                    <HelpText text={helpText} position={helpTextPosition ?? 'top'} />
+                                                )}
+                                                {link && getValues(name)?.id > 0 && (
+                                                    <Tooltip title='Acessar cadastro' placement='top'>
+                                                        <IconButton
+                                                            onClick={handleGoToLink}
+                                                            sx={{ color: theme.palette.secondary.main }}
+                                                            className='opacity-70'
+                                                        >
+                                                            <Icon
+                                                                icon='heroicons-outline:external-link'
+                                                                fontSize={16}
+                                                            />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )}
+                                            </Box>
+                                        </InputAdornment>
+                                    </>
+                                )
+                            }}
+                        />
+                    )}
+                    PaperComponent={({ children }) => (
+                        <Paper
+                            sx={{
+                                '& ul': {
+                                    border:
+                                        settings.mode === 'dark'
+                                            ? `1px solid rgba(${theme.palette.customColors.main}, 0.32)`
+                                            : `null`,
+                                    borderRadius: '8px'
+                                }
+                            }}
+                        >
+                            {children}
+                        </Paper>
+                    )}
+                    noOptionsText='Sem opções'
+                />
+            </FormControl>
         </Grid>
     )
 }
