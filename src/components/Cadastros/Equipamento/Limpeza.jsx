@@ -99,6 +99,7 @@ const Limpeza = ({ form }) => {
                                     required
                                     options={itens ?? []}
                                     form={form}
+                                    link='/cadastros/item/'
                                 />
 
                                 <Grid item xs={12} md={1} className='flex items-center'>
