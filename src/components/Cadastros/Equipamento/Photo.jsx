@@ -5,7 +5,8 @@ import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import toast from 'react-hot-toast'
 
-const Photo = ({ id, photo, setPhoto }) => {
+const Photo = ({ id, photo, change, setChange }) => {
+    console.log('🚀 ~ photo:', photo)
     const { user, loggedUnity } = useContext(AuthContext)
     const fileInputRef = useRef(null)
 
@@ -28,32 +29,28 @@ const Photo = ({ id, photo, setPhoto }) => {
             }
 
             await api
-                .post(`/cadastros/equipamento/photo-profile/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
+                .post(`/cadastros/equipamento/photo/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
                 .then(response => {
-                    setPhotoProfile(response.data)
                     toast.success('Foto atualizada com sucesso!')
-
-                    //? Atualiza localstorage
-                    const userData = JSON.parse(localStorage.getItem('userData'))
-                    userData.imagem = response.data
-                    localStorage.setItem('userData', JSON.stringify(userData))
-                    //? Atualiza contexto
-                    setUser(userData)
                 })
                 .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto de perfil, tente novamente!')
+                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto!')
+                })
+                .finally(() => {
+                    setChange(!change)
                 })
         }
     }
 
     const handleDeleteImage = async () => {
         try {
-            await api.delete(`/cadastros/equipamento/photo-profile/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`)
-            setPhoto(null)
+            await api.delete(`/cadastros/equipamento/photo/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`)
             toast.success('Foto removida com sucesso!')
         } catch (error) {
             console.log(error)
             toast.error('Erro ao remover foto, tente novamente!')
+        } finally {
+            setChange(!change)
         }
     }
 
@@ -67,6 +64,7 @@ const Photo = ({ id, photo, setPhoto }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '180px',
+                position: 'relative',
                 borderRadius: '8px'
             }}
         >
@@ -76,7 +74,7 @@ const Photo = ({ id, photo, setPhoto }) => {
                         size='small'
                         sx={{
                             position: 'absolute',
-                            top: '8px',
+                            top: '20px',
                             right: '8px',
                             zIndex: '20',
                             color: 'white',

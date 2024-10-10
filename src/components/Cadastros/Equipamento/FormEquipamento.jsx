@@ -35,7 +35,7 @@ const FormEquipamento = ({
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
     const [setores, setSetores] = useState(null)
-    const [photo, setPhoto] = useState(null)
+    const [change, setChange] = useState(false)
     const { setId } = useContext(RouteContext)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
@@ -111,6 +111,7 @@ const FormEquipamento = ({
         try {
             if (type === 'edit') {
                 await api.post(`${staticUrl}/getData/${id}`, { id }).then(response => {
+                    console.log('🚀 ~ getData: ', response.data)
                     setData(response.data)
                     form.reset(response.data) //* Insere os dados no formulário
                 })
@@ -145,7 +146,9 @@ const FormEquipamento = ({
         setTimeout(() => {
             form.trigger()
         }, 300)
-    }, [id, loggedUnity])
+    }, [id, loggedUnity, change])
+
+    console.log('🚀 ~ data?.fields?.dataCompra:', data?.fields?.dataCompra)
 
     return (
         <>
@@ -170,14 +173,21 @@ const FormEquipamento = ({
                             <CardContent>
                                 <Grid container spacing={5}>
                                     {/* Esquerda */}
-                                    <Grid item xs={12} md={2}>
-                                        <Grid container spacing={5}>
-                                            <Photo id={id} photo={photo} setPhoto={setPhoto} />
+                                    {type === 'edit' && (
+                                        <Grid item xs={12} md={2}>
+                                            <Grid container spacing={5}>
+                                                <Photo
+                                                    id={id}
+                                                    photo={data.fields.foto}
+                                                    change={change}
+                                                    setChange={setChange}
+                                                />
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
+                                    )}
 
                                     {/* Direita */}
-                                    <Grid item xs={12} md={10}>
+                                    <Grid item xs={12} md={type == 'edit' ? 10 : 12}>
                                         <Grid container spacing={5}>
                                             <Input
                                                 xs={11}

@@ -15,7 +15,7 @@ const Limpeza = ({ form }) => {
     //? Itens da limpeza
     const { fields, append, remove } = useFieldArray({
         control: form.control,
-        name: 'fields.limpeza.itens'
+        name: 'fields.limpeza'
     })
 
     const getItemsLimpeza = async () => {
@@ -39,7 +39,7 @@ const Limpeza = ({ form }) => {
 
     useEffect(() => {
         if (form.watch('fields.realizaLimpeza') && fields.length === 0) {
-            append()
+            append({ item: null })
         }
     }, [form.watch('fields.realizaLimpeza')])
 
@@ -63,7 +63,7 @@ const Limpeza = ({ form }) => {
                             xs={12}
                             md={4}
                             title='Frequência (dias)'
-                            name='fields.frequencia'
+                            name='fields.frequenciaLimpeza'
                             form={form}
                             helpText='Prazo para notificação da próxima limpeza do equipamento (calendário)'
                         />
@@ -91,14 +91,11 @@ const Limpeza = ({ form }) => {
 
                         {fields.map((item, index) => (
                             <Fragment key={item.id}>
-                                <input type='hidden' name={`fields.limpeza.itens[${index}].id`} value={item.id} />
-
                                 <Select
                                     xs={12}
                                     md={11}
                                     title='Item'
-                                    name={`fields.limpeza.itens[${index}].item`}
-                                    // value={data?.fields?.limpeza?.itens?.[index]?.item}
+                                    name={`fields.limpeza[${index}]`}
                                     required
                                     options={itens ?? []}
                                     form={form}
@@ -126,7 +123,11 @@ const Limpeza = ({ form }) => {
                             <Button
                                 variant='outlined'
                                 color='primary'
-                                onClick={append}
+                                onClick={() =>
+                                    append({
+                                        item: null
+                                    })
+                                }
                                 startIcon={<Icon icon='material-symbols:add-circle-outline-rounded' />}
                             >
                                 Inserir
