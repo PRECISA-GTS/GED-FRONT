@@ -5,10 +5,13 @@ import { useRouter } from 'next/router'
 import Controller from './NaoConformidade/Controller'
 import { Card, CardContent } from '@mui/material'
 import LimpezaInfo from './NaoConformidade/LimpezaInfo'
+import { useContext, useEffect } from 'react'
+import { ParametersContext } from 'src/context/ParametersContext'
 
 const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change, onSubmit }) => {
     const router = useRouter()
     const isNew = router.asPath.includes('/novo')
+    const { setTitle } = useContext(ParametersContext)
 
     const tabs = [
         {
@@ -56,6 +59,18 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
             </Card>
         )
     }
+
+    useEffect(() => {
+        setTitle({
+            icon: 'carbon:clean',
+            title: 'Limpeza e Higienização',
+            subtitle: {
+                id: id,
+                count: 1,
+                new: false
+            }
+        })
+    }, [id, loggedUnity, router.query?.aba])
 
     return <CustomTabs tabs={tabs} headerInfoComponent={<HeaderInfo />} defaultTab={defaultTab} />
 }

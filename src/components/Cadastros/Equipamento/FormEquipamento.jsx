@@ -1,8 +1,8 @@
 import Router from 'next/router'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { api } from 'src/configs/api'
-import { Card, CardContent, Grid } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { Button, Card, CardContent, Grid, IconButton } from '@mui/material'
+import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import DialogForm from 'src/components/Defaults/Dialogs/Dialog'
 import FormHeader from '../../Defaults/FormHeader'
@@ -13,8 +13,14 @@ import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
 import { useContext } from 'react'
 import Input from 'src/components/Form/Input'
-import Check from 'src/components/Form/Check'
+import Icon from 'src/@core/components/icon'
 import useLoad from 'src/hooks/useLoad'
+import DateField from 'src/components/Form/DateField'
+import CheckLabel from 'src/components/Form/CheckLabel'
+import Select from 'src/components/Form/Select'
+import Photo from './Photo'
+import Loading from 'src/components/Loading'
+import Limpeza from './Limpeza'
 
 const FormEquipamento = ({
     id,
@@ -28,6 +34,8 @@ const FormEquipamento = ({
 }) => {
     const [open, setOpen] = useState(false)
     const [data, setData] = useState(null)
+    const [setores, setSetores] = useState(null)
+    const [photo, setPhoto] = useState(null)
     const { setId } = useContext(RouteContext)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
@@ -36,7 +44,16 @@ const FormEquipamento = ({
     const { loggedUnity, user } = useContext(AuthContext)
     const { startLoading, stopLoading } = useLoad()
 
-    const form = useForm({ mode: 'onChange' })
+    const form = useForm({
+        mode: 'onChange',
+        defaultValues: {
+            fields: {
+                limpeza: {
+                    itens: [{}]
+                }
+            }
+        }
+    })
 
     //? Envia dados para a api
     const onSubmit = async data => {
@@ -74,7 +91,6 @@ const FormEquipamento = ({
         }
     }
 
-    //? Função que deleta os dados
     const handleClickDelete = async () => {
         try {
             await api.delete(`${staticUrl}/${id}/${user.usuarioID}/${loggedUnity.unidadeID}`)
@@ -91,7 +107,6 @@ const FormEquipamento = ({
         }
     }
 
-    //? Dados iniciais ao carregar página
     const getData = async () => {
         try {
             if (type === 'edit') {
@@ -112,19 +127,29 @@ const FormEquipamento = ({
         }
     }
 
-    //? Função que traz os dados quando carrega a página e atualiza quando as dependências mudam
+    const getSetores = async () => {
+        try {
+            if (!loggedUnity) return
+
+            const response = await api.post(`/cadastros/setor/getSetores`, { unidadeID: loggedUnity.unidadeID })
+            setSetores(response.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         getData()
+        getSetores()
 
-        //? Seta error nos campos obrigatórios
         setTimeout(() => {
             form.trigger()
         }, 300)
-    }, [id])
+    }, [id, loggedUnity])
 
     return (
         <>
-            {/* {!data && <Loading />} */}
+            {!data && <Loading />}
             {data && (
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <FormHeader
@@ -140,29 +165,108 @@ const FormEquipamento = ({
                         type={type}
                         outsideID={outsideID}
                     />
-                    <Card>
-                        <CardContent>
-                            <Grid container spacing={5}>
-                                <Input xs={11} md={11} title='Nome' name='fields.nome' required={true} form={form} />
-                                <Check
-                                    xs={1}
-                                    md={1}
-                                    title='Ativo'
-                                    name='fields.status'
-                                    value={data?.fields.status}
-                                    typePage={type}
-                                    form={form}
-                                />
-                                <Input
-                                    xs={11}
-                                    md={12}
-                                    title='Tipo de material (inox, metal, plástico, vidro, etc)'
-                                    name='fields.tipo'
-                                    form={form}
-                                />
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                    <div className='flex flex-col gap-3'>
+                        <Card>
+                            <CardContent>
+                                <Grid container spacing={5}>
+                                    {/* Esquerda */}
+                                    <Grid item xs={12} md={2}>
+                                        <Grid container spacing={5}>
+                                            <Photo id={id} photo={photo} setPhoto={setPhoto} />
+                                        </Grid>
+                                    </Grid>
+
+                                    {/* Direita */}
+                                    <Grid item xs={12} md={10}>
+                                        <Grid container spacing={5}>
+                                            <Input
+                                                xs={11}
+                                                md={4}
+                                                title='Nome'
+                                                name='fields.nome'
+                                                required={true}
+                                                form={form}
+                                            />
+                                            <Input
+                                                xs={11}
+                                                md={4}
+                                                title='Tipo de material (inox, metal, plástico, vidro, etc)'
+                                                name='fields.tipo'
+                                                form={form}
+                                            />
+                                            <Input
+                                                xs={11}
+                                                md={4}
+                                                title='Nº Série'
+                                                name='fields.numeroSerie'
+                                                form={form}
+                                            />
+                                            <Input
+                                                xs={11}
+                                                md={4}
+                                                title='Cód. Inventário'
+                                                name='fields.codigoInventario'
+                                                form={form}
+                                            />
+                                            <Input xs={11} md={4} title='Marca' name='fields.marca' form={form} />
+                                            <Input xs={11} md={4} title='Modelo' name='fields.modelo' form={form} />
+                                            <DateField
+                                                xs={12}
+                                                md={4}
+                                                title='Data compra'
+                                                name={`fields.dataCompra`}
+                                                value={data?.fields?.dataCompra}
+                                                form={form}
+                                            />
+                                            <Input
+                                                xs={11}
+                                                md={4}
+                                                title='Fornecedor'
+                                                name='fields.fornecedor'
+                                                form={form}
+                                            />
+                                            <Select
+                                                xs={12}
+                                                md={4}
+                                                title='Setor'
+                                                name={`fields.setor`}
+                                                value={data?.fields?.setor}
+                                                options={setores ?? []}
+                                                form={form}
+                                            />
+                                            <Grid item xs={12} md={8}>
+                                                <p>ANEXOS</p>
+                                            </Grid>
+                                            <Grid item xs={12} md={4}></Grid>
+                                            <CheckLabel
+                                                xs={6}
+                                                md={2}
+                                                title='Realiza Limpeza'
+                                                name={`fields.realizaLimpeza`}
+                                                value={data.fields.realizaLimpeza}
+                                                form={form}
+                                                helpText='Este equipamento será listado no formulário de limpeza e higienização'
+                                            />
+                                            <CheckLabel
+                                                xs={6}
+                                                md={3}
+                                                title='Realiza Manutenção e Calibração'
+                                                name={`fields.realizaManutencao`}
+                                                value={data.fields.realizaManutencao}
+                                                form={form}
+                                                helpText='Este equipamento será listado no formulário de Manutenção e Calibração'
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+
+                        {/* Realiza Limpeza */}
+                        <Limpeza form={form} />
+
+                        {/* Realiza Manutenção */}
+                    </div>
                 </form>
             )}
             <DialogForm
