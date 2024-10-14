@@ -1,7 +1,6 @@
 import { Card, CardContent, Grid } from '@mui/material'
 import Input from 'src/components/Form/Input'
 import DateField from 'src/components/Form/DateField'
-import CustomFields from 'src/components/Defaults/Formularios/CustomFields'
 import InfoDepartamentos from 'src/components/Defaults/Formularios/InfoDepartamentos'
 import { useContext, useEffect, useState } from 'react'
 import Select from 'src/components/Form/Select'
@@ -16,9 +15,6 @@ const Header = ({ form, data, disabled }) => {
     const [profissionais, setProfissionais] = useState([])
     const [profissionaisFiltrados, setProfissionaisFiltrados] = useState([])
     const [setores, setSetores] = useState([])
-    const [equipamentos, setEquipamentos] = useState([])
-    const [equipamentosFiltrados, setEquipamentosFiltrados] = useState([])
-    const [produtos, setProdutos] = useState([])
     const [fornecedores, setFornecedores] = useState([])
 
     if (!data) return
@@ -59,33 +55,6 @@ const Header = ({ form, data, disabled }) => {
         }
     }
 
-    const getEquipamentos = async () => {
-        try {
-            if (!loggedUnity) return
-
-            const response = await api.post(`/cadastros/equipamento/getEquipamentos`, {
-                unidadeID: loggedUnity.unidadeID
-            })
-            setEquipamentos(response.data)
-            filterEquipments(data?.setor, response.data, false)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    const getProdutosLimpeza = async () => {
-        try {
-            if (!loggedUnity) return
-
-            const response = await api.post(`/cadastros/produto/getProdutosLimpeza`, {
-                unidadeID: loggedUnity.unidadeID
-            })
-            setProdutos(response.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     const getFornecedores = async () => {
         try {
             if (!loggedUnity) return
@@ -111,24 +80,10 @@ const Header = ({ form, data, disabled }) => {
         if (clear) form.setValue('header.profissional', null)
     }
 
-    const filterEquipments = (value, equipamentos, clear) => {
-        const filteredEquipments = equipamentos.filter(e => {
-            if (e.setores) {
-                const setoresArray = e.setores.split(',').map(Number)
-                return setoresArray.includes(value?.id)
-            }
-            return false
-        })
-        setEquipamentosFiltrados(filteredEquipments)
-        if (clear) form.setValue('header.equipamentos', [])
-    }
-
     useEffect(() => {
         getDepartamentos()
         getProfissionais()
         getSetores()
-        getEquipamentos()
-        getProdutosLimpeza()
         getFornecedores()
     }, [loggedUnity])
 
@@ -208,7 +163,7 @@ const Header = ({ form, data, disabled }) => {
                         disabled={disabled}
                         helpText='Limpeza realizada por uma empresa terceira'
                     />
-                    {form.getValues('header.prestadorServico') && (
+                    {form.watch('header.prestadorServico') && (
                         <Select
                             xs={12}
                             md={4}
@@ -221,7 +176,7 @@ const Header = ({ form, data, disabled }) => {
                             helpText='Todos os fornecedor ativos prestadores de serviço'
                         />
                     )}
-                    {!form.getValues('header.prestadorServico') && (
+                    {!form.watch('header.prestadorServico') && (
                         <>
                             <Select
                                 xs={12}
@@ -247,8 +202,6 @@ const Header = ({ form, data, disabled }) => {
                             />
                         </>
                     )}
-                    {/* <Grid item md={form.watch('header.prestadorServico') ? 8 : 4}></Grid> */}
-
                     <Select
                         xs={12}
                         md={4}
@@ -256,61 +209,12 @@ const Header = ({ form, data, disabled }) => {
                         name={`header.setor`}
                         value={data?.setor}
                         disabled={disabled}
-                        onChange={value => filterEquipments(value, equipamentos, true)}
+                        // onChange={value => filterEquipments(value, equipamentos, true)}
                         required
                         options={setores ?? []}
                         form={form}
                         helpText='Setor que foi limpo pelo profissional responsável pela limpeza'
                     />
-
-                    {/* <Select
-                        xs={12}
-                        md={4}
-                        title='Produtos utilizados'
-                        name={`header.produtos`}
-                        disabled={disabled}
-                        value={data?.produtos}
-                        multiple
-                        helpText='Produtos que foram utilizados pra realizar a limpeza do setor'
-                        options={produtos ?? []}
-                        form={form}
-                    /> */}
-
-                    {/* <Select
-                        xs={12}
-                        md={4}
-                        title='Equipamento(s) que foram limpos'
-                        name={`header.equipamentos`}
-                        value={data?.equipamentos}
-                        disabled={disabled}
-                        multiple
-                        options={equipamentosFiltrados ?? []}
-                        form={form}
-                        helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'
-                    /> */}
-
-                    {/* <CheckLabel
-                        xs={6}
-                        md={2}
-                        title='Limpeza'
-                        name={`header.limpeza`}
-                        value={data.limpeza}
-                        checked
-                        form={form}
-                        disabled
-                    /> */}
-                    {/* <CheckLabel
-                        xs={6}
-                        md={2}
-                        title='Higienização'
-                        name={`header.higienizacao`}
-                        value={data.higienizacao}
-                        form={form}
-                        disabled={disabled}
-                    /> */}
-
-                    {/* Fields dinamicos */}
-                    <CustomFields form={form} fields={data.fields} disabled={disabled} />
                 </Grid>
             </CardContent>
         </Card>

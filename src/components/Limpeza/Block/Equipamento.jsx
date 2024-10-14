@@ -51,6 +51,7 @@ const Equipamento = ({ form, data, index }) => {
                 md={4}
                 title='Higienização'
                 name={`blocos[0].equipamentos.${index}.higienizacao`}
+                value={data?.higienizacao}
             />
 
             {form.watch(`blocos[0].equipamentos.${index}.itens`) &&

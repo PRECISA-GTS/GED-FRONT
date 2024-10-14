@@ -44,7 +44,6 @@ const HeaderLimpeza = ({ modelID }) => {
             console.log('🚀 ~ getData:', response.data)
             form.reset(response.data)
             setHeader(response.data.header)
-            // setBlock(response.data.blocos)
         } catch (e) {
             console.log(e)
             return
@@ -268,7 +267,6 @@ const HeaderLimpeza = ({ modelID }) => {
                 title='Limpeza e Higienização'
                 type={type}
                 status={header?.status?.id}
-                // actionsNC={header?.naoConformidade && header?.status?.id > 40}
                 module='limpeza'
                 actionsData={actionsData}
             />

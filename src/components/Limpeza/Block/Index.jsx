@@ -6,9 +6,11 @@ import CheckLabel from 'src/components/Form/CheckLabel'
 import { api } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import Equipamento from './Equipamento'
+import { RouteContext } from 'src/context/RouteContext'
 
 const Block = ({ form }) => {
     const { loggedUnity } = useContext(AuthContext)
+    const { id } = useContext(RouteContext)
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
@@ -20,11 +22,14 @@ const Block = ({ form }) => {
 
         try {
             const values = {
+                id,
                 unidadeID: loggedUnity.unidadeID,
                 setorID: form.watch('header.setor')?.id
             }
 
             const response = await api.post(`/formularios/limpeza/getEquipamentos`, values)
+            console.log('🚀 ~ response:', response.data)
+
             remove()
             append(response.data)
             console.log('🚀 ~ response:', response.data)
