@@ -54,7 +54,6 @@ const Equipamentos = ({ form }) => {
                         form={form}
                         opacity={item.status === 0 ? true : false}
                         link='/cadastros/equipamento/'
-                        helpText='uashuhasuha'
                     />
 
                     <Grid item xs={12} md={1} className='flex items-center'>

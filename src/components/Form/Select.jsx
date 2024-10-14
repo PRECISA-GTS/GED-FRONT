@@ -178,9 +178,16 @@ const Select = ({
                                     <>
                                         {params.InputProps.endAdornment}
                                         <InputAdornment position='end'>
-                                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                            <>
                                                 {helpText && (
-                                                    <HelpText text={helpText} position={helpTextPosition ?? 'top'} />
+                                                    <Tooltip title={helpText} placement='top'>
+                                                        <IconButton
+                                                            sx={{ color: theme.palette.secondary.main }}
+                                                            className='opacity-70'
+                                                        >
+                                                            <Icon icon='akar-icons:question' fontSize={16} />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 )}
                                                 {link && getValues(name)?.id > 0 && (
                                                     <Tooltip title='Acessar cadastro' placement='top'>
@@ -196,7 +203,7 @@ const Select = ({
                                                         </IconButton>
                                                     </Tooltip>
                                                 )}
-                                            </Box>
+                                            </>
                                         </InputAdornment>
                                     </>
                                 )
