@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import HeaderModelDescription from '../Defaults/HeaderModelDescription'
 import ButtonOpenForm from '../Defaults/Buttons/ButtonOpenForm'
 import ModelBlocks from '../Form/ModelBlocks'
+import Block from './Block/Index'
 
 const FormLimpeza = ({ id, form, header, block, setBlock, onSubmit }) => {
     const router = Router
@@ -81,22 +82,23 @@ const FormLimpeza = ({ id, form, header, block, setBlock, onSubmit }) => {
         header && (
             <>
                 <div className='space-y-2'>
-                    <HeaderModelDescription description={header.modelo.cabecalho} />
+                    {/* <HeaderModelDescription description={header.modelo.cabecalho} /> */}
                     <Header form={form} data={header} disabled={header.status?.id >= 40} />
 
                     {type === 'new' && <ButtonOpenForm />}
 
                     {type === 'edit' && (
-                        <ModelBlocks
-                            form={form}
-                            data={block}
-                            blockKeyName='parLimpezaModeloBlocoID'
-                            setBlock={setBlock}
-                            handleFileSelect={handleFileSelect}
-                            handleRemoveFile={handleRemoveFile}
-                            status={header.status.id}
-                            disabled={header.status.id >= 40}
-                        />
+                        <Block form={form} />
+                        // <ModelBlocks
+                        //     form={form}
+                        //     data={block}
+                        //     blockKeyName='parLimpezaModeloBlocoID'
+                        //     setBlock={setBlock}
+                        //     handleFileSelect={handleFileSelect}
+                        //     handleRemoveFile={handleRemoveFile}
+                        //     status={header.status.id}
+                        //     disabled={header.status.id >= 40}
+                        // />
                     )}
 
                     <HistoricForm key={change} id={id} parFormularioID={4} />

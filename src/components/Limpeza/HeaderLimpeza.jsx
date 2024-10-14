@@ -44,7 +44,7 @@ const HeaderLimpeza = ({ modelID }) => {
             console.log('🚀 ~ getData:', response.data)
             form.reset(response.data)
             setHeader(response.data.header)
-            setBlock(response.data.blocos)
+            // setBlock(response.data.blocos)
         } catch (e) {
             console.log(e)
             return
@@ -68,6 +68,8 @@ const HeaderLimpeza = ({ modelID }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
+        console.log('🚀 ~ onSubmit:', data)
+        return
 
         try {
             if (type === 'new') {
@@ -317,7 +319,7 @@ const HeaderLimpeza = ({ modelID }) => {
                         unity={loggedUnity}
                         values={header}
                         formularioID={4} // Limpeza
-                        modeloID={header.modelo.id}
+                        modeloID={header.modelo?.id}
                         form={form}
                     />
 

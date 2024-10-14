@@ -70,7 +70,7 @@ const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, ch
                 new: false
             }
         })
-    }, [id, loggedUnity, router.query?.aba])
+    }, [id, router.query?.aba])
 
     return <CustomTabs tabs={tabs} headerInfoComponent={<HeaderInfo />} defaultTab={defaultTab} />
 }

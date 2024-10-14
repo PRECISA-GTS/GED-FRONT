@@ -146,13 +146,6 @@ const Header = ({ form, data, disabled }) => {
                                 label={data.status.label}
                                 sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                             />
-                            <CustomChip
-                                size='small'
-                                HeaderFiel
-                                skin='light'
-                                label={data.modelo.nome}
-                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                            />
                         </div>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ textAlign: 'right' }}>
@@ -254,7 +247,8 @@ const Header = ({ form, data, disabled }) => {
                             />
                         </>
                     )}
-                    <Grid item md={form.watch('header.prestadorServico') ? 8 : 4}></Grid>
+                    {/* <Grid item md={form.watch('header.prestadorServico') ? 8 : 4}></Grid> */}
+
                     <Select
                         xs={12}
                         md={4}
@@ -268,20 +262,8 @@ const Header = ({ form, data, disabled }) => {
                         form={form}
                         helpText='Setor que foi limpo pelo profissional responsável pela limpeza'
                     />
-                    <Select
-                        xs={12}
-                        md={4}
-                        title='Equipamento(s) que foram limpos'
-                        name={`header.equipamentos`}
-                        value={data?.equipamentos}
-                        disabled={disabled}
-                        multiple
-                        options={equipamentosFiltrados ?? []}
-                        form={form}
-                        helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'
-                    />
-                    <Grid item md={4}></Grid>
-                    <Select
+
+                    {/* <Select
                         xs={12}
                         md={4}
                         title='Produtos utilizados'
@@ -292,8 +274,22 @@ const Header = ({ form, data, disabled }) => {
                         helpText='Produtos que foram utilizados pra realizar a limpeza do setor'
                         options={produtos ?? []}
                         form={form}
-                    />
-                    <CheckLabel
+                    /> */}
+
+                    {/* <Select
+                        xs={12}
+                        md={4}
+                        title='Equipamento(s) que foram limpos'
+                        name={`header.equipamentos`}
+                        value={data?.equipamentos}
+                        disabled={disabled}
+                        multiple
+                        options={equipamentosFiltrados ?? []}
+                        form={form}
+                        helpText='Equipamentos que foram limpos pelo profissional responsável pela limpeza'
+                    /> */}
+
+                    {/* <CheckLabel
                         xs={6}
                         md={2}
                         title='Limpeza'
@@ -302,8 +298,8 @@ const Header = ({ form, data, disabled }) => {
                         checked
                         form={form}
                         disabled
-                    />
-                    <CheckLabel
+                    /> */}
+                    {/* <CheckLabel
                         xs={6}
                         md={2}
                         title='Higienização'
@@ -311,7 +307,7 @@ const Header = ({ form, data, disabled }) => {
                         value={data.higienizacao}
                         form={form}
                         disabled={disabled}
-                    />
+                    /> */}
 
                     {/* Fields dinamicos */}
                     <CustomFields form={form} fields={data.fields} disabled={disabled} />
