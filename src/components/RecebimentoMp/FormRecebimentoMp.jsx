@@ -566,15 +566,19 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
+                    console.log('Chegou no response..', response)
+
                     //* Submete formulário pra atualizar configurações dos itens
-                    const values = form.getValues()
-                    console.log('🚀 ~ submete values:', values)
-                    onSubmit(values)
+                    // const values = form.getValues()
+                    // console.log('🚀 ~ submete values:', values)
+                    // onSubmit(values)
                 })
                 .catch(error => {
+                    console.log('Chegou no catch..', error)
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
                 })
                 .finally(() => {
+                    console.log('Chegou no finally..')
                     setLoadingFileItem(false)
                     setChange(!change)
                 })
