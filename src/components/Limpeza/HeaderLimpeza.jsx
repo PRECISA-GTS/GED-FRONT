@@ -68,7 +68,7 @@ const HeaderLimpeza = ({ modelID }) => {
             }
         }
         console.log('🚀 ~ onSubmit:', data)
-        return
+        // return
 
         try {
             if (type === 'new') {
