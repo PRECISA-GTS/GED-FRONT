@@ -555,11 +555,21 @@ const FormRecebimentoMp = ({ id, model }) => {
             formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
+            console.log(
+                'Parametros do anexo: ',
+                user.usuarioID,
+                loggedUnity.unidadeID,
+                item.parRecebimentoMpModeloBlocoID,
+                item.itemOpcaoAnexoID
+            )
+
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
-                    onSubmit(form.getValues())
+                    const values = form.getValues()
+                    console.log('🚀 ~ submete values:', values)
+                    onSubmit(values)
                 })
                 .catch(error => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
