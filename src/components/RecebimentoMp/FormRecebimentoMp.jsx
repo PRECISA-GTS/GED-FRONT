@@ -542,7 +542,7 @@ const FormRecebimentoMp = ({ id, model }) => {
     }
 
     const handleFileSelectItem = async (event, item) => {
-        setLoadingFileItem(true)
+        // setLoadingFileItem(true)
         const selectedFile = event.target.files
 
         if (selectedFile && selectedFile.length > 0) {
@@ -558,7 +558,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             await api
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
-                    console.log('Chegou no response..', response)
+                    console.log('Chegou no response..', response.data)
                     //* Submete formulário pra atualizar configurações dos itens
                     onSubmit(form.getValues())
                 })
@@ -566,7 +566,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                     toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
                 })
                 .finally(() => {
-                    setLoadingFileItem(false)
+                    // setLoadingFileItem(false)
                     setChange(!change)
                 })
         }

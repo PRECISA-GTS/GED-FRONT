@@ -35,10 +35,10 @@ const CommonDataProvider = ({ children }) => {
     const { loggedUnity } = useContext(AuthContext)
 
     const getData = async () => {
-        const res = await api.post('commonData/getData', {
-            unidadeID: loggedUnity.unidadeID
-        })
-        setCommonData(res.data)
+        // const res = await api.post('commonData/getData', {
+        //     unidadeID: loggedUnity.unidadeID
+        // })
+        // setCommonData(res.data)
     }
 
     useEffect(() => {
