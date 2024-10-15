@@ -564,7 +564,7 @@ const FormRecebimentoMp = ({ id, model }) => {
             )
 
             await api
-                .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
+                .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
                     //* Submete formulário pra atualizar configurações dos itens
                     const values = form.getValues()
