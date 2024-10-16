@@ -541,6 +541,37 @@ const FormRecebimentoMp = ({ id, model }) => {
         }
     }
 
+    // const handleFileSelectItem = async (event, item) => {
+    //     // setLoadingFileItem(true)
+    //     const selectedFile = event.target.files
+
+    //     if (selectedFile && selectedFile.length > 0) {
+    //         const formData = new FormData()
+    //         for (let i = 0; i < selectedFile.length; i++) {
+    //             formData.append('files[]', selectedFile[i])
+    //         }
+    //         formData.append(`usuarioID`, user.usuarioID)
+    //         formData.append(`unidadeID`, loggedUnity.unidadeID)
+    //         formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
+    //         formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+    //         await api
+    //             .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
+    //             .then(response => {
+    //                 console.log('Chegou no response..', response.data)
+    //                 //* Submete formulário pra atualizar configurações dos itens
+    //                 onSubmit(form.getValues())
+    //             })
+    //             .catch(error => {
+    //                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
+    //             })
+    //             .finally(() => {
+    //                 // setLoadingFileItem(false)
+    //                 setChange(!change)
+    //             })
+    //     }
+    // }
+
     const handleFileSelectItem = async (event, item) => {
         // setLoadingFileItem(true)
         const selectedFile = event.target.files
@@ -555,22 +586,79 @@ const FormRecebimentoMp = ({ id, model }) => {
             formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
             formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
-            await api
-                .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
-                .then(response => {
-                    console.log('Chegou no response..', response.data)
-                    //* Submete formulário pra atualizar configurações dos itens
-                    onSubmit(form.getValues())
-                })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
-                })
-                .finally(() => {
-                    // setLoadingFileItem(false)
-                    setChange(!change)
-                })
+            // await api
+            //     .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
+            //     .then(response => {
+            //         console.log('Chegou no response..', response.data)
+            //         //* Submete formulário pra atualizar configurações dos itens
+            //         onSubmit(form.getValues())
+            //     })
+            //     .catch(error => {
+            //         toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
+            //     })
+            //     .finally(() => {
+            //         // setLoadingFileItem(false)
+            //         setChange(!change)
+            //     })
+
+            // fetch
+            const response = await fetch(
+                `https://demo.gedagro.com.br/api/formularios/recebimento-mp/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            )
+
+            const data = await response.json()
+
+            console.log('Chegou no response..', data)
+            //* Submete formulário pra atualizar configurações dos itens
+            onSubmit(form.getValues())
         }
     }
+
+    // const handleFileSelectItem = async (event, item) => {
+    //     // setLoadingFileItem(true);
+    //     const selectedFile = event.target.files
+
+    //     if (selectedFile && selectedFile.length > 0) {
+    //         const formData = new FormData()
+    //         for (let i = 0; i < selectedFile.length; i++) {
+    //             formData.append('files[]', selectedFile[i])
+    //         }
+    //         formData.append(`usuarioID`, user.usuarioID)
+    //         formData.append(`unidadeID`, loggedUnity.unidadeID)
+    //         formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
+    //         formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+    //         try {
+    //             const response = await fetch(
+    //                 `${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`,
+    //                 {
+    //                     method: 'POST',
+    //                     body: formData
+    //                 }
+    //             )
+
+    //             // Verifique se a resposta está OK
+    //             if (!response.ok) {
+    //                 const errorData = await response.json()
+    //                 throw new Error(errorData.message || 'Erro ao atualizar anexo, tente novamente!!!!')
+    //             }
+
+    //             const data = await response.json()
+    //             console.log('Chegou no response..', data)
+    //             //* Submete formulário pra atualizar configurações dos itens
+    //             onSubmit(form.getValues())
+    //         } catch (error) {
+    //             toast.error(error.message)
+    //         } finally {
+    //             // setLoadingFileItem(false);
+    //             setChange(!change)
+    //         }
+    //     }
+    // }
 
     //? Função que atualiza os anexos solicitados no item, quando altera a resposta
     const setItemResposta = async value => {
