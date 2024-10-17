@@ -57,13 +57,13 @@ const Fornecedor = () => {
 
     const getList = async () => {
         try {
-            const response = await api.post(`${currentLink}/getList/`, {
+            const values = {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
-                cnpj: user.cnpj ? user.cnpj : null,
-                status
-            })
-
+                cnpj: user.cnpj ? user.cnpj : null
+                // status
+            }
+            const response = await api.post(`${currentLink}/getList/`, values)
             if (!response.data) return
 
             setFilteredDataSupplier(response.data)

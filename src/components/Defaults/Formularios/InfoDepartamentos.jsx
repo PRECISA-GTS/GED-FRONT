@@ -11,10 +11,11 @@ const InfoDepartamentos = ({ data }) => {
 
     const getProfessionals = async () => {
         try {
-            const response = await api.post(`/cadastros/departamento/getProfessionals`, {
+            const values = {
                 departamentos: data.map(item => item.id),
                 unidadeID: loggedUnity.unidadeID
-            })
+            }
+            const response = await api.post(`/cadastros/departamento/getProfessionals`, values)
 
             setProfessionals(response.data)
         } catch (error) {

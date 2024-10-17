@@ -22,11 +22,11 @@ const ListRecebimentoMP = () => {
 
     const getList = async () => {
         await api
-            .post(`${currentLink}/getList`, {
+            .post(`${currentLink}/getList/`, {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID,
-                usuarioID: user.usuarioID,
-                status
+                usuarioID: user.usuarioID
+                // status
             })
             .then(response => {
                 setFilteredDataRecebimentoMP(response.data)
