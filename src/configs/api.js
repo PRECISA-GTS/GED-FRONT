@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const URL = 'https://demo.gedagro.com.br/api/'
-const URL = 'https://api.gedagro.com.br/'
+const URL = 'https://demo.gedagro.com.br/api/'
+// const URL = 'https://api.gedagro.com.br/'
 
 export const api = axios.create({
   baseURL: process.env.NODE_ENV === 'development'
