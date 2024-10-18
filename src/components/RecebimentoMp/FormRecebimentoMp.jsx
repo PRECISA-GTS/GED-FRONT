@@ -559,6 +559,7 @@ const FormRecebimentoMp = ({ id, model }) => {
                 .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${loggedUnity.unidadeID}`, formData)
                 .then(response => {
                     console.log('Chegou no response..', response.data)
+                    toast(response.data?.message)
                     //* Submete formulário pra atualizar configurações dos itens
                     onSubmit(form.getValues())
                 })
