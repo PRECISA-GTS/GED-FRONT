@@ -702,7 +702,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
             const pathDatabase = `uploads/${loggedUnity.unidadeID}/fornecedor/item/`
-            const pathDestination = `https://demo.gedagro.com.br/api/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
+            const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
 
             // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
@@ -734,7 +734,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 //     throw new Error('Erro ao fazer upload dos arquivos.')
                 // }
 
-                const result = await response.json()
+                // const result = await response.json()
 
                 // Submete o formulário para atualizar configurações dos itens
                 const values = form.getValues()
