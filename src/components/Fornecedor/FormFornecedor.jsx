@@ -701,6 +701,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
+            const path = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
 
             // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
@@ -709,7 +710,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
             // Adiciona os outros parâmetros
             formData.append('fornecedorID', item.fornecedorID)
-            formData.append('pathDestination', item.pathDestination)
+            formData.append('pathDestination', path)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
@@ -719,6 +720,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     method: 'POST',
                     body: formData
                 })
+
+                console.log('🚀 ~ response:', response)
 
                 if (!response.ok) {
                     throw new Error('Erro ao fazer upload dos arquivos.')
