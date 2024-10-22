@@ -710,7 +710,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             }
 
             // Adiciona os outros parâmetros
-            formData.append('fornecedorID', item.fornecedorID)
+            formData.append('fornecedorID', id)
             formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
             formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
             formData.append('pathDestination', pathDestination)
@@ -718,7 +718,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
-            console.log('🚀 ~ item.parFornecedorModeloBlocoID:', item.parFornecedorModeloBlocoID, item.itemOpcaoAnexoID)
+            console.log('🚀 ~ ENVIANDO PRO PHP ===>>> ', id, item.parFornecedorModeloBlocoID, item.itemOpcaoAnexoID)
 
             try {
                 // Faz a requisição POST com fetch
