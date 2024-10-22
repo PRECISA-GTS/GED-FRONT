@@ -701,24 +701,36 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
+
+            // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
                 formData.append('files[]', selectedFile[i])
             }
-            formData.append(`usuarioID`, user.usuarioID)
-            formData.append(`unidadeID`, loggedUnity.unidadeID)
-            formData.append(`parFornecedorModeloBlocoID`, item.parFornecedorModeloBlocoID ?? null)
-            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+            // Adiciona os outros parâmetros
+            formData.append('fornecedorID', item.fornecedorID)
+            formData.append('pathDestination', item.pathDestination)
+            formData.append('usuarioID', user.usuarioID)
+            formData.append('unidadeID', loggedUnity.unidadeID)
 
             try {
-                const response = await api.post(
-                    `${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`,
-                    formData
-                )
-                //* Submete formulário pra atualizar configurações dos itens
+                // Faz a requisição POST com fetch
+                const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
+                    method: 'POST',
+                    body: formData
+                })
+
+                if (!response.ok) {
+                    throw new Error('Erro ao fazer upload dos arquivos.')
+                }
+
+                const result = await response.json()
+
+                // Submete o formulário para atualizar configurações dos itens
                 const values = form.getValues()
                 onSubmit(values)
             } catch (error) {
-                toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
+                toast.error(error.message ?? 'Erro ao atualizar anexo, tente novamente!')
             } finally {
                 setChange(!change)
             }
