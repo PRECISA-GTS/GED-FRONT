@@ -701,7 +701,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
-            const pathDatabase = `uploads/${loggedUnity.unidadeID}/fornecedor/item/`
             const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
 
             // Adiciona os arquivos ao formData
@@ -714,7 +713,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
             formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
             formData.append('pathDestination', pathDestination)
-            formData.append('pathDatabase', pathDatabase)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
@@ -727,14 +725,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                     body: formData,
                     mode: 'no-cors' // Adiciona 'no-cors'
                 })
-
-                console.log('🚀 ~ response:', response)
-
-                // if (!response.ok) {
-                //     throw new Error('Erro ao fazer upload dos arquivos.')
-                // }
-
-                // const result = await response.json()
 
                 // Submete o formulário para atualizar configurações dos itens
                 const values = form.getValues()
