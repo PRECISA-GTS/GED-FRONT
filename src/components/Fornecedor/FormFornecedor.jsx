@@ -718,7 +718,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
                 // Faz a requisição POST com fetch
                 const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    mode: 'no-cors' // Adiciona 'no-cors'
                 })
 
                 console.log('🚀 ~ response:', response)
