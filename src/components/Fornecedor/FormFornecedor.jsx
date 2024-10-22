@@ -711,11 +711,12 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             // Adiciona os outros parâmetros
             formData.append('fornecedorID', item.fornecedorID)
             formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
+            formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
             formData.append('pathDestination', path)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
-            console.log('🚀 ~ item.parFornecedorModeloBlocoID:', item.parFornecedorModeloBlocoID)
+            console.log('🚀 ~ item.parFornecedorModeloBlocoID:', item.parFornecedorModeloBlocoID, item.itemOpcaoAnexoID)
 
             try {
                 // Faz a requisição POST com fetch
@@ -727,9 +728,9 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
                 console.log('🚀 ~ response:', response)
 
-                if (!response.ok) {
-                    throw new Error('Erro ao fazer upload dos arquivos.')
-                }
+                // if (!response.ok) {
+                //     throw new Error('Erro ao fazer upload dos arquivos.')
+                // }
 
                 const result = await response.json()
 
