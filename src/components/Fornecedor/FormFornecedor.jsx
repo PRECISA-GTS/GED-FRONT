@@ -710,6 +710,7 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
             // Adiciona os outros parâmetros
             formData.append('fornecedorID', item.fornecedorID)
+            formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
             formData.append('pathDestination', path)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
