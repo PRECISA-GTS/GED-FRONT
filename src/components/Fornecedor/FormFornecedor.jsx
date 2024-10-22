@@ -696,29 +696,69 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
         }
     }
 
+    // const handleFileSelectItem = async (event, item) => {
+    //     const selectedFile = event.target.files
+
+    //     if (selectedFile && selectedFile.length > 0) {
+    //         const formData = new FormData()
+    //         for (let i = 0; i < selectedFile.length; i++) {
+    //             formData.append('files[]', selectedFile[i])
+    //         }
+    //         formData.append(`usuarioID`, user.usuarioID)
+    //         formData.append(`unidadeID`, loggedUnity.unidadeID)
+    //         formData.append(`parFornecedorModeloBlocoID`, item.parFornecedorModeloBlocoID ?? null)
+    //         formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+    //         try {
+    //             const response = await api.post(
+    //                 `${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`,
+    //                 formData
+    //             )
+    //             //* Submete formulário pra atualizar configurações dos itens
+    //             const values = form.getValues()
+    //             onSubmit(values)
+    //         } catch (error) {
+    //             toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
+    //         } finally {
+    //             setChange(!change)
+    //         }
+    //     }
+    // }
+
     const handleFileSelectItem = async (event, item) => {
         const selectedFile = event.target.files
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
+            const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
+
+            // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
                 formData.append('files[]', selectedFile[i])
             }
-            formData.append(`usuarioID`, user.usuarioID)
-            formData.append(`unidadeID`, loggedUnity.unidadeID)
-            formData.append(`parFornecedorModeloBlocoID`, item.parFornecedorModeloBlocoID ?? null)
-            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+            // Adiciona os outros parâmetros
+            formData.append('fornecedorID', id)
+            formData.append('recebimentoMpID', null)
+            formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
+            formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
+            formData.append('pathDestination', pathDestination)
+            formData.append('usuarioID', user.usuarioID)
+            formData.append('unidadeID', loggedUnity.unidadeID)
 
             try {
-                const response = await api.post(
-                    `${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`,
-                    formData
-                )
-                //* Submete formulário pra atualizar configurações dos itens
+                // Faz a requisição POST com fetch
+                const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Adiciona 'no-cors'
+                })
+
+                // Submete o formulário para atualizar configurações dos itens
                 const values = form.getValues()
                 onSubmit(values)
             } catch (error) {
-                toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!')
+                toast.error(error.message ?? 'Erro ao atualizar anexo, tente novamente!')
             } finally {
                 setChange(!change)
             }

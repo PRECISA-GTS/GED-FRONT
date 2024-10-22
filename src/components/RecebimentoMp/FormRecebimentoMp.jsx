@@ -541,33 +541,73 @@ const FormRecebimentoMp = ({ id, model }) => {
         }
     }
 
+    // const handleFileSelectItem = async (event, item) => {
+    //     setLoadingFileItem(true)
+    //     const selectedFile = event.target.files
+
+    //     if (selectedFile && selectedFile.length > 0) {
+    //         const formData = new FormData()
+    //         for (let i = 0; i < selectedFile.length; i++) {
+    //             formData.append('files[]', selectedFile[i])
+    //         }
+    //         formData.append(`usuarioID`, user.usuarioID)
+    //         formData.append(`unidadeID`, loggedUnity.unidadeID)
+    //         formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
+    //         formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
+
+    //         await api
+    //             .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
+    //             .then(response => {
+    //                 //* Submete formulário pra atualizar configurações dos itens
+    //                 onSubmit(form.getValues())
+    //             })
+    //             .catch(error => {
+    //                 toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
+    //             })
+    //             .finally(() => {
+    //                 setLoadingFileItem(false)
+    //                 setChange(!change)
+    //             })
+    //     }
+    // }
+
     const handleFileSelectItem = async (event, item) => {
-        setLoadingFileItem(true)
         const selectedFile = event.target.files
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
+            const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/recebimento-mp/item/`
+
+            // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
                 formData.append('files[]', selectedFile[i])
             }
-            formData.append(`usuarioID`, user.usuarioID)
-            formData.append(`unidadeID`, loggedUnity.unidadeID)
-            formData.append(`parRecebimentoMpModeloBlocoID`, item.parRecebimentoMpModeloBlocoID ?? null)
-            formData.append(`itemOpcaoAnexoID`, item.itemOpcaoAnexoID ?? null)
 
-            await api
-                .post(`${staticUrl}/saveAnexo/${id}/item/${user.usuarioID}/${unidade.unidadeID}`, formData)
-                .then(response => {
-                    //* Submete formulário pra atualizar configurações dos itens
-                    onSubmit(form.getValues())
+            // Adiciona os outros parâmetros
+            formData.append('recebimentoMpID', id)
+            formData.append('fornecedorID', null)
+            formData.append('parRecebimentoMpModeloBlocoID', item.parRecebimentoMpModeloBlocoID ?? null)
+            formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
+            formData.append('pathDestination', pathDestination)
+            formData.append('usuarioID', user.usuarioID)
+            formData.append('unidadeID', loggedUnity.unidadeID)
+
+            try {
+                // Faz a requisição POST com fetch
+                const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Adiciona 'no-cors'
                 })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar anexo, tente novamente!!!!')
-                })
-                .finally(() => {
-                    setLoadingFileItem(false)
-                    setChange(!change)
-                })
+
+                // Submete o formulário para atualizar configurações dos itens
+                const values = form.getValues()
+                onSubmit(values)
+            } catch (error) {
+                toast.error(error.message ?? 'Erro ao atualizar anexo, tente novamente!')
+            } finally {
+                setChange(!change)
+            }
         }
     }
 
