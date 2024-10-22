@@ -717,8 +717,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
-            console.log('🚀 ~ ENVIANDO PRO PHP ===>>> ', id, item.parFornecedorModeloBlocoID, item.itemOpcaoAnexoID)
-
             try {
                 // Faz a requisição POST com fetch
                 const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
