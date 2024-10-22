@@ -701,7 +701,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
-            const path = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
+            const pathDatabase = `uploads/${loggedUnity.unidadeID}/fornecedor/item/`
+            const pathDestination = `https://demo.gedagro.com.br/api/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
 
             // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
@@ -712,7 +713,8 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append('fornecedorID', item.fornecedorID)
             formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
             formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
-            formData.append('pathDestination', path)
+            formData.append('pathDestination', pathDestination)
+            formData.append('pathDatabase', pathDatabase)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
