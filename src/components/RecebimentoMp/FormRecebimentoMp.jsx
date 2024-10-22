@@ -594,7 +594,7 @@ const FormRecebimentoMp = ({ id, model }) => {
 
             try {
                 // Faz a requisição POST com fetch
-                const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
+                const response = await fetch('https://gedagro.com.br/apps/ged/production/upload-files/', {
                     method: 'POST',
                     body: formData,
                     mode: 'no-cors' // Adiciona 'no-cors'
