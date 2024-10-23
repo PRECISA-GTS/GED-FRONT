@@ -1,7 +1,7 @@
 import { Avatar, FormControl, Grid, IconButton, Tooltip } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import React, { useContext, useRef } from 'react'
-import { api } from 'src/configs/api'
+import { api, BACKEND_FOLDER, URL_UPLOAD } from 'src/configs/api'
 import { AuthContext } from 'src/context/AuthContext'
 import toast from 'react-hot-toast'
 
@@ -19,7 +19,10 @@ const Photo = ({ id, photo, change, setChange }) => {
         if (selectedFile) {
             const formData = new FormData()
             formData.append('files[]', selectedFile)
+            formData.append(`equipamentoID`, id)
+            formData.append(`type`, 'equipamento')
             formData.append(`usuarioID`, user.usuarioID)
+            formData.append('pathDestination', `../${BACKEND_FOLDER}/uploads/${loggedUnity.unidadeID}/equipamento/`)
 
             //? Verifica se o arquivo é uma imagem
             const isImage = selectedFile.type.includes('image')
@@ -28,17 +31,32 @@ const Photo = ({ id, photo, change, setChange }) => {
                 return
             }
 
-            await api
-                .post(`/cadastros/equipamento/photo/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
-                .then(response => {
-                    toast.success('Foto atualizada com sucesso!')
+            try {
+                //? PHP upload files
+                await fetch(`${URL_UPLOAD}upload-files/`, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
                 })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto!')
-                })
-                .finally(() => {
-                    setChange(!change)
-                })
+
+                toast.success('Foto atualizada com sucesso!')
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setChange(!change)
+            }
+
+            // await api
+            //     .post(`/cadastros/equipamento/photo/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
+            //     .then(response => {
+            //         toast.success('Foto atualizada com sucesso!')
+            //     })
+            //     .catch(error => {
+            //         toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto!')
+            //     })
+            //     .finally(() => {
+            //         setChange(!change)
+            //     })
         }
     }
 
