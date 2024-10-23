@@ -13,7 +13,7 @@ import AnexoModeView from 'src/components/Anexos/ModeView'
 import { Alert, Box, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
-import { api } from 'src/configs/api'
+import { api, BACKEND_FOLDER, URL_UPLOAD } from 'src/configs/api'
 import FormHeader from 'src/components/Defaults/FormHeader'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
@@ -730,7 +730,6 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
-            const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/fornecedor/item/`
 
             // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
@@ -742,16 +741,16 @@ const FormFornecedor = ({ id, makeFornecedor }) => {
             formData.append('recebimentoMpID', null)
             formData.append('parFornecedorModeloBlocoID', item.parFornecedorModeloBlocoID ?? null)
             formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
-            formData.append('pathDestination', pathDestination)
+            formData.append('pathDestination', `../${BACKEND_FOLDER}/uploads/${loggedUnity.unidadeID}/fornecedor/item/`)
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
             try {
-                // Faz a requisição POST com fetch
-                const response = await fetch('https://gedagro.com.br/apps/ged/production/upload-files/', {
+                //? PHP upload files
+                await fetch(`${URL_UPLOAD}upload-files/`, {
                     method: 'POST',
                     body: formData,
-                    mode: 'no-cors' // Adiciona 'no-cors'
+                    mode: 'no-cors'
                 })
 
                 // Submete o formulário para atualizar configurações dos itens

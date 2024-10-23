@@ -2,7 +2,7 @@ import Router from 'next/router'
 import { useEffect, useState, useContext, useRef } from 'react'
 import { RouteContext } from 'src/context/RouteContext'
 import { SettingsContext } from 'src/@core/context/settingsContext'
-import { api } from 'src/configs/api'
+import { api, BACKEND_FOLDER, URL_UPLOAD } from 'src/configs/api'
 import Icon from 'src/@core/components/icon'
 import { Card, CardContent, Grid, Button, CardHeader, Tooltip, IconButton, FormControl, Avatar } from '@mui/material'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -225,7 +225,11 @@ const FormProfissional = ({ id }) => {
         if (selectedFile) {
             const formData = new FormData()
             formData.append('files[]', selectedFile)
+            formData.append(`type`, 'profissional')
+            formData.append(`profissionalID`, id)
             formData.append(`usuarioID`, user.usuarioID)
+            formData.append('unidadeID', loggedUnity.unidadeID)
+            formData.append('pathDestination', `../${BACKEND_FOLDER}/uploads/${loggedUnity.unidadeID}/profissional/`)
 
             //? Verifica se o arquivo é uma imagem
             const isImage = selectedFile.type.includes('image')
@@ -234,22 +238,46 @@ const FormProfissional = ({ id }) => {
                 return
             }
 
-            await api
-                .post(`${staticUrl}/photo-profile/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
-                .then(response => {
-                    setPhotoProfile(response.data)
-                    toast.success('Foto atualizada com sucesso!')
+            try {
+                //? PHP upload files
+                const response = await fetch(`${URL_UPLOAD}upload-files/`, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                })
+                console.log('🚀 ~ response:', response)
 
-                    //? Atualiza localstorage
-                    const userData = JSON.parse(localStorage.getItem('userData'))
-                    userData.imagem = response.data
-                    localStorage.setItem('userData', JSON.stringify(userData))
-                    //? Atualiza contexto
-                    setUser(userData)
-                })
-                .catch(error => {
-                    toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto de perfil, tente novamente!')
-                })
+                // setPhotoProfile(response.data)
+                getData()
+                toast.success('Foto atualizada com sucesso!')
+
+                //? Atualiza localstorage
+                // const userData = JSON.parse(localStorage.getItem('userData'))
+                // userData.imagem = response.data
+                // localStorage.setItem('userData', JSON.stringify(userData))
+                // //? Atualiza contexto
+                // setUser(userData)
+            } catch (error) {
+                console.log(error)
+                toast.error('Erro ao atualizar foto de perfil, tente novamente!')
+            }
+
+            // await api
+            //     .post(`${staticUrl}/photo-profile/${id}/${loggedUnity.unidadeID}/${user.usuarioID}`, formData)
+            //     .then(response => {
+            //         setPhotoProfile(response.data)
+            //         toast.success('Foto atualizada com sucesso!')
+
+            //         //? Atualiza localstorage
+            //         const userData = JSON.parse(localStorage.getItem('userData'))
+            //         userData.imagem = response.data
+            //         localStorage.setItem('userData', JSON.stringify(userData))
+            //         //? Atualiza contexto
+            //         setUser(userData)
+            //     })
+            //     .catch(error => {
+            //         toast.error(error.response?.data?.message ?? 'Erro ao atualizar foto de perfil, tente novamente!')
+            //     })
         }
     }
 
