@@ -13,7 +13,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { Box, Button, Card, CardContent, FormControl, Grid, Typography } from '@mui/material'
 import Router from 'next/router'
 import { backRoute, toastMessage, statusDefault } from 'src/configs/defaultConfigs'
-import { api } from 'src/configs/api'
+import { api, BACKEND_FOLDER, URL_UPLOAD } from 'src/configs/api'
 import FormHeader from 'src/components/Defaults/FormHeader'
 import { RouteContext } from 'src/context/RouteContext'
 import { AuthContext } from 'src/context/AuthContext'
@@ -578,7 +578,6 @@ const FormRecebimentoMp = ({ id, model }) => {
 
         if (selectedFile && selectedFile.length > 0) {
             const formData = new FormData()
-            const pathDestination = `../backend/uploads/${loggedUnity.unidadeID}/recebimento-mp/item/`
 
             // Adiciona os arquivos ao formData
             for (let i = 0; i < selectedFile.length; i++) {
@@ -590,18 +589,19 @@ const FormRecebimentoMp = ({ id, model }) => {
             formData.append('fornecedorID', null)
             formData.append('parRecebimentoMpModeloBlocoID', item.parRecebimentoMpModeloBlocoID ?? null)
             formData.append('itemOpcaoAnexoID', item.itemOpcaoAnexoID ?? null)
-            formData.append('pathDestination', pathDestination)
+            formData.append(
+                'pathDestination',
+                `../${BACKEND_FOLDER}/uploads/${loggedUnity.unidadeID}/recebimento-mp/item/`
+            )
             formData.append('usuarioID', user.usuarioID)
             formData.append('unidadeID', loggedUnity.unidadeID)
 
-            console.log('🚀 ~ ENVIANDO PRO PHP ===>>> ', id, item.parRecebimentoMpModeloBlocoID, item.itemOpcaoAnexoID)
-
             try {
-                // Faz a requisição POST com fetch
-                const response = await fetch('https://gedagro.com.br/apps/ged/develop/upload-files/', {
+                //? PHP upload files
+                await fetch(`${URL_UPLOAD}upload-files/`, {
                     method: 'POST',
                     body: formData,
-                    mode: 'no-cors' // Adiciona 'no-cors'
+                    mode: 'no-cors'
                 })
 
                 // Submete o formulário para atualizar configurações dos itens
