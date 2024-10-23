@@ -1,7 +1,14 @@
 import axios from 'axios';
 
 const URL = 'https://demo.gedagro.com.br/api/'
-// const URL = 'https://api.gedagro.com.br/'
+
+//* UPLOAD PHP (develop || production)
+export const URL_UPLOAD = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:8080/Gedagro/'
+  : 'https://gedagro.com.br/apps/ged/develop/'
+
+export const BACKEND_FOLDER = process.env.NODE_ENV === 'development'
+  ? 'GED-BACK' : 'backend'
 
 export const api = axios.create({
   baseURL: process.env.NODE_ENV === 'development'
