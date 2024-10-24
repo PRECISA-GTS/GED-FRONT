@@ -20,7 +20,6 @@ const TopBar = () => {
     const [header, setHeader] = useState(null)
     const [block, setBlock] = useState(null)
     const type = id && id > 0 ? 'edit' : 'new'
-
     const form = useForm({ mode: 'onChange' })
 
     const modelID = 0 //! temp

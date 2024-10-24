@@ -8,7 +8,7 @@ import Router from 'next/router'
 import CardList from 'src/components/Defaults/Cards/CardList'
 import { backRoute } from 'src/configs/defaultConfigs'
 import EmptyModels from 'src/components/Defaults/EmptyModels'
-import TopBar from '../HeaderLimpeza'
+import HeaderLimpeza from '../HeaderLimpeza'
 
 const SelectModel = () => {
     const { loggedUnity } = useContext(AuthContext)
@@ -53,7 +53,7 @@ const SelectModel = () => {
 
     return (
         <>
-            {model && <TopBar modelID={model} />}
+            {model && <HeaderLimpeza />}
             {!model && (
                 <Box display='flex' flexDirection='column' sx={{ gap: 4 }}>
                     {/* Botão voltar */}

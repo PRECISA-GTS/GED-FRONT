@@ -8,7 +8,7 @@ import LimpezaInfo from './NaoConformidade/LimpezaInfo'
 import { useContext, useEffect } from 'react'
 import { ParametersContext } from 'src/context/ParametersContext'
 
-const Tabs = ({ id, idNc, modelID, form, header, block, setBlock, defaultTab, change, onSubmit }) => {
+const Tabs = ({ id, idNc, form, header, block, setBlock, defaultTab, change, onSubmit }) => {
     const router = useRouter()
     const isNew = router.asPath.includes('/novo')
     const { setTitle } = useContext(ParametersContext)

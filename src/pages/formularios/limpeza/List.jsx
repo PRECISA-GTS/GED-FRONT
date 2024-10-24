@@ -68,18 +68,13 @@ const ListLimpeza = () => {
             type: 'date'
         },
         {
+            headerName: 'Departamento',
+            field: 'departamento',
+            size: 1
+        },
+        {
             headerName: 'Setor',
             field: 'setor',
-            size: 1
-        },
-        {
-            headerName: 'Modelo',
-            field: 'modelo',
-            size: 1
-        },
-        {
-            headerName: 'Tipo',
-            field: 'limpezaHigienizacao',
             size: 1
         },
         {

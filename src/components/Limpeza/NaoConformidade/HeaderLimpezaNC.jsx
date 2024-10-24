@@ -18,9 +18,10 @@ import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, ge
 import Tabs from '../Tabs'
 
 const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
-    console.log('🚀 ~~ Limpeza HeaderLimpezaNC:', limpezaID, id)
+    console.log('🚀 ~~ Limpeza HeaderLimpezaNC:', limpezaID, id, modelID)
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
+    console.log('🚀 ~ type:', type)
     const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
     const { setTitle } = useContext(ParametersContext)
     const [header, setHeader] = useState(null)
@@ -119,8 +120,10 @@ const HeaderLimpezaNC = ({ id, limpezaID, modelID }) => {
                 unidadeID: loggedUnity.unidadeID,
                 papelID: user.papelID
             }
+            console.log('🚀 ~ values:', values)
             const response = await api.post(`/formularios/limpeza/nao-conformidade/getData`, values)
 
+            console.log('🚀 ~ response:', response)
             if (response.status === 204) {
                 //? Estava no formulário NOVO que passa dados do contexto, se recarregar a página perde os valores do contexto, então redireciona pra listagem
                 setId(null)

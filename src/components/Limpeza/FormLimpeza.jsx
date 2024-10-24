@@ -8,8 +8,9 @@ import Router from 'next/router'
 import toast from 'react-hot-toast'
 import ButtonOpenForm from '../Defaults/Buttons/ButtonOpenForm'
 import Block from './Block/Index'
+import { useForm } from 'react-hook-form'
 
-const FormLimpeza = ({ id, form, header, block, setBlock, onSubmit }) => {
+const FormLimpeza = ({ id, header, block, setBlock, form, onSubmit }) => {
     const router = Router
     const type = id && id > 0 ? 'edit' : 'new'
     const { user, loggedUnity } = useContext(AuthContext)
@@ -80,6 +81,8 @@ const FormLimpeza = ({ id, form, header, block, setBlock, onSubmit }) => {
         header && (
             <>
                 <div className='space-y-2'>
+                    <input type='hidden' {...form.register('type')} value='limpeza' />
+
                     <Header form={form} data={header} disabled={header.status?.id >= 40} />
 
                     {type === 'new' && <ButtonOpenForm />}

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import NaoConformidade from 'src/components/Limpeza/NaoConformidade/HeaderLimpezaNC'
 import { RouteContext } from 'src/context/RouteContext'
 import SelectModel from 'src/components/Limpeza/SelectModel'
+import HeaderLimpeza from 'src/components/Limpeza/HeaderLimpeza'
 
 const LimpezaNovo = () => {
     const { setTitle } = useContext(ParametersContext)
@@ -27,7 +28,7 @@ const LimpezaNovo = () => {
     return router.query?.aba == 'nao-conformidade' ? (
         <NaoConformidade id={null} limpezaID={limpezaID} modelID={modelID} />
     ) : (
-        <SelectModel />
+        <HeaderLimpeza />
     )
 }
 

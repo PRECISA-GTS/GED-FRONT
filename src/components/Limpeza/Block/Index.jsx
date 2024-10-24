@@ -26,6 +26,7 @@ const Block = ({ form }) => {
                 unidadeID: loggedUnity.unidadeID,
                 setorID: form.watch('header.setor')?.id
             }
+            console.log('🚀 ~ values:', values)
 
             const response = await api.post(`/formularios/limpeza/getEquipamentos`, values)
             console.log('🚀 ~ response:', response.data)
@@ -67,6 +68,7 @@ const Block = ({ form }) => {
                                 title={field.nome}
                                 name={`blocos[0].equipamentos.${index}.checked`}
                                 onClick={e => handleCheck(e, index)}
+                                disabled={form.getValues(`header.status.id`) >= 40}
                                 value={field?.checked}
                             />
                             {field?.orientacoesLimpeza && <HelpText text={field.orientacoesLimpeza} />}

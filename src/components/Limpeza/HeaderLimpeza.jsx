@@ -8,7 +8,6 @@ import Tabs from './Tabs'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
 import { checkErrorsBlocks, checkErrorsDynamicHeader, checkErrorStaticHeader, getErrors } from 'src/configs/checkErrors'
-import { canConfigForm } from 'src/configs/functions'
 import DialogFormConclusion from '../Defaults/Dialogs/DialogFormConclusion'
 import DialogDelete from '../Defaults/Dialogs/DialogDelete'
 import DialogReOpenForm from '../Defaults/Dialogs/DialogReOpenForm'
@@ -17,10 +16,10 @@ import { getCurrentTab } from 'src/configs/tabs'
 import NewContent from './NaoConformidade/NewContent'
 import DialogActs from '../Defaults/Dialogs/DialogActs'
 
-const HeaderLimpeza = ({ modelID }) => {
+const HeaderLimpeza = () => {
     const router = useRouter()
     const { id, setId, idNc, setModelID, setLimpezaID } = useContext(RouteContext)
-    const { menu, user, loggedUnity, hasPermission } = useContext(AuthContext)
+    const { user, loggedUnity, hasPermission } = useContext(AuthContext)
     const [header, setHeader] = useState(null)
     const [block, setBlock] = useState(null)
     const type = id && id > 0 ? 'edit' : 'new'
@@ -37,7 +36,6 @@ const HeaderLimpeza = ({ modelID }) => {
         try {
             const values = {
                 id: id ?? 0, //? Novo (id == null)
-                modelID: modelID ?? 0, //? Novo (modelID)
                 unidadeID: loggedUnity.unidadeID
             }
             const response = await api.post(`/formularios/limpeza/getData`, values)
@@ -56,7 +54,18 @@ const HeaderLimpeza = ({ modelID }) => {
         onSubmit(values)
     }
 
+    //? Envio do formulário: limpeza e não conformidade
     const onSubmit = async values => {
+        if (!values) return
+
+        if (values.type === 'limpeza') {
+            await onSubmitLimpeza(values)
+        } else if (values.type == 'nao-conformidade') {
+            console.log('envia formulário da nao conformidade...')
+        }
+    }
+
+    const onSubmitLimpeza = async values => {
         if (!values) return
 
         const data = {
@@ -67,7 +76,7 @@ const HeaderLimpeza = ({ modelID }) => {
                 unidadeID: loggedUnity.unidadeID
             }
         }
-        console.log('🚀 ~ onSubmit:', data)
+        console.log('🚀 ~ onSubmit limpeza:', data)
         // return
 
         try {
@@ -138,6 +147,7 @@ const HeaderLimpeza = ({ modelID }) => {
                 profissionalID: user.profissionalID
             }
         }
+
         setHeader(null)
 
         try {
@@ -177,9 +187,13 @@ const HeaderLimpeza = ({ modelID }) => {
     }
 
     const verifyIfCanAproveForm = blocos => {
+        const equipamentos = blocos[0].equipamentos
+
         let tempCanApprove = true
-        blocos.forEach(block => {
-            block.itens.forEach(item => {
+
+        if (equipamentos.length == 0) tempCanApprove = false
+        equipamentos.forEach(equip => {
+            equip.itens.forEach(item => {
                 if (item.resposta && item.resposta.bloqueiaFormulario == 1) {
                     tempCanApprove = false
                 }
@@ -219,19 +233,7 @@ const HeaderLimpeza = ({ modelID }) => {
         identification: null,
         ncPending: true //? Campo que desabilita opção se houver NC
     }
-    const objFormConfig = {
-        id: 2,
-        name: 'Configurações do formulário',
-        description: 'Alterar as configurações do modelo de formulário.',
-        route: null,
-        type: null,
-        action: goToFormConfig,
-        modal: false,
-        icon: 'bi:gear',
-        identification: null
-    }
     if (header && header.status.id >= 40) actionsData.push(objReOpenForm)
-    if (canConfigForm(menu, '/configuracoes/formularios')) actionsData.push(objFormConfig)
 
     useEffect(() => {
         getData()
@@ -241,6 +243,8 @@ const HeaderLimpeza = ({ modelID }) => {
             form.trigger()
         }, 300)
     }, [id, loggedUnity, change])
+
+    console.log('==> ', openModal)
 
     return (
         <form onSubmit={e => customSubmit(e)}>
@@ -260,7 +264,7 @@ const HeaderLimpeza = ({ modelID }) => {
                 handleSend={() => {
                     setOpenModal(true)
                     checkErrors()
-                    verifyIfCanAproveForm(block)
+                    verifyIfCanAproveForm(form.getValues('blocos'))
                 }}
                 iconConclusion={'solar:check-read-linear'}
                 titleConclusion={'Concluir'}
@@ -273,7 +277,6 @@ const HeaderLimpeza = ({ modelID }) => {
 
             <Tabs
                 id={id}
-                modelID={modelID}
                 form={form}
                 header={header}
                 block={block}
@@ -317,7 +320,7 @@ const HeaderLimpeza = ({ modelID }) => {
                         unity={loggedUnity}
                         values={header}
                         formularioID={4} // Limpeza
-                        modeloID={header.modelo?.id}
+                        modeloID={1}
                         form={form}
                     />
 

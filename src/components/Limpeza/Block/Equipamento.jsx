@@ -42,6 +42,7 @@ const Equipamento = ({ form, data, index }) => {
                 multiple
                 options={produtos ?? []}
                 form={form}
+                disabled={form.getValues(`header.status.id`) >= 40}
                 helpText='Produtos utilizados na limpeza do equipamento.'
             />
 
@@ -51,6 +52,7 @@ const Equipamento = ({ form, data, index }) => {
                 md={4}
                 title='Higienização'
                 name={`blocos[0].equipamentos.${index}.higienizacao`}
+                disabled={form.getValues(`header.status.id`) >= 40}
                 value={data?.higienizacao}
             />
 
@@ -65,6 +67,7 @@ const Equipamento = ({ form, data, index }) => {
                             indexItem={i}
                             item={item}
                             updateResponse={updateResponse}
+                            disabled={form.getValues(`header.status.id`) >= 40}
                             // handleFileSelect={handleFileSelect}
                             // handleRemoveAnexoItem={handleRemoveAnexoItem}
                         />
